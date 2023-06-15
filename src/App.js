@@ -24,6 +24,7 @@ function App() {
             <Route path="/subcontract" element={<SubContract />} />
             <Route path="/company" element={<Company />} />
             <Route path="/employee" element={<Employee />} />
+            {/* <Route path="/employee" element={<Employee />} /> */}
           </Routes>
         </BrowserRouter>
       </div>
