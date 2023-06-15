@@ -7,6 +7,7 @@ import Signup from "./pages/signup";
 import SubContract from "./pages/SubContract";
 import Company from "./pages/Company";
 import Employee from "./pages/Employee";
+import "./assests/css/graph.css"
 
 function App() {
   return (
