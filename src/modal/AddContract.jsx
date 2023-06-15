@@ -26,9 +26,10 @@ export default function AddContract() {
     <div style={{ outline: "none" }}>
         <button
           onClick={handleOpen}
-          className="btn btn-info text-white rounded-0 border border-white"
+          className="btn text-white rounded-0 border border-white btn-primary"
+          style={{background:"#277099"}}
         >
-          + Add Sub Contrator
+          + Add New Sub Contrator
         </button>
 
         <Modal

@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from "./pages/signup";
 import Contract from "./pages/Contract";
 import Company from "./pages/Company";
+import "./assests/css/graph.css"
 
 function App() {
   return (
