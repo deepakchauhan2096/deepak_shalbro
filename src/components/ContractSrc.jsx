@@ -178,10 +178,9 @@ const ContractSrc = () => {
           className="p-4"
           >
           <button
-            onClick={handleClose}
             className="btn btn-info text-white rounded-0  border-white"
           >
-            Sub Contrator
+            Sub Contractor
           </button>
           <div>
             <AddContract />

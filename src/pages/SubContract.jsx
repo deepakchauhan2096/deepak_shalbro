@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../components/Navbar'
 import ContractSrc from '../components/ContractSrc'
 
-const Contract= () => {
+const SubContract= () => {
   return (
     <>
     <Navbar />
@@ -11,4 +11,4 @@ const Contract= () => {
   )
 }
 
-export default Contract
+export default SubContract

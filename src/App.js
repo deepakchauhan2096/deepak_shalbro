@@ -4,8 +4,9 @@ import Index from "./pages/index";
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from "./pages/signup";
-import Contract from "./pages/Contract";
+import SubContract from "./pages/SubContract";
 import Company from "./pages/Company";
+import Employee from "./pages/Employee";
 
 function App() {
   return (
@@ -16,10 +17,12 @@ function App() {
       >
         <BrowserRouter>
           <Routes>
+          <Route path="/" element={<Index />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" index element={<Index />} />
-            <Route path="/contract" element={<Contract />} />
+            <Route path="/subcontract" element={<SubContract />} />
             <Route path="/company" element={<Company />} />
+            <Route path="/employee" element={<Employee />} />
           </Routes>
         </BrowserRouter>
       </div>

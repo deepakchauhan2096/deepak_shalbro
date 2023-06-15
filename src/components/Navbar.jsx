@@ -21,9 +21,16 @@ const Navbar = () => {
                 {/* <li style={{background: location.pathname === "/Company" ? "#3596d9" : ""}} >
                     <Link to="/Company" ></Link>
                 </li> */}
-                <li style={{background: location.pathname === "/Contract" ? "#3596d9" : ""}}>
-                    <Link to="/Contract">Sub Contractors</Link>
+                <li style={{background: location.pathname === "/subcontract" ? "#3596d9" : ""}}>
+                    <Link to="/subcontract">Sub Contractors</Link>
                 </li>
+
+
+                <li style={{background: location.pathname === "/employee" ? "#3596d9" : ""}}>
+                    <Link to="/employee">Employee</Link>
+                </li>
+
+               
             </ul>
       </nav>
     </>
