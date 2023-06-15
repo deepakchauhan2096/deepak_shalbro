@@ -5,11 +5,7 @@ import Navbar from "../components/Navbar";
 const SignupPage = () => {
   return (
     <>
-      <div className="signupPage" style={{height:"100vh"}}>
-        <h1>Hello world</h1>
-      <Navbar />
       <Signup />
-      </div>
     </>
   );
 };

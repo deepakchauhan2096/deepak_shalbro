@@ -1,15 +1,15 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
+import React from "react";
+import Navbar from "../components/Navbar";
+import Dashboard from "../components/Dashboard";
 
 const Index = () => {
   return (
-  <>
-    <Navbar/>
+    <>
+      
+        <Navbar />
+        <Dashboard />
+    </>
+  );
+};
 
-  <center>Welcome to homepage</center>
-  
-  </>
-  )
-}
-
-export default Index
+export default Index;

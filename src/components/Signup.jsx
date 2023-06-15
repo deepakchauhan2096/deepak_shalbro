@@ -16,6 +16,7 @@ const Signup = () => {
         <div className="p-4 border " style={{ height: "auto", width: "350px" }}>
           <form>
             <div className="mb-3">
+              <h5 className="text-center p-2">Shalbro Construction Group</h5>
               <label for="exampleInputEmail1" className="form-label">
                 Email address
               </label>
