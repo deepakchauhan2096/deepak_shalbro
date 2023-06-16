@@ -7,6 +7,7 @@ import Signup from "./pages/signup";
 import SubContract from "./pages/SubContract";
 import Company from "./pages/Company";
 import Employee from "./pages/Employee";
+import "./assests/css/graph.css"
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/subcontract" element={<SubContract />} />
             <Route path="/company" element={<Company />} />
             <Route path="/employee" element={<Employee />} />
+            {/* <Route path="/employee" element={<Employee />} /> */}
           </Routes>
         </BrowserRouter>
       </div>
