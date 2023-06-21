@@ -29,7 +29,7 @@ export default function AddContract() {
           className="btn text-white rounded-0 border border-white btn-primary"
           style={{background:"#277099"}}
         >
-          + Add New Sub Contrator
+          + Add New Contrator
         </button>
 
         <Modal

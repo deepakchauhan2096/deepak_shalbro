@@ -184,7 +184,7 @@ export default function AddEmployee() {
             </button>
             {" "}
             <button onClick={handleClose} className="btn btn-danger text-white rounded-0">
-              Disgard
+            Discard
             </button>
           </form>
         </Box>
