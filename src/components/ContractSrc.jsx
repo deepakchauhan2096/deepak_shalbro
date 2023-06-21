@@ -200,7 +200,7 @@ const ContractSrc = () => {
           <button
             className="btn btn-info text-white rounded-0  border-white"
           >
-            Sub Contractor
+          Contractor
           </button>
           <div
             className="border"

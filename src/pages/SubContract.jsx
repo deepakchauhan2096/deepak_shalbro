@@ -1,12 +1,12 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import ContractSrc from '../components/ContractSrc'
+import Subcontract from '../components/Subcontract'
 
 const SubContract= () => {
   return (
     <>
     <Navbar />
-    <ContractSrc />
+    <Subcontract/>
     </>
   )
 }
