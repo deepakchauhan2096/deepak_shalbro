@@ -246,7 +246,7 @@ const ContractSrc = () => {
           </button>
           <button
             className="btn btn-info rounded-0 border-white"
-            style={{ background: index == 1 ? "#fff" : "" }}
+            style={{ background: index === 1 ? "#fff" : "" }}
             onClick={(e) => setIndex(1)}
           >
             Detail
@@ -254,7 +254,7 @@ const ContractSrc = () => {
 
           <button
             className="btn btn-info rounded-0 border-white"
-            style={{ background: index == 2 ? "#fff" : "" }}
+            style={{ background: index === 2 ? "#fff" : "" }}
             onClick={(e) => setIndex(2)}
           >
             Payment
@@ -262,7 +262,7 @@ const ContractSrc = () => {
 
           <button
             className="btn btn-info rounded-0 border-white"
-            style={{ background: index == 3 ? "#fff" : "" }}
+            style={{ background: index === 3 ? "#fff" : "" }}
             onClick={(e) => setIndex(3)}
           >
             Compliance
@@ -270,13 +270,13 @@ const ContractSrc = () => {
 
           <button
             className="btn btn-info rounded-0 border-white"
-            style={{ background: index == 4 ? "#fff" : "" }}
+            style={{ background: index === 4 ? "#fff" : "" }}
             onClick={(e) => setIndex(4)}
           >
             Documents
           </button>
 
-          {index == 1 ? (
+          {index === 1 ? (
             <div className="border" style={{ height: "88vh" }}>
               {/* <h5 style={{ textDecoration: "underline" }}>Contract Detail</h5> */}
               <div className="p-4 container-fluid">
@@ -462,7 +462,7 @@ const ContractSrc = () => {
           ) : (
             ""
           )}
-          {index == 2 ? (
+          {index === 2 ? (
             <div className="border" style={{ height: "88vh" }}>
               <div className="p-4 container-fluid">
                 <div className="row">
@@ -860,7 +860,7 @@ const ContractSrc = () => {
             ""
           )}
 
-          {index == 3 ? (
+          {index === 3 ? (
             <div className="border" style={{ height: "88vh" }}>
               <div className="p-4 container-fluid">
                 <div className="row">
@@ -1258,7 +1258,7 @@ const ContractSrc = () => {
             ""
           )}
 
-          {/* {index == 3 ? (
+          {/* {index === 3 ? (
             <div className="p-4">
               <h5 style={{ textDecoration: "underline" }}>
                 Company's contract
