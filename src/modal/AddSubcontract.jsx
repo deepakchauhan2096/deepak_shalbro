@@ -2,6 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import pluslogo from "../assests/images/plus.png";
+import { Button } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -23,15 +24,8 @@ export default function AddSubContract() {
   
 
   return (
-    <div style={{ outline: "none" }}>
-        <button
-          onClick={handleOpen}
-          className="btn text-white rounded-0 border border-white btn-primary"
-          style={{background:"#277099"}}
-        >
-          + Add New Sub Contrator
-        </button>
-
+    <>
+        <Button  onClick={handleOpen} sx={{color:"#277099"}} className="rounded-0 border-0" variant="outlined" >+ Add New Sub Contrator</Button>
         <Modal
           open={open}
           onClose={handleClose}
@@ -183,6 +177,6 @@ export default function AddSubContract() {
           </Box>
         </Modal>
 
-    </div>
+    </>
   );
 }

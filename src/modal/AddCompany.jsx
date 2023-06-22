@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 // import pluslogo from "../assests/images/plus.png"
 import axios from 'axios';
+import { Button, Container } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -66,18 +67,20 @@ export default function AddCompany() {
   }
 
   return (
-    <div style={{ outline: "none" }}>
-      <button
-        onClick={handleOpen}
-        className="btn btn-info text-white rounded-0"
-      >
-        + Add Company
-      </button>
+    // <div style={{ outline: "none" }}>
+    <>
+      <Button  onClick={handleOpen} sx={{color:"#277099"}} className="rounded-0 border-0" variant="outlined" >+ Add Company</Button>
+
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+      >
+        <Container
+        id="content"
+        style={{ height: "100vh", position: "relative" }}
+        maxWidth="xl"
       >
         <Box sx={style}>
           <form>
@@ -237,18 +240,23 @@ export default function AddCompany() {
             </div> */}
 
            
-            <button type="submit" className="btn btn-info text-white rounded-0 mt-2" onClick={handleSubmit}>
+            <Button type="submit" variant="contained" className="btn text-white rounded-0 mt-2" onClick={handleSubmit}>
               Submit
-            </button>{" "}
-            <button
+            </Button>{" "}
+            <Button
+            variant="contained"
+              color="error"
               onClick={handleClose}
-              className="btn btn-danger text-white rounded-0 mt-2"
+              className="btn text-white rounded-0 mt-2"
             >
               Discard
-            </button>
+            </Button>
           </form>
         </Box>
+        </Container>
       </Modal>
-    </div>
+      </>
+    // </div>
+
   );
 }
