@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
@@ -7,16 +7,19 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddCompany from "../modal/AddCompany";
 
 import { Button, ButtonGroup, Container } from "@mui/material";
-import { useEffect } from "react";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ContractSrc = () => {
-  const [adminData, setAdminData] = useState([]);
-  const [tableRows, setTableRows] = useState([{
-      COMPANY_ID: 19,
-      COMPANY_USERNAME: "company1"
-  }]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  
+  const [tableRows, setTableRows] = useState([
+    {
+      COMPANY_ID: 19,
+      COMPANY_USERNAME: "company1",
+    },
+  ]);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -33,10 +36,12 @@ const ContractSrc = () => {
         { ADMIN_ID: 18, ADMIN_USERNAME: "deepanshu1" },
         { headers }
       );
-      console.log("response.data : ",response.data)
-      const data = response.data;
-      setAdminData(data.result[0]);
-      setTableRows(data.result[0].ADMIN_COMPANIES)
+      setTimeout(() => {
+        console.log("response.data : ", response.data);
+        const data = response.data;
+        setTableRows(data.result[0].ADMIN_COMPANIES);
+      }, 1000);
+      setIsLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -79,12 +84,6 @@ const ContractSrc = () => {
       width: 180,
       // editable: true,
     },
-    // {
-    //   field: "COMPANY_PHONE",
-    //   headerName: "Phone",
-    //   width: 120,
-    //   // editable: true,
-    // },
 
     {
       field: "action",
@@ -121,7 +120,7 @@ const ContractSrc = () => {
     handleOpen();
   };
 
-  console.log("company data table: =>", tableRows)
+  console.log("company data table: =>", tableRows);
   return (
     <>
       <Container
@@ -143,23 +142,36 @@ const ContractSrc = () => {
               {/*----------------------- Add Company -----------------------------------------  */}
             </div>
             <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
-              <DataGrid
-                sx={{ border: "none" }}
-                rows={tableRows}
-                columns={columns}
-                getRowId={(row) => row.COMPANY_ID}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 20,
+              {isLoading ? (
+                <Backdrop
+                  sx={{
+                    color: "#fff",
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                  }}
+                  open={isLoading}
+                  onClick={handleClose}
+                >
+                  <CircularProgress color="inherit" />
+                </Backdrop>
+              ) : (
+                <DataGrid
+                  sx={{ border: "none" }}
+                  rows={tableRows}
+                  columns={columns}
+                  getRowId={(row) => row.COMPANY_ID}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 10,
+                      },
                     },
-                  },
-                }}
-                density="compact"
-                pageSizeOptions={[5]}
-                checkboxSelection
-                disableRowSelectionOnClick
-              />
+                  }}
+                  density="compact"
+                  pageSizeOptions={[5]}
+                  checkboxSelection
+                  disableRowSelectionOnClick
+                />
+              )}
             </div>
           </div>
         </Box>

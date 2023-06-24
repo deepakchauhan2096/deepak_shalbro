@@ -6,10 +6,14 @@ import AddEmployee from "../modal/AddEmployee";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import teamImg1 from "../assests/images/team-1.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-// import boot
+import { Backdrop, CircularProgress } from "@mui/material";
+
+
+
 
 const EmployeeSrc = () => {
-  // const [employeData, setEmployeeData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [employeDatatable, setEmployeeDataTable] = useState({
     COMPANY_PARENT_ID: 18,
     COMPANY_PARENT_USERNAME: "deepanshu1",
@@ -62,10 +66,12 @@ const EmployeeSrc = () => {
         },
         { headers }
       );
-      console.log("API DATA EMPLOYEE", response);
+      setTimeout(()=>{
+        console.log("API DATA EMPLOYEE", response);
       const data = response.data;
-      // setEmployeeData(data.result[0]);
       setEmployeeDataTable(data.result[0].COMPANY_EMPLOYIES);
+      setIsLoading(false);
+      },1000)
     } catch (err) {
       console.log("something Went wrong: =>", err);
     }
@@ -84,52 +90,6 @@ const EmployeeSrc = () => {
       width: 120,
       // editable: true,
     },
-    // {
-    //   field: "Birthdate",
-    //   headerName: "Date Of Birth",
-    //   width: 120,
-    //   // editable: true,
-    // },
-    // {
-    //   field: "PhoneNumber",
-    //   headerName: "Phone",
-    //   width: 100,
-    //   // editable: true,
-    // },
-    // {
-    //   field: "Employeerole",
-    //   headerName: "Employee Role",
-    //   width: 110,
-    //   // editable: true,
-    // },
-    // {
-    //   field: "Employementtype",
-    //   headerName: "Employement Type",
-    //   width: 120,
-    //   // editable: true,
-    // },
-    // {
-    //   field: "Hiringdate",
-    //   headerName: "Hired Date",
-    //   type: "number",
-    //   width: 90,
-    //   // editable: true,
-    // },
-    // {
-    //   field: "hourlywages",
-    //   headerName: "Hourly Wages",
-    //   type: "number",
-    //   width: 90,
-    //   // editable: true,
-    // },
-
-    // {
-    //   field: "address",
-    //   headerName: "Address",
-    //   width: 270,
-    //   // editable: true,
-    // },
-
     {
       field: "action",
       headerName: "Action",
@@ -217,6 +177,8 @@ const EmployeeSrc = () => {
       workinghrs: 7,
     },
   ];
+  
+
 
   return (
     <>
@@ -238,25 +200,30 @@ const EmployeeSrc = () => {
           <div>
             <AddEmployee />
 
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              getRowId={(row) => row.EMPLOYEE_ID}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 5,
+            {isLoading ? (
+              <Backdrop open={isLoading}>
+                <CircularProgress color="inherit" />
+              </Backdrop>
+            ) : (
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                getRowId={(row) => row.EMPLOYEE_ID}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 5,
+                    },
                   },
-                },
-              }}
-              density="compact"
-              pageSizeOptions={[5]}
-              checkboxSelection
-              disableRowSelectionOnClick
-            />
+                }}
+                density="compact"
+                pageSizeOptions={[5]}
+                checkboxSelection
+                disableRowSelectionOnClick
+              />
+            )}
           </div>
         </Box>
-        {/* <div style={{position:"absolute", top:"0",left:"0",height:"100%",width:"100%",background:"#fff"}}>{filterData.PhoneNumber}</div> */}
 
         <Box
           style={{
@@ -320,8 +287,6 @@ const EmployeeSrc = () => {
                 <div className="col-4 border mx-2">
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employee Name :{" "}
-                  
-
                     <span style={{ color: "red" }}>
                       {/* {rows.map((item) => item.EMPLOYEE_USERNAME)} */}
                     </span>
