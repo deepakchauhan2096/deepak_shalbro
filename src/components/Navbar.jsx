@@ -8,7 +8,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav id="sidebar" style={{ height: "100vh" }}>
+      <nav id="sidebar" style={{ height: "100vh", position:"relative" }}>
         <div className="sidebar-header">
           <h3>Shalbro</h3>
         </div>
@@ -54,7 +54,7 @@ const Navbar = () => {
           </li>
         </ul>
 
-        <div className="login sidebar_footer">
+        <div className="login sidebar_footer position-absolute" style={{bottom:"0"}}>
           <div className="logout_icon">
             <LogoutIcon />
           </div>

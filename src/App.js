@@ -1,4 +1,5 @@
-import "./App.css";
+import "../src/assests/css/sidebar.css";
+import "../src/assests/css/style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Index from "./pages/index";
 import Navbar from "./components/Navbar";
