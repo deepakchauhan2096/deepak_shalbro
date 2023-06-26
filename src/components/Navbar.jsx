@@ -1,10 +1,27 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate} from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
+
 const Navbar = () => {
   const [index, setIndex] = useState(1);
+  const [showProfile, setShowProfile] = useState(false);
   const location = useLocation();
   console.log(location.pathname, "loc");
+
+  const navigate = useNavigate();
+ 
+  const Logout = () => {
+    setShowProfile(false)
+    signOut(auth).then(() => {
+      navigate("/login");
+    }).catch((error) => {
+      // An error happened.
+    })
+    
+  }
+  
 
   return (
     <>
@@ -52,13 +69,21 @@ const Navbar = () => {
           >
             <Link to="/employee">Employee</Link>
           </li>
+
+          <li
+            style={{
+              background: location.pathname === "/employee" ? "#3596d9" : "",
+            }}
+          >
+            <Link to="/signup">Sign up</Link>
+          </li>
         </ul>
 
         <div className="login sidebar_footer position-absolute" style={{bottom:"0"}}>
           <div className="logout_icon">
             <LogoutIcon />
           </div>
-          <div className="logout_icon">Logout</div>
+          <div className="logout_icon" onClick={Logout}>Logout</div>
         </div>
       </nav>
     </>
