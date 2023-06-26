@@ -35,13 +35,15 @@ function App() {
       >
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/dashboard" index element={<Index />} />
-              <Route path="/subcontract" element={<SubContract />} />
-              <Route path="/company" element={<Company />} />
-              <Route path="/employee" element={<Employee />} />
-              <Route path="/contract" element={<Contract />} />
-              <Route path="*" element={<Page404 link="/dashboard" />} />
+              <Route path="/" element={!userName ? <Login/> : <Index />} />
+              <Route path="/signup" index element={userName ? <Index /> : <Signup/>} />
+              <Route path="/login" index element={userName ? <Index /> : <Login/>} />
+              <Route path="/dashboard" index element={userName ? <Index /> : <Login/>} />
+              <Route path="/subcontract" element={ userName ? <SubContract /> : ""} />
+              <Route path="/company" element={ userName ? <Company /> : ""} />
+              <Route path="/employee" element={userName ? <Employee /> : ""} />
+              <Route path="/contract" element={ userName ? <Contract /> : ""} />
+              <Route path="*" element={ userName ? <Page404 link="/dashboard" /> : <Page404 link="/" />} />
             </Routes>
           </BrowserRouter>
       </div>
