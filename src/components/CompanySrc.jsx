@@ -32,14 +32,16 @@ const ContractSrc = () => {
   const fetchData = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_admin",
-        { ADMIN_ID: 18, ADMIN_USERNAME: "deepanshu1" },
+        "http://54.89.160.62:5001/get_all_company",
+        { COMPANY_PARENT_ID: 18,
+          COMPANY_PARENT_USERNAME: "deepanshu1" },
         { headers }
       );
       setTimeout(() => {
         console.log("response.data : ", response.data);
         const data = response.data;
-        setTableRows(data.result[0].ADMIN_COMPANIES);
+        console.log("first1", data)
+        setTableRows(data.result);
       }, 1000);
       setIsLoading(false);
     } catch (error) {
@@ -80,8 +82,44 @@ const ContractSrc = () => {
     },
     {
       field: "COMPANY_USERNAME",
+      headerName: "USERNAME",
+      width: 120,
+      // editable: true,
+    },
+    {
+      field: "COMPANY_NAME",
       headerName: "NAME",
       width: 180,
+      // editable: true,
+    },
+    {
+      field: "COMPANY_EMAIL",
+      headerName: "E-MAIL",
+      width: 180,
+      // editable: true,
+    },
+    {
+      field: "COMPANY_ADD2",
+      headerName: "ADDRESS",
+      width: 200,
+      // editable: true,
+    },
+    {
+      field: "COMPANY_ROLE",
+      headerName: "ROLE",
+      width: 80,
+      // editable: true,
+    },
+    {
+      field: "COMPANY_STATE",
+      headerName: "STATE",
+      width: 80,
+      // editable: true,
+    },
+    {
+      field: "COMPANY_PHONE",
+      headerName: "CONTACT",
+      width: 120,
       // editable: true,
     },
 
@@ -254,7 +292,7 @@ const ContractSrc = () => {
                   <div className="col">
                     <b>Company Name</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {tableRows[0].COMPANY_USERNAME}
+                      {/* {tableRows[0].COMPANY_USERNAME} */}
                     </p>
                   </div>
                   <div className="col">

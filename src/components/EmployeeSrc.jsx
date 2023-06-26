@@ -8,22 +8,28 @@ import teamImg1 from "../assests/images/team-1.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Backdrop, CircularProgress } from "@mui/material";
 
-
-
-
 const EmployeeSrc = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  const [employeDatatable, setEmployeeDataTable] = useState({
-    COMPANY_PARENT_ID: 18,
-    COMPANY_PARENT_USERNAME: "deepanshu1",
-    COMPANY_ID: 45,
-    COMPANY_USERNAME: "company21",
+  // const [employeDatatable, setEmployeeDataTable] = useState({
+  //   COMPANY_PARENT_ID: 18,
+  //   COMPANY_PARENT_USERNAME: "deepanshu1",
+  //   COMPANY_ID: 45,
+  //   COMPANY_USERNAME: "company21",
+  // });
+  const [allempData, setAllempData] = useState({
+
+      COMPANY_PARENT_ID: 18,
+      COMPANY_PARENT_USERNAME: "deepanshu1",
+    
   });
-  console.log("employeerowdata: =>", employeDatatable);
+
+  // console.log("employeerowdata: =>", employeDatatable);
+  console.log("All_employe_data: =>", allempData);
 
   useEffect(() => {
-    fetchEmployee();
+    // fetchEmployee();
+    fetchAllEmployee();
   }, []);
 
   const [filterData, setFilteredData] = useState({
@@ -54,28 +60,31 @@ const EmployeeSrc = () => {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const fetchEmployee = async () => {
+
+
+  const fetchAllEmployee = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_company",
+        "http://54.89.160.62:5001/get_employee_all",
         {
-          COMPANY_PARENT_ID: 18,
-          COMPANY_PARENT_USERNAME: "deepanshu1",
-          COMPANY_ID: 45,
-          COMPANY_USERNAME: "company21",
+          EMPLOYEE_MEMBER_PARENT_ID: 18,
+          EMPLOYEE_MEMBER_PARENT_USERNAME: "deepanshu1",
         },
         { headers }
       );
-      setTimeout(()=>{
-        console.log("API DATA EMPLOYEE", response);
-      const data = response.data;
-      setEmployeeDataTable(data.result[0].COMPANY_EMPLOYIES);
-      setIsLoading(false);
-      },1000)
+      setTimeout(() => {
+        console.log("ALL EMPLOYEE data ", response);
+        const data = response.data;
+        // setAllempData(data.result[0].COMPANY_EMPLOYIES);
+        setAllempData(data.result)
+        console.log("all employee data", data.result[0].EMPLOYEE_NAME)
+        setIsLoading(false);
+      }, 1000);
     } catch (err) {
       console.log("something Went wrong: =>", err);
     }
   };
+
   const columns = [
     { field: "EMPLOYEE_ID", headerName: "ID", width: 60 },
     {
@@ -86,10 +95,29 @@ const EmployeeSrc = () => {
     },
     {
       field: "EMPLOYEE_NAME",
-      headerName: "Employee Name",
+      headerName: "Name",
       width: 120,
       // editable: true,
     },
+    {
+      field: "EMPLOYEE_EMAIL",
+      headerName: "E-mail",
+      width: 120,
+      // editable: true,
+    },
+    {
+      field: "EMPLOYEE_ROLE",
+      headerName: "Employee Role",
+      width: 120,
+      // editable: true,
+    },
+    {
+      field: "EMPLOYEE_PHONE",
+      headerName: "Phone",
+      width: 120,
+      // editable: true,
+    },
+  
     {
       field: "action",
       headerName: "Action",
@@ -111,7 +139,9 @@ const EmployeeSrc = () => {
     },
   ];
 
-  const rows = employeDatatable;
+  // const rows = employeDatatable;allempData
+  const rows = allempData;
+  console.log("rows",rows)
 
   function downloadPDF(pdf) {
     const linkSource = `data:application/pdf;base64,${pdf}`;
@@ -177,8 +207,6 @@ const EmployeeSrc = () => {
       workinghrs: 7,
     },
   ];
-  
-
 
   return (
     <>
@@ -288,14 +316,16 @@ const EmployeeSrc = () => {
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employee Name :{" "}
                     <span style={{ color: "red" }}>
-                      {/* {rows.map((item) => item.EMPLOYEE_USERNAME)} */}
+                    
+                     {/* {rows[0].EMPLOYEE_NAME} */}
+                    
                     </span>
                   </p>
                   {/* Date of Birth  */}
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Date Of Birth :{" "}
                     <span style={{ color: "grey" }}>
-                      {filterData.row.Birthdate}
+                      {/* {rows[0].EMPLOYEE_EMAIL} */}
                     </span>
                   </p>
 
