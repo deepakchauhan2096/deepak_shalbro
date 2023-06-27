@@ -5,7 +5,6 @@ import Dashboard from "../components/Dashboard";
 const Index = () => {
   return (
     <>
-      
         <Navbar />
         <Dashboard />
     </>

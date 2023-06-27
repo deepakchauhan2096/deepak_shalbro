@@ -1,11 +1,11 @@
 import React from 'react'
-import Dashhead from './Dashhead'
+import Dashheadm from './Dashheadm'
 
 const Dashboard = () => {
   return (
    <>
    
-   <Dashhead/>
+   <Dashheadm />
    
    
    </>
