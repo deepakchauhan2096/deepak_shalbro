@@ -17,10 +17,14 @@ const style = {
   p: 4,
 };
 
-export default function AddCompany() {
+export default function AddCompany({sendDataToParent}) {
   
   const [open, setOpen] = React.useState(false);
-  const [create_data, setCreate_data] = useState({
+ 
+
+  const [create_company, setCreate_company] = useState({
+    COMPANY_PARENT_ID: 18,
+    COMPANY_PARENT_USERNAME:"deepanshu1",
     COMPANY_NAME: "",
     COMPANY_USERNAME: "",
     COMPANY_PHONE: "",
@@ -28,8 +32,9 @@ export default function AddCompany() {
     COMPANY_ROLE: "Admin",
     COMPANY_ADD2: "",
     COMPANY_STATE: "",
-    // COMPANY_ZIP: "",
   });
+
+  // console.log("All state Data",create_company)
 
   const headers = {
     'Content-Type': 'application/json',
@@ -39,32 +44,29 @@ export default function AddCompany() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   
-    // const createCom = {
-    //   COMPANY_NAME: "",
-    //   COMPANY_USERNAME: "",
-    //   COMPANY_PHONE: "",
-    //   COMPANY_EMAIL: "",
-    //   COMPANY_ROLE: "",
-    //   // COMPANY_ADD2: "",
-    //   // COMPANY_STATE: "",
-    //   // COMPANY_ZIP: "",
-    //   // COMPANY_CHECK: "",
-    // };
-  
-
 
   const handleCreate = (e) => {
-      setCreate_data({...create_data,[e.target.name]:e.target.value})
+    setCreate_company({...create_company,[e.target.name]:e.target.value})
+    // console.log("heello world",create_company)
   }
+
+
+
 
   const handleSubmit = (e) => {
+    console.log("on btn submit")
     e.preventDefault();
-    axios.post("http://54.89.160.62:5001/create_user",create_data,{headers})
-    .then((response) => {
-      console.log("create_data: ", create_data)
-    })
-
-  }
+    axios.post("http://54.89.160.62:5001/create_company", create_company, { headers })
+      .then((response) => {
+        console.log("response1 : ",response)
+        // sendDataToParent(response.data);
+        console.log("response",response.data)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+      handleClose();
+  };
 
   return (
     // <div style={{ outline: "none" }}>
@@ -86,93 +88,123 @@ export default function AddCompany() {
           <form>
             <div className="row py-2">
               <div className="form-group py-2 col-xl-6">
-                <label for="inputEmail4">Company Name</label>
+                <label >Company Name</label>
                 <input
                   type="text"
                   className="form-control rounded-0"
-                  id="inputEmail4"
-                  placeholder="Email"
-                  value={create_data.COMPANY_NAME}
+                  id="inputcompName"
+                  placeholder="Company Name"
+                  value={create_company.COMPANY_NAME}
                   name="COMPANY_NAME"
                   onChange={handleCreate}
                 />
               </div>
               <div className="form-group py-2 col-xl-6">
-                <label for="inputAddress">Company username</label>
+                <label >Company username</label>
                 <input
                   type="text"
                   className="form-control rounded-0"
-                  id="inputAddress"
+                  id="inputUsername"
                   placeholder="Username"
-                  value={create_data.COMPANY_USERNAME}
+                  value={create_company.COMPANY_USERNAME}
                   name="COMPANY_USERNAME"
                   onChange={handleCreate}
 
                 />
               </div>
             </div>
+
+            <div className="row py-2">
+              <div className="form-group py-2 col-xl-6">
+                <label >Company Admin</label>
+                <input
+                  type="text"
+                  className="form-control rounded-0"
+                  id="inputEmail4"
+                  placeholder="Email"
+                  value={create_company.COMPANY_PARENT_ID}
+                  name="COMPANY_PARENT_ID"
+                  // defaultValue="Admin"
+                  // onChange={handleCreate}
+                />
+              </div>
+              <div className="form-group py-2 col-xl-6">
+                <label >Company parent username</label>
+                <input
+                  type="text"
+                  className="form-control rounded-0"
+                  id="inputusername"
+                  placeholder=" Parent Username"
+                  value={create_company.COMPANY_PARENT_USERNAME}
+                  name="COMPANY_PARENT_USERNAME"
+                  // onChange={handleCreate}
+
+                />
+              </div>
+            </div>
+
             <div className="row">
               <div className="form-group py-2 col-xl-6">
-                <label for="inputPassword4">Phone Number</label>
+                <label>Phone Number</label>
                 <input
                   type="number"
                   className="form-control rounded-0"
-                  id="inputPassword4"
+                  id="inputphone"
                   placeholder="Enter Number"
-                  value={create_data.COMPANY_PHONE}
+                  value={create_company.COMPANY_PHONE}
                   name="COMPANY_PHONE"
                   onChange={handleCreate}
 
                 />
               </div>
               <div className="form-group py-2 col-xl-6">
-                <label for="inputAddress">Role</label>
+                <label>Role</label>
                 <input
                   type="text"
                   className="form-control rounded-0"
                   id="inputAddress"
                   placeholder="1234 Main St"
-                  value="Admin"
+                  defaultValue="Admin"
                   name="COMPANY_ROLE"
-                  // value={create_data.add}
+                  // value={create_company.add}
                   // onChange={handleCreate}
 
                 />
               </div>
             </div>
             <div className="form-group py-2">
-              <label for="inputAddress2">Address 2</label>
+              <label >Address 2</label>
               <input
                 type="text"
                 className="form-control rounded-0"
                 id="inputAddress2"
                 placeholder="Apartment, studio, or floor"
                 name="COMPANY_ADD2"
-                value={create_data.COMPANY_ADD2}
+                value={create_company.COMPANY_ADD2}
                 onChange={handleCreate}
 
               />
             </div>
             <div className="row py-2">
               <div className="form-group col-md-6">
-                <label for="inputCity">Email</label>
+                <label>Email</label>
                 <input
                   type="text"
                   className="form-control rounded-0"
                   id="inputCity"
                   name="COMPANY_EMAIL"
-                  value={create_data.COMPANY_EMAIL}
+                  value={create_company.COMPANY_EMAIL}
                   onChange={handleCreate}
 
                 />
               </div>
               <div className="form-group col-md-6">
-                <label for="inputState">State</label>
+                <label>State</label>
                 <select
                   id="inputState"
                   className="form-control rounded-0"
                   name="COMPANY_STATE"
-                  value={create_data.COMPANY_STATE}
+                  value={create_company.COMPANY_STATE}
                   onChange={handleCreate}
 
                 >
@@ -186,59 +218,9 @@ export default function AddCompany() {
                   <option>Jharkhand</option>
                 </select>
               </div>
-              {/* <div className="form-group col-md-4">
-                <label for="inputZip">Zip</label>
-                <input
-                  type="text"
-                  className="form-control rounded-0"
-                  id="inputZip"
-                  name="zip"
-                  value={create_data.zip}
-                  onChange={handleCreate}
-
-                />
-              </div> */}
+            
             </div>
-            {/* <div className="row py-2">
-              <div className="form-group py-2 col-md-4">
-                <label for="file">Compliance doc</label>
-                <input
-                  className="form-control rounded-0"
-                  type="file"
-                  id="file"
-                  name="doc"
-                  // value={doc}
-                />
-              </div>
-
-              <div className="form-group py-2 col-md-4">
-                <label for="file">Policies</label>
-                <input
-                  className="form-control rounded-0"
-                  type="file"
-                  id="file"
-                />
-              </div>
-
-              <div className="form-group py-2 col-md-4">
-                <label for="file">Auto policies</label>
-                <input
-                  className="form-control rounded-0"
-                  type="file"
-                  id="file"
-                />
-              </div>
-
-              <div className="form-group py-2 col-md-4">
-                <label for="file">Law suits</label>
-                <input
-                  className="form-control rounded-0"
-                  type="file"
-                  id="file"
-                />
-              </div>
-            </div> */}
-
+          
            
             <Button type="submit" variant="contained" className="btn text-white rounded-0 mt-2" onClick={handleSubmit}>
               Submit
@@ -260,3 +242,6 @@ export default function AddCompany() {
 
   );
 }
+
+
+

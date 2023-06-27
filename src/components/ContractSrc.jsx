@@ -8,6 +8,7 @@ import AddContract from "../modal/AddContract";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddCompany from "../modal/AddCompany";
 import { Button, Container } from "@mui/material";
+import axios from "axios";
 
 const ContractSrc = () => {
   const [filterData, setFilteredData] = useState({
@@ -358,7 +359,7 @@ const ContractSrc = () => {
             </Button>
             <Button
               onClick={(e) => setIndex(1)}
-              variant={index == 1 ? "outlined" : "contained"}
+              variant={index === 1 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
             >
               Detail
@@ -366,7 +367,7 @@ const ContractSrc = () => {
 
             <Button
               onClick={(e) => setIndex(2)}
-              variant={index == 2 ? "outlined" : "contained"}
+              variant={index === 2 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
             >
               Payment
@@ -374,7 +375,7 @@ const ContractSrc = () => {
 
             <Button
               onClick={(e) => setIndex(3)}
-              variant={index == 3 ? "outlined" : "contained"}
+              variant={index === 3 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
             >
               Compliance
@@ -382,14 +383,14 @@ const ContractSrc = () => {
 
             <Button
               onClick={(e) => setIndex(4)}
-              variant={index == 4 ? "outlined" : "contained"}
+              variant={index === 4 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
             >
               Documents
             </Button>
           </div>
 
-          {index == 1 ? (
+          {index === 1 ? (
             <div className="box-tab">
               <div className="container-fluid p-4">
                 <div className="row">
@@ -569,7 +570,7 @@ const ContractSrc = () => {
                 </div>
               </div>
             </div>
-          ) : index == 2 ? (
+          ) : index === 2 ? (
             <div className="box-tab">
               <div className="p-4 container-fluid">
                 <div className="row">
@@ -785,7 +786,7 @@ const ContractSrc = () => {
                 </div>
               </div>
             </div>
-          ) : index == 3 ? (
+          ) : index === 3 ? (
             <div className="box-tab">
               <div className="p-4 container-fluid">
                 <div className="row">
