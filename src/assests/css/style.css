@@ -1,0 +1,34 @@
+.containers {
+    background-color: #f9f9f9;
+}
+
+.box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 95%;
+    height: 94vh;
+    background: #fff;
+}
+
+.box-tab {
+    height: 88vh;
+}
+
+.button {
+    border: none;
+    border-radius: 0 !important;
+}
+
+.btn-blue {
+    background: "#3596d9"
+}
+
+.view-btn {
+    border-radius: 20px !important;
+    font-size: 12px !important;
+}
+
+.btn {
+    box-shadow: none !important;
+}
