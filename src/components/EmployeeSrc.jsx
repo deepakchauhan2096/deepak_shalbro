@@ -113,6 +113,8 @@ const EmployeeSrc = () => {
       width: 120,
       // editable: true,
     },
+
+
     {
       field: "in",
       headerName: "IN",
@@ -152,6 +154,7 @@ const EmployeeSrc = () => {
         );
       },
     },
+
     {
       field: "action",
       headerName: "Action",
@@ -303,7 +306,11 @@ const EmployeeSrc = () => {
             </Button>
             <Button
               onClick={(e) => setIndex(1)}
+
+              variant={index == 1 ? "outlined" : "contained"}
+
               variant={index ===1 ? "outlined" : "contained"}
+
               className="btn rounded-0 border-0"
             >
               Employee Details
@@ -311,7 +318,9 @@ const EmployeeSrc = () => {
 
             <Button
               onClick={(e) => setIndex(2)}
+
               variant={index ===2 ? "outlined" : "contained"}
+
               className="btn rounded-0 border-0"
             >
               Documents
@@ -319,7 +328,11 @@ const EmployeeSrc = () => {
 
             <Button
               onClick={(e) => setIndex(3)}
+
+              variant={index == 3 ? "outlined" : "contained"}
+
               variant={index ===3 ? "outlined" : "contained"}
+
               className="btn rounded-0 border-0"
             >
               Timesheet
@@ -348,6 +361,7 @@ const EmployeeSrc = () => {
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employee Name :{" "}
                     <span style={{ color: "red" }}>
+
                       {filterData.row.EMPLOYEE_NAME}
                     </span>
                   </p>

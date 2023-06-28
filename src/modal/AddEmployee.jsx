@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+
 import { Button, Container } from "@mui/material";
 
 const style = {
@@ -40,7 +41,7 @@ export default function AddEmployee() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
- 
+
 
   const headers = {
     "Content-Type": "application/json",
@@ -94,7 +95,9 @@ export default function AddEmployee() {
           <Box sx={style}>
             <form>
               <div className="row py-2">
+
                 <div className="form-group col-xl-3">
+
                   <label>Employee Name</label>
                   <input
                     type="text"
@@ -106,6 +109,7 @@ export default function AddEmployee() {
                     onChange={handleCreate}
                   />
                 </div>
+
                 <div className="form-group col-xl-3">
                   <label>E-mail</label>
                   <input
@@ -139,11 +143,13 @@ export default function AddEmployee() {
                     placeholder="Enter Your city.."
                     value={createEmployee.EMPLOYEE_CITY}
                     name="EMPLOYEE_CITY"
+
                     onChange={handleCreate}
                   />
                 </div>
               </div>
               <div className="row py-2">
+
                 <div className="form-group col-xl-4">
                   <label>Phone</label>
                   <input
@@ -169,6 +175,7 @@ export default function AddEmployee() {
                   />
                 </div>
                 <div className="form-group col-xl-4">
+
                   <label for="inputPassword4">Employee Role</label>
                   <select
                     id="inputqual"
@@ -187,6 +194,7 @@ export default function AddEmployee() {
                   </select>
                 </div>
               </div>
+
               <div className="row py-2">
                 <div className="form-group col-xl-4">
                   <label for="inputqual">Employement Type</label>
@@ -197,6 +205,7 @@ export default function AddEmployee() {
                     name="EMPLOYEE_EMPLMNTTYPE"
                     onChange={handleCreate}
                   >
+
                     <option selected>Choose type...</option>
                     <option>Permanent</option>
                     <option>Contract</option>
@@ -243,9 +252,9 @@ export default function AddEmployee() {
                   onChange={handleCreate}
                 />
               </div>
+
            
               </div>
-             
               {/* <div className="row py-2">
               <div className="form-group col-md-6">
                 <label for="inputCity">City</label>
@@ -383,6 +392,20 @@ export default function AddEmployee() {
                 </label>
               </div>
             </div> */}
+
+              <Button type="submit" variant="contained" className="btn text-white rounded-0 mt-2" onClick={handleSubmit}>
+              Submit
+            </Button>{" "}
+            <Button
+            variant="contained"
+              color="error"
+              onClick={handleClose}
+              className="btn text-white rounded-0 mt-2"
+            >
+              Discard
+            </Button>
+              
+
               <Button
                 type="submit"
                 variant="contained"
@@ -399,6 +422,7 @@ export default function AddEmployee() {
               >
                 Discard
               </Button>
+
             </form>
           </Box>
         </Container>
