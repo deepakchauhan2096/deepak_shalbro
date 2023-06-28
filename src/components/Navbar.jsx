@@ -4,7 +4,11 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import {
+  AppBar,
   Avatar,
+  Box,
+  Divider,
+  Drawer,
   List,
   ListItem,
   ListItemButton,
@@ -16,6 +20,16 @@ const Navbar = () => {
   const [userName, setUserName] = useState("U");
 
   const [showProfile, setShowProfile] = useState(false);
+
+  const handleClose = () => {
+    setShowProfile(false)
+  }
+
+  const handleOpen = () => {
+    setShowProfile(true)
+  }
+
+
   const location = useLocation();
   console.log(location.pathname, "loc");
 
@@ -40,49 +54,73 @@ const Navbar = () => {
     });
   }, []);
 
-
   const urls = [
     {
-      listname : "Dashboard",
-      listlink :"/dashboard"
+      listname: "Dashboard",
+      listlink: "/dashboard",
     },
     {
-      listname : "Company",
-      listlink :"/company"
+      listname: "Company",
+      listlink: "/company",
     },
     {
-      listname : "Contract",
-      listlink :"/contract"
+      listname: "Contract",
+      listlink: "/contract",
     },
     {
-      listname : "Sub Contract",
-      listlink :"/subcontract"
+      listname: "Sub Contract",
+      listlink: "/subcontract",
     },
     {
+
+      listname: "Employee",
+      listlink: "/employee",
+    },
+  ];
+
       listname : "Employee",
       listlink :"/employee"
     }
   ]
 
+
   const Lists = (props) => {
-    return (<Link to={props.listlink}>
-            <List sx={{py:0}}>
-              <ListItem
-                sx={{
-                  background:
-                    location.pathname === props.listlink ? "#3596d9" : "",
-                }}
-                disablePadding
-              >
-                <ListItemButton sx={{color:"#fff"}}>{props.listname}</ListItemButton>
-              </ListItem>
-            </List>
-    </Link>)
-  }
+    return (
+      <Box role="presentation" sx={{width:250}}>
+        <Link to={props.listlink}>
+          <List sx={{ py: 0 }}>
+            <ListItem
+              sx={{
+                background:
+                  location.pathname === props.listlink ? "#3596d9" : "",
+              }}
+              disablePadding
+            >
+              <ListItemButton sx={{ color: "#fff" }}>
+                {props.listname}
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Link>
+      </Box>
+    );
+  };
 
   return (
     <>
-      <nav id="sidebar" style={{ height: "100vh", position: "relative" }}>
+      <Drawer
+        open={showProfile}
+        onClose={handleClose}
+        anchor="left"
+        variant="permanent"
+        PaperProps={{
+          className: "sidebar",
+          sx:{
+            overflow:"hidden"
+          }
+        }}
+      >
+        
         <div
           className="sidebar-header d-flex"
           style={{ justifyContent: "space-between" }}
@@ -93,9 +131,11 @@ const Navbar = () => {
           </Tooltip>
         </div>
 
-        <ul className="list-unstyled components">
-          {urls.map((post) => <Lists listname={post.listname} listlink={post.listlink} />)}
-        </ul>
+        <Divider/>
+
+        {urls.map((post) => (
+          <Lists listname={post.listname} listlink={post.listlink} />
+        ))}
 
         <div
           className="login sidebar_footer position-absolute"
@@ -108,7 +148,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-      </nav>
+      </Drawer>
     </>
   );
 };

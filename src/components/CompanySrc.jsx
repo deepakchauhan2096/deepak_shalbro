@@ -6,7 +6,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddCompany from "../modal/AddCompany";
 
-import { Button, ButtonGroup, Container } from "@mui/material";
+import { Button, ButtonGroup, Container, CssBaseline } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -161,13 +161,9 @@ const ContractSrc = () => {
   console.log("company data table: =>", tableRows);
   return (
     <>
-      <Container
-        id="content"
-        sx={{ height: "100vh", position: "relative" }}
-        maxWidth="xl"
-        className="containers"
-      >
-        <Box className="box m-4">
+        <Box 
+        className="box"
+        >
           <div className="container-fluid d-flex pb-0 g-0 flex-column">
             <div style={{ height: "20%" }}>
               <Button className="btn button btn-blue" variant="contained">
@@ -211,7 +207,7 @@ const ContractSrc = () => {
           style={{
             display: open ? "block" : "none",
           }}
-          className="box position-absolute overflow-auto m-4"
+          className="box position-absolute overflow-auto"
         >
           <ButtonGroup
             variant="outlined"
@@ -772,7 +768,6 @@ const ContractSrc = () => {
             ""
           )}
         </Box>
-      </Container>
     </>
   );
 };

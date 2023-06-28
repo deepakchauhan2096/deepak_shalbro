@@ -6,9 +6,10 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 95%;
-    height: 94vh;
+    width: calc(100% - 250px);
+    height: 100vh;
     background: #fff;
+    margin-left: 250px;
 }
 
 .box-tab {
@@ -32,3 +33,26 @@
 .btn {
     box-shadow: none !important;
 }
+
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+    
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #c7c7c7; 
+    border-radius: 20px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }

@@ -7,6 +7,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import teamImg1 from "../assests/images/team-1.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Backdrop, Button, CircularProgress, Container } from "@mui/material";
+import Snippet from "./Snippet";
 
 const EmployeeSrc = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -253,7 +254,7 @@ const EmployeeSrc = () => {
         maxWidth="xl"
         className="containers"
       >
-        <Box className="p-4">
+        <Box className="box">
           <div className="container-fluid d-flex pb-0 g-0 flex-column">
             <div style={{ height: "20%" }}>
               <Button className="btn button btn-blue" variant="contained">
@@ -262,12 +263,17 @@ const EmployeeSrc = () => {
               <AddEmployee />
             </div>
 
+            <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
+          
+
+
             {isLoading ? (
                <Box sx={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)"}}>
                <CircularProgress />
              </Box>
             ) : (
               <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
+
                 <DataGrid
                   sx={{ border: "none" }}
                   rows={rows}
@@ -285,18 +291,19 @@ const EmployeeSrc = () => {
                   checkboxSelection
                   disableRowSelectionOnClick
                 />
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </Box>
+        
 
         <Box
           style={{
             display: open ? "block" : "none",
           }}
-          className="box position-absolute overflow-auto m-4"
+          className="box position-absolute overflow-auto"
         >
-          <div className="container-fluid pb-0 g-0">
+          <div className="container-fluid pb-0 g-0 position-relative">
             <Button
               onClick={handleClose}
               variant="contained"
@@ -336,25 +343,102 @@ const EmployeeSrc = () => {
             >
               Timesheet
             </Button>
+            <Button
+              onClick={(e) => setIndex(4)}
+              variant={index == 4 ? "outlined" : "contained"}
+              className="btn rounded-0 border-0"
+            >
+              Worksheet
+            </Button>
           </div>
 
           {index === 1 ? (
             <div className="box-tab">
-            <div className="p-4 container-fluid">
-              <h5 style={{ textDecoration: "underline" }}>Employee Detail</h5>
+              <div className="p-4 container-fluid">
+                <h5 style={{ textDecoration: "underline" }}>Employee Detail</h5>
 
-              <div className="row">
-                <div className="col-3 border">
-                  <div className="text-center py-2">
-                    <img
-                      src={teamImg1}
-                      className="rounded"
-                      alt="img1"
-                      width="100%"
-                      height="100%"
-                    />
+                <div className="row">
+                  <div className="col-3 border">
+                    <div className="text-center py-2">
+                      <img
+                        src={teamImg1}
+                        className="rounded"
+                        alt="img1"
+                        width="100%"
+                        height="100%"
+                      />
+                    </div>
                   </div>
-                </div>
+
+
+                  <div className="col-4 border mx-2">
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Employee Name :{" "}
+                      <span style={{ color: "red" }}>
+                        {/* {rows[0].EMPLOYEE_NAME} */}
+                      </span>
+                    </p>
+                    {/* Date of Birth  */}
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Date Of Birth :{" "}
+                      <span style={{ color: "grey" }}>
+                        {/* {rows[0].EMPLOYEE_EMAIL} */}
+                      </span>
+                    </p>
+
+                    {/* Phone number               */}
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Phone Number :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.PhoneNumber}
+                      </span>
+                    </p>
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      State :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.state}
+                      </span>
+                    </p>
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      City :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.city}
+                      </span>
+                    </p>
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Employee Role :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.Employeerole}
+                      </span>
+                    </p>
+                  </div>
+
+                  <div className="col-4 border ">
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Employeement Type :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.Employementtype}
+                      </span>
+                    </p>
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Hire Date :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.Hiringdate}
+                      </span>
+                    </p>
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Working On Contract :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.holdingContract}
+                      </span>
+                    </p>
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Hourly Wages :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.hourlywages}
+                      </span>
+                    </p>
+                  </div>
 
                 <div className="col-4 border mx-2">
                   <p style={{ color: "black", fontWeight: "500" }}>
@@ -418,13 +502,75 @@ const EmployeeSrc = () => {
                       {filterData.row.EMPLOYEE_HOURLY_WAGE}
                     </span>
                   </p>
-                </div>
-              </div>
 
-              <div className="row">
-                {/* <h5 style={{ textDecoration: "underline" }} className="pt-4">
+                </div>
+
+                <div className="row">
+                  {/* <h5 style={{ textDecoration: "underline" }} className="pt-4">
                   Work Detail
                 </h5> */}
+
+                  <div className="col-5 border m-4">
+                    <h5
+                      style={{ textDecoration: "underline" }}
+                      className="pt-4"
+                    >
+                      Work Detail
+                    </h5>
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Employee Role :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.Employeerole}
+                      </span>
+                    </p>
+
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Employeement Type :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.Employementtype}
+                      </span>
+                    </p>
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Hire Date :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.Hiringdate}
+                      </span>
+                    </p>
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Working On Contract :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.holdingContract}
+                      </span>
+                    </p>
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Hourly Wages :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.hourlywages}
+                      </span>
+                    </p>
+                  </div>
+
+                  <div className="col-5 border m-4">
+                    <h5
+                      style={{ textDecoration: "underline" }}
+                      className="pt-4"
+                    >
+                      Salary Detail
+                    </h5>
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Employee Role :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.Employeerole}
+                      </span>
+                    </p>
+
+                    <p style={{ color: "black", fontWeight: "500" }}>
+                      Employeement Type :{" "}
+                      <span style={{ color: "grey" }}>
+                        {filterData.row.Employementtype}
+                      </span>
+                    </p>
+                  </div>
 
                 <div className="col-5 border m-4">
                   <h5 style={{ textDecoration: "underline" }} className="pt-4">
@@ -480,9 +626,9 @@ const EmployeeSrc = () => {
                       {filterData.row.EMPLOYEE_EMPLMNTTYPE}
                     </span>
                   </p>
+
                 </div>
               </div>
-            </div>
             </div>
           ) : (
             ""
@@ -650,6 +796,16 @@ const EmployeeSrc = () => {
                 </div>
               </div>
             </div>
+          ) : (
+            ""
+          )}
+
+           {index === 4 ? (
+            <>
+            <div className="container p-2" style={{height:"calc(100vh - 37px)", background:"#696969"}}>
+            <Snippet />
+            </div>
+            </>     
           ) : (
             ""
           )}

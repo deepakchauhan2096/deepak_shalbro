@@ -167,6 +167,10 @@ const ContractSrc = () => {
 
   return (
     <>
+
+   <Box className="box">
+          <div className="container-fluid d-flex pb-0 g-0 flex-column">
+
       <Container
         id="content"
         sx={{ height: "100vh", position: "relative" }}
@@ -175,6 +179,7 @@ const ContractSrc = () => {
       >
         <Box className="box m-4">
           <div className="container-fluid d-flex pb-0 g-0 flex-column" >
+
             <div style={{ height: "20%" }}>
               <Button className="btn button btn-blue" variant="contained">
                 Contract
@@ -214,7 +219,7 @@ const ContractSrc = () => {
           style={{
             display: open ? "block" : "none",
           }}
-          className="box position-absolute overflow-auto m-4"
+          className="box position-absolute overflow-auto"
         >
           <div className="container-fluid pb-0 g-0">
             <Button
@@ -1031,7 +1036,6 @@ const ContractSrc = () => {
             ""
           )}
         </Box>
-      </Container>
     </>
   );
 };
