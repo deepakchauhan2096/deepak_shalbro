@@ -181,16 +181,9 @@ const ContractSrc = () => {
             </div>
             <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
               {isLoading ? (
-                <Backdrop
-                  sx={{
-                    color: "#fff",
-                    zIndex: (theme) => theme.zIndex.drawer + 1,
-                  }}
-                  open={isLoading}
-                  onClick={handleClose}
-                >
-                  <CircularProgress color="inherit" />
-                </Backdrop>
+                <Box sx={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)"}}>
+                <CircularProgress />
+              </Box>
               ) : (
                 <DataGrid
                   sx={{ border: "none" }}

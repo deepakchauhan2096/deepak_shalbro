@@ -263,9 +263,9 @@ const EmployeeSrc = () => {
             </div>
 
             {isLoading ? (
-              <Backdrop open={isLoading}>
-                <CircularProgress color="inherit" />
-              </Backdrop>
+               <Box sx={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)"}}>
+               <CircularProgress />
+             </Box>
             ) : (
               <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
                 <DataGrid
@@ -307,9 +307,9 @@ const EmployeeSrc = () => {
             <Button
               onClick={(e) => setIndex(1)}
 
-              variant={index == 1 ? "outlined" : "contained"}
+              variant={index === 1 ? "outlined" : "contained"}
 
-              variant={index ===1 ? "outlined" : "contained"}
+             
 
               className="btn rounded-0 border-0"
             >
@@ -329,7 +329,6 @@ const EmployeeSrc = () => {
             <Button
               onClick={(e) => setIndex(3)}
 
-              variant={index == 3 ? "outlined" : "contained"}
 
               variant={index ===3 ? "outlined" : "contained"}
 

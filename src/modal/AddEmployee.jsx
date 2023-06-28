@@ -406,22 +406,7 @@ export default function AddEmployee() {
             </Button>
               
 
-              <Button
-                type="submit"
-                variant="contained"
-                className="btn text-white rounded-0 mt-2"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>{" "}
-              <Button
-                variant="contained"
-                color="error"
-                onClick={handleClose}
-                className="btn text-white rounded-0 mt-2"
-              >
-                Discard
-              </Button>
+          
 
             </form>
           </Box>

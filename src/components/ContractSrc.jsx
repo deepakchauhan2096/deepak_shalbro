@@ -1,74 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-
+import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 
 import AddContract from "../modal/AddContract";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Container } from "@mui/material";
-import axios from "axios";
-import { useEffect } from "react";
+
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ContractSrc = () => {
   const [data, setData] = useState({
-   row: {
-    "_id": "649a71ca12c8d41898147a9d",
-    "CONTRACT_ID": 52,
-    "CONTRACT_PARENT_ID": 45,
-    "CONTRACT_PARENT_USERNAME": "company21",
-    "CONTRACT_MEMBER_PARENT_ID": 18,
-    "CONTRACT_MEMBER_PARENT_USERNAME": "deepanshu1",
-    "CONTRACT_ROLE": "",
-    "CONTRACT_NAME": "construction",
-    "CONTRACT_PHONE": 7988155813,
-    "CONTRACT_USERNAME": "contract01",
-    "CONTRACT_START_DATE": "2023-06-01",
-    "CONTRACT_END_DATE": "2023-06-26",
-    "CONTRACT_SUPERVISOR": "Jigyashuu",
-    "CONTRACT_PROGRESS": "40",
-    "__v": 0
-}});
+    row: {
+      _id: "649a71ca12c8d41898147a9d",
+      CONTRACT_ID: 52,
+      CONTRACT_PARENT_ID: 45,
+      CONTRACT_PARENT_USERNAME: "company21",
+      CONTRACT_MEMBER_PARENT_ID: 18,
+      CONTRACT_MEMBER_PARENT_USERNAME: "deepanshu1",
+      CONTRACT_ROLE: "",
+      CONTRACT_NAME: "construction",
+      CONTRACT_PHONE: 7988155813,
+      CONTRACT_USERNAME: "contract01",
+      CONTRACT_START_DATE: "2023-06-01",
+      CONTRACT_END_DATE: "2023-06-26",
+      CONTRACT_SUPERVISOR: "Jigyashuu",
+      CONTRACT_PROGRESS: "40",
+      __v: 0,
+    },
+  });
 
-const [ContractData , setContractData] = useState([]);
+  const [ContractData, setContractData] = useState([]);
 
-console.log("all contracts: =>>>",ContractData)
+  const [isLoading, setIsLoading] = useState(true);
 
-useEffect( () => {
-  fetchContracts();
-},[])
+  // console.log("all contracts: =>>>",ContractData)
+
+  useEffect(() => {
+    fetchContracts();
+  }, []);
 
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
- 
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
- const headers ={
-  "Content-Type": "application/json",
-  authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
- }
+  const headers = {
+    "Content-Type": "application/json",
+    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  };
 
-const fetchContracts = async () =>{
-  try{
-    const response = await axios.put("http://54.89.160.62:5001/get_contracts",  
-     {
-      CONTRACT_MEMBER_PARENT_ID: 18,
-      CONTRACT_MEMBER_PARENT_USERNAME: "deepanshu1",
-    },
-     {headers}
-     );
-    setTimeout(()=>{
- const data = response.data
- setContractData(data.result)
- console.log("contracts Data : =>", data)
-    },1000)
-
-  }catch(err){
-console.log("Something Went Wrong: =>", err)
-  }
-}
-
-
+  const fetchContracts = async () => {
+    try {
+      const response = await axios.put(
+        "http://54.89.160.62:5001/get_contracts",
+        {
+          CONTRACT_MEMBER_PARENT_ID: 18,
+          CONTRACT_MEMBER_PARENT_USERNAME: "deepanshu1",
+        },
+        { headers }
+      );
+      setTimeout(() => {
+        const data = response.data;
+        setContractData(data.result);
+        setIsLoading(false);
+        console.log("contracts Data : =>", data);
+      }, 1000);
+    } catch (err) {
+      console.log("Something Went Wrong: =>", err);
+    }
+  };
 
   const columns = [
     { field: "CONTRACT_ID", headerName: "ID", width: 90 },
@@ -133,7 +135,6 @@ console.log("Something Went Wrong: =>", err)
   ];
 
   const rows = ContractData;
- 
 
   const style = {
     position: "absolute",
@@ -161,8 +162,8 @@ console.log("Something Went Wrong: =>", err)
   };
 
   // console.log(filterData, "data-GGG");
-  const filterData = data.row
-  console.log(filterData, "f-data")
+  const filterData = data.row;
+  console.log(filterData, "f-data");
 
   return (
     <>
@@ -173,32 +174,39 @@ console.log("Something Went Wrong: =>", err)
         className="containers"
       >
         <Box className="box m-4">
-          <div className="container-fluid d-flex pb-0 g-0 flex-column">
+          <div className="container-fluid d-flex pb-0 g-0 flex-column" >
             <div style={{ height: "20%" }}>
               <Button className="btn button btn-blue" variant="contained">
                 Contract
               </Button>
               <AddContract />
             </div>
-            <div style={{ height: "88vh", padding:20,paddingBottom:"0"  }}>
-              <DataGrid
-                sx={{ border: "none" }}
-                rows={rows}
-                columns={columns}
-                getRowId={(row) => row.CONTRACT_ID}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 20,
+
+            {isLoading ? (
+              <Box sx={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)"}}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
+                <DataGrid
+                  sx={{ border: "none" }}
+                  rows={rows}
+                  columns={columns}
+                  getRowId={(row) => row.CONTRACT_ID}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 20,
+                      },
                     },
-                  },
-                }}
-                density="compact"
-                pageSizeOptions={[5]}
-                checkboxSelection
-                disableRowSelectionOnClick
-              />
-            </div>
+                  }}
+                  density="compact"
+                  pageSizeOptions={[5]}
+                  checkboxSelection
+                  disableRowSelectionOnClick
+                />
+              </div>
+            )}
           </div>
         </Box>
 
@@ -288,7 +296,6 @@ console.log("Something Went Wrong: =>", err)
                 <hr />
 
                 <div className="row">
-                
                   <div className="col">
                     <b>Client</b>
                     <p className="bg-light text-dark px-2 rounded-4">L&T</p>
@@ -302,18 +309,18 @@ console.log("Something Went Wrong: =>", err)
                   <div className="col">
                     <b>Project Start</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                   { filterData.CONTRACT_START_DATE}
+                      {filterData.CONTRACT_START_DATE}
                     </p>
                   </div>
                   <div className="col">
                     <b>Project End</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                     { filterData.CONTRACT_END_DATE}
+                      {filterData.CONTRACT_END_DATE}
                     </p>
                   </div>
                 </div>
 
-               <div className="row">
+                <div className="row">
                   <div className="col">
                     <b>Project Progress</b>
                     <div className="p-2 rounded-3 bg-light">
@@ -329,7 +336,7 @@ console.log("Something Went Wrong: =>", err)
                       </div>
                     </div>
                   </div>
-                </div> 
+                </div>
 
                 <hr />
 
