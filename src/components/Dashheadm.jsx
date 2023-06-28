@@ -9,7 +9,7 @@ import React from "react";
 const Dashheadm = () => {
   const data = [
     {
-      contractname: "All Contracts",
+      contractname: "Contracts",
       counts: "300",
       description: "Lorem, ipsum dolor sit amet consectetur adipisicing",
       url: "Learn More",
@@ -33,7 +33,7 @@ const Dashheadm = () => {
       url: "Learn More",
     },
     {
-      contractname: "All Payments",
+      contractname: "Payments",
       counts: "200",
       description: "Lorem, ipsum dolor sit amet consectetur adipisicing",
       url: "Learn More",
@@ -75,7 +75,7 @@ const Dashheadm = () => {
                 color="text.secondary"
                 gutterBottom
               >
-                Total Contracts : {post.counts}
+                Total {post.contractname}: {post.counts}
               </Typography>
               <Typography component="div">{post.description}</Typography>
             </CardContent>

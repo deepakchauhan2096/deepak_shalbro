@@ -8,14 +8,13 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
-  ListItemText,
+
   Tooltip,
 } from "@mui/material";
 
 const Navbar = () => {
   const [userName, setUserName] = useState("U");
-  const [index, setIndex] = useState(1);
+
   const [showProfile, setShowProfile] = useState(false);
   const location = useLocation();
   console.log(location.pathname, "loc");
@@ -64,11 +63,6 @@ const Navbar = () => {
       listlink :"/employee"
     }
   ]
-
-
-
-
-
 
   const Lists = (props) => {
     return (<Link to={props.listlink}>
