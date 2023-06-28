@@ -33,14 +33,13 @@ const ContractSrc = () => {
     try {
       const response = await axios.put(
         "http://54.89.160.62:5001/get_all_company",
-        { COMPANY_PARENT_ID: 18,
-          COMPANY_PARENT_USERNAME: "deepanshu1" },
+        { COMPANY_PARENT_ID: 18, COMPANY_PARENT_USERNAME: "deepanshu1" },
         { headers }
       );
       setTimeout(() => {
         console.log("response.data : ", response.data);
         const data = response.data;
-        console.log("first1", data)
+        console.log("first1", data);
         setTableRows(data.result);
       }, 1000);
       setIsLoading(false);
@@ -51,21 +50,22 @@ const ContractSrc = () => {
 
   const [filterData, setFilteredData] = useState({
     row: {
-      id: 1,
-      companyName: "",
-      PhoneNumber: "",
-      state: "",
-      city: "",
-      age: "",
-      zip: "",
-      address: "",
-      action: "",
-      complianceDoc: "",
-      policies: "",
-      autoppolicies: "",
-      lawsuits: "",
+      _id: "64953f89450d9b0a7b4271e5",
+      COMPANY_ID: 20,
+      COMPANY_PARENT_ID: 18,
+      COMPANY_PARENT_USERNAME: "deepanshu1",
+      COMPANY_ROLE: "editor",
+      COMPANY_NAME: "comp1",
+      COMPANY_PHONE: 9876543,
+      COMPANY_EMAIL: "comp1@gmail.com",
+      COMPANY_ADD2: "HEELO",
+      COMPANY_USERNAME: "company12",
+      COMPANY_STATE: "",
+      COMPANY_EMPLOYIES: [],
+      __v: 0,
     },
   });
+
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
 
@@ -154,7 +154,7 @@ const ContractSrc = () => {
   }
 
   const handleClick = (event) => {
-    // setDataFromChild(event);
+    setFilteredData(event);
     handleOpen();
   };
 
@@ -290,39 +290,71 @@ const ContractSrc = () => {
               <div className="container-fluid p-4">
                 <div className="row">
                   <div className="col">
-                    <b>Company Name</b>
+                    <b>ID</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {/* {tableRows[0].COMPANY_USERNAME} */}
+                      {filterData.row.COMPANY_ID}
+                    </p>
+                  </div>
+                  <div className="col">
+                    <b>Username</b>
+                    <p className="bg-light text-dark px-2 rounded-4">
+                      {filterData.row.COMPANY_USERNAME}
+                    </p>
+                  </div>
+                  <div className="col">
+                    <b> Company Name</b>
+                    <p className="bg-light text-dark px-2 rounded-4">
+                      {filterData.row.COMPANY_NAME}
                     </p>
                   </div>
                   <div className="col">
                     <b>Phone</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {/* {tableRows.[0].PhoneNumber} */}
+                      {filterData.row.COMPANY_PHONE}
                     </p>
                   </div>
                   <div className="col">
                     <b>State</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.row.state}
+                      {filterData.row.COMPANY_STATE}
                     </p>
                   </div>
-                  <div className="col">
+                
+                </div>
+
+
+
+                <hr />
+
+                 <div className="row">
+                 <div className="col">
                     <b>City</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.row.city}
+                      {filterData.row.CITY}
+                    </p>
+                  </div>
+                
+                  <div className="col">
+                    <b>E-mail</b>
+                    <p className="bg-light text-dark px-2 rounded-4">
+                      {filterData.row.COMPANY_EMAIL}
+                    </p>
+                  </div>
+                 
+                  <div className="col">
+                    <b>Project Start</b>
+                    <p className="bg-light text-dark px-2 rounded-4">
+                      {filterData.row.COMPANY_ROLE}
                     </p>
                   </div>
                   <div className="col">
                     <b>Address</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.row.address}
+                      {filterData.row.COMPANY_ADD2}
                     </p>
                   </div>
                 </div>
-
-                <hr />
-
+ <hr />
                 <div className="row">
                   <div className="col">
                     <b>Project Name</b>
@@ -354,20 +386,9 @@ const ContractSrc = () => {
                       In Execution
                     </p>
                   </div>
-                  <div className="col">
-                    <b>Project Start</b>
-                    <p className="bg-light text-dark px-2 rounded-4">
-                      20-05-2020
-                    </p>
-                  </div>
-                  <div className="col">
-                    <b>Project End</b>
-                    <p className="bg-light text-dark px-2 rounded-4">
-                      30-09-2023
-                    </p>
-                  </div>
+               
                 </div>
-
+                {/* 
                 <div className="row">
                   <div className="col">
                     <b>Project Progress</b>
@@ -384,11 +405,11 @@ const ContractSrc = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 <hr />
 
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-3">
                     <b>Cost Breakdown</b>
                     <div className="bg-light rounded-3 pb-2">
@@ -462,7 +483,7 @@ const ContractSrc = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           ) : index === 2 ? (
