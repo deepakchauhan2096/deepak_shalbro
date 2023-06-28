@@ -6,22 +6,14 @@ import AddEmployee from "../modal/AddEmployee";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import teamImg1 from "../assests/images/team-1.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Backdrop, CircularProgress } from "@mui/material";
+import { Backdrop, Button, CircularProgress, Container } from "@mui/material";
 
 const EmployeeSrc = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  // const [employeDatatable, setEmployeeDataTable] = useState({
-  //   COMPANY_PARENT_ID: 18,
-  //   COMPANY_PARENT_USERNAME: "deepanshu1",
-  //   COMPANY_ID: 45,
-  //   COMPANY_USERNAME: "company21",
-  // });
   const [allempData, setAllempData] = useState({
-
-      COMPANY_PARENT_ID: 18,
-      COMPANY_PARENT_USERNAME: "deepanshu1",
-    
+    COMPANY_PARENT_ID: 18,
+    COMPANY_PARENT_USERNAME: "deepanshu1",
   });
 
   // console.log("employeerowdata: =>", employeDatatable);
@@ -34,20 +26,24 @@ const EmployeeSrc = () => {
 
   const [filterData, setFilteredData] = useState({
     row: {
-      id: 1,
-      EmployeeName: "",
-      Birthdate: "",
-      PhoneNumber: "",
-      Employeerole: "",
-      Employementtype: "",
-      Hiringdate: "",
-      hourlywages: "",
-      address: "",
-      action: "",
-      doc1: "",
-      doc2: "",
-      doc3: "",
-    },
+      "EMPLOYEE_DOB": "",
+      "EMPLOYEE_EMPLMNTTYPE": "",
+      "EMPLOYEE_HIRE_DATE": "",
+      "EMPLOYEE_HOURLY_WAGE": "",
+      "EMPLOYEE_ADD": "",
+      "_id": "649542d61de4d6ddb5243b83",
+      "EMPLOYEE_ID": 26,
+      "EMPLOYEE_PARENT_ID": 21,
+      "EMPLOYEE_PARENT_USERNAME": "company123",
+      "EMPLOYEE_MEMBER_PARENT_ID": 18,
+      "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepanshu1",
+      "EMPLOYEE_ROLE": "NAUKARI",
+      "EMPLOYEE_NAME": "NAUKAR",
+      "EMPLOYEE_PHONE": 1234567890,
+      "EMPLOYEE_EMAIL": "naukar@gmail.com",
+      "EMPLOYEE_USERNAME": "bhaknaukar",
+      "__v": 0
+  },
   });
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
@@ -59,8 +55,6 @@ const EmployeeSrc = () => {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
-
-
 
   const fetchAllEmployee = async () => {
     try {
@@ -76,8 +70,8 @@ const EmployeeSrc = () => {
         console.log("ALL EMPLOYEE data ", response);
         const data = response.data;
         // setAllempData(data.result[0].COMPANY_EMPLOYIES);
-        setAllempData(data.result)
-        console.log("all employee data", data.result[0].EMPLOYEE_NAME)
+        setAllempData(data.result);
+        console.log("all employee data", data.result[0].EMPLOYEE_NAME);
         setIsLoading(false);
       }, 1000);
     } catch (err) {
@@ -89,7 +83,7 @@ const EmployeeSrc = () => {
     { field: "EMPLOYEE_ID", headerName: "ID", width: 60 },
     {
       field: "EMPLOYEE_USERNAME",
-      headerName: "USERNAME",
+      headerName: "Username",
       width: 120,
       // editable: true,
     },
@@ -117,23 +111,61 @@ const EmployeeSrc = () => {
       width: 120,
       // editable: true,
     },
-  
     {
-      field: "action",
-      headerName: "Action",
+      field: "in",
+      headerName: "IN",
+      width: 80,
+      renderCell: (cellValues) => {
+        return (
+          <Button
+            variant="contained"
+            className="view-btn "
+            style={{ padding: "2px 2px",background:"#00a152" ,color:"white" }}
+            onClick={(event) => {
+              handleClick(cellValues);
+            }}
+          >
+            In
+          </Button>
+        );
+      },
+    },
+
+    {
+      field: "OUT",
+      headerName: "OUT",
       width: 100,
       renderCell: (cellValues) => {
         return (
-          <button
+          <Button
             variant="contained"
-            className="primary btn btn-success rounded-0"
+            className="view-btn  btn btn-success btn-danger"
+            style={{ padding: "2px 2px", background:"#ab003c" }}
+            onClick={(event) => {
+              handleClick(cellValues);
+            }}
+          >
+            Out
+          </Button>
+        );
+      },
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 80,
+      renderCell: (cellValues) => {
+        return (
+          <Button
+            variant="contained"
+            className="view-btn primary btn btn-success"
             style={{ padding: "2px 2px" }}
             onClick={(event) => {
               handleClick(cellValues);
             }}
           >
-            Show Detail
-          </button>
+            view
+          </Button>
         );
       },
     },
@@ -141,7 +173,7 @@ const EmployeeSrc = () => {
 
   // const rows = employeDatatable;allempData
   const rows = allempData;
-  console.log("rows",rows)
+  console.log("rows", rows);
 
   function downloadPDF(pdf) {
     const linkSource = `data:application/pdf;base64,${pdf}`;
@@ -210,93 +242,91 @@ const EmployeeSrc = () => {
 
   return (
     <>
-      <div id="content" style={{ height: "100vh", position: "relative" }}>
-        <Box
-          style={{
-            position: "absolute",
-            left: "0",
-            top: "0",
-            width: "100%",
-            height: "100vh",
-            background: "#fff",
-          }}
-          className="p-4"
-        >
-          <button className="btn btn-info text-white rounded-0  border-white">
-            Employee
-          </button>
-          <div>
-            <AddEmployee />
+      <Container
+        id="content"
+        sx={{ height: "100vh", position: "relative" }}
+        maxWidth="xl"
+        className="containers"
+      >
+        <Box className="p-4">
+          <div className="container-fluid d-flex pb-0 g-0 flex-column">
+            <div style={{ height: "20%" }}>
+              <Button className="btn button btn-blue" variant="contained">
+                Employee
+              </Button>
+              <AddEmployee />
+            </div>
 
             {isLoading ? (
               <Backdrop open={isLoading}>
                 <CircularProgress color="inherit" />
               </Backdrop>
             ) : (
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                getRowId={(row) => row.EMPLOYEE_ID}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 5,
+              <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
+                <DataGrid
+                  sx={{ border: "none" }}
+                  rows={rows}
+                  columns={columns}
+                  getRowId={(row) => row.EMPLOYEE_ID}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 20,
+                      },
                     },
-                  },
-                }}
-                density="compact"
-                pageSizeOptions={[5]}
-                checkboxSelection
-                disableRowSelectionOnClick
-              />
+                  }}
+                  density="compact"
+                  pageSizeOptions={[5]}
+                  checkboxSelection
+                  disableRowSelectionOnClick
+                />
+              </div>
             )}
           </div>
         </Box>
 
         <Box
           style={{
-            position: "absolute",
-            left: "0",
-            top: "0",
-            width: "100%",
-            height: "100vh",
-            background: "#fff",
             display: open ? "block" : "none",
           }}
-          className="p-4 position-absolute"
+          className="box position-absolute overflow-auto m-4"
         >
-          <button
-            onClick={handleClose}
-            className="btn btn-info text-white rounded-0 border-white"
-          >
-            <ArrowBackIcon />
-          </button>
-          <button
-            className="btn btn-info rounded-0 border-white"
-            style={{ background: index === 1 ? "#fff" : "" }}
-            onClick={(e) => setIndex(1)}
-          >
-            Employee Details
-          </button>
+          <div className="container-fluid pb-0 g-0">
+            <Button
+              onClick={handleClose}
+              variant="contained"
+              className="btn rounded-0"
+            >
+              <ArrowBackIcon style={{ fontSize: "25px" }} />
+            </Button>
+            <Button
+              onClick={(e) => setIndex(1)}
+              variant={index ===1 ? "outlined" : "contained"}
+              className="btn rounded-0 border-0"
+            >
+              Employee Details
+            </Button>
 
-          <button
-            className="btn btn-info rounded-0 border-white"
-            style={{ background: index === 2 ? "#fff" : "" }}
-            onClick={(e) => setIndex(2)}
-          >
-            Documents
-          </button>
+            <Button
+              onClick={(e) => setIndex(2)}
+              variant={index ===2 ? "outlined" : "contained"}
+              className="btn rounded-0 border-0"
+            >
+              Documents
+            </Button>
 
-          <button
-            className="btn btn-info rounded-0 border-white"
-            style={{ background: index === 3 ? "#fff" : "" }}
-            onClick={(e) => setIndex(3)}
-          >
-            Timesheet
-          </button>
+            <Button
+              onClick={(e) => setIndex(3)}
+              variant={index ===3 ? "outlined" : "contained"}
+              className="btn rounded-0 border-0"
+            >
+              Timesheet
+            </Button>
+          </div>
 
           {index === 1 ? (
-            <div className="container p-4 border">
+            <div className="box-tab">
+            <div className="p-4 container-fluid">
               <h5 style={{ textDecoration: "underline" }}>Employee Detail</h5>
 
               <div className="row">
@@ -316,16 +346,15 @@ const EmployeeSrc = () => {
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employee Name :{" "}
                     <span style={{ color: "red" }}>
-                    
-                     {/* {rows[0].EMPLOYEE_NAME} */}
-                    
+                      {filterData.row.EMPLOYEE_NAME}
                     </span>
                   </p>
                   {/* Date of Birth  */}
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Date Of Birth :{" "}
                     <span style={{ color: "grey" }}>
-                      {/* {rows[0].EMPLOYEE_EMAIL} */}
+                   
+                      {filterData.row.EMPLOYEE_EMAIL}
                     </span>
                   </p>
 
@@ -333,7 +362,7 @@ const EmployeeSrc = () => {
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Phone Number :{" "}
                     <span style={{ color: "grey" }}>
-                      {filterData.row.PhoneNumber}
+                      {filterData.row.EMPLOYEE_PHONE}
                     </span>
                   </p>
                   <p style={{ color: "black", fontWeight: "500" }}>
@@ -349,7 +378,7 @@ const EmployeeSrc = () => {
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employee Role :{" "}
                     <span style={{ color: "grey" }}>
-                      {filterData.row.Employeerole}
+                      {filterData.row.EMPLOYEE_EMPLMNTTYPE}
                     </span>
                   </p>
                 </div>
@@ -358,13 +387,13 @@ const EmployeeSrc = () => {
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employeement Type :{" "}
                     <span style={{ color: "grey" }}>
-                      {filterData.row.Employementtype}
+                      {filterData.row.EMPLOYEE_EMPLMNTTYPE}
                     </span>
                   </p>
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Hire Date :{" "}
                     <span style={{ color: "grey" }}>
-                      {filterData.row.Hiringdate}
+                      {filterData.row.EMPLOYEE_HIRE_DATE}
                     </span>
                   </p>
                   <p style={{ color: "black", fontWeight: "500" }}>
@@ -376,7 +405,7 @@ const EmployeeSrc = () => {
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Hourly Wages :{" "}
                     <span style={{ color: "grey" }}>
-                      {filterData.row.hourlywages}
+                      {filterData.row.EMPLOYEE_HOURLY_WAGE}
                     </span>
                   </p>
                 </div>
@@ -401,13 +430,13 @@ const EmployeeSrc = () => {
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employeement Type :{" "}
                     <span style={{ color: "grey" }}>
-                      {filterData.row.Employementtype}
+                      {filterData.row.EMPLOYEE_EMPLMNTTYPE}
                     </span>
                   </p>
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Hire Date :{" "}
                     <span style={{ color: "grey" }}>
-                      {filterData.row.Hiringdate}
+                      {filterData.row.EMPLOYEE_HIRE_DATE}
                     </span>
                   </p>
                   <p style={{ color: "black", fontWeight: "500" }}>
@@ -444,10 +473,11 @@ const EmployeeSrc = () => {
                 </div>
               </div>
             </div>
+            </div>
           ) : (
             ""
           )}
-          {index === 2 ? (
+          {index ===2 ? (
             <div className=" container  border p-2">
               <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
               <div
@@ -495,7 +525,7 @@ const EmployeeSrc = () => {
             ""
           )}
 
-          {index === 3 ? (
+          {index ===3 ? (
             <div className=" container  border p-2">
               <p>
                 {" "}
@@ -532,9 +562,9 @@ const EmployeeSrc = () => {
                 <tbody>
                   {tablerows?.map((item) => (
                     <tr className="table table-striped">
-                      <td scope="row">{item.date}</td>
-                      <td scope="row">{item.day}</td>
-                      <td scope="row">
+                      <td>{item.date}</td>
+                      <td>{item.day}</td>
+                      <td>
                         <span className=" bg-success text-light rounded-pill p-1">
                           {item.status}
                         </span>
@@ -614,7 +644,7 @@ const EmployeeSrc = () => {
             ""
           )}
         </Box>
-      </div>
+      </Container>
     </>
   );
 };
