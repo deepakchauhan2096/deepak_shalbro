@@ -176,24 +176,17 @@ const Dashheadm = () => {
 
   return (
     <>
-      <Container
-        id="content"
-        sx={{ height: "100vh", position: "relative" }}
-        maxWidth="xl"
-        className="containers"
-      >
-        <Box className="box m-4" overflow={"auto"}>
-          <Grid container spacing={2} sx={{ p: 3.5 }}>
-            <Grid container item xl={9} xs={12} >
-              {card}
-            </Grid>
-
-            <Grid container item xl={3} xs={12} >
-              {card2}
-            </Grid>
+      <Box className="box" overflow={"auto"}>
+        <Grid container spacing={2} sx={{ p: 3.5 }}>
+          <Grid container item xl={9} xs={12}>
+            {card}
           </Grid>
-        </Box>
-      </Container>
+
+          <Grid container item xl={3} xs={12}>
+            {card2}
+          </Grid>
+        </Grid>
+      </Box>
     </>
   );
 };
