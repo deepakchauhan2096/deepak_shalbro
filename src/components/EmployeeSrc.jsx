@@ -31,17 +31,19 @@ const EmployeeSrc = () => {
       "EMPLOYEE_HIRE_DATE": "",
       "EMPLOYEE_HOURLY_WAGE": "",
       "EMPLOYEE_ADD": "",
-      "_id": "649542d61de4d6ddb5243b83",
-      "EMPLOYEE_ID": 26,
-      "EMPLOYEE_PARENT_ID": 21,
-      "EMPLOYEE_PARENT_USERNAME": "company123",
+      "EMPLOYEE_STATE": "",
+      "EMPLOYEE_CITY": "",
+      "_id": "6496d035a6835b787aa7b7b1",
+      "EMPLOYEE_ID": 51,
+      "EMPLOYEE_PARENT_ID": 45,
+      "EMPLOYEE_PARENT_USERNAME": "company21",
       "EMPLOYEE_MEMBER_PARENT_ID": 18,
       "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepanshu1",
-      "EMPLOYEE_ROLE": "NAUKARI",
-      "EMPLOYEE_NAME": "NAUKAR",
-      "EMPLOYEE_PHONE": 1234567890,
-      "EMPLOYEE_EMAIL": "naukar@gmail.com",
-      "EMPLOYEE_USERNAME": "bhaknaukar",
+      "EMPLOYEE_ROLE": "",
+      "EMPLOYEE_NAME": "",
+      "EMPLOYEE_PHONE": null,
+      "EMPLOYEE_EMAIL": "",
+      "EMPLOYEE_USERNAME": "",
       "__v": 0
   },
   });
@@ -368,12 +370,12 @@ const EmployeeSrc = () => {
                   <p style={{ color: "black", fontWeight: "500" }}>
                     State :{" "}
                     <span style={{ color: "grey" }}>
-                      {filterData.row.state}
+                      {filterData.row.EMPLOYEE_STATE}
                     </span>
                   </p>
                   <p style={{ color: "black", fontWeight: "500" }}>
                     City :{" "}
-                    <span style={{ color: "grey" }}>{filterData.row.city}</span>
+                    <span style={{ color: "grey" }}>{filterData.row.EMPLOYEE_CITY}</span>
                   </p>
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employee Role :{" "}
@@ -384,6 +386,44 @@ const EmployeeSrc = () => {
                 </div>
 
                 <div className="col-4 border ">
+                  <p style={{ color: "black", fontWeight: "500" }}>
+                    Employeement Type :{" "}
+                    <span style={{ color: "grey" }}>
+                      {filterData.row.EMPLOYEE_EMPLMNTTYPE}
+                    </span>
+                  </p>
+                  <p style={{ color: "black", fontWeight: "500" }}>
+                    Hire Date :{" "}
+                    <span style={{ color: "grey" }}>
+                      {filterData.row.EMPLOYEE_HIRE_DATE}
+                    </span>
+                  </p>
+                
+                  <p style={{ color: "black", fontWeight: "500" }}>
+                    Hourly Wages :{" "}
+                    <span style={{ color: "grey" }}>
+                      {filterData.row.EMPLOYEE_HOURLY_WAGE}
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <div className="row">
+                {/* <h5 style={{ textDecoration: "underline" }} className="pt-4">
+                  Work Detail
+                </h5> */}
+
+                <div className="col-5 border m-4">
+                  <h5 style={{ textDecoration: "underline" }} className="pt-4">
+                    Work Detail
+                  </h5>
+                  <p style={{ color: "black", fontWeight: "500" }}>
+                    Employee Role :{" "}
+                    <span style={{ color: "grey" }}>
+                      {filterData.row.EMPLOYEE_ROLE}
+                    </span>
+                  </p>
+
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employeement Type :{" "}
                     <span style={{ color: "grey" }}>
@@ -409,49 +449,6 @@ const EmployeeSrc = () => {
                     </span>
                   </p>
                 </div>
-              </div>
-
-              <div className="row">
-                {/* <h5 style={{ textDecoration: "underline" }} className="pt-4">
-                  Work Detail
-                </h5> */}
-
-                <div className="col-5 border m-4">
-                  <h5 style={{ textDecoration: "underline" }} className="pt-4">
-                    Work Detail
-                  </h5>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Employee Role :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.Employeerole}
-                    </span>
-                  </p>
-
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Employeement Type :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_EMPLMNTTYPE}
-                    </span>
-                  </p>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Hire Date :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_HIRE_DATE}
-                    </span>
-                  </p>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Working On Contract :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.holdingContract}
-                    </span>
-                  </p>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Hourly Wages :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.hourlywages}
-                    </span>
-                  </p>
-                </div>
 
                 <div className="col-5 border m-4">
                   <h5 style={{ textDecoration: "underline" }} className="pt-4">
@@ -460,14 +457,14 @@ const EmployeeSrc = () => {
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employee Role :{" "}
                     <span style={{ color: "grey" }}>
-                      {filterData.row.Employeerole}
+                      {filterData.row.EMPLOYEE_ROLE}
                     </span>
                   </p>
 
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employeement Type :{" "}
                     <span style={{ color: "grey" }}>
-                      {filterData.row.Employementtype}
+                      {filterData.row.EMPLOYEE_EMPLMNTTYPE}
                     </span>
                   </p>
                 </div>
@@ -532,7 +529,7 @@ const EmployeeSrc = () => {
                 <b style={{ fontWeight: "600", color: "black" }}>
                   Employee Name :{" "}
                 </b>
-                Anurag Pal
+                {filterData.row.EMPLOYEE_NAME}
               </p>
               <p>
                 {" "}
