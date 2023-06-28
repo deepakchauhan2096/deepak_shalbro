@@ -78,10 +78,6 @@ const Navbar = () => {
     },
   ];
 
-      listname : "Employee",
-      listlink :"/employee"
-    }
-  ]
 
 
   const Lists = (props) => {

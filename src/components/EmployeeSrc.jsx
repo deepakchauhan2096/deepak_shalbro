@@ -263,10 +263,8 @@ const EmployeeSrc = () => {
               <AddEmployee />
             </div>
 
+           
             <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
-          
-
-
             {isLoading ? (
                <Box sx={{position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)"}}>
                <CircularProgress />
@@ -291,8 +289,10 @@ const EmployeeSrc = () => {
                   checkboxSelection
                   disableRowSelectionOnClick
                 />
-              )}
             </div>
+              )}
+         
+          </div>
           </div>
         </Box>
         
@@ -370,7 +370,6 @@ const EmployeeSrc = () => {
                     </div>
                   </div>
 
-
                   <div className="col-4 border mx-2">
                     <p style={{ color: "black", fontWeight: "500" }}>
                       Employee Name :{" "}
@@ -440,7 +439,7 @@ const EmployeeSrc = () => {
                     </p>
                   </div>
 
-                <div className="col-4 border mx-2">
+                  <div className="col-4 border mx-2">
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employee Name :{" "}
                     <span style={{ color: "red" }}>
@@ -480,9 +479,9 @@ const EmployeeSrc = () => {
                       {filterData.row.EMPLOYEE_EMPLMNTTYPE}
                     </span>
                   </p>
-                </div>
+                  </div>
 
-                <div className="col-4 border ">
+                  <div className="col-4 border ">
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employeement Type :{" "}
                     <span style={{ color: "grey" }}>
@@ -503,12 +502,14 @@ const EmployeeSrc = () => {
                     </span>
                   </p>
 
+                 </div>
+
                 </div>
 
                 <div className="row">
-                  {/* <h5 style={{ textDecoration: "underline" }} className="pt-4">
-                  Work Detail
-                </h5> */}
+                         {/* <h5 style={{ textDecoration: "underline" }} className="pt-4">
+                         Work Detail
+                       </h5> */}
 
                   <div className="col-5 border m-4">
                     <h5
@@ -572,7 +573,7 @@ const EmployeeSrc = () => {
                     </p>
                   </div>
 
-                <div className="col-5 border m-4">
+                  <div className="col-5 border m-4">
                   <h5 style={{ textDecoration: "underline" }} className="pt-4">
                     Work Detail
                   </h5>
@@ -607,7 +608,7 @@ const EmployeeSrc = () => {
                       {filterData.row.EMPLOYEE_HOURLY_WAGE}
                     </span>
                   </p>
-                </div>
+                  </div>
 
                 <div className="col-5 border m-4">
                   <h5 style={{ textDecoration: "underline" }} className="pt-4">
@@ -628,6 +629,8 @@ const EmployeeSrc = () => {
                   </p>
 
                 </div>
+
+              </div>
               </div>
             </div>
           ) : (

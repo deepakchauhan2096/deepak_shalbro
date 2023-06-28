@@ -167,9 +167,9 @@ const ContractSrc = () => {
 
   return (
     <>
-
+{/* 
    <Box className="box">
-          <div className="container-fluid d-flex pb-0 g-0 flex-column">
+          <div className="container-fluid d-flex pb-0 g-0 flex-column"> */}
 
       <Container
         id="content"
@@ -177,7 +177,7 @@ const ContractSrc = () => {
         maxWidth="xl"
         className="containers"
       >
-        <Box className="box m-4">
+        <Box className="box">
           <div className="container-fluid d-flex pb-0 g-0 flex-column" >
 
             <div style={{ height: "20%" }}>
@@ -1036,6 +1036,7 @@ const ContractSrc = () => {
             ""
           )}
         </Box>
+   </Container>
     </>
   );
 };
