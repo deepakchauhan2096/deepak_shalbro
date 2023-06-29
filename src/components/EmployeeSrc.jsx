@@ -369,76 +369,6 @@ const EmployeeSrc = () => {
                       />
                     </div>
                   </div>
-
-                  <div className="col-4 border mx-2">
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employee Name :{" "}
-                      <span style={{ color: "red" }}>
-                        {/* {rows[0].EMPLOYEE_NAME} */}
-                      </span>
-                    </p>
-                    {/* Date of Birth  */}
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Date Of Birth :{" "}
-                      <span style={{ color: "grey" }}>
-                        {/* {rows[0].EMPLOYEE_EMAIL} */}
-                      </span>
-                    </p>
-
-                    {/* Phone number               */}
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Phone Number :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.PhoneNumber}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      State :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.state}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      City :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.city}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employee Role :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employeerole}
-                      </span>
-                    </p>
-                  </div>
-
-                  <div className="col-4 border ">
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employeement Type :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employementtype}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Hire Date :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Hiringdate}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Working On Contract :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.holdingContract}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Hourly Wages :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.hourlywages}
-                      </span>
-                    </p>
-                  </div>
-
                   <div className="col-4 border mx-2">
                   <p style={{ color: "black", fontWeight: "500" }}>
                     Employee Name :{" "}
@@ -511,67 +441,9 @@ const EmployeeSrc = () => {
                          Work Detail
                        </h5> */}
 
-                  <div className="col-5 border m-4">
-                    <h5
-                      style={{ textDecoration: "underline" }}
-                      className="pt-4"
-                    >
-                      Work Detail
-                    </h5>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employee Role :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employeerole}
-                      </span>
-                    </p>
+                 
 
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employeement Type :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employementtype}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Hire Date :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Hiringdate}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Working On Contract :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.holdingContract}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Hourly Wages :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.hourlywages}
-                      </span>
-                    </p>
-                  </div>
-
-                  <div className="col-5 border m-4">
-                    <h5
-                      style={{ textDecoration: "underline" }}
-                      className="pt-4"
-                    >
-                      Salary Detail
-                    </h5>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employee Role :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employeerole}
-                      </span>
-                    </p>
-
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employeement Type :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employementtype}
-                      </span>
-                    </p>
-                  </div>
+                 
 
                   <div className="col-5 border m-4">
                   <h5 style={{ textDecoration: "underline" }} className="pt-4">
