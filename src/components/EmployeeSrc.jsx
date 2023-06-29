@@ -8,6 +8,8 @@ import teamImg1 from "../assests/images/team-1.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Backdrop, Button, CircularProgress, Container } from "@mui/material";
 import Snippet from "./Snippet";
+import EmployeePDF from "../Invoices/EmployeePDF";
+import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 
 const EmployeeSrc = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -254,7 +256,6 @@ const EmployeeSrc = () => {
             </div>
           </div>
         </Box>
-        
 
         <Box
           style={{
@@ -270,36 +271,21 @@ const EmployeeSrc = () => {
             >
               <ArrowBackIcon style={{ fontSize: "25px" }} />
             </Button>
-            <Button
-              onClick={(e) => setIndex(1)}
-              variant={index == 1 ? "outlined" : "contained"}
-              className="btn rounded-0 border-0"
-            >
-              Employee Details
-            </Button>
-
-            <Button
-              onClick={(e) => setIndex(2)}
-              variant={index == 2 ? "outlined" : "contained"}
-              className="btn rounded-0 border-0"
-            >
-              Documents
-            </Button>
-
-            <Button
-              onClick={(e) => setIndex(3)}
-              variant={index == 3 ? "outlined" : "contained"}
-              className="btn rounded-0 border-0"
-            >
-              Timesheet
-            </Button>
-            <Button
-              onClick={(e) => setIndex(4)}
-              variant={index == 4 ? "outlined" : "contained"}
-              className="btn rounded-0 border-0"
-            >
-              Worksheet
-            </Button>
+            {[
+              "Employee Details",
+              "Documents",
+              "Timesheet",
+              "Worksheet",
+              "Acknowledge",
+            ].map((item, value) => (
+              <Button
+                onClick={(e, index) => setIndex(value + 1)}
+                variant={index == value + 1 ? "outlined" : "contained"}
+                className="btn rounded-0 border-0"
+              >
+                {item}
+              </Button>
+            ))}
           </div>
 
           {index === 1 ? (
@@ -629,12 +615,35 @@ const EmployeeSrc = () => {
             ""
           )}
 
-           {index === 4 ? (
+          {index === 4 ? (
             <>
-            <div className="container p-2" style={{height:"calc(100vh - 37px)", background:"#696969"}}>
-            <Snippet />
-            </div>
-            </>     
+              <div
+                className="container p-2"
+                style={{ height: "calc(100vh - 37px)", background: "#696969" }}
+              >
+                <Snippet />
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+
+          {index === 5 ? (
+            <>
+              <div
+                className="container p-4"
+                style={{ height: "calc(100vh - 37px)", background: "#696969" }}
+              >
+                {/* <PDFDownloadLink document={<EmployeePDF />} fileName="test.pdf">
+        {({ blob, url, loading, error }) =>
+          loading ? "Loading document..." : "Download now!"
+        }
+      </PDFDownloadLink> */}
+                <PDFViewer style={{width:"100%",height:"100%",backgroundColor:"pink"}}>
+                  <EmployeePDF />
+                </PDFViewer>
+              </div>
+            </>
           ) : (
             ""
           )}
