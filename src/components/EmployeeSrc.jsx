@@ -6,24 +6,37 @@ import AddEmployee from "../modal/AddEmployee";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import teamImg1 from "../assests/images/team-1.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Backdrop, Button, CircularProgress, Container } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import {
+  Backdrop,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  Container,
+  Grid,
+  Paper,
+  Typography,
+} from "@mui/material";
 import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
+import CloseIcon from "@mui/icons-material/Close";
+import Mymenu from "../components/Menus"
+
+
+
+
 
 const EmployeeSrc = () => {
   const [isLoading, setIsLoading] = useState(true);
 
-  // const [employeDatatable, setEmployeeDataTable] = useState({
-  //   COMPANY_PARENT_ID: 18,
-  //   COMPANY_PARENT_USERNAME: "deepanshu1",
-  //   COMPANY_ID: 45,
-  //   COMPANY_USERNAME: "company21",
-  // });
   const [allempData, setAllempData] = useState({
     COMPANY_PARENT_ID: 18,
     COMPANY_PARENT_USERNAME: "deepanshu1",
   });
+  
 
   // console.log("employeerowdata: =>", employeDatatable);
   console.log("All_employe_data: =>", allempData);
@@ -35,19 +48,25 @@ const EmployeeSrc = () => {
 
   const [filterData, setFilteredData] = useState({
     row: {
-      id: 1,
-      EmployeeName: "",
-      Birthdate: "",
-      PhoneNumber: "",
-      Employeerole: "",
-      Employementtype: "",
-      Hiringdate: "",
-      hourlywages: "",
-      address: "",
-      action: "",
-      doc1: "",
-      doc2: "",
-      doc3: "",
+      _id: "6496d035a6835b787aa7b7b1",
+      EMPLOYEE_DOB: "",
+      EMPLOYEE_EMPLMNTTYPE: "",
+      EMPLOYEE_HIRE_DATE: "",
+      EMPLOYEE_HOURLY_WAGE: "",
+      EMPLOYEE_ADD: "",
+      EMPLOYEE_STATE: "",
+      EMPLOYEE_CITY: "",
+      EMPLOYEE_ID: 51,
+      EMPLOYEE_PARENT_ID: 45,
+      EMPLOYEE_PARENT_USERNAME: "company21",
+      EMPLOYEE_MEMBER_PARENT_ID: 18,
+      EMPLOYEE_MEMBER_PARENT_USERNAME: "deepanshu1",
+      EMPLOYEE_ROLE: "",
+      EMPLOYEE_NAME: "",
+      EMPLOYEE_PHONE: null,
+      EMPLOYEE_EMAIL: "",
+      EMPLOYEE_USERNAME: "",
+      __v: 0,
     },
   });
   const [open, setOpen] = React.useState(false);
@@ -116,10 +135,55 @@ const EmployeeSrc = () => {
       width: 120,
       // editable: true,
     },
+
+    // {
+    //   field: "in",
+    //   headerName: "IN",
+    //   width: 80,
+    //   renderCell: (cellValues) => {
+    //     return (
+    //       <Button
+    //         variant="contained"
+    //         className="view-btn "
+    //         style={{
+    //           padding: "2px 2px",
+    //           background: "#00a152",
+    //           color: "white",
+    //         }}
+    //         onClick={(event) => {
+    //           handleClick(cellValues);
+    //         }}
+    //       >
+    //         In
+    //       </Button>
+    //     );
+    //   },
+    // },
+
+    // {
+    //   field: "OUT",
+    //   headerName: "OUT",
+    //   width: 100,
+    //   renderCell: (cellValues) => {
+    //     return (
+    //       <Button
+    //         variant="contained"
+    //         className="view-btn  btn btn-success btn-danger"
+    //         style={{ padding: "2px 2px", background: "#ab003c" }}
+    //         onClick={(event) => {
+    //           handleClick(cellValues);
+    //         }}
+    //       >
+    //         Out
+    //       </Button>
+    //     );
+    //   },
+    // },
+
     {
       field: "action",
       headerName: "Action",
-      width: 100,
+      width: 80,
       renderCell: (cellValues) => {
         return (
           <Button
@@ -206,6 +270,20 @@ const EmployeeSrc = () => {
     },
   ];
 
+  const MyScreen = styled(Paper)(({ props }) => ({
+    height: "calc(100vh - 37px)",
+    padding: 0,
+    paddingBottom: "0",
+    overflow: "auto",
+  }));
+
+
+  
+
+
+  
+
+
   return (
     <>
       <Container
@@ -215,25 +293,25 @@ const EmployeeSrc = () => {
         className="containers"
       >
         <Box className="box">
-          <div className="container-fluid d-flex pb-0 g-0 flex-column">
-            <div style={{ height: "20%" }}>
-              <Button className="btn button btn-blue" variant="contained">
-                Employee
-              </Button>
-              <AddEmployee />
-            </div>
-            <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
+          <div>
+            <Button className="btn button btn-blue" variant="contained">
+              Employee
+            </Button>
+            <AddEmployee />
+          </div>
+          <MyScreen>
+            <div style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
               {isLoading ? (
-                <Backdrop
+                <Box
                   sx={{
-                    color: "#fff",
-                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%,-50%)",
                   }}
-                  open={isLoading}
-                  onClick={handleClose}
                 >
-                  <CircularProgress color="inherit" />
-                </Backdrop>
+                  <CircularProgress />
+                </Box>
               ) : (
                 <DataGrid
                   sx={{ border: "none" }}
@@ -254,7 +332,7 @@ const EmployeeSrc = () => {
                 />
               )}
             </div>
-          </div>
+          </MyScreen>
         </Box>
 
         <Box
@@ -263,7 +341,7 @@ const EmployeeSrc = () => {
           }}
           className="box position-absolute overflow-auto"
         >
-          <div className="container-fluid pb-0 g-0 position-relative">
+          <div className="container-fluid pb-0 g-0 position-sticky top-0">
             <Button
               onClick={handleClose}
               variant="contained"
@@ -286,170 +364,141 @@ const EmployeeSrc = () => {
                 {item}
               </Button>
             ))}
+            
+             
+            <Mymenu />
+            <Button
+              onClick={handleClose}
+              variant={"contained"}
+              className="btn rounded-0 border border-top-0 border-bottom-0"
+              color="error"
+              style={{ position: "absolute", right: "0" }}
+            >
+              {<CloseIcon />}
+            </Button>
           </div>
 
           {index === 1 ? (
-            <div className="box-tab">
-              <div className="p-4 container-fluid">
-                <h5 style={{ textDecoration: "underline" }}>Employee Detail</h5>
-
-                <div className="row">
-                  <div className="col-3 border">
-                    <div className="text-center py-2">
-                      <img
-                        src={teamImg1}
-                        className="rounded"
-                        alt="img1"
-                        width="100%"
-                        height="100%"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="col-4 border mx-2">
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employee Name :{" "}
-                      <span style={{ color: "red" }}>
-                        {/* {rows[0].EMPLOYEE_NAME} */}
-                      </span>
-                    </p>
-                    {/* Date of Birth  */}
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Date Of Birth :{" "}
-                      <span style={{ color: "grey" }}>
-                        {/* {rows[0].EMPLOYEE_EMAIL} */}
-                      </span>
-                    </p>
-
-                    {/* Phone number               */}
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Phone Number :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.PhoneNumber}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      State :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.state}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      City :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.city}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employee Role :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employeerole}
-                      </span>
-                    </p>
-                  </div>
-
-                  <div className="col-4 border ">
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employeement Type :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employementtype}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Hire Date :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Hiringdate}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Working On Contract :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.holdingContract}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Hourly Wages :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.hourlywages}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                <div className="row">
-                  {/* <h5 style={{ textDecoration: "underline" }} className="pt-4">
-                  Work Detail
-                </h5> */}
-
-                  <div className="col-5 border m-4">
-                    <h5
-                      style={{ textDecoration: "underline" }}
-                      className="pt-4"
-                    >
-                      Work Detail
-                    </h5>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employee Role :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employeerole}
-                      </span>
-                    </p>
-
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employeement Type :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employementtype}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Hire Date :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Hiringdate}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Working On Contract :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.holdingContract}
-                      </span>
-                    </p>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Hourly Wages :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.hourlywages}
-                      </span>
-                    </p>
-                  </div>
-
-                  <div className="col-5 border m-4">
-                    <h5
-                      style={{ textDecoration: "underline" }}
-                      className="pt-4"
-                    >
-                      Salary Detail
-                    </h5>
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employee Role :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employeerole}
-                      </span>
-                    </p>
-
-                    <p style={{ color: "black", fontWeight: "500" }}>
-                      Employeement Type :{" "}
-                      <span style={{ color: "grey" }}>
-                        {filterData.row.Employementtype}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <MyScreen>
+              <Grid container xl={12} sx={{ bgcolor: "" }}>
+                <Grid item xl={6} p={4} pr={2}>
+                  <Card sx={{ display: "flex", height: "250px" }}>
+                    <CardMedia
+                      component="img"
+                      sx={{ width: 200 }}
+                      image={teamImg1}
+                      alt="Live from space album cover"
+                    />
+                    <Box sx={{ display: "flex", flexDirection: "column" }}>
+                      <CardContent sx={{ flex: "1 0 auto" }}>
+                        <Typography component="div" variant="h5">
+                          {filterData.row.EMPLOYEE_NAME}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                        >
+                          Email : {filterData.row.EMPLOYEE_EMAIL}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                        >
+                          Phone : {filterData.row.EMPLOYEE_PHONE}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                        >
+                          Address : {filterData.row.EMPLOYEE_STATE}
+                          {""}
+                          {filterData.row.EMPLOYEE_CITY}
+                        </Typography>
+                      </CardContent>
+                    </Box>
+                  </Card>
+                </Grid>
+                <Grid item xl={6} p={4} pl={2}>
+                  <Card sx={{ display: "flex", height: "250px" }}>
+                    <Box sx={{ display: "flex", flexDirection: "column" }}>
+                      <CardContent sx={{ flex: "1 0 auto" }}>
+                        <Typography component="div" variant="h5">
+                          Work detail
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                        >
+                          Employee role : {filterData.row.EMPLOYEE_ROLE}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                        >
+                          Employee type : {filterData.row.EMPLOYEE_EMPLMNTTYPE}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                        >
+                          Hire Date : {filterData.row.EMPLOYEE_HIRE_DATE}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                        >
+                          Hourly Wages : {filterData.row.EMPLOYEE_HOURLY_WAGE}
+                        </Typography>
+                      </CardContent>
+                    </Box>
+                  </Card>
+                </Grid>
+                <Grid item xl={6} p={4} pr={2}>
+                  <Card sx={{ display: "flex", height: "250px" }}>
+                    <Box sx={{ display: "flex", flexDirection: "column" }}>
+                      <CardContent sx={{ flex: "1 0 auto" }}>
+                        <Typography component="div" variant="h5">
+                          Salary detail
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                        >
+                          Amount : {filterData.row.EMPLOYEE_ROLE}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                        >
+                          Date : {filterData.row.EMPLOYEE_EMPLMNTTYPE}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                        >
+                          Payment type : {filterData.row.EMPLOYEE_HIRE_DATE}
+                        </Typography>
+                      </CardContent>
+                    </Box>
+                  </Card>
+                </Grid>
+              </Grid>
+            </MyScreen>
           ) : (
             ""
           )}
           {index === 2 ? (
-            <div className=" container  border p-2">
+            <div className=" container p-2">
               <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
               <div
                 className="form-control rounded-0 mb-1"
@@ -497,13 +546,13 @@ const EmployeeSrc = () => {
           )}
 
           {index === 3 ? (
-            <div className=" container  border p-2">
+            <div className=" container p-2">
               <p>
                 {" "}
                 <b style={{ fontWeight: "600", color: "black" }}>
                   Employee Name :{" "}
                 </b>
-                Anurag Pal
+                {filterData.row.EMPLOYEE_NAME}
               </p>
               <p>
                 {" "}
@@ -533,9 +582,9 @@ const EmployeeSrc = () => {
                 <tbody>
                   {tablerows?.map((item) => (
                     <tr className="table table-striped">
-                      <td scope="row">{item.date}</td>
-                      <td scope="row">{item.day}</td>
-                      <td scope="row">
+                      <td>{item.date}</td>
+                      <td>{item.day}</td>
+                      <td>
                         <span className=" bg-success text-light rounded-pill p-1">
                           {item.status}
                         </span>
@@ -630,19 +679,22 @@ const EmployeeSrc = () => {
 
           {index === 5 ? (
             <>
-              <div
-                className="container p-4"
-                style={{ height: "calc(100vh - 37px)", background: "#696969" }}
-              >
-                {/* <PDFDownloadLink document={<EmployeePDF />} fileName="test.pdf">
-        {({ blob, url, loading, error }) =>
-          loading ? "Loading document..." : "Download now!"
-        }
-      </PDFDownloadLink> */}
-                <PDFViewer style={{width:"100%",height:"100%",backgroundColor:"pink"}}>
-                  <EmployeePDF />
+              <MyScreen sx={{ padding: "0" }}>
+                <PDFViewer
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "pink",
+                    position: "absolute",
+                  }}
+                >
+                  <EmployeePDF
+                    name={filterData.row.EMPLOYEE_NAME}
+                    email={filterData.row.EMPLOYEE_EMAIL}
+                    phone={filterData.row.EMPLOYEE_PHONE}
+                  />
                 </PDFViewer>
-              </div>
+              </MyScreen>
             </>
           ) : (
             ""

@@ -12,14 +12,13 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
-  ListItemText,
+
   Tooltip,
 } from "@mui/material";
 
 const Navbar = () => {
   const [userName, setUserName] = useState("U");
-  const [index, setIndex] = useState(1);
+
   const [showProfile, setShowProfile] = useState(false);
 
   const handleClose = () => {
@@ -73,10 +72,18 @@ const Navbar = () => {
       listlink: "/subcontract",
     },
     {
+
       listname: "Employee",
       listlink: "/employee",
     },
+    {
+
+      listname: "Attendance",
+      listlink: "/attendance",
+    },
   ];
+
+
 
   const Lists = (props) => {
     return (
