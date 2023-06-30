@@ -13,9 +13,7 @@ import Contract from "./pages/Contract";
 import Login from "./pages/Login";
 import { auth } from "./firebase";
 import Page404 from "./pages/PageNotFound";
-import Loader from "./pages/Loader";
-import { faL } from "@fortawesome/free-solid-svg-icons";
-// import Attendance from "./pages/Attendance";
+
 
 function App() {
   const [userName, setUserName] = useState(false);
@@ -44,7 +42,6 @@ function App() {
               <Route path="/company" element={ userName ? <Company /> : ""} />
               <Route path="/employee" element={userName ? <Employee /> : ""} />
               <Route path="/contract" element={ userName ? <Contract /> : ""} />
-              {/* <Route path="/attendance" element={ userName ? <Attendance /> : ""} /> */}
               <Route path="*" element={ userName ? <Page404 link="/dashboard" /> : <Page404 link="/" />} />
             </Routes>
           </BrowserRouter>
