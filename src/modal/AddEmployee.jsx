@@ -17,9 +17,9 @@ const style = {
   p: 4,
 };
 
-export default function AddEmployee() {
+export default function AddEmployee(props) {
   const [createEmployee, setCreateEmployee] = useState({
-    EMPLOYEE_ID:"",
+    EMPLOYEE_ID: "",
     EMPLOYEE_NAME: "",
     EMPLOYEE_EMAIL: "",
     EMPLOYEE_STATE: "",
@@ -41,8 +41,6 @@ export default function AddEmployee() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-
-
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
@@ -62,7 +60,7 @@ export default function AddEmployee() {
       })
       .then((response) => {
         console.log("response1 : ", response);
-        // sendDataToParent(response.data);
+        props.update(response.data);
         console.log("response", response.data);
       })
       .catch((error) => {
@@ -70,6 +68,9 @@ export default function AddEmployee() {
       });
     handleClose();
   };
+
+
+  
 
   return (
     <>
@@ -95,9 +96,7 @@ export default function AddEmployee() {
           <Box sx={style}>
             <form>
               <div className="row py-2">
-
                 <div className="form-group col-xl-3">
-
                   <label>Employee Name</label>
                   <input
                     type="text"
@@ -109,7 +108,6 @@ export default function AddEmployee() {
                     onChange={handleCreate}
                   />
                 </div>
-
                 <div className="form-group col-xl-3">
                   <label>E-mail</label>
                   <input
@@ -143,13 +141,11 @@ export default function AddEmployee() {
                     placeholder="Enter Your city.."
                     value={createEmployee.EMPLOYEE_CITY}
                     name="EMPLOYEE_CITY"
-
                     onChange={handleCreate}
                   />
                 </div>
               </div>
               <div className="row py-2">
-
                 <div className="form-group col-xl-4">
                   <label>Phone</label>
                   <input
@@ -175,7 +171,6 @@ export default function AddEmployee() {
                   />
                 </div>
                 <div className="form-group col-xl-4">
-
                   <label for="inputPassword4">Employee Role</label>
                   <select
                     id="inputqual"
@@ -194,7 +189,6 @@ export default function AddEmployee() {
                   </select>
                 </div>
               </div>
-
               <div className="row py-2">
                 <div className="form-group col-xl-4">
                   <label for="inputqual">Employement Type</label>
@@ -205,7 +199,6 @@ export default function AddEmployee() {
                     name="EMPLOYEE_EMPLMNTTYPE"
                     onChange={handleCreate}
                   >
-
                     <option selected>Choose type...</option>
                     <option>Permanent</option>
                     <option>Contract</option>
@@ -237,23 +230,20 @@ export default function AddEmployee() {
                     onChange={handleCreate}
                   />
                 </div>
-               
               </div>
               <div className="row">
-              <div className="form-group py-2">
-                <label for="inputAddress">Address</label>
-                <input
-                  type="text"
-                  className="form-control rounded-0"
-                  id="inputAddress"
-                  placeholder="Enter Address"
-                  value={createEmployee.EMPLOYEE_ADD}
-                  name="EMPLOYEE_ADD"
-                  onChange={handleCreate}
-                />
-              </div>
-
-           
+                <div className="form-group py-2">
+                  <label for="inputAddress">Address</label>
+                  <input
+                    type="text"
+                    className="form-control rounded-0"
+                    id="inputAddress"
+                    placeholder="Enter Address"
+                    value={createEmployee.EMPLOYEE_ADD}
+                    name="EMPLOYEE_ADD"
+                    onChange={handleCreate}
+                  />
+                </div>
               </div>
               {/* <div className="row py-2">
               <div className="form-group col-md-6">
@@ -392,22 +382,22 @@ export default function AddEmployee() {
                 </label>
               </div>
             </div> */}
-
-              <Button type="submit" variant="contained" className="btn text-white rounded-0 mt-2" onClick={handleSubmit}>
-              Submit
-            </Button>{" "}
-            <Button
-            variant="contained"
-              color="error"
-              onClick={handleClose}
-              className="btn text-white rounded-0 mt-2"
-            >
-              Discard
-            </Button>
-              
-
-          
-
+              <Button
+                type="submit"
+                variant="contained"
+                className="btn text-white rounded-0 mt-2"
+                onClick={handleSubmit}
+              >
+                Submit
+              </Button>{" "}
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleClose}
+                className="btn text-white rounded-0 mt-2"
+              >
+                Discard
+              </Button>
             </form>
           </Box>
         </Container>

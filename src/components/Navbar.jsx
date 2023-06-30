@@ -76,8 +76,11 @@ const Navbar = () => {
       listname: "Employee",
       listlink: "/employee",
     },
+    {
 
-  
+      listname: "Attendance",
+      listlink: "/attendance",
+    },
   ];
 
 
