@@ -46,7 +46,7 @@ function App() {
               <Route path="/employee" element={userName ? <Employee /> : ""} />
               <Route path="/contract" element={ userName ? <Contract /> : ""} />
               <Route path="/attendance" element={ userName ? <Attendances /> : ""} />
-              <Route path="/attendance" element={ userName ? <Screen /> : ""} />
+              {/* <Route path="/attendance" element={ userName ? <Screen /> : ""} /> */}
               <Route path="*" element={ userName ? <Page404 link="/dashboard" /> : <Page404 link="/" />} />
             </Routes>
           </BrowserRouter>

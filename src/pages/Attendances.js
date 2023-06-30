@@ -1,12 +1,12 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-// import Attendance from '../components/Attendances'
+import Attendance from '../components/Attendance'
 
 const Attendances = () => {
   return (
   <>
   <Navbar/>
-  {/* <Attendance/> */}
+  <Attendance/>
   </>
   )
 }
