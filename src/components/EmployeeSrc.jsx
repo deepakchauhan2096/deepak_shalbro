@@ -23,7 +23,7 @@ import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import CloseIcon from "@mui/icons-material/Close";
-import Mymenu from "../components/Menus"
+import Mymenu  from "../components/Menus"
 
 
 
@@ -36,6 +36,8 @@ const EmployeeSrc = () => {
     COMPANY_PARENT_ID: 18,
     COMPANY_PARENT_USERNAME: "deepanshu1",
   });
+
+  const [updatedata, setUpdateData] = useState([])
   
 
   // console.log("employeerowdata: =>", employeDatatable);
@@ -44,7 +46,7 @@ const EmployeeSrc = () => {
   useEffect(() => {
     // fetchEmployee();
     fetchAllEmployee();
-  }, []);
+  }, [updatedata]);
 
   const [filterData, setFilteredData] = useState({
     row: {
@@ -279,7 +281,10 @@ const EmployeeSrc = () => {
 
 
   
-
+ const updateDate = (event) => {
+ setUpdateData(event)
+ console.log(event,"event")
+ }
 
   
 
@@ -297,7 +302,7 @@ const EmployeeSrc = () => {
             <Button className="btn button btn-blue" variant="contained">
               Employee
             </Button>
-            <AddEmployee />
+            <AddEmployee update={(event) => updateDate(event)} />
           </div>
           <MyScreen>
             <div style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
