@@ -1,10 +1,14 @@
 import React from 'react'
+import Dashheadm from './Dashheadm'
 
 const Dashboard = () => {
   return (
-        <div id="content" style={{height:"100vh"}}>
-            hello dashboard
-        </div>
+   <>
+   
+   <Dashheadm />
+   
+   
+   </>
   )
 }
 
