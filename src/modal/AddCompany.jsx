@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function AddCompany({sendDataToParent}) {
+export default function AddCompany(props) {
   
   const [open, setOpen] = React.useState(false);
  
@@ -59,7 +59,7 @@ export default function AddCompany({sendDataToParent}) {
     axios.post("http://54.89.160.62:5001/create_company", create_company, { headers })
       .then((response) => {
         console.log("response1 : ",response)
-        // sendDataToParent(response.data);
+        props.update(response.data);
         console.log("response",response.data)
       })
       .catch((error) => {

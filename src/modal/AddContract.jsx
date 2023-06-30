@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function AddContract() {
+export default function AddContract(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -58,7 +58,7 @@ export default function AddContract() {
       })
       .then((response) => {
         console.log("response1 : ", response);
-        // sendDataToParent(response.data);
+        props.update(response.data);
         console.log("response", response.data);
       })
       .catch((error) => {

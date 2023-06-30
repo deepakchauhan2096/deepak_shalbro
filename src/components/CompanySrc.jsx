@@ -12,6 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 const ContractSrc = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [updateEvent, setUpdateEvent] = useState([]);
 
   const [tableRows, setTableRows] = useState([
     {
@@ -22,7 +23,7 @@ const ContractSrc = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [updateEvent]);
 
   const headers = {
     "Content-Type": "application/json",
@@ -71,6 +72,10 @@ const ContractSrc = () => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const updateCompany = (event) => {
+    setUpdateEvent(event);
+  }
 
   const columns = [
     // { field: "id", headerName: "ID", width: 90 },
@@ -171,7 +176,7 @@ const ContractSrc = () => {
               </Button>
               {/*----------------------- Add Company -----------------------------------------  */}
 
-              <AddCompany />
+              <AddCompany  update={(event) => updateCompany(event) } />
 
               {/*----------------------- Add Company -----------------------------------------  */}
             </div>

@@ -138,50 +138,6 @@ const EmployeeSrc = () => {
       // editable: true,
     },
 
-    // {
-    //   field: "in",
-    //   headerName: "IN",
-    //   width: 80,
-    //   renderCell: (cellValues) => {
-    //     return (
-    //       <Button
-    //         variant="contained"
-    //         className="view-btn "
-    //         style={{
-    //           padding: "2px 2px",
-    //           background: "#00a152",
-    //           color: "white",
-    //         }}
-    //         onClick={(event) => {
-    //           handleClick(cellValues);
-    //         }}
-    //       >
-    //         In
-    //       </Button>
-    //     );
-    //   },
-    // },
-
-    // {
-    //   field: "OUT",
-    //   headerName: "OUT",
-    //   width: 100,
-    //   renderCell: (cellValues) => {
-    //     return (
-    //       <Button
-    //         variant="contained"
-    //         className="view-btn  btn btn-success btn-danger"
-    //         style={{ padding: "2px 2px", background: "#ab003c" }}
-    //         onClick={(event) => {
-    //           handleClick(cellValues);
-    //         }}
-    //       >
-    //         Out
-    //       </Button>
-    //     );
-    //   },
-    // },
-
     {
       field: "action",
       headerName: "Action",
@@ -281,7 +237,7 @@ const EmployeeSrc = () => {
 
 
   
- const updateDate = (event) => {
+ const updateData = (event) => {
  setUpdateData(event)
  console.log(event,"event")
  }
@@ -302,7 +258,7 @@ const EmployeeSrc = () => {
             <Button className="btn button btn-blue" variant="contained">
               Employee
             </Button>
-            <AddEmployee update={(event) => updateDate(event)} />
+            <AddEmployee update={(event) => updateData(event)} />
           </div>
           <MyScreen>
             <div style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
@@ -384,160 +340,6 @@ const EmployeeSrc = () => {
           </div>
 
           {index === 1 ? (
-<<<<<<< HEAD
-            <div className="box-tab">
-              <div className="p-4 container-fluid">
-                <h5 style={{ textDecoration: "underline" }}>Employee Detail</h5>
-
-                <div className="row">
-                  <div className="col-3 border">
-                    <div className="text-center py-2">
-                      <img
-                        src={teamImg1}
-                        className="rounded"
-                        alt="img1"
-                        width="100%"
-                        height="100%"
-                      />
-                    </div>
-                  </div>
-                  <div className="col-4 border mx-2">
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Employee Name :{" "}
-                    <span style={{ color: "red" }}>
-
-                      {filterData.row.EMPLOYEE_NAME}
-                    </span>
-                  </p>
-                  {/* Date of Birth  */}
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Date Of Birth :{" "}
-                    <span style={{ color: "grey" }}>
-                   
-                      {filterData.row.EMPLOYEE_EMAIL}
-                    </span>
-                  </p>
-
-                  {/* Phone number               */}
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Phone Number :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_PHONE}
-                    </span>
-                  </p>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    State :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_STATE}
-                    </span>
-                  </p>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    City :{" "}
-                    <span style={{ color: "grey" }}>{filterData.row.EMPLOYEE_CITY}</span>
-                  </p>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Employee Role :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_EMPLMNTTYPE}
-                    </span>
-                  </p>
-                  </div>
-
-                  <div className="col-4 border ">
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Employeement Type :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_EMPLMNTTYPE}
-                    </span>
-                  </p>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Hire Date :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_HIRE_DATE}
-                    </span>
-                  </p>
-                
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Hourly Wages :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_HOURLY_WAGE}
-                    </span>
-                  </p>
-
-                 </div>
-
-                </div>
-
-                <div className="row">
-                         {/* <h5 style={{ textDecoration: "underline" }} className="pt-4">
-                         Work Detail
-                       </h5> */}
-
-                 
-
-                 
-
-                  <div className="col-5 border m-4">
-                  <h5 style={{ textDecoration: "underline" }} className="pt-4">
-                    Work Detail
-                  </h5>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Employee Role :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_ROLE}
-                    </span>
-                  </p>
-
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Employeement Type :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_EMPLMNTTYPE}
-                    </span>
-                  </p>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Hire Date :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_HIRE_DATE}
-                    </span>
-                  </p>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Working On Contract :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.holdingContract}
-                    </span>
-                  </p>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Hourly Wages :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_HOURLY_WAGE}
-                    </span>
-                  </p>
-                  </div>
-
-                <div className="col-5 border m-4">
-                  <h5 style={{ textDecoration: "underline" }} className="pt-4">
-                    Salary Detail
-                  </h5>
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Employee Role :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_ROLE}
-                    </span>
-                  </p>
-
-                  <p style={{ color: "black", fontWeight: "500" }}>
-                    Employeement Type :{" "}
-                    <span style={{ color: "grey" }}>
-                      {filterData.row.EMPLOYEE_EMPLMNTTYPE}
-                    </span>
-                  </p>
-
-                </div>
-
-              </div>
-              </div>
-            </div>
-=======
             <MyScreen>
               <Grid container xl={12} sx={{ bgcolor: "" }}>
                 <Grid item xl={6} p={4} pr={2}>
@@ -653,7 +455,6 @@ const EmployeeSrc = () => {
                 </Grid>
               </Grid>
             </MyScreen>
->>>>>>> 0e64a1309f25e3e8201a3df8b66763abec51c80a
           ) : (
             ""
           )}
