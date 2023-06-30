@@ -10,6 +10,7 @@ import { Button, Container } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const ContractSrc = () => {
+
   const [data, setData] = useState({
     row: {
       _id: "649a71ca12c8d41898147a9d",
@@ -34,11 +35,13 @@ const ContractSrc = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const [updateContractData, setUpdateContractData] = useState([]);
+
   // console.log("all contracts: =>>>",ContractData)
 
   useEffect(() => {
     fetchContracts();
-  }, []);
+  }, [updateContractData]);
 
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
@@ -161,6 +164,11 @@ const ContractSrc = () => {
     handleOpen();
   };
 
+  // for updating the event according when add contract reflect back on page at the same time 
+  const updateContract = (event) => {
+    setUpdateContractData(event)
+  }
+
   // console.log(filterData, "data-GGG");
   const filterData = data.row;
   console.log(filterData, "f-data");
@@ -184,7 +192,7 @@ const ContractSrc = () => {
               <Button className="btn button btn-blue" variant="contained">
                 Contract
               </Button>
-              <AddContract />
+              <AddContract update={(event) => updateContract(event)} />
             </div>
 
             {isLoading ? (

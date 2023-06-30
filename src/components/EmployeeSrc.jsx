@@ -138,50 +138,6 @@ const EmployeeSrc = () => {
       // editable: true,
     },
 
-    // {
-    //   field: "in",
-    //   headerName: "IN",
-    //   width: 80,
-    //   renderCell: (cellValues) => {
-    //     return (
-    //       <Button
-    //         variant="contained"
-    //         className="view-btn "
-    //         style={{
-    //           padding: "2px 2px",
-    //           background: "#00a152",
-    //           color: "white",
-    //         }}
-    //         onClick={(event) => {
-    //           handleClick(cellValues);
-    //         }}
-    //       >
-    //         In
-    //       </Button>
-    //     );
-    //   },
-    // },
-
-    // {
-    //   field: "OUT",
-    //   headerName: "OUT",
-    //   width: 100,
-    //   renderCell: (cellValues) => {
-    //     return (
-    //       <Button
-    //         variant="contained"
-    //         className="view-btn  btn btn-success btn-danger"
-    //         style={{ padding: "2px 2px", background: "#ab003c" }}
-    //         onClick={(event) => {
-    //           handleClick(cellValues);
-    //         }}
-    //       >
-    //         Out
-    //       </Button>
-    //     );
-    //   },
-    // },
-
     {
       field: "action",
       headerName: "Action",
@@ -281,7 +237,7 @@ const EmployeeSrc = () => {
 
 
   
- const updateDate = (event) => {
+ const updateData = (event) => {
  setUpdateData(event)
  console.log(event,"event")
  }
@@ -302,7 +258,7 @@ const EmployeeSrc = () => {
             <Button className="btn button btn-blue" variant="contained">
               Employee
             </Button>
-            <AddEmployee update={(event) => updateDate(event)} />
+            <AddEmployee update={(event) => updateData(event)} />
           </div>
           <MyScreen>
             <div style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
