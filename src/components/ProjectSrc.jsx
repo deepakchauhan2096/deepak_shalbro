@@ -2,46 +2,45 @@ import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
-
-import AddContract from "../modal/AddContract";
+import AddProject from "../modal/AddProject";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Container } from "@mui/material";
 
 import CircularProgress from "@mui/material/CircularProgress";
 
-const ContractSrc = () => {
+const ProjectSrc = () => {
 
   const [data, setData] = useState({
     row: {
       _id: "649a71ca12c8d41898147a9d",
-      CONTRACT_ID: 52,
-      CONTRACT_PARENT_ID: 45,
-      CONTRACT_PARENT_USERNAME: "company21",
-      CONTRACT_MEMBER_PARENT_ID: 18,
-      CONTRACT_MEMBER_PARENT_USERNAME: "deepanshu1",
-      CONTRACT_ROLE: "",
-      CONTRACT_NAME: "construction",
-      CONTRACT_PHONE: 7988155813,
-      CONTRACT_USERNAME: "contract01",
-      CONTRACT_START_DATE: "2023-06-01",
-      CONTRACT_END_DATE: "2023-06-26",
-      CONTRACT_SUPERVISOR: "Jigyashuu",
-      CONTRACT_PROGRESS: "40",
+      PROJECT_ID: 52,
+      PROJECT_PARENT_ID: 45,
+      PROJECT_PARENT_USERNAME: "company21",
+      PROJECT_MEMBER_PARENT_ID: 18,
+      PROJECT_MEMBER_PARENT_USERNAME: "deepanshu1",
+      PROJECT_ROLE: "",
+      PROJECT_NAME: "construction",
+      PROJECT_PHONE: 7988155813,
+      PROJECT_USERNAME: "contract01",
+      PROJECT_START_DATE: "2023-06-01",
+      PROJECT_END_DATE: "2023-06-26",
+      PROJECT_SUPERVISOR: "Jigyashuu",
+      PROJECT_PROGRESS: "40",
       __v: 0,
     },
   });
 
-  const [ContractData, setContractData] = useState([]);
+  const [ProjectData, setProjectData] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [updateContractData, setUpdateContractData] = useState([]);
+  const [updateProjectData, setUpdateProjectData] = useState([]);
 
-  // console.log("all contracts: =>>>",ContractData)
+  // console.log("all contracts: =>>>",ProjectData)
 
   useEffect(() => {
-    fetchContracts();
-  }, [updateContractData]);
+    fetchProjects();
+  }, [updateProjectData]);
 
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
@@ -54,19 +53,19 @@ const ContractSrc = () => {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const fetchContracts = async () => {
+  const fetchProjects = async () => {
     try {
       const response = await axios.put(
         "http://54.89.160.62:5001/get_contracts",
         {
-          CONTRACT_MEMBER_PARENT_ID: 18,
-          CONTRACT_MEMBER_PARENT_USERNAME: "deepanshu1",
+          PROJECT_MEMBER_PARENT_ID: 18,
+          PROJECT_MEMBER_PARENT_USERNAME: "deepanshu1",
         },
         { headers }
       );
       setTimeout(() => {
         const data = response.data;
-        setContractData(data.result);
+        setProjectData(data.result);
         setIsLoading(false);
         console.log("contracts Data : =>", data);
       }, 1000);
@@ -76,33 +75,33 @@ const ContractSrc = () => {
   };
 
   const columns = [
-    { field: "CONTRACT_ID", headerName: "ID", width: 90 },
+    { field: "PROJECT_ID", headerName: "ID", width: 90 },
     {
-      field: "CONTRACT_USERNAME",
+      field: "PROJECT_USERNAME",
       headerName: "USername",
       width: 150,
       // editable: true,
     },
     {
-      field: "CONTRACT_NAME",
+      field: "PROJECT_NAME",
       headerName: "Name",
       width: 150,
       // editable: true,
     },
     {
-      field: "CONTRACT_PHONE",
+      field: "PROJECT_PHONE",
       headerName: "Phone",
       width: 150,
       // editable: true,
     },
     {
-      field: "CONTRACT_START_DATE",
+      field: "PROJECT_START_DATE",
       headerName: "Start Date",
       width: 150,
       // editable: true,
     },
     {
-      field: "CONTRACT_END_DATE",
+      field: "PROJECT_END_DATE",
       headerName: "End Date",
       type: "number",
       width: 100,
@@ -110,7 +109,7 @@ const ContractSrc = () => {
     },
 
     {
-      field: "CONTRACT_SUPERVISOR",
+      field: "PROJECT_SUPERVISOR",
       headerName: "Supervisor",
       width: 200,
       // editable: true,
@@ -137,7 +136,8 @@ const ContractSrc = () => {
     },
   ];
 
-  const rows = ContractData;
+  const rows = ProjectData;
+  console.log("Project Data : =>", ProjectData)
 
   const style = {
     position: "absolute",
@@ -165,8 +165,8 @@ const ContractSrc = () => {
   };
 
   // for updating the event according when add contract reflect back on page at the same time 
-  const updateContract = (event) => {
-    setUpdateContractData(event)
+  const updateProject = (event) => {
+    setUpdateProjectData(event)
   }
 
   // console.log(filterData, "data-GGG");
@@ -190,9 +190,9 @@ const ContractSrc = () => {
 
             <div style={{ height: "20%" }}>
               <Button className="btn button btn-blue" variant="contained">
-                Contract
+               All Project
               </Button>
-              <AddContract update={(event) => updateContract(event)} />
+              <AddProject update={(event) => updateProject(event)} />
             </div>
 
             {isLoading ? (
@@ -205,7 +205,7 @@ const ContractSrc = () => {
                   sx={{ border: "none" }}
                   rows={rows}
                   columns={columns}
-                  getRowId={(row) => row.CONTRACT_ID}
+                  getRowId={(row) => row.PROJECT_ID}
                   initialState={{
                     pagination: {
                       paginationModel: {
@@ -277,31 +277,31 @@ const ContractSrc = () => {
                   <div className="col">
                     <b>Contract Name</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.CONTRACT_NAME}
+                      {filterData.PROJECT_NAME}
                     </p>
                   </div>
                   <div className="col">
                     <b>Phone</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.CONTRACT_PHONE}
+                      {filterData.PROJECT_PHONE}
                     </p>
                   </div>
                   <div className="col">
                     <b>Username</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.CONTRACT_USERNAME}
+                      {filterData.PROJECT_USERNAME}
                     </p>
                   </div>
                   <div className="col">
                     <b>Supervisor</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.CONTRACT_SUPERVISOR}
+                      {filterData.PROJECT_SUPERVISOR}
                     </p>
                   </div>
                   <div className="col">
                     <b>Contract Type</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.CONTRACT_ROLE}
+                      {filterData.PROJECT_ROLE}
                     </p>
                   </div>
                 </div>
@@ -322,13 +322,13 @@ const ContractSrc = () => {
                   <div className="col">
                     <b>Project Start</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.CONTRACT_START_DATE}
+                      {filterData.PROJECT_START_DATE}
                     </p>
                   </div>
                   <div className="col">
                     <b>Project End</b>
                     <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.CONTRACT_END_DATE}
+                      {filterData.PROJECT_END_DATE}
                     </p>
                   </div>
                 </div>
@@ -340,11 +340,11 @@ const ContractSrc = () => {
                       <div
                         className="progress-bar"
                         style={{
-                          background: `radial-gradient(closest-side, white 79%, transparent 80% 100%),conic-gradient(hotpink ${filterData.CONTRACT_PROGRESS}, pink 0)`,
+                          background: `radial-gradient(closest-side, white 79%, transparent 80% 100%),conic-gradient(hotpink ${filterData.PROJECT_PROGRESS}, pink 0)`,
                         }}
                       >
                         <div className="counter">
-                          {filterData.CONTRACT_PROGRESS}
+                          {filterData.PROJECT_PROGRESS}
                         </div>
                       </div>
                     </div>
@@ -1049,4 +1049,4 @@ const ContractSrc = () => {
   );
 };
 
-export default ContractSrc;
+export default ProjectSrc;

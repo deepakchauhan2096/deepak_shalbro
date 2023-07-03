@@ -17,26 +17,26 @@ const style = {
   p: 4,
 };
 
-export default function AddContract(props) {
+export default function AddProject(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [index, setIndex] = React.useState(1);
 
-  const [createContract, setCreateContract] = useState({
-    CONTRACT_PARENT_ID: 45,
-    CONTRACT_PARENT_USERNAME: "company21",
-    CONTRACT_MEMBER_PARENT_ID: 18,
-    CONTRACT_MEMBER_PARENT_USERNAME: "deepanshu1",
-    CONTRACT_NAME: "",
-    CONTRACT_USERNAME: "",
-    CONTRACT_PHONE: "",
-    CONTRACT_ADD: "",
-    CONTRACT_CITY: "",
-    CONTRACT_START_DATE: "",
-    CONTRACT_END_DATE: "",
-    CONTRACT_SUPERVISOR: "",
-    CONTRACT_EMROLMNT_TYPE: "",
+  const [createProject, setCreateProject] = useState({
+    PROJECT_PARENT_ID: 45,
+    PROJECT_PARENT_USERNAME: "company21",
+    PROJECT_MEMBER_PARENT_ID: 18,
+    PROJECT_MEMBER_PARENT_USERNAME: "deepanshu1",
+    PROJECT_NAME: "",
+    PROJECT_USERNAME: "",
+    PROJECT_PHONE: "",
+    PROJECT_ADD: "",
+    PROJECT_CITY: "",
+    PROJECT_START_DATE: "",
+    PROJECT_END_DATE: "",
+    PROJECT_SUPERVISOR: "",
+    PROJECT_EMROLMNT_TYPE: "",
   });
 
   const headers = {
@@ -45,15 +45,15 @@ export default function AddContract(props) {
   };
 
   const handleCreate = (e) => {
-    setCreateContract({ ...createContract, [e.target.name]: e.target.value });
-    console.log("heello world", createContract);
+    setCreateProject({ ...createProject, [e.target.name]: e.target.value });
+    console.log("heello world", createProject);
   };
 
   const handleSubmit = (e) => {
     console.log("on btn submit");
     e.preventDefault();
     axios
-      .post("http://54.89.160.62:5001/create_contract", createContract, {
+      .post("http://54.89.160.62:5001/create_contract", createProject, {
         headers,
       })
       .then((response) => {
@@ -75,7 +75,7 @@ export default function AddContract(props) {
         className="rounded-0 border-0"
         variant="outlined"
       >
-        + Add New Contrator
+        + Add New Project
       </Button>
 
       <Modal
@@ -88,26 +88,26 @@ export default function AddContract(props) {
           <form>
             <div className="row py-2">
               <div className="form-group col-xl-4">
-                <label> Contract Username</label>
+                <label> Project Username</label>
                 <input
                   type="text"
                   className="form-control rounded-0"
                   id="inputusername"
                   placeholder="Username"
-                  value={createContract.CONTRACT_USERNAME}
-                  name="CONTRACT_USERNAME"
+                  value={createProject.PROJECT_USERNAME}
+                  name="PROJECT_USERNAME"
                   onChange={handleCreate}
                 />
               </div>
               <div className="form-group col-xl-4">
-                <label>Contract Name</label>
+                <label>Project Name</label>
                 <input
                   type="text"
                   className="form-control rounded-0"
                   id="inputname"
-                  placeholder="Contract Name"
-                  value={createContract.CONTRACT_NAME}
-                  name="CONTRACT_NAME"
+                  placeholder="Project Name"
+                  value={createProject.PROJECT_NAME}
+                  name="PROJECT_NAME"
                   onChange={handleCreate}
                 />
               </div>
@@ -118,31 +118,31 @@ export default function AddContract(props) {
                   className="form-control rounded-0"
                   id="inputPassword4"
                   placeholder="Enter Phone Number"
-                  name="CONTRACT_PHONE"
-                  value={createContract.CONTRACT_PHONE}
+                  name="PROJECT_PHONE"
+                  value={createProject.PROJECT_PHONE}
                   onChange={handleCreate}
                 />
               </div>
             </div>
             <div className="row py-2">
               <div className="form-group col-xl-6">
-                <label className="py-2 border" >Contract start date</label>
+                <label className="py-2 " >Project start date</label>
                 <input
                   type="date"
-                  value={createContract.CONTRACT_START_DATE}
-                  name="CONTRACT_START_DATE"
+                  value={createProject.PROJECT_START_DATE}
+                  name="PROJECT_START_DATE"
                   onChange={handleCreate}
                   className="mx-2 py-2 border"
                 />
               </div>
               <div className="form-group col-xl-6">
-                <label className="py-2 border">Contract End date</label>
+                <label className="py-2 ">Project End date</label>
                 <input
                   type="date"
-                  value={createContract.CONTRACT_END_DATE}
-                  name="CONTRACT_END_DATE"
+                  value={createProject.PROJECT_END_DATE}
+                  name="PROJECT_END_DATE"
                   onChange={handleCreate}
-                  className="mx-2 py-2 border"
+                  className="mx-2 py-2 border outline-0"
                 />
               </div>
             </div>
@@ -155,14 +155,14 @@ export default function AddContract(props) {
                     id="inputEnroll"
                     className="form-control rounded-0"
                     onChange={handleCreate}
-                    name="CONTRACT_EMROLMNT_TYPE"
-                    value={createContract.CONTRACT_EMROLMNT_TYPE}
+                    name="PROJECT_EMROLMNT_TYPE"
+                    value={createProject.PROJECT_EMROLMNT_TYPE}
                   >
                     <option selected>Choose...</option>
-                    <option>painter</option>
-                    <option>fitter</option>
-                    <option>plumber</option>
-                    <option>engineer</option>
+                    <option>Painter</option>
+                    <option>Fitter</option>
+                    <option>Plumber</option>
+                    <option>Engineer</option>
                   </select>
                 </div>
 
@@ -172,8 +172,8 @@ export default function AddContract(props) {
                   type="text"
                   className="form-control rounded-0"
                   id="inputsupervisor"
-                  name="CONTRACT_SUPERVISOR"
-                  value={createContract.CONTRACT_SUPERVISOR}
+                  name="PROJECT_SUPERVISOR"
+                  value={createProject.PROJECT_SUPERVISOR}
                   onChange={handleCreate}
                 />
             
@@ -186,8 +186,8 @@ export default function AddContract(props) {
                 className="form-control rounded-0"
                 id="inputAddress2"
                 placeholder="Apartment, studio, or floor"
-                name="CONTRACT_ADD"
-                value={createContract.CONTRACT_ADD}
+                name="PROJECT_ADD"
+                value={createProject.PROJECT_ADD}
                 onChange={handleCreate}
               />
             </div>
@@ -198,8 +198,8 @@ export default function AddContract(props) {
                   type="text"
                   className="form-control rounded-0"
                   id="inputCity"
-                  name="CONTRACT_CITY"
-                  value={createContract.CONTRACT_CITY}
+                  name="PROJECT_CITY"
+                  value={createProject.PROJECT_CITY}
                   onChange={handleCreate}
                 />
               </div>

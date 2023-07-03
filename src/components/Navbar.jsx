@@ -64,8 +64,8 @@ const Navbar = () => {
       listlink: "/company",
     },
     {
-      listname: "Contract",
-      listlink: "/contract",
+      listname: "Project",
+      listlink: "/project",
     },
     {
       listname: "Sub Contract",
