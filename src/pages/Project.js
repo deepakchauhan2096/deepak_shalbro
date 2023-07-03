@@ -1,16 +1,16 @@
 import React from 'react'
-import ContractSrc from '../components/ContractSrc'
+import ProjectSrc from '../components/ProjectSrc'
 import Navbar from '../components/Navbar'
 
-const Contract = () => {
+const Project = () => {
   return (
     <>
     
     <Navbar />
-    <ContractSrc />
+    <ProjectSrc />
     
     </>
   )
 }
 
-export default Contract
+export default Project
