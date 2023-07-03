@@ -22,58 +22,84 @@ import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import CloseIcon from "@mui/icons-material/Close";
 
 const Attendance = () => {
-
+  const [indone, setIndone] = useState("");
+  const [outdone, setOutdone] = useState("");
   // let data = ;
-
-
 
   const Time = new Date();
   const currentTime = Time.toString().split(" ")[4];
 
-  const [inData, setInData] = useState({
-    "ATTENDANCE_ADMIN_ID": 18,
-    "ATTENDANCE_ADMIN_USERNAME": "deepanshu1",
-    "ATTENDANCE_COMPANY_ID": 45,
-    "ATTENDANCE_COMPANY_USERNAME": "company21",
-    "ATTENDANCE_EMPLOYEE_ID": 47,
-    "ATTENDANCE_EMPLOYEE_USERNAME": "EMP0123",
-    "ATTENDANCE_DATE_ID": "02-7-2023",
-  })
-  
-  
-  const OutDataSuccess = {...inData, "ATTENDANCE_OUT": "anurag"}
-  const inDataSuccess = {...inData, "ATTENDANCE_IN": "deepak"}
+  const date = new Date();
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
 
+  const [inData, setInData] = useState({
+    ATTENDANCE_ADMIN_ID: 18,
+    ATTENDANCE_ADMIN_USERNAME: "deepanshu1",
+    ATTENDANCE_COMPANY_ID: 45,
+    ATTENDANCE_COMPANY_USERNAME: "company21",
+    ATTENDANCE_EMPLOYEE_ID: 47,
+    ATTENDANCE_EMPLOYEE_USERNAME: "EMP0123",
+    ATTENDANCE_DATE_ID: new Date(),
+  });
+
+  const OutDataSuccess = { ...inData, ATTENDANCE_OUT: new Date() };
+  const inDataSuccess = { ...inData, ATTENDANCE_IN: new Date() };
 
   const handleSubmitIn = (event) => {
-    
-    // console.log(event,"myevent")
-    
+    console.log(event, "in");
+
     let config = {
-      method: 'post',
+      method: "post",
       maxBodyLength: Infinity,
-      url: 'http://54.89.160.62:5001/create_emp_attendence',
-      headers: { 
-        'authorization_key': 'qzOUsBmZFgMDlwGtrgYypxUz', 
-        'Content-Type': 'application/json'
+      url: "http://54.89.160.62:5001/create_emp_attendence",
+      headers: {
+        authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+        "Content-Type": "application/json",
       },
-      data : event === "in" ? inDataSuccess : event === "out" ? OutDataSuccess : ""
+      data: inDataSuccess,
     };
-    
-    axios.request(config)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        setOutdone(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
+  const handleSubmitOut = (event) => {
+    console.log(event, "out");
 
-  // console.log(inData, "datanew")
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://54.89.160.62:5001/create_emp_attendence",
+      headers: {
+        authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+        "Content-Type": "application/json",
+      },
+      data: OutDataSuccess,
+    };
 
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        setOutdone(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-  console.log(inDataSuccess, "data s")
+  console.log(currentTime, "datanew");
+
+  console.log(inDataSuccess, "data s");
 
   const MyScreen = styled(Paper)(({ props }) => ({
     height: "calc(100vh - 37px)",
@@ -98,43 +124,85 @@ const Attendance = () => {
               </Button>
             </div>
             <MyScreen>
-              <Grid container sx={{height:"100%",bgcolor:"#f9f9f9",position:"relative"}} xl={12}>
-                 <Paper sx={{p:2,height:"300px",width:"500px",transform:"translate(-50%,-50%)",top:"50%",left:"50%",position:"absolute"}} >
-                      <form>
-                        <label htmlFor="employeeId">Employee ID:</label>
-                        <input
-                          type="text"
-                          id="employeeId"
-                          value={inData.ATTENDANCE_EMPLOYEE_ID}
-                          required
-                        />
-                        <br />
-
+              <Grid
+                container
+                sx={{
+                  height: "100%",
+                  bgcolor: "#f9f9f9",
+                  position: "relative",
+                }}
+                xl={12}
+              >
+                <Paper
+                  sx={{
+                    p: 2,
+                    height: "300px",
+                    width: "500px",
+                    transform: "translate(-50%,-50%)",
+                    top: "50%",
+                    left: "50%",
+                    position: "absolute",
+                  }}
+                >
+                  <Typography>
+                    Date : {day}-{month}-{year}{" "}Time : {currentTime}
+                  </Typography>
+                  <form>
+                    <div className="form-group py-2 col-xl-12">
+                      <label>Enter Your Employee ID</label>
+                      <input
+                        type="text"
+                        className="form-control rounded-0"
+                        placeholder="Company Name"
+                        value={inData.ATTENDANCE_EMPLOYEE_ID}
+                      />
+                    </div>
+                    <div className="form-group py-2 col-xl-12">
+                      {outdone  ? (
                         <Button
-                          onClick={(e) => handleSubmitIn("in")}
+                          disabled
                           name="in_btn"
                           variant="contained"
                           color="success"
+                          px={2}
                         >
-                          IN
+                        ATTENDANCE  IN
                         </Button>
-
-                        <br />
+                      ) : (
                         <Button
-                          onClick={(e) => handleSubmitIn("out")}
+                          onClick={handleSubmitIn}
+                          name="in_btn"
+                          variant="contained"
+                          color="success"
+                          px={2}
+                        >
+                        ATTENDANCE  IN
+                        </Button>
+                      )}
+                      {" "}
+                      {indone ? (
+                        <Button
+                          disabled
                           name="in_btn"
                           variant="contained"
                           color="error"
                         >
-                          OUT
+                         ATTENDANCE OUT
                         </Button>
- 
-                        <br />
-                        <br />
-                      </form>
-                    </Paper>
+                      ) : (
+                        <Button
+                          onClick={handleSubmitOut}
+                          name="in_btn"
+                          variant="contained"
+                          color="error"
+                        >
+                         ATTENDANCE OUT
+                        </Button>
+                      )}
+                    </div>
+                  </form>
+                </Paper>
               </Grid>
-                   
             </MyScreen>
           </div>
         </Box>
