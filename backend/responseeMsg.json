@@ -1,8 +1,0 @@
-{
-    "success": "successfull",
-    "failed": "failed",
-    "invalid": "Invalid Data",
-    "userAlreadyExist":"User Already Exist",
-    "memberAlreadyExist":"Member Already Exist",
-    "clinetAlreadyExist":"Client Already Exist"
-}
