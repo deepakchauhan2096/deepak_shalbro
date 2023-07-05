@@ -74,13 +74,16 @@ export default function AddEmployee(props) {
 
   return (
     <>
+      <Button className="btn button btn-blue" variant="contained">
+              {props.name ? props.name : "Enter Name"}
+      </Button>
       <Button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
         className="rounded-0 border-0"
         variant="outlined"
       >
-        + Add Employee
+        + Add {props.name}
       </Button>
       <Modal
         open={open}
