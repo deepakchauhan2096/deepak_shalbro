@@ -1,6 +1,5 @@
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
-import { useRef } from "react";
 
 const Snippet = () => {
   const drag = (ev) => {

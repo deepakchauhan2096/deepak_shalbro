@@ -8,13 +8,10 @@ import teamImg1 from "../assests/images/team-1.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { styled } from "@mui/material/styles";
 import {
-  Backdrop,
   Button,
   Card,
   CardContent,
   CardMedia,
-  CircularProgress,
-  Container,
   Grid,
   Paper,
   Skeleton,
@@ -40,9 +37,8 @@ const EmployeeSrc = () => {
   console.log("All_employe_data: =>", allempData);
 
   useEffect(() => {
-    // fetchEmployee();
     fetchAllEmployee();
-  }, [updatedata]);
+  },[updatedata]);
 
   const [filterData, setFilteredData] = useState({
     row: {
@@ -133,51 +129,6 @@ const EmployeeSrc = () => {
       width: 120,
       // editable: true,
     },
-
-    // {
-    //   field: "in",
-    //   headerName: "IN",
-    //   width: 80,
-    //   renderCell: (cellValues) => {
-    //     return (
-    //       <Button
-    //         variant="contained"
-    //         className="view-btn "
-    //         style={{
-    //           padding: "2px 2px",
-    //           background: "#00a152",
-    //           color: "white",
-    //         }}
-    //         onClick={(event) => {
-    //           handleClick(cellValues);
-    //         }}
-    //       >
-    //         In
-    //       </Button>
-    //     );
-    //   },
-    // },
-
-    // {
-    //   field: "OUT",
-    //   headerName: "OUT",
-    //   width: 100,
-    //   renderCell: (cellValues) => {
-    //     return (
-    //       <Button
-    //         variant="contained"
-    //         className="view-btn  btn btn-success btn-danger"
-    //         style={{ padding: "2px 2px", background: "#ab003c" }}
-    //         onClick={(event) => {
-    //           handleClick(cellValues);
-    //         }}
-    //       >
-    //         Out
-    //       </Button>
-    //     );
-    //   },
-    // },
-
     {
       field: "action",
       headerName: "Action",
@@ -285,38 +236,28 @@ const EmployeeSrc = () => {
 
   console.log(index, "index");
 
-  const Animations = () =>  {
+  const Animations = () => {
     return (
       <Box sx={{ width: "100%" }}>
         <Skeleton animation="pulse" height={60} />
-        <Skeleton animation="pulse" height={50}/>
-        <Skeleton animation="pulse" height={50}/>
-        <Skeleton animation="pulse" height={50}/>
-        <Skeleton animation="pulse" height={50}/>
-        <Skeleton animation="pulse" height={50}/>
-        <Skeleton animation="pulse" height={50}/>
-        <Skeleton animation="pulse" height={50}/>
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
       </Box>
-    )
-  }
+    );
+  };
 
   return (
     <>
       <Box className="box">
         <AddEmployee update={(event) => updateDate(event)} name={"Employee"} />
-        <MyScreen sx={{display:"block", padding:3}}>
+        <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
-              // <Box
-              //   sx={{
-              //     position: "absolute",
-              //     top: "50%",
-              //     left: "50%",
-              //     transform: "translate(-50%,-50%)",
-              //   }}
-              // >
-              //   <CircularProgress />
-              // </Box>
               <Animations />
             ) : (
               <DataGrid
@@ -364,7 +305,7 @@ const EmployeeSrc = () => {
           ].map((item, value) => (
             <Button
               onClick={(e, index) => setIndex(value)}
-              variant={index == value ? "outlined" : "contained"}
+              variant={index === value ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
             >
               {item}
@@ -383,8 +324,8 @@ const EmployeeSrc = () => {
           </Button>
         </div>
 
-        <MyScreen screenIndex={index == 0} sx={{padding:3 }}>
-          <Grid container xl={12} >
+        <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
+          <Grid container xl={12}>
             <Grid item xl={6} pr={2}>
               <Card sx={{ display: "flex", height: "250px" }}>
                 <CardMedia
@@ -425,7 +366,7 @@ const EmployeeSrc = () => {
                 </Box>
               </Card>
             </Grid>
-            <Grid item xl={6} pl={2} screenIndex={index == 1}>
+            <Grid item xl={6} pl={2} screenIndex={index === 1}>
               <Card sx={{ display: "flex", height: "250px" }}>
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <CardContent sx={{ flex: "1 0 auto" }}>
@@ -498,7 +439,7 @@ const EmployeeSrc = () => {
             </Grid>
           </Grid>
         </MyScreen>
-        <MyScreen screenIndex={index == 1} sx={{padding:3}}>
+        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
           <div
             className="form-control rounded-0 mb-1"
@@ -542,7 +483,7 @@ const EmployeeSrc = () => {
           </div>
         </MyScreen>
 
-        <MyScreen screenIndex={index == 2} sx={{padding:3 }}>
+        <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
           <p>
             {" "}
             <b style={{ fontWeight: "600", color: "black" }}>
@@ -654,14 +595,14 @@ const EmployeeSrc = () => {
         </MyScreen>
 
         <MyScreen
-          screenIndex={index == 3}
-          sx={{ padding: "0", background: "#696969",padding:3 }}
+          screenIndex={index === 3}
+          sx={{ background: "#696969", padding: 3 }}
           className="rounded-0"
         >
           <Snippet />
         </MyScreen>
 
-        <MyScreen screenIndex={index == 4} sx={{ padding: "0" }}>
+        <MyScreen screenIndex={index === 4} sx={{ padding: "0" }}>
           <PDFViewer
             style={{
               width: "100%",

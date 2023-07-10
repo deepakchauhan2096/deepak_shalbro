@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function AddCompany({sendDataToParent}) {
+export default function AddCompany(props) {
   
   const [open, setOpen] = React.useState(false);
  
@@ -59,7 +59,7 @@ export default function AddCompany({sendDataToParent}) {
     axios.post("http://54.89.160.62:5001/create_company", create_company, { headers })
       .then((response) => {
         console.log("response1 : ",response)
-        // sendDataToParent(response.data);
+        props.update(response.data);
         console.log("response",response.data)
       })
       .catch((error) => {
@@ -71,7 +71,18 @@ export default function AddCompany({sendDataToParent}) {
   return (
     // <div style={{ outline: "none" }}>
     <>
-      <Button  onClick={handleOpen} sx={{color:"#277099"}} className="rounded-0 border-0" variant="outlined" >+ Add Company</Button>
+       <Button className="btn button btn-blue" variant="contained">
+              {props.name ? props.name : "Enter Name"}
+      </Button>
+
+      <Button
+        onClick={handleOpen}
+        sx={{ color: "#277099" }}
+        className="rounded-0 border-0"
+        variant="outlined"
+      >
+        + Add {props.name}
+      </Button>
 
       <Modal
         open={open}

@@ -58,7 +58,6 @@ export default function AddContract() {
       })
       .then((response) => {
         console.log("response1 : ", response);
-        // sendDataToParent(response.data);
         console.log("response", response.data);
       })
       .catch((error) => {
