@@ -3,7 +3,8 @@ import { useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
 
 const style = {
@@ -38,6 +39,19 @@ export default function AddEmployee(props) {
     EMPLOYEE_MEMBER_PARENT_ID: 18,
   });
   const [open, setOpen] = React.useState(false);
+  const [values, setValues] = useState({
+    name: createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME,
+    email: createEmployee.EMPLOYEE_EMAIL,
+    pass: createEmployee.EMPLOYEE_USERNAME,
+  });
+  const [errorMsg, setErrorMsg] = useState("");
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+
+
+
+
+
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -51,7 +65,32 @@ export default function AddEmployee(props) {
     console.log("heello world", createEmployee);
   };
 
+  const handleSubmission = () => {
+    if (!values.name || !values.email || !values.pass) {
+      setErrorMsg("Fill all fields");
+      return;
+    }
+    setErrorMsg("");
+
+    setSubmitButtonDisabled(true);
+    createUserWithEmailAndPassword(auth, values.email, values.pass)
+      .then(async (res) => {
+        setSubmitButtonDisabled(false);
+        const user = res.user;
+        await updateProfile(user, {
+          displayName: values.name,
+        });
+        alert("sucess")
+        // navigate("/dashboard");
+      })
+      .catch((err) => {
+        setSubmitButtonDisabled(false);
+        setErrorMsg(err.message);
+      });
+  };
+
   const handleSubmit = (e) => {
+    handleSubmission()
     console.log("on btn submit");
     e.preventDefault();
     axios
@@ -62,25 +101,30 @@ export default function AddEmployee(props) {
         console.log("response1 : ", response);
         props.update(response.data);
         console.log("response", response.data);
+        handleClose();
       })
       .catch((error) => {
         console.error(error);
       });
-    handleClose();
+    
   };
+
 
 
   
 
   return (
     <>
+      <Button className="btn button btn-blue" variant="contained">
+              {props.name ? props.name : "Enter Name"}
+      </Button>
       <Button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
         className="rounded-0 border-0"
         variant="outlined"
       >
-        + Add Employee
+        + Add {props.name}
       </Button>
       <Modal
         open={open}

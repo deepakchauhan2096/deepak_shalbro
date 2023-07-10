@@ -5,10 +5,12 @@ import { DataGrid } from "@mui/x-data-grid";
 import AddProject from "../modal/AddProject";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Container } from "@mui/material";
+import { useLocation } from "react-router-dom";
+
 
 import CircularProgress from "@mui/material/CircularProgress";
 
-const ProjectSrc = () => {
+const ProjectDashboard = () => {
 
   const [data, setData] = useState({
     row: {
@@ -37,6 +39,9 @@ const ProjectSrc = () => {
   const [updateProjectData, setUpdateProjectData] = useState([]);
 
   // console.log("all contracts: =>>>",ProjectData)
+  const location = useLocation();
+
+  console.log("location of the Project cerattion", location.state);
 
   useEffect(() => {
     fetchProjects();
@@ -1049,4 +1054,4 @@ const ProjectSrc = () => {
   );
 };
 
-export default ProjectSrc;
+export default ProjectDashboard;

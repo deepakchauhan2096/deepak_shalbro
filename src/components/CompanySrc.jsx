@@ -2,29 +2,31 @@ import React, { useState, useEffect,useRef } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
-
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AddCompany from "../modal/AddCompany";
-
-import { Button, ButtonGroup, Container, CssBaseline } from "@mui/material";
-import Backdrop from "@mui/material/Backdrop";
+import { Button, ButtonGroup, Paper, Skeleton } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+import { styled } from "@mui/material/styles";
+import CloseIcon from "@mui/icons-material/Close";
+import Mymenu from "../components/Menus";
 
 const ContractSrc = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [updateEvent, setUpdateEvent] = useState([]);
 
-  const [tableRows, setTableRows] = useState([
+  const [tableRows, setTableRows] = useState(
     {
       COMPANY_ID: 19,
       COMPANY_USERNAME: "company1",
     },
-  ]);
+  );
   const fileInputRef = useRef(null);
+
+  const [updatedata, setUpdateData] = useState([]);
 
   useEffect(() => {
     fetchData();
-  }, [updateEvent]);
+  }, [updatedata]);
 
   const headers = {
     "Content-Type": "application/json",
@@ -50,9 +52,6 @@ const ContractSrc = () => {
     }
   };
 
-
-  
-
   const [filterData, setFilteredData] = useState({
     row: {
       _id: "64953f89450d9b0a7b4271e5",
@@ -77,10 +76,19 @@ const ContractSrc = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const updateCompany = (event) => {
-    setUpdateEvent(event);
+ 
+
+
+
+
+  const handleClick = (event) => {
+    setFilteredData(event);
+    handleOpen();
   };
 
+
+
+ 
   const columns = [
     // { field: "id", headerName: "ID", width: 90 },
     {
@@ -161,10 +169,38 @@ const ContractSrc = () => {
     downloadLink.download = fileName;
     downloadLink.click();
   }
+  const updateCompany = (event) => {
+    setUpdateEvent(event);
+  };
 
-  const handleClick = (event) => {
-    setFilteredData(event);
-    handleOpen();
+  const MyScreen = styled(Paper)((props) => ([{
+    height: "calc(100vh - 37px)",
+    padding: 0,
+    paddingBottom: "0",
+    overflow: "auto",
+    borderRadius: 0,
+    Border: 0,
+    display: props.screenIndex ? "block" : "none",
+  }]));
+
+  const updateDate = (event) => {
+    setUpdateData(event);
+    console.log(event, "event");
+  };
+
+  const Animations = () => {
+    return (
+      <Box sx={{ width: "100%" }}>
+        <Skeleton animation="pulse" height={60} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+      </Box>
+    );
   };
 
   console.log("company data table: =>", tableRows);
@@ -181,22 +217,12 @@ const ContractSrc = () => {
     fileInputRef.current.click();
   };
 
-
   return (
     <>
       <Box className="box">
-        <div className="container-fluid d-flex pb-0 g-0 flex-column">
-          <div style={{ height: "20%" }}>
-            <Button className="btn button btn-blue" variant="contained">
-              Company
-            </Button>
-            {/*----------------------- Add Company -----------------------------------------  */}
-
-            <AddCompany update={(event) => updateCompany(event)} />
-
-            {/*----------------------- Add Company -----------------------------------------  */}
-          </div>
-          <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
+        <AddCompany update={(event) => updateDate(event)} name={"Company"} />
+        <MyScreen sx={{ display: "block", padding: 3 }}>
+          <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
               <Box
                 sx={{
@@ -217,7 +243,7 @@ const ContractSrc = () => {
                 initialState={{
                   pagination: {
                     paginationModel: {
-                      pageSize: 10,
+                      pageSize: 20,
                     },
                   },
                 }}
@@ -227,8 +253,8 @@ const ContractSrc = () => {
                 disableRowSelectionOnClick
               />
             )}
-          </div>
-        </div>
+          </Box>
+        </MyScreen>
       </Box>
 
       <Box
@@ -237,24 +263,7 @@ const ContractSrc = () => {
         }}
         className="box position-absolute overflow-auto"
       >
-        <ButtonGroup
-          variant="outlined"
-          aria-label="outlined primary button group"
-          className="btn rounded-0 border-0"
-          style={{ position: "absolute", top: "0", right: "0" }}
-        >
-          <Button >
-            <i className="fa fa-plus" ></i>
-          </Button>
-        
-          <Button>
-            <i className="fa fa-edit"></i>
-          </Button>
-          <Button>
-            <i className="fa fa-trash"></i>
-          </Button>
-        </ButtonGroup>
-        <div className="container-fluid pb-0 g-0 position-relative">
+        <div className="container-fluid pb-0 g-0 position-sticky top-0">
           <Button
             onClick={handleClose}
             variant="contained"
@@ -262,48 +271,34 @@ const ContractSrc = () => {
           >
             <ArrowBackIcon style={{ fontSize: "25px" }} />
           </Button>
+          {[
+            "Details",
+            "Policies",
+            "Compliance Documents",
+            "Insurance",
+            "law suits",
+          ].map((item, value) => (
+            <Button
+              onClick={(e, index) => setIndex(value)}
+              variant={index === value ? "outlined" : "contained"}
+              className="btn rounded-0 border-0"
+            >
+              {item}
+            </Button>
+          ))}
+          <Mymenu />
           <Button
-            onClick={(e) => setIndex(1)}
-            variant={index === 1 ? "outlined" : "contained"}
-            className="btn rounded-0 border-0"
+            onClick={handleClose}
+            variant={"contained"}
+            className="btn rounded-0 border border-top-0 border-bottom-0"
+            color="error"
+            style={{ position: "absolute", right: "0" }}
           >
-            Detail
-          </Button>
-
-          <Button
-            onClick={(e) => setIndex(2)}
-            variant={index === 2 ? "outlined" : "contained"}
-            className="btn rounded-0 border-0"
-          >
-            Policies
-          </Button>
-
-          <Button
-            onClick={(e) => setIndex(3)}
-            variant={index === 3 ? "outlined" : "contained"}
-            className="btn rounded-0 border-0"
-          >
-            Compliance Documents
-          </Button>
-
-          <Button
-            onClick={(e) => setIndex(4)}
-            variant={index === 4 ? "outlined" : "contained"}
-            className="btn rounded-0 border-0"
-          >
-            Insurance
-          </Button>
-
-          <Button
-            onClick={(e) => setIndex(5)}
-            variant={index === 5 ? "outlined" : "contained"}
-            className="btn rounded-0 border-0"
-          >
-            law suits
+            {<CloseIcon />}
           </Button>
         </div>
 
-        {index === 1 ? (
+        <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
           <div className="box-tab">
             <div className="container-fluid p-4">
               <div className="row">
@@ -500,7 +495,8 @@ const ContractSrc = () => {
                 </div> */}
             </div>
           </div>
-        ) : index === 2 ? (
+        </MyScreen>
+        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <div className="box-tab">
             <div className="p-4 container-fluid">
               <div className="row">
@@ -560,238 +556,224 @@ const ContractSrc = () => {
               </div>
             </div>
           </div>
-        ) : index === 3 ? (
-          <div className="box-tab">
-            <div className="p-4 container-fluid">
-              <div className="row">
-                <div className="col-9">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Material</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Method</th>
-                        <th scope="col">Transaction ID</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Tiles</td>
-                        <td>10</td>
-                        <td>20 USD</td>
-                        <td>Cash</td>
-                        <td>RG384054859</td>
-                        <td>
-                          <b className="bg-success text-white px-2 rounded-2">
-                            Paid
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Cement</td>
-                        <td>20</td>
-                        <td>20 USD</td>
-                        <td>UPI</td>
-                        <td>TY485060</td>
-                        <td>
-                          <b className="bg-warning text-white px-2 rounded-2">
-                            Panding
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Concrete</td>
-                        <td>60</td>
-                        <td>20 USD</td>
-                        <td>Stripe</td>
-                        <td>PO6970845</td>
-                        <td>
-                          <b className="bg-success text-white px-2 rounded-2">
-                            Paid
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Bricks</td>
-                        <td>120</td>
-                        <td>the Bird</td>
-                        <td>Visa</td>
-                        <td>PO697084599</td>
-                        <td>
-                          <b className="bg-danger text-white px-2 rounded-2">
-                            Failed
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                    </tbody>
-                  </table>
+        </MyScreen>
+        <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
+        <div className="box-tab">
+          <div className="p-4 container-fluid">
+            <div className="row">
+              <div className="col-9">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Material</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Method</th>
+                      <th scope="col">Transaction ID</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Tiles</td>
+                      <td>10</td>
+                      <td>20 USD</td>
+                      <td>Cash</td>
+                      <td>RG384054859</td>
+                      <td>
+                        <b className="bg-success text-white px-2 rounded-2">
+                          Paid
+                        </b>
+                      </td>
+                      <td>12-10-2020</td>
+                    </tr>
+                    <tr>
+                      <td>Cement</td>
+                      <td>20</td>
+                      <td>20 USD</td>
+                      <td>UPI</td>
+                      <td>TY485060</td>
+                      <td>
+                        <b className="bg-warning text-white px-2 rounded-2">
+                          Panding
+                        </b>
+                      </td>
+                      <td>12-10-2020</td>
+                    </tr>
+                    <tr>
+                      <td>Concrete</td>
+                      <td>60</td>
+                      <td>20 USD</td>
+                      <td>Stripe</td>
+                      <td>PO6970845</td>
+                      <td>
+                        <b className="bg-success text-white px-2 rounded-2">
+                          Paid
+                        </b>
+                      </td>
+                      <td>12-10-2020</td>
+                    </tr>
+                    <tr>
+                      <td>Bricks</td>
+                      <td>120</td>
+                      <td>the Bird</td>
+                      <td>Visa</td>
+                      <td>PO697084599</td>
+                      <td>
+                        <b className="bg-danger text-white px-2 rounded-2">
+                          Failed
+                        </b>
+                      </td>
+                      <td>12-10-2020</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="col-3 px-4">
+                <div className="mb-5 ">
+                  <button className="btn btn-primary float-right rounded-0">
+                    <i className="fa fa-print"></i> Print Invoice
+                  </button>
                 </div>
-                <div className="col-3 px-4">
-                  <div className="mb-5 ">
-                    <button className="btn btn-primary float-right rounded-0">
-                      <i className="fa fa-print"></i> Print Invoice
-                    </button>
+                <div className="search-container mb-5">
+                  <input type="text" placeholder="Search.." name="search" />
+                  <button type="submit">
+                    <i className="fa fa-search"></i>
+                  </button>
+                </div>
+
+                <div>
+                  <b>Time Period</b>
+                </div>
+                <div>
+                  <div className="form-check py-1">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault1"
+                    />
+                    <label className="form-check-label" for="flexRadioDefault1">
+                      All time
+                    </label>
                   </div>
-                  <div className="search-container mb-5">
-                    <input type="text" placeholder="Search.." name="search" />
-                    <button type="submit">
-                      <i className="fa fa-search"></i>
-                    </button>
+                  <div className="form-check py-1">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault2"
+                      checked
+                    />
+                    <label className="form-check-label" for="flexRadioDefault2">
+                      Today
+                    </label>
                   </div>
 
-                  <div>
-                    <b>Time Period</b>
+                  <div className="form-check py-1">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault2"
+                    />
+                    <label className="form-check-label" for="flexRadioDefault2">
+                      This Week
+                    </label>
                   </div>
-                  <div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault1"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault1"
-                      >
-                        All time
-                      </label>
-                    </div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                        checked
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        Today
-                      </label>
-                    </div>
 
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        This Week
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        This month
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        Custom
-                      </label>
-                    </div>
+                  <div className="form-check py-1">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault2"
+                    />
+                    <label className="form-check-label" for="flexRadioDefault2">
+                      This month
+                    </label>
                   </div>
-                  <b>Status</b>
-                  <div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Paid
-                      </label>
-                    </div>
 
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Panding
-                      </label>
-                    </div>
+                  <div className="form-check py-1">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault2"
+                    />
+                    <label className="form-check-label" for="flexRadioDefault2">
+                      Custom
+                    </label>
+                  </div>
+                </div>
+                <b>Status</b>
+                <div>
+                  <div className="form-check py-1">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckIndeterminate"
+                    />
+                    <label
+                      className="form-check-label"
+                      for="flexCheckIndeterminate"
+                    >
+                      Paid
+                    </label>
+                  </div>
 
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Failed
-                      </label>
-                    </div>
+                  <div className="form-check py-1">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckIndeterminate"
+                    />
+                    <label
+                      className="form-check-label"
+                      for="flexCheckIndeterminate"
+                    >
+                      Panding
+                    </label>
+                  </div>
+
+                  <div className="form-check py-1">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckIndeterminate"
+                    />
+                    <label
+                      className="form-check-label"
+                      for="flexCheckIndeterminate"
+                    >
+                      Failed
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        ) : index === 4 ? (
-          <div className="box-tab">
-            <div className="p-4 container-fluid">
-              <div className="row">insurances</div>
-            </div>
+        </div>
+       </MyScreen>
+       <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
+        <div className="box-tab">
+          <div className="p-4 container-fluid">
+            <div className="row">insurances</div>
           </div>
-        ) : index === 5 ? (
-          <div className="box-tab">
-            <div className="p-4 container-fluid">
-              <div className="row">law suits</div>
-            </div>
+        </div>
+       </MyScreen>
+       <MyScreen screenIndex={index === 4} sx={{ padding: 3 }}>
+        <div className="box-tab">
+          <div className="p-4 container-fluid">
+            <div className="row">law suits</div>
           </div>
-        ) : (
-          ""
-        )}
-      </Box>
+        </div>
+        </MyScreen>
+    </Box>
     </>
   );
 };

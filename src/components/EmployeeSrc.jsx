@@ -8,26 +8,20 @@ import teamImg1 from "../assests/images/team-1.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { styled } from "@mui/material/styles";
 import {
-  Backdrop,
   Button,
   Card,
   CardContent,
   CardMedia,
-  CircularProgress,
-  Container,
   Grid,
   Paper,
+  Skeleton,
   Typography,
 } from "@mui/material";
 import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import CloseIcon from "@mui/icons-material/Close";
-import Mymenu  from "../components/Menus"
-
-
-
-
+import Mymenu from "../components/Menus";
 
 const EmployeeSrc = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -37,16 +31,14 @@ const EmployeeSrc = () => {
     COMPANY_PARENT_USERNAME: "deepanshu1",
   });
 
-  const [updatedata, setUpdateData] = useState([])
-  
+  const [updatedata, setUpdateData] = useState([]);
 
   // console.log("employeerowdata: =>", employeDatatable);
   console.log("All_employe_data: =>", allempData);
 
   useEffect(() => {
-    // fetchEmployee();
     fetchAllEmployee();
-  }, [updatedata]);
+  },[updatedata]);
 
   const [filterData, setFilteredData] = useState({
     row: {
@@ -167,7 +159,6 @@ const EmployeeSrc = () => {
       width: 120,
       // editable: true,
     },
-
     {
       field: "action",
       headerName: "Action",
@@ -258,440 +249,405 @@ const EmployeeSrc = () => {
     },
   ];
 
-  const MyScreen = styled(Paper)(({ props }) => ({
+  const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 37px)",
     padding: 0,
     paddingBottom: "0",
     overflow: "auto",
+    borderRadius: 0,
+    Border: 0,
+    display: props.screenIndex ? "block" : "none",
   }));
 
+  const updateDate = (event) => {
+    setUpdateData(event);
+    console.log(event, "event");
+  };
 
-  
- const updateData = (event) => {
- setUpdateData(event)
- console.log(event,"event")
- }
+  console.log(index, "index");
 
-  
-
+  const Animations = () => {
+    return (
+      <Box sx={{ width: "100%" }}>
+        <Skeleton animation="pulse" height={60} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+      </Box>
+    );
+  };
 
   return (
     <>
-      <Container
-        id="content"
-        sx={{ height: "100vh", position: "relative" }}
-        maxWidth="xl"
-        className="containers"
-      >
-        <Box className="box">
-          <div>
-            <Button className="btn button btn-blue" variant="contained">
-              Employee
-            </Button>
-            <AddEmployee update={(event) => updateData(event)} />
-          </div>
-          <MyScreen>
-            <div style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
-              {isLoading ? (
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%,-50%)",
-                  }}
-                >
-                  <CircularProgress />
-                </Box>
-              ) : (
-                <DataGrid
-                  sx={{ border: "none" }}
-                  rows={rows}
-                  columns={columns}
-                  getRowId={(row) => row.EMPLOYEE_ID}
-                  initialState={{
-                    pagination: {
-                      paginationModel: {
-                        pageSize: 20,
-                      },
+      <Box className="box">
+        <AddEmployee update={(event) => updateDate(event)} name={"Employee"} />
+        <MyScreen sx={{ display: "block", padding: 3 }}>
+          <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
+            {isLoading ? (
+              <Animations />
+            ) : (
+              <DataGrid
+                sx={{ border: "none" }}
+                rows={rows}
+                columns={columns}
+                getRowId={(row) => row.EMPLOYEE_ID}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 20,
                     },
-                  }}
-                  density="compact"
-                  pageSizeOptions={[5]}
-                  checkboxSelection
-                  disableRowSelectionOnClick
-                />
-              )}
-            </div>
-          </MyScreen>
-        </Box>
+                  },
+                }}
+                density="compact"
+                pageSizeOptions={[5]}
+                checkboxSelection
+                disableRowSelectionOnClick
+              />
+            )}
+          </Box>
+        </MyScreen>
+      </Box>
 
-        <Box
-          style={{
-            display: open ? "block" : "none",
-          }}
-          className="box position-absolute overflow-auto"
-        >
-          <div className="container-fluid pb-0 g-0 position-sticky top-0">
+      <Box
+        style={{
+          display: open ? "block" : "none",
+        }}
+        className="box position-absolute overflow-auto"
+      >
+        <div className="container-fluid pb-0 g-0 position-sticky top-0">
+          <Button
+            onClick={handleClose}
+            variant="contained"
+            className="btn rounded-0"
+          >
+            <ArrowBackIcon style={{ fontSize: "25px" }} />
+          </Button>
+          {[
+            "Employee Details",
+            "Documents",
+            "Timesheet",
+            "Worksheet",
+            "Acknowledge",
+          ].map((item, value) => (
             <Button
-              onClick={handleClose}
-              variant="contained"
-              className="btn rounded-0"
+              onClick={(e, index) => setIndex(value)}
+              variant={index === value ? "outlined" : "contained"}
+              className="btn rounded-0 border-0"
             >
-              <ArrowBackIcon style={{ fontSize: "25px" }} />
+              {item}
             </Button>
-            {[
-              "Employee Details",
-              "Documents",
-              "Timesheet",
-              "Worksheet",
-              "Acknowledge",
-            ].map((item, value) => (
-              <Button
-                onClick={(e, index) => setIndex(value + 1)}
-                variant={index === value + 1 ? "outlined" : "contained"}
-                className="btn rounded-0 border-0"
-              >
-                {item}
-              </Button>
-            ))}
-            
-             
-            <Mymenu />
-            <Button
-              onClick={handleClose}
-              variant={"contained"}
-              className="btn rounded-0 border border-top-0 border-bottom-0"
-              color="error"
-              style={{ position: "absolute", right: "0" }}
+          ))}
+
+          <Mymenu />
+          <Button
+            onClick={handleClose}
+            variant={"contained"}
+            className="btn rounded-0 border border-top-0 border-bottom-0"
+            color="error"
+            style={{ position: "absolute", right: "0" }}
+          >
+            {<CloseIcon />}
+          </Button>
+        </div>
+
+        <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
+          <Grid container xl={12}>
+            <Grid item xl={6} pr={2}>
+              <Card sx={{ display: "flex", height: "250px" }}>
+                <CardMedia
+                  component="img"
+                  sx={{ width: 200 }}
+                  image={teamImg1}
+                  alt="Live from space album cover"
+                />
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <CardContent sx={{ flex: "1 0 auto" }}>
+                    <Typography component="div" variant="h5">
+                      {filterData.row.EMPLOYEE_NAME}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Email : {filterData.row.EMPLOYEE_EMAIL}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Phone : {filterData.row.EMPLOYEE_PHONE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Address : {filterData.row.EMPLOYEE_STATE}
+                      {""}
+                      {filterData.row.EMPLOYEE_CITY}
+                    </Typography>
+                  </CardContent>
+                </Box>
+              </Card>
+            </Grid>
+            <Grid item xl={6} pl={2} screenIndex={index === 1}>
+              <Card sx={{ display: "flex", height: "250px" }}>
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <CardContent sx={{ flex: "1 0 auto" }}>
+                    <Typography component="div" variant="h5">
+                      Work detail
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Employee role : {filterData.row.EMPLOYEE_ROLE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Employee type : {filterData.row.EMPLOYEE_EMPLMNTTYPE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Hire Date : {filterData.row.EMPLOYEE_HIRE_DATE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Hourly Wages : {filterData.row.EMPLOYEE_HOURLY_WAGE}
+                    </Typography>
+                  </CardContent>
+                </Box>
+              </Card>
+            </Grid>
+            <Grid item xl={6} pr={2} pt={2}>
+              <Card sx={{ display: "flex", height: "250px" }}>
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <CardContent sx={{ flex: "1 0 auto" }}>
+                    <Typography component="div" variant="h5">
+                      Salary detail
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Amount : {filterData.row.EMPLOYEE_ROLE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Date : {filterData.row.EMPLOYEE_EMPLMNTTYPE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Payment type : {filterData.row.EMPLOYEE_HIRE_DATE}
+                    </Typography>
+                  </CardContent>
+                </Box>
+              </Card>
+            </Grid>
+          </Grid>
+        </MyScreen>
+        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
+          <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
+          <div
+            className="form-control rounded-0 mb-1"
+            style={{ position: "relative" }}
+          >
+            Education Document
+            <button
+              style={{ position: "absolute", right: "0", top: "0" }}
+              className="btn btn-primary rounded-0"
+              onClick={() => downloadPDF(filterData.complianceDoc)}
             >
-              {<CloseIcon />}
-            </Button>
+              Download file
+            </button>
           </div>
 
-          {index === 1 ? (
-            <MyScreen>
-              <Grid container xl={12} sx={{ bgcolor: "" }}>
-                <Grid item xl={6} p={4} pr={2}>
-                  <Card sx={{ display: "flex", height: "250px" }}>
-                    <CardMedia
-                      component="img"
-                      sx={{ width: 200 }}
-                      image={teamImg1}
-                      alt="Live from space album cover"
-                    />
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                      <CardContent sx={{ flex: "1 0 auto" }}>
-                        <Typography component="div" variant="h5">
-                          {filterData.row.EMPLOYEE_NAME}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          Email : {filterData.row.EMPLOYEE_EMAIL}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          Phone : {filterData.row.EMPLOYEE_PHONE}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          Address : {filterData.row.EMPLOYEE_STATE}
-                          {""}
-                          {filterData.row.EMPLOYEE_CITY}
-                        </Typography>
-                      </CardContent>
-                    </Box>
-                  </Card>
-                </Grid>
-                <Grid item xl={6} p={4} pl={2}>
-                  <Card sx={{ display: "flex", height: "250px" }}>
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                      <CardContent sx={{ flex: "1 0 auto" }}>
-                        <Typography component="div" variant="h5">
-                          Work detail
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          Employee role : {filterData.row.EMPLOYEE_ROLE}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          Employee type : {filterData.row.EMPLOYEE_EMPLMNTTYPE}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          Hire Date : {filterData.row.EMPLOYEE_HIRE_DATE}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          Hourly Wages : {filterData.row.EMPLOYEE_HOURLY_WAGE}
-                        </Typography>
-                      </CardContent>
-                    </Box>
-                  </Card>
-                </Grid>
-                <Grid item xl={6} p={4} pr={2}>
-                  <Card sx={{ display: "flex", height: "250px" }}>
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                      <CardContent sx={{ flex: "1 0 auto" }}>
-                        <Typography component="div" variant="h5">
-                          Salary detail
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          Amount : {filterData.row.EMPLOYEE_ROLE}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          Date : {filterData.row.EMPLOYEE_EMPLMNTTYPE}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="text.secondary"
-                          component="div"
-                        >
-                          Payment type : {filterData.row.EMPLOYEE_HIRE_DATE}
-                        </Typography>
-                      </CardContent>
-                    </Box>
-                  </Card>
-                </Grid>
-              </Grid>
-            </MyScreen>
-          ) : (
-            ""
-          )}
-          {index === 2 ? (
-            <div className=" container p-2">
-              <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
-              <div
-                className="form-control rounded-0 mb-1"
-                style={{ position: "relative" }}
-              >
-                Education Document
-                <button
-                  style={{ position: "absolute", right: "0", top: "0" }}
-                  className="btn btn-primary rounded-0"
-                  onClick={() => downloadPDF(filterData.complianceDoc)}
-                >
-                  Download file
-                </button>
+          <div
+            className="form-control rounded-0 mb-1"
+            style={{ position: "relative" }}
+          >
+            Valid ID
+            <button
+              style={{ position: "absolute", right: "0", top: "0" }}
+              className="btn btn-primary rounded-0"
+              onClick={() => downloadPDF(filterData.complianceDoc)}
+            >
+              Download file
+            </button>
+          </div>
+          <div
+            className="form-control rounded-0 mb-1"
+            style={{ position: "relative" }}
+          >
+            Other
+            <button
+              style={{ position: "absolute", right: "0", top: "0" }}
+              className="btn btn-primary rounded-0"
+              onClick={() => downloadPDF(filterData.complianceDoc)}
+            >
+              Download file
+            </button>
+          </div>
+        </MyScreen>
+
+        <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
+          <p>
+            {" "}
+            <b style={{ fontWeight: "600", color: "black" }}>
+              Employee Name :{" "}
+            </b>
+            {filterData.row.EMPLOYEE_NAME}
+          </p>
+          <p>
+            {" "}
+            <b style={{ fontWeight: "600", color: "black" }}>Manager Name : </b>
+            Varun Kamboj
+          </p>
+          <p style={{ textAlign: "right" }}>
+            {" "}
+            <b style={{ fontWeight: "600", color: "black" }}>
+              Week Starting :{" "}
+            </b>
+            6/23/2022
+          </p>
+          <table className="table table-hover border">
+            <thead style={{ border: "1px solid black" }}>
+              <tr className="table-dark">
+                <th scope="col">Date</th>
+                <th scope="col">Day</th>
+                <th scope="col">Status</th>
+                <th scope="col">In</th>
+                <th scope="col">Out</th>
+                <th scope="col">Working hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tablerows?.map((item) => (
+                <tr className="table table-striped">
+                  <td>{item.date}</td>
+                  <td>{item.day}</td>
+                  <td>
+                    <span className=" bg-success text-light rounded-pill p-1">
+                      {item.status}
+                    </span>
+                  </td>
+                  <td>{item.in}</td>
+                  <td>{item.out}</td>
+                  <td>{item.workinghrs}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="container">
+            <div className="row border">
+              <div className="col-6  pt-5 ">
+                <p className="fw-semibold text-dark">
+                  Employee Signature:{" "}
+                  <span
+                    style={{
+                      borderBottom: "2px solid black",
+                      width: "200px",
+                    }}
+                  ></span>
+                </p>
+                <p className="fw-semibold text-dark  mt-2">
+                  Manager Signature: <span></span>
+                </p>
               </div>
 
-              <div
-                className="form-control rounded-0 mb-1"
-                style={{ position: "relative" }}
-              >
-                Valid ID
-                <button
-                  style={{ position: "absolute", right: "0", top: "0" }}
-                  className="btn btn-primary rounded-0"
-                  onClick={() => downloadPDF(filterData.complianceDoc)}
-                >
-                  Download file
-                </button>
+              <div className="col-5  border m-2">
+                <div className="row">
+                  <div className="col-5  m-2">
+                    <p className="text-dark fw-semibold">Total Hours</p>
+                    <p className="text-dark fw-semibold">Rate Per Hour</p>
+                    <p className="text-dark fw-semibold">Total Pay</p>
+                  </div>
+                  <div className="col-2  m-2">
+                    <p className="bg-warning text-center fs-6 text-light">48</p>
+                    <p className="bg-primary text-center fs-6 text-light">
+                      100
+                    </p>
+                    <p className="bg-success text-center fs-6 text-light">
+                      $4800
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div
-                className="form-control rounded-0 mb-1"
-                style={{ position: "relative" }}
-              >
-                Other
-                <button
-                  style={{ position: "absolute", right: "0", top: "0" }}
-                  className="btn btn-primary rounded-0"
-                  onClick={() => downloadPDF(filterData.complianceDoc)}
-                >
-                  Download file
-                </button>
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
-
-          {index === 3 ? (
-            <div className=" container p-2">
-              <p>
-                {" "}
-                <b style={{ fontWeight: "600", color: "black" }}>
-                  Employee Name :{" "}
-                </b>
-                {filterData.row.EMPLOYEE_NAME}
-              </p>
-              <p>
-                {" "}
-                <b style={{ fontWeight: "600", color: "black" }}>
-                  Manager Name :{" "}
-                </b>
-                Varun Kamboj
-              </p>
-              <p style={{ textAlign: "right" }}>
-                {" "}
-                <b style={{ fontWeight: "600", color: "black" }}>
-                  Week Starting :{" "}
-                </b>
-                6/23/2022
-              </p>
-              <table className="table table-hover border">
-                <thead style={{ border: "1px solid black" }}>
-                  <tr className="table-dark">
-                    <th scope="col">Date</th>
-                    <th scope="col">Day</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">In</th>
-                    <th scope="col">Out</th>
-                    <th scope="col">Working hours</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tablerows?.map((item) => (
-                    <tr className="table table-striped">
-                      <td>{item.date}</td>
-                      <td>{item.day}</td>
-                      <td>
-                        <span className=" bg-success text-light rounded-pill p-1">
-                          {item.status}
-                        </span>
-                      </td>
-                      <td>{item.in}</td>
-                      <td>{item.out}</td>
-                      <td>{item.workinghrs}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
               <div className="container">
-                <div className="row border">
-                  <div className="col-6  pt-5 ">
-                    <p className="fw-semibold text-dark">
-                      Employee Signature:{" "}
-                      <span
-                        style={{
-                          borderBottom: "2px solid black",
-                          width: "200px",
-                        }}
-                      ></span>
-                    </p>
-                    <p className="fw-semibold text-dark  mt-2">
-                      Manager Signature: <span></span>
-                    </p>
+                <div className="row float-end  border border-danger">
+                  <div className="col-6  ">
+                    <button
+                      className="btn btn-info text-white rounded-0 border-white"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-title="Previous Week"
+                    >
+                      <ArrowBackIcon />
+                    </button>
                   </div>
-
-                  <div className="col-5  border m-2">
-                    <div className="row">
-                      <div className="col-5  m-2">
-                        <p className="text-dark fw-semibold">Total Hours</p>
-                        <p className="text-dark fw-semibold">Rate Per Hour</p>
-                        <p className="text-dark fw-semibold">Total Pay</p>
-                      </div>
-                      <div className="col-2  m-2">
-                        <p className="bg-warning text-center fs-6 text-light">
-                          48
-                        </p>
-                        <p className="bg-primary text-center fs-6 text-light">
-                          100
-                        </p>
-                        <p className="bg-success text-center fs-6 text-light">
-                          $4800
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="container">
-                    <div className="row float-end  border border-danger">
-                      <div className="col-6  ">
-                        <button
-                          className="btn btn-info text-white rounded-0 border-white"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          data-bs-title="Previous Week"
-                        >
-                          <ArrowBackIcon />
-                        </button>
-                      </div>
-                      <div className="col-6 ">
-                        <button
-                          className="btn btn-info text-white rounded-0 border-white"
-                          data-bs-toggle="tooltip"
-                          data-bs-placement="top"
-                          data-bs-title="Tooltip on top"
-                        >
-                          <ArrowForwardIcon />
-                        </button>
-                      </div>
-                    </div>
+                  <div className="col-6 ">
+                    <button
+                      className="btn btn-info text-white rounded-0 border-white"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      data-bs-title="Tooltip on top"
+                    >
+                      <ArrowForwardIcon />
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
-          ) : (
-            ""
-          )}
+          </div>
+        </MyScreen>
 
-          {index === 4 ? (
-            <>
-              <div
-                className="container p-2"
-                style={{ height: "calc(100vh - 37px)", background: "#696969" }}
-              >
-                <Snippet />
-              </div>
-            </>
-          ) : (
-            ""
-          )}
+        <MyScreen
+          screenIndex={index === 3}
+          sx={{ background: "#696969", padding: 3 }}
+          className="rounded-0"
+        >
+          <Snippet />
+        </MyScreen>
 
-          {index === 5 ? (
-            <>
-              <MyScreen sx={{ padding: "0" }}>
-                <PDFViewer
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "pink",
-                    position: "absolute",
-                  }}
-                >
-                  <EmployeePDF
-                    name={filterData.row.EMPLOYEE_NAME}
-                    email={filterData.row.EMPLOYEE_EMAIL}
-                    phone={filterData.row.EMPLOYEE_PHONE}
-                  />
-                </PDFViewer>
-              </MyScreen>
-            </>
-          ) : (
-            ""
-          )}
-        </Box>
-      </Container>
+        <MyScreen screenIndex={index === 4} sx={{ padding: "0" }}>
+          <PDFViewer
+            style={{
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+            }}
+          >
+            <EmployeePDF
+              name={filterData.row.EMPLOYEE_NAME}
+              email={filterData.row.EMPLOYEE_EMAIL}
+              phone={filterData.row.EMPLOYEE_PHONE}
+            />
+          </PDFViewer>
+        </MyScreen>
+      </Box>
     </>
   );
 };

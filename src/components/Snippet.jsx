@@ -1,6 +1,5 @@
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
-import { useRef } from "react";
 
 const Snippet = () => {
   const drag = (ev) => {
@@ -67,9 +66,12 @@ const Snippet = () => {
     }
   ];
 
+   
+
+
   return (
     <>
-      <Grid sx={{ flexGrow: 1 }} padding={2} >
+      <Grid sx={{ flexGrow: 1 }}>
         <Grid container justifyContent="center" spacing={2}>
           {carditem.map((post, value) => (
             <Grid item xs={3}>

@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function AddProject(props) {
+export default function ProjectCreate(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

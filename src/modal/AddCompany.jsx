@@ -71,7 +71,18 @@ export default function AddCompany(props) {
   return (
     // <div style={{ outline: "none" }}>
     <>
-      <Button  onClick={handleOpen} sx={{color:"#277099"}} className="rounded-0 border-0" variant="outlined" >+ Add Company</Button>
+       <Button className="btn button btn-blue" variant="contained">
+              {props.name ? props.name : "Enter Name"}
+      </Button>
+
+      <Button
+        onClick={handleOpen}
+        sx={{ color: "#277099" }}
+        className="rounded-0 border-0"
+        variant="outlined"
+      >
+        + Add {props.name}
+      </Button>
 
       <Modal
         open={open}
