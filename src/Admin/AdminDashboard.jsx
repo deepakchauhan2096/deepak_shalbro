@@ -14,7 +14,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Fab, Paper, styled } from "@mui/material";
-import { Link } from '@mui/material';
+import { Link } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -25,8 +25,20 @@ import AddIcon from "@mui/icons-material/Add";
 import CompanyCreate from "./CompanyCreate";
 import { useNavigate } from "react-router-dom";
 import ProjectCreate from "../company/ProjectCreate";
+import Modal from "@mui/material/Modal";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "60%",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+};
 
 const AdminDashboard = (props) => {
+  const [open, setOpen] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [update, setUpdateData] = React.useState(null);
@@ -113,15 +125,11 @@ const AdminDashboard = (props) => {
   }, [tableRows, update]);
 
   // Mine work
-  const NavigateTo = useNavigate()
+  const NavigateTo = useNavigate();
 
-  const ShowCompDetail  = (props) => {
-    
-    return(
-    NavigateTo("/project/dashboard", {state:{props}})
-    )
-  
-  }
+  const ShowCompDetail = (props) => {
+    return NavigateTo("/company", { state: { props } });
+  };
 
   const MyScreen = styled(Paper)((props) => ({
     // height: "calc(100vh - 37px)",
@@ -159,29 +167,20 @@ const AdminDashboard = (props) => {
   const settings = [props.email, "Account", "Dashboard", "Logout"];
   const pages = [props.email, tableRows?.ADMIN_ID];
 
-
-
   return (
     <>
-      {/* <div>AdminDashboard</div>
-    <div>{props.email}</div>
-    <div>{props.user}</div> */}
       <MyScreen screenIndex={true}>
         <AppBar position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
               <Typography
                 variant="h6"
                 noWrap
-                // component="a"
                 href="/"
                 sx={{
                   mr: 2,
                   display: { xs: "none", md: "flex" },
-                  //   fontFamily: 'arial',
                   fontWeight: 700,
-                  //   letterSpacing: '.3rem',
                   color: "inherit",
                   textDecoration: "none",
                 }}
@@ -237,7 +236,6 @@ const AdminDashboard = (props) => {
                   flexGrow: 1,
                   //   fontFamily: 'monospace',
                   fontWeight: 700,
-                  //   letterSpacing: '.3rem',
                   color: "inherit",
                   textDecoration: "none",
                 }}
@@ -297,7 +295,6 @@ const AdminDashboard = (props) => {
             Username={tableRows?.ADMIN_USERNAME}
             Update={(e) => setUpdateData(e)}
           />
-
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
@@ -312,7 +309,7 @@ const AdminDashboard = (props) => {
                     "State",
                     "Detail",
                   ].map((item) => (
-                    <TableCell>{item}</TableCell>
+                    <TableCell size="large">{item}</TableCell>
                   ))}
                 </TableRow>
               </TableHead>
@@ -323,19 +320,20 @@ const AdminDashboard = (props) => {
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       {/* <TableCell component="th" scope="row"></TableCell> */}
-                      <TableCell>{post.COMPANY_NAME}</TableCell>
-                      <TableCell>{post.COMPANY_ID}</TableCell>
-                      <TableCell>{post.COMPANY_USERNAME}</TableCell>
-                      <TableCell>{post.COMPANY_PHONE}</TableCell>
-                      <TableCell>{post.COMPANY_EMAIL}</TableCell>
-                      <TableCell>{post.COMPANY_ADD2}</TableCell>
-                      <TableCell>{post.COMPANY_STATE}</TableCell>
-                      <TableCell>
-                
-                       <Button 
-                            onClick={(e) => ShowCompDetail(post)}
-                        >  view 
-                          </Button>
+                      <TableCell size="small">{post.COMPANY_NAME}</TableCell>
+                      <TableCell size="small">{post.COMPANY_ID}</TableCell>
+                      <TableCell size="small">
+                        {post.COMPANY_USERNAME}
+                      </TableCell>
+                      <TableCell size="small">{post.COMPANY_PHONE}</TableCell>
+                      <TableCell size="small">{post.COMPANY_EMAIL}</TableCell>
+                      <TableCell size="small">{post.COMPANY_ADD2}</TableCell>
+                      <TableCell size="small">{post.COMPANY_STATE}</TableCell>
+                      <TableCell size="small">
+                        <Button onClick={(e) => ShowCompDetail(post)}>
+                          {" "}
+                          view
+                        </Button>
                       </TableCell>
                     </TableRow>
                   </>
