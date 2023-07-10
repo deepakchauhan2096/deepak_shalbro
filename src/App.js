@@ -1,27 +1,73 @@
-import "./App.css";
+import "../src/assests/css/sidebar.css";
+import "../src/assests/css/style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useState, useEffect } from "react";
 import Index from "./pages/index";
-import Navbar from "./components/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Signup from "./pages/signup";
-import Contract from "./pages/Contract";
+import Signup from "./pages/Signup";
+import SubContract from "./pages/SubContract";
 import Company from "./pages/Company";
+import Employee from "./pages/Employee";
+import "./assests/css/graph.css";
+import Contract from "./pages/Contract";
+import Login from "./pages/Login";
+import LoginEmp from "./Employee/Auth/Login"
+import { auth } from "./firebase";
+import Page404 from "./pages/PageNotFound";
+import Loader from "./pages/Loader";
+import { faL } from "@fortawesome/free-solid-svg-icons";
+import Attendances from "./pages/Attendances";
+import Screen from "./components/Screen";
+import AdminCreate from "./Admin/AdminCreate";
+import AdminDashboard from "./Admin/AdminDashboard";
 
 function App() {
+  // const [emailname, setEmailName] = useState(false);
+  const [data, setData] = useState(
+    {
+      emailName:"",
+      usernames:""
+    }
+  );
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      console.log(user,"user")
+      if (user) {
+        setData(prev=>{
+          return {...prev,
+          emailName : user.email, 
+          usernames : user.displayName
+        }
+      });
+        // setUserName(user.);
+      } else setData("");
+    });
+  }, []);
+
   return (
     <>
       <div
         className="wrapper"
         style={{ overflowX: "scroll", overflow: "hidden" }}
       >
-        <BrowserRouter>
-          <Routes>
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/dashboard" index element={<Index />} />
-            <Route path="/contract" element={<Contract />} />
-            <Route path="/company" element={<Company />} />
-          </Routes>
-        </BrowserRouter>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<AdminCreate />} />
+              <Route path="/admin" element={<AdminDashboard email={data.emailName}  user={data.usernames}  />} />
+              <Route path="/login" element={<Login/>} />
+              {/* <Route path="/signup" element={userName ? <Index /> : <Signup/>} />
+              <Route path="/employee/login" element={<LoginEmp/>} />
+              <Route path="/login" element={emailname ? <Index /> : <Login/>} />
+              <Route path="/dashboard" element={userName ? <Index /> : <Login/>} />
+              <Route path="/subcontract" element={ userName ? <SubContract /> : ""} />
+              <Route path="/company" element={ userName ? <Company /> : ""} />
+              <Route path="/employee" element={userName ? <Employee /> : ""} />
+              <Route path="/contract" element={ userName ? <Contract /> : ""} />
+              <Route path="/attendance" element={ userName ? <Attendances /> : ""} />
+              <Route path="*" element={ userName ? <Page404 link="/dashboard" /> : <Page404 link="/" />} /> */}
+            </Routes>
+          </BrowserRouter>
       </div>
     </>
   );
