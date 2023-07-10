@@ -140,7 +140,7 @@ const AdminDashboard = (props) => {
     // height: "100vh",
     padding: "50px",
     paddingBottom: "0",
-    overflow: "auto",
+    overflow: "scroll",
     borderRadius: 0,
     Border: 0,
     width: "100%",
