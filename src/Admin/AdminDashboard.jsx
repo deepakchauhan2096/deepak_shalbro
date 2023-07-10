@@ -26,16 +26,16 @@ import CompanyCreate from "./CompanyCreate";
 const AdminDashboard = (props) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [ update, setUpdateData] = React.useState(null);
+  const [updatedata, setUpdateData] = useState([]);
   const [tableRows, setTableRows] = useState({
     ADMIN_ID: "",
-    ADMIN_EMAIL: "meenu@gmail.com",
-    ADMIN_USERNAME: "Meenu12345",
+    ADMIN_EMAIL: "",
+    ADMIN_USERNAME: "",
   });
   const [Rows, setRows] = useState([
     {
-      COMPANY_ID: 19,
-      COMPANY_USERNAME: "company1",
+      COMPANY_ID: "",
+      COMPANY_USERNAME: "",
     },
   ]);
 
@@ -56,9 +56,6 @@ const AdminDashboard = (props) => {
 
   
 
-  useEffect(() => {
-    getAdminData();
-  }, [props.user]);
 
   const headers = {
     "Content-Type": "application/json",
@@ -66,50 +63,54 @@ const AdminDashboard = (props) => {
   };
 
   const getAdminData = async () => {
-    try {
-      const response = await axios.put(
-        "http://54.89.160.62:5001/get_admin",
-        { ADMIN_EMAIL: props?.email, ADMIN_USERNAME: props?.user },
-        { headers }
-      );
-      setTimeout(() => {
-        console.log("response.data : ", response.data);
-        const data = response.data;
-        setTableRows(...data.result);
-      }, 1000);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    }
-  };
+     
+   await axios
+      .put("http://54.89.160.62:5001/get_admin",  { ADMIN_EMAIL: props?.email, ADMIN_USERNAME: props?.user },
+      { headers }
+      )
+      .then((response) => {
+        console.log("response1 : ", response);
+        setTableRows(...response.data.result);
+        if(response.data.result){
+          getCompanyData();
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
-  console.log(props.user);
-  console.log(tableRows, "table-data");
+    }
+
+
+  
 
   const getCompanyData = async () => {
-    try {
-      const response = await axios.put(
+    await axios.put(
         "http://54.89.160.62:5001/get_all_company",
         {
           COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
           COMPANY_PARENT_USERNAME: props.user,
         },
         { headers }
-      );
-      setTimeout(() => {
-        console.log("response.data : ", response.data);
-        const data = response.data;
-        console.log("first13", data);
-        setRows(data.result);
-      }, 1000);
-      // setIsLoading(false);
-    } catch (error) {
+      ).then((response) => {
+        setTimeout(() => {
+          setRows(response.data.result);
+        }, 2000);
+      }).catch ((error) => {
       console.log("Error fetching data:", error);
-    }
+    })
   };
 
   useEffect(() => {
-    getCompanyData();
-  }, [tableRows , update]);
+    getAdminData();
+  }, [props.user]);
+
+
+  useEffect(() => {
+    getCompanyData()
+  }, [tableRows,updatedata]);
+
+  
 
   const MyScreen = styled(Paper)((props) => ({
     // height: "calc(100vh - 37px)",
@@ -143,6 +144,11 @@ const AdminDashboard = (props) => {
     transform: "translate(-50%,-50%)",
     justifyItems: "center",
   });
+
+  const updateDate = (event) => {
+    setUpdateData(event);
+    console.log(event, "event");
+  };
 
   const settings = [props.email, "Account", "Dashboard", "Logout"];
   const pages = [props.email, tableRows?.ADMIN_ID];
@@ -281,7 +287,7 @@ const AdminDashboard = (props) => {
           <CompanyCreate
             ID={tableRows?.ADMIN_ID}
             Username={tableRows?.ADMIN_USERNAME}
-            Update={(e)=>setUpdateData(e)}
+            Update={(event)=>updateDate(event)}
           />
 
           <TableContainer component={Paper}>
