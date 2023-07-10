@@ -73,8 +73,10 @@ export default function CompanyCreate(props) {
 
   const StyledFab = styled(Fab)({
     display: "absolute",
-    top: "-200px",
-    left:"0"
+    top: "50px",
+    left: "95%",
+    transform: "translate(-50%,-50%)",
+    justifyItems: "center",
   });
 
   // const input = (props) => {

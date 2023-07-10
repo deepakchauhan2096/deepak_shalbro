@@ -26,6 +26,18 @@ import CompanyCreate from "./CompanyCreate";
 const AdminDashboard = (props) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [ update, setUpdateData] = React.useState(null);
+  const [tableRows, setTableRows] = useState({
+    ADMIN_ID: "",
+    ADMIN_EMAIL: "meenu@gmail.com",
+    ADMIN_USERNAME: "Meenu12345",
+  });
+  const [Rows, setRows] = useState([
+    {
+      COMPANY_ID: 19,
+      COMPANY_USERNAME: "company1",
+    },
+  ]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -42,21 +54,10 @@ const AdminDashboard = (props) => {
     setAnchorElUser(null);
   };
 
-  const [tableRows, setTableRows] = useState({
-    ADMIN_ID: "",
-    ADMIN_EMAIL: "meenu@gmail.com",
-    ADMIN_USERNAME: "Meenu12345",
-  });
-
-  const [Rows, setRows] = useState([
-    {
-      COMPANY_ID: 19,
-      COMPANY_USERNAME: "company1",
-    },
-  ]);
+  
 
   useEffect(() => {
-    fetchData();
+    getAdminData();
   }, [props.user]);
 
   const headers = {
@@ -64,20 +65,18 @@ const AdminDashboard = (props) => {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const fetchData = async () => {
+  const getAdminData = async () => {
     try {
       const response = await axios.put(
         "http://54.89.160.62:5001/get_admin",
-        { ADMIN_EMAIL: props.email, ADMIN_USERNAME: props.user },
+        { ADMIN_EMAIL: props?.email, ADMIN_USERNAME: props?.user },
         { headers }
       );
       setTimeout(() => {
         console.log("response.data : ", response.data);
         const data = response.data;
         setTableRows(...data.result);
-        console.log("first1", data);
       }, 1000);
-      //   setIsLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
@@ -86,7 +85,7 @@ const AdminDashboard = (props) => {
   console.log(props.user);
   console.log(tableRows, "table-data");
 
-  const getData = async () => {
+  const getCompanyData = async () => {
     try {
       const response = await axios.put(
         "http://54.89.160.62:5001/get_all_company",
@@ -109,8 +108,8 @@ const AdminDashboard = (props) => {
   };
 
   useEffect(() => {
-    getData();
-  }, [tableRows]);
+    getCompanyData();
+  }, [tableRows , update]);
 
   const MyScreen = styled(Paper)((props) => ({
     // height: "calc(100vh - 37px)",
@@ -132,7 +131,6 @@ const AdminDashboard = (props) => {
     overflow: "auto",
     borderRadius: 0,
     Border: 0,
-    display: props.screenIndex ? "block" : "none",
     width: "100%",
     position: "relative",
     background: "#f9f9f9",
@@ -280,20 +278,13 @@ const AdminDashboard = (props) => {
           </Container>
         </AppBar>
         <MyScreenbox screenIndex={true}>
-          
+          <CompanyCreate
+            ID={tableRows?.ADMIN_ID}
+            Username={tableRows?.ADMIN_USERNAME}
+            Update={(e)=>setUpdateData(e)}
+          />
 
-          <TableContainer
-            component={Paper}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "cal(100vh-200px",
-              bgcolor: "pink",
-              position:"relative"
-            }}
-          >
-            <CompanyCreate ID={tableRows?.ADMIN_ID} Username={tableRows?.ADMIN_USERNAME} />
+          <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -304,7 +295,7 @@ const AdminDashboard = (props) => {
                     "Phone",
                     "Email",
                     "Address",
-                    "State"
+                    "State",
                   ].map((item) => (
                     <TableCell>{item}</TableCell>
                   ))}
