@@ -24,10 +24,10 @@ export default function AddProject(props) {
   const [index, setIndex] = React.useState(1);
 
   const [createProject, setCreateProject] = useState({
-    PROJECT_PARENT_ID: 45,
-    PROJECT_PARENT_USERNAME: "company21",
-    PROJECT_MEMBER_PARENT_ID: 18,
-    PROJECT_MEMBER_PARENT_USERNAME: "deepanshu1",
+    PROJECT_PARENT_ID: props.usernameId.COMPANY_ID,
+    PROJECT_PARENT_USERNAME: props.usernameId.COMPANY_USERNAME,
+    PROJECT_MEMBER_PARENT_ID: props.usernameId.COMPANY_PARENT_ID,
+    PROJECT_MEMBER_PARENT_USERNAME:  props.usernameId.COMPANY_PARENT_USERNAME,
     PROJECT_NAME: "",
     PROJECT_USERNAME: "",
     PROJECT_PHONE: "",
@@ -53,7 +53,7 @@ export default function AddProject(props) {
     console.log("on btn submit");
     e.preventDefault();
     axios
-      .post("http://54.89.160.62:5001/create_contract", createProject, {
+      .post("http://54.89.160.62:5001/create_project", createProject, {
         headers,
       })
       .then((response) => {

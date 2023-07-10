@@ -63,8 +63,10 @@ const ProjectDashboard = () => {
       const response = await axios.put(
         "http://54.89.160.62:5001/get_projects",
         {
-          PROJECT_MEMBER_PARENT_ID: 18,
-          PROJECT_MEMBER_PARENT_USERNAME: "deepanshu1",
+          PROJECT_PARENT_ID: location.state.props.COMPANY_ID,
+          PROJECT_PARENT_USERNAME: location.state.props.COMPANY_USERNAME,
+          PROJECT_MEMBER_PARENT_ID: location.state.props.COMPANY_PARENT_ID,
+          PROJECT_MEMBER_PARENT_USERNAME: location.state.props.COMPANY_PARENT_USERNAME,
         },
         { headers }
       );
@@ -197,7 +199,7 @@ const ProjectDashboard = () => {
               <Button className="btn button btn-blue" variant="contained">
                All Project
               </Button>
-              <AddProject update={(event) => updateProject(event)} />
+              <AddProject update={(event) => updateProject(event)} usernameId={location.state.props} />
             </div>
 
             {isLoading ? (

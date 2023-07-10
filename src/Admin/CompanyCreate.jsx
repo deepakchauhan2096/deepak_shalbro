@@ -51,6 +51,15 @@ export default function CompanyCreate(props) {
     // console.log("heello world",create_company)
   };
 
+
+ 
+
+
+
+  
+
+
+
   console.log(create_company, props.ID, "jungli");
 
   const handleSubmit = (e) => {
@@ -61,14 +70,16 @@ export default function CompanyCreate(props) {
         headers,
       })
       .then((response) => {
-        console.log("response1 : ", response);
-        props.update(response.data);
-        alert("response");
+        props.Update(()=> response.data.result);
+        console.log("fuck")
+        if(response){
+          handleClose();
+        }
       })
       .catch((error) => {
         console.error(error);
       });
-    // handleClose();
+    
   };
 
   const StyledFab = styled(Fab)({
@@ -79,14 +90,9 @@ export default function CompanyCreate(props) {
     justifyItems: "center",
   });
 
-  // const input = (props) => {
-  //   return (
-  //     <div className="form-group py-2 col-xl-6">
-  //       <label className="py-1">{props.label}</label>
-  //       <input {...props} />
-  //     </div>
-  //   );
-  // };
+ 
+
+  
 
   return (
     // <div style={{ outline: "none" }}>
@@ -138,33 +144,14 @@ export default function CompanyCreate(props) {
                     type="text"
                     className="form-control rounded-0"
                     placeholder="Username"
-                    // value={create_company.COMPANY_USERNAME}
+                    value={create_company.COMPANY_USERNAME}
                     name="COMPANY_USERNAME"
                     onChange={handleCreate}
                     label="Company username"
                   />
                 </div>
               </div>
-              {/* <div className="row">
-                <input
-                  type="text"
-                  className="form-control rounded-0"
-                  id="inputEmail4"
-                  placeholder="Email"
-                  value={create_company.COMPANY_PARENT_ID}
-                  name="COMPANY_PARENT_ID"
-                  label="Admin ID"
-                />
-                <input
-                  type="text"
-                  className="form-control rounded-0"
-                  id="inputusername"
-                  placeholder=" Parent Username"
-                  value={create_company.COMPANY_PARENT_USERNAME}
-                  name="COMPANY_PARENT_USERNAME"
-                  label="Admin username"
-                />
-              </div> */}
+
               <div className="row">
               <div className="form-group py-2 col-xl-6">
                   <label>Phone Number</label>
