@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
@@ -12,13 +12,15 @@ import Mymenu from "../components/Menus";
 
 const ContractSrc = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [updateEvent, setUpdateEvent] = useState([]);
 
-  const [tableRows, setTableRows] = useState([
+  const [tableRows, setTableRows] = useState(
     {
       COMPANY_ID: 19,
       COMPANY_USERNAME: "company1",
     },
-  ]);
+  );
+  const fileInputRef = useRef(null);
 
   const [updatedata, setUpdateData] = useState([]);
 
@@ -74,6 +76,19 @@ const ContractSrc = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+ 
+
+
+
+
+  const handleClick = (event) => {
+    setFilteredData(event);
+    handleOpen();
+  };
+
+
+
+ 
   const columns = [
     // { field: "id", headerName: "ID", width: 90 },
     {
@@ -154,10 +169,8 @@ const ContractSrc = () => {
     downloadLink.download = fileName;
     downloadLink.click();
   }
-
-  const handleClick = (event) => {
-    setFilteredData(event);
-    handleOpen();
+  const updateCompany = (event) => {
+    setUpdateEvent(event);
   };
 
   const MyScreen = styled(Paper)((props) => ([{
@@ -191,6 +204,19 @@ const ContractSrc = () => {
   };
 
   console.log("company data table: =>", tableRows);
+
+  const handleFileSelect = (event) => {
+    const file = event.target.files[0];
+    // Do something with the selected file, such as uploading it
+    // You can access the file using 'file' variable
+
+    // Example: Log the file name to the console
+    console.log(file.name);
+  };
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
   return (
     <>
       <Box className="box">

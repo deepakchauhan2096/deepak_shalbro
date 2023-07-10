@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
-
-import AddContract from "../modal/AddContract";
+import AddProject from "../modal/AddProject";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Container } from "@mui/material";
 
 import CircularProgress from "@mui/material/CircularProgress";
 
-const ContractSrc = () => {
+const ProjectSrc = () => {
+
   const [data, setData] = useState({
     row: {
       _id: "649a71ca12c8d41898147a9d",
@@ -30,15 +30,17 @@ const ContractSrc = () => {
     },
   });
 
-  const [ContractData, setContractData] = useState([]);
+  const [ProjectData, setProjectData] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  // console.log("all contracts: =>>>",ContractData)
+  const [updateProjectData, setUpdateProjectData] = useState([]);
+
+  // console.log("all contracts: =>>>",ProjectData)
 
   useEffect(() => {
-    fetchContracts();
-  }, []);
+    fetchProjects();
+  }, [updateProjectData]);
 
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
@@ -51,7 +53,7 @@ const ContractSrc = () => {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const fetchContracts = async () => {
+  const fetchProjects = async () => {
     try {
       const response = await axios.put(
         "http://54.89.160.62:5001/get_projects",
@@ -63,7 +65,7 @@ const ContractSrc = () => {
       );
       setTimeout(() => {
         const data = response.data;
-        setContractData(data.result);
+        setProjectData(data.result);
         setIsLoading(false);
         console.log("contracts Data : =>", data);
       }, 1000);
@@ -134,7 +136,8 @@ const ContractSrc = () => {
     },
   ];
 
-  const rows = ContractData;
+  const rows = ProjectData;
+  console.log("Project Data : =>", ProjectData)
 
   const style = {
     position: "absolute",
@@ -161,6 +164,11 @@ const ContractSrc = () => {
     handleOpen();
   };
 
+  // for updating the event according when add contract reflect back on page at the same time 
+  const updateProject = (event) => {
+    setUpdateProjectData(event)
+  }
+
   // console.log(filterData, "data-GGG");
   const filterData = data.row;
   console.log(filterData, "f-data");
@@ -182,9 +190,9 @@ const ContractSrc = () => {
 
             <div style={{ height: "20%" }}>
               <Button className="btn button btn-blue" variant="contained">
-                Contract
+               All Project
               </Button>
-              <AddContract />
+              <AddProject update={(event) => updateProject(event)} />
             </div>
 
             {isLoading ? (
@@ -1041,4 +1049,4 @@ const ContractSrc = () => {
   );
 };
 
-export default ContractSrc;
+export default ProjectSrc;

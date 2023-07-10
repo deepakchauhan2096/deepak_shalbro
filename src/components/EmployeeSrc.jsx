@@ -126,6 +126,36 @@ const EmployeeSrc = () => {
     {
       field: "EMPLOYEE_PHONE",
       headerName: "Phone",
+      width: 110,
+      // editable: true,
+    },
+    {
+      field: "EMPLOYEE_HIRE_DATE",
+      headerName: "Hire Date",
+      width: 100,
+      // editable: true,
+    },
+    {
+      field: "EMPLOYEE_HOURLY_WAGE",
+      headerName: "Hourly Wages",
+      width: 60,
+      // editable: true,
+    },
+    {
+      field: "EMPLOYEE_ADD",
+      headerName: "Address",
+      width: 120,
+      // editable: true,
+    },
+    {
+      field: "EMPLOYEE_CITY",
+      headerName: "City",
+      width: 80,
+      // editable: true,
+    },
+    {
+      field: "EMPLOYEE_EMPLMNTTYPE",
+      headerName: "Employement Type",
       width: 120,
       // editable: true,
     },

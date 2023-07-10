@@ -9,6 +9,7 @@ import styles from "../assests/css/Signup.module.css";
 
 function AdminCreate() {
   const navigate = useNavigate();
+  
   const [values, setValues] = useState({
     ADMIN_PASSWORD: "",
     ADMIN_NAME: "",

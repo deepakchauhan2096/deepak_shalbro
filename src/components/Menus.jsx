@@ -3,10 +3,14 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-const options = ["Add", "Edit", "Delete"];
+import EditEmployee from "../modal/EditEmployee";
+
+
 const ITEM_HEIGHT = 48;
 
 const Menus = () => {
+
+  const options = ["Add", <EditEmployee />,"Delete"];
   const [anchorEl, setAnchorEl] = React.useState(null);
   const opens = Boolean(anchorEl);
   const handleClicks = (event) => {
@@ -47,7 +51,7 @@ const Menus = () => {
           <MenuItem
             key={option}
             selected={option === "Pyxis"}
-            onClick={handleCloses}
+            // onClick={handleCloses}
           >
             {option}
           </MenuItem>

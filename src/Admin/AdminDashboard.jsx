@@ -14,6 +14,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Fab, Paper, styled } from "@mui/material";
+import { Link } from '@mui/material';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -22,20 +23,22 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import AddIcon from "@mui/icons-material/Add";
 import CompanyCreate from "./CompanyCreate";
+import { useNavigate } from "react-router-dom";
+import ProjectCreate from "../company/ProjectCreate";
 
 const AdminDashboard = (props) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [updatedata, setUpdateData] = useState([]);
+  const [update, setUpdateData] = React.useState(null);
   const [tableRows, setTableRows] = useState({
     ADMIN_ID: "",
-    ADMIN_EMAIL: "",
-    ADMIN_USERNAME: "",
+    ADMIN_EMAIL: "meenu@gmail.com",
+    ADMIN_USERNAME: "Meenu12345",
   });
   const [Rows, setRows] = useState([
     {
-      COMPANY_ID: "",
-      COMPANY_USERNAME: "",
+      COMPANY_ID: 19,
+      COMPANY_USERNAME: "company1",
     },
   ]);
 
@@ -54,8 +57,9 @@ const AdminDashboard = (props) => {
     setAnchorElUser(null);
   };
 
-  
-
+  useEffect(() => {
+    getAdminData();
+  }, [props.user]);
 
   const headers = {
     "Content-Type": "application/json",
@@ -63,54 +67,61 @@ const AdminDashboard = (props) => {
   };
 
   const getAdminData = async () => {
-     
-   await axios
-      .put("http://54.89.160.62:5001/get_admin",  { ADMIN_EMAIL: props?.email, ADMIN_USERNAME: props?.user },
-      { headers }
-      )
-      .then((response) => {
-        console.log("response1 : ", response);
-        setTableRows(...response.data.result);
-        if(response.data.result){
-          getCompanyData();
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
+    try {
+      const response = await axios.put(
+        "http://54.89.160.62:5001/get_admin",
+        { ADMIN_EMAIL: props?.email, ADMIN_USERNAME: props?.user },
+        { headers }
+      );
+      setTimeout(() => {
+        console.log("response.data : ", response.data);
+        const data = response.data;
+        setTableRows(...data.result);
+      }, 1000);
+    } catch (error) {
+      console.log("Error fetching data:", error);
     }
+  };
 
-
-  
+  console.log(props.user);
+  console.log(tableRows, "table-data");
 
   const getCompanyData = async () => {
-    await axios.put(
+    try {
+      const response = await axios.put(
         "http://54.89.160.62:5001/get_all_company",
         {
           COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
           COMPANY_PARENT_USERNAME: props.user,
         },
         { headers }
-      ).then((response) => {
-        setTimeout(() => {
-          setRows(response.data.result);
-        }, 2000);
-      }).catch ((error) => {
+      );
+      setTimeout(() => {
+        console.log("response.data : ", response.data);
+        const data = response.data;
+        console.log("first13", data);
+        setRows(data.result);
+      }, 2000);
+      // setIsLoading(false);
+    } catch (error) {
       console.log("Error fetching data:", error);
-    })
+    }
   };
 
   useEffect(() => {
-    getAdminData();
-  }, [props.user]);
+    getCompanyData();
+  }, [tableRows, update]);
 
+  // Mine work
+  const NavigateTo = useNavigate()
 
-  useEffect(() => {
-    getCompanyData()
-  }, [tableRows,updatedata]);
-
+  const ShowCompDetail  = (props) => {
+    
+    return(
+    NavigateTo("/project/dashboard", {state:{props}})
+    )
   
+  }
 
   const MyScreen = styled(Paper)((props) => ({
     // height: "calc(100vh - 37px)",
@@ -145,13 +156,10 @@ const AdminDashboard = (props) => {
     justifyItems: "center",
   });
 
-  const updateDate = (event) => {
-    setUpdateData(event);
-    console.log(event, "event");
-  };
-
   const settings = [props.email, "Account", "Dashboard", "Logout"];
   const pages = [props.email, tableRows?.ADMIN_ID];
+
+
 
   return (
     <>
@@ -287,7 +295,7 @@ const AdminDashboard = (props) => {
           <CompanyCreate
             ID={tableRows?.ADMIN_ID}
             Username={tableRows?.ADMIN_USERNAME}
-            Update={(event)=>updateDate(event)}
+            Update={(e) => setUpdateData(e)}
           />
 
           <TableContainer component={Paper}>
@@ -302,13 +310,14 @@ const AdminDashboard = (props) => {
                     "Email",
                     "Address",
                     "State",
+                    "Detail",
                   ].map((item) => (
                     <TableCell>{item}</TableCell>
                   ))}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {Rows.map((post) => (
+                {Rows?.map((post) => (
                   <>
                     <TableRow
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -321,6 +330,13 @@ const AdminDashboard = (props) => {
                       <TableCell>{post.COMPANY_EMAIL}</TableCell>
                       <TableCell>{post.COMPANY_ADD2}</TableCell>
                       <TableCell>{post.COMPANY_STATE}</TableCell>
+                      <TableCell>
+                
+                       <Button 
+                            onClick={(e) => ShowCompDetail(post)}
+                        >  view 
+                          </Button>
+                      </TableCell>
                     </TableRow>
                   </>
                 ))}

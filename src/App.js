@@ -9,7 +9,7 @@ import SubContract from "./pages/SubContract";
 import Company from "./pages/Company";
 import Employee from "./pages/Employee";
 import "./assests/css/graph.css";
-import Contract from "./pages/Contract";
+import Project from "./pages/Project";
 import Login from "./pages/Login";
 import LoginEmp from "./Employee/Auth/Login"
 import { auth } from "./firebase";
@@ -20,6 +20,7 @@ import Attendances from "./pages/Attendances";
 import Screen from "./components/Screen";
 import AdminCreate from "./Admin/AdminCreate";
 import AdminDashboard from "./Admin/AdminDashboard";
+import ProjectDashboard from "./company/ProjectDashboard";
 
 function App() {
   // const [emailname, setEmailName] = useState(false);
@@ -55,6 +56,7 @@ function App() {
             <Routes>
               <Route path="/" element={<AdminCreate />} />
               <Route path="/admin" element={<AdminDashboard email={data.emailName}  user={data.usernames}  />} />
+              <Route path="/project/dashboard" element={<ProjectDashboard email={data.emailName}  user={data.usernames}  />} />
               <Route path="/login" element={<Login/>} />
               {/* <Route path="/signup" element={userName ? <Index /> : <Signup/>} />
               <Route path="/employee/login" element={<LoginEmp/>} />
@@ -63,7 +65,7 @@ function App() {
               <Route path="/subcontract" element={ userName ? <SubContract /> : ""} />
               <Route path="/company" element={ userName ? <Company /> : ""} />
               <Route path="/employee" element={userName ? <Employee /> : ""} />
-              <Route path="/contract" element={ userName ? <Contract /> : ""} />
+              <Route path="/project" element={ userName ? <Project /> : ""} />
               <Route path="/attendance" element={ userName ? <Attendances /> : ""} />
               <Route path="*" element={ userName ? <Page404 link="/dashboard" /> : <Page404 link="/" />} /> */}
             </Routes>
