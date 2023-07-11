@@ -118,7 +118,7 @@ const AdminDashboard = (props) => {
   const ShowCompDetail  = (props) => {
     
     return(
-    NavigateTo("/project/dashboard", {state:{props}})
+    NavigateTo("/project", {state:{props}})
     )
   
   }

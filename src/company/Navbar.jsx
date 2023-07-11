@@ -59,46 +59,39 @@ const Navbar = (props) => {
       listname: "Dashboard",
       listlink: "/dashboard",
     },
-    {
-      listname: "Company",
-      listlink: "/company",
-    },
+    
     {
       listname: "Project",
       listlink: "/project",
     },
-    {
-      listname: "Sub Contract",
-      listlink: "/subcontract",
-    },
-    {
+    // {
+    //   listname: "Sub Contract",
+    //   listlink: "/subcontract",
+    // },
+    // {
 
-      listname: "Employee",
-      listlink: "/employee",
-    },
-    {
-
-      listname: "Attendance",
-      listlink: "/attendance",
-    },
+    //   listname: "Employee",
+    //   listlink: "/employee",
+    // },
+   
   ];
 
 
 
-  const Lists = (props) => {
+  const Lists = (post) => {
     return (
       <Box role="presentation" sx={{width:250}}>
-        <Link to={props.listlink}>
+        <Link to={post.listlink}>
           <List sx={{ py: 0 }}>
             <ListItem
               sx={{
                 background:
-                  location.pathname === props.listlink ? "#3596d9" : "",
+                  location.pathname === post.listlink ? "#3596d9" : "",
               }}
               disablePadding
             >
-              <ListItemButton sx={{ color: "#fff" }}>
-                {props.listname}
+              <ListItemButton sx={{ color: "#fff" }} disabled>
+                {post.listname}
               </ListItemButton>
             </ListItem>
           </List>
@@ -127,7 +120,7 @@ const Navbar = (props) => {
           style={{ justifyContent: "space-between" }}
         >
           <h3>{props.companyName}</h3>
-          <Tooltip title={userName}>
+          <Tooltip title={props.companyName}>
             <Avatar>{props.companyName.charAt(0).toUpperCase()}</Avatar>
           </Tooltip>
         </div>

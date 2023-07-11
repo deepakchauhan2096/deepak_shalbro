@@ -13,6 +13,7 @@ function AdminLogin() {
     email: "",
     pass: "",
   });
+
   const [errorMsg, setErrorMsg] = useState("");
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
 
@@ -31,6 +32,7 @@ function AdminLogin() {
         setSubmitButtonDisabled(false);
         
         navigate("/");
+
       })
       .catch((err) => {
         setSubmitButtonDisabled(false);

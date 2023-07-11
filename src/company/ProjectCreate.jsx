@@ -2,9 +2,19 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import pluslogo from "../assests/images/plus.png";
-import { Button } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
+
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  Paper,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -64,6 +74,22 @@ export default function ProjectCreate(props) {
         console.error(error);
       });
     handleClose();
+  };
+
+
+  const Animations = () => {
+    return (
+      <Box sx={{ width: "100%" }}>
+        <Skeleton animation="pulse" height={60} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+      </Box>
+    );
   };
 
   return (

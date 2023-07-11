@@ -56,12 +56,12 @@ function App() {
             <Routes>
               <Route path="/" element={<AdminCreate />} />
               <Route path="/admin" element={<AdminDashboard email={data.emailName}  user={data.usernames}  />} />
-              <Route path="/project/dashboard" element={<ProjectDashboard email={data.emailName}  user={data.usernames}  />} />
+              <Route path="/project" element={<ProjectDashboard />} />
               <Route path="/login" element={<Login/>} />
+              {/* <Route path="/dashboard" element={userName ? <Index /> : <Login/>} /> */}
               {/* <Route path="/signup" element={userName ? <Index /> : <Signup/>} />
               <Route path="/employee/login" element={<LoginEmp/>} />
               <Route path="/login" element={emailname ? <Index /> : <Login/>} />
-              <Route path="/dashboard" element={userName ? <Index /> : <Login/>} />
               <Route path="/subcontract" element={ userName ? <SubContract /> : ""} />
               <Route path="/company" element={ userName ? <Company /> : ""} />
               <Route path="/employee" element={userName ? <Employee /> : ""} />

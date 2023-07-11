@@ -9,6 +9,7 @@ import { useLocation } from "react-router-dom";
 
 
 import CircularProgress from "@mui/material/CircularProgress";
+import Navbar from "./Navbar";
 
 const ProjectDashboard = () => {
 
@@ -186,6 +187,7 @@ const ProjectDashboard = () => {
    <Box className="box">
           <div className="container-fluid d-flex pb-0 g-0 flex-column"> */}
 
+      <Navbar companyName={location.state.props.COMPANY_NAME} />
       <Container
         id="content"
         sx={{ height: "100vh", position: "relative" }}
