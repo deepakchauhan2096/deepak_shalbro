@@ -42,15 +42,15 @@ const AdminDashboard = (props) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [update, setUpdateData] = React.useState(null);
-  const [tableRows, setTableRows] = useState({
+  const [tableRows, setTableRows] = useState([{
     ADMIN_ID: "",
     ADMIN_EMAIL: "meenu@gmail.com",
     ADMIN_USERNAME: "Meenu12345",
-  });
+  }]);
   const [Rows, setRows] = useState([
     {
-      COMPANY_ID: 19,
-      COMPANY_USERNAME: "company1",
+      COMPANY_ID: "",
+      COMPANY_USERNAME: "",
     },
   ]);
 
@@ -88,15 +88,14 @@ const AdminDashboard = (props) => {
       setTimeout(() => {
         console.log("response.data : ", response.data);
         const data = response.data;
-        setTableRows(...data.result);
+        setTableRows(data.result[0]);
       }, 1000);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
   };
 
-  console.log(props.user);
-  console.log(tableRows, "table-data");
+
 
   const getCompanyData = async () => {
     try {
@@ -111,9 +110,8 @@ const AdminDashboard = (props) => {
       setTimeout(() => {
         console.log("response.data : ", response.data);
         const data = response.data;
-        console.log("first13", data);
         setRows(data.result);
-      }, 2000);
+      }, 1000);
       // setIsLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -143,6 +141,7 @@ const AdminDashboard = (props) => {
     width: "100%",
     // background:"pink"
   }));
+  
   const MyScreenbox = styled(Paper)((props) => ({
     height: "calc(100vh - 68.5px)",
     // height: "100vh",

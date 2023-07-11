@@ -15,6 +15,7 @@ const style = {
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
+  borderRadius:4
 };
 
 export default function ProjectCreate(props) {
@@ -24,10 +25,10 @@ export default function ProjectCreate(props) {
   const [index, setIndex] = React.useState(1);
 
   const [createProject, setCreateProject] = useState({
-    PROJECT_PARENT_ID: 45,
-    PROJECT_PARENT_USERNAME: "company21",
-    PROJECT_MEMBER_PARENT_ID: 18,
-    PROJECT_MEMBER_PARENT_USERNAME: "deepanshu1",
+    PROJECT_PARENT_ID: props.usernameId.COMPANY_ID,
+    PROJECT_PARENT_USERNAME: props.usernameId.COMPANY_USERNAME,
+    PROJECT_MEMBER_PARENT_ID: props.usernameId.COMPANY_PARENT_ID,
+    PROJECT_MEMBER_PARENT_USERNAME:  props.usernameId.COMPANY_PARENT_USERNAME,
     PROJECT_NAME: "",
     PROJECT_USERNAME: "",
     PROJECT_PHONE: "",
@@ -53,7 +54,7 @@ export default function ProjectCreate(props) {
     console.log("on btn submit");
     e.preventDefault();
     axios
-      .post("http://54.89.160.62:5001/create_contract", createProject, {
+      .post("http://54.89.160.62:5001/create_project", createProject, {
         headers,
       })
       .then((response) => {
@@ -71,7 +72,7 @@ export default function ProjectCreate(props) {
       <Button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
-        className="rounded-0 border-0"
+        className=" border-0"
         variant="outlined"
       >
         + Add New Project
@@ -90,7 +91,7 @@ export default function ProjectCreate(props) {
                 <label> Project Username</label>
                 <input
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control "
                   id="inputusername"
                   placeholder="Username"
                   value={createProject.PROJECT_USERNAME}
@@ -102,7 +103,7 @@ export default function ProjectCreate(props) {
                 <label>Project Name</label>
                 <input
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control "
                   id="inputname"
                   placeholder="Project Name"
                   value={createProject.PROJECT_NAME}
@@ -114,7 +115,7 @@ export default function ProjectCreate(props) {
                 <label>Contact</label>
                 <input
                   type="number"
-                  className="form-control rounded-0"
+                  className="form-control"
                   id="inputPassword4"
                   placeholder="Enter Phone Number"
                   name="PROJECT_PHONE"
@@ -125,23 +126,23 @@ export default function ProjectCreate(props) {
             </div>
             <div className="row py-2">
               <div className="form-group col-xl-6">
-                <label className="py-2 " >Project start date</label>
+                <label>Project start date</label>
                 <input
                   type="date"
                   value={createProject.PROJECT_START_DATE}
                   name="PROJECT_START_DATE"
                   onChange={handleCreate}
-                  className="mx-2 py-2 border"
+                  className="form-control"
                 />
               </div>
               <div className="form-group col-xl-6">
-                <label className="py-2 ">Project End date</label>
+                <label>Project End date</label>
                 <input
                   type="date"
                   value={createProject.PROJECT_END_DATE}
                   name="PROJECT_END_DATE"
                   onChange={handleCreate}
-                  className="mx-2 py-2 border outline-0"
+                  className="form-control"
                 />
               </div>
             </div>
@@ -152,7 +153,7 @@ export default function ProjectCreate(props) {
                   <label>Enrollment</label>
                   <select
                     id="inputEnroll"
-                    className="form-control rounded-0"
+                    className="form-control "
                     onChange={handleCreate}
                     name="PROJECT_EMROLMNT_TYPE"
                     value={createProject.PROJECT_EMROLMNT_TYPE}
@@ -169,7 +170,7 @@ export default function ProjectCreate(props) {
                 <label>Supervisor</label>
                 <input
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control "
                   id="inputsupervisor"
                   name="PROJECT_SUPERVISOR"
                   value={createProject.PROJECT_SUPERVISOR}
@@ -180,9 +181,9 @@ export default function ProjectCreate(props) {
             </div>
             <div className="form-group py-2">
               <label>Address</label>
-              <input
+              <textarea
                 type="text"
-                className="form-control rounded-0"
+                className="form-control "
                 id="inputAddress2"
                 placeholder="Apartment, studio, or floor"
                 name="PROJECT_ADD"
@@ -195,7 +196,7 @@ export default function ProjectCreate(props) {
                 <label>City</label>
                 <input
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control "
                   id="inputCity"
                   name="PROJECT_CITY"
                   value={createProject.PROJECT_CITY}
@@ -207,7 +208,7 @@ export default function ProjectCreate(props) {
               {/* <div className="form-group py-2 col-md-4">
               <label for="file" >Compliance doc</label>
                 <input
-                  className="form-control rounded-0"
+                  className="form-control "
                   type="file"
                   id="file"
                 />
@@ -216,7 +217,7 @@ export default function ProjectCreate(props) {
               {/* <div className="form-group py-2 col-md-4">
               <label for="file" >Policies</label>
                 <input
-                  className="form-control rounded-0"
+                  className="form-control "
                   type="file"
                   id="file"
                 />
@@ -225,7 +226,7 @@ export default function ProjectCreate(props) {
               {/* <div className="form-group py-2 col-md-4">
               <label for="file" >Auto policies</label>
                 <input
-                  className="form-control rounded-0"
+                  className="form-control "
                   type="file"
                   id="file"
                 />
@@ -234,18 +235,18 @@ export default function ProjectCreate(props) {
             <div className="form-group py-2 col-md-4">
               <label for="file" >Law suits</label>
                 <input
-                  className="form-control rounded-0"
+                  className="form-control "
                   type="file"
                   id="file"
                 />
             </div> */}
             </div>
-            <button type="submit" className="btn btn-info text-white rounded-0" onClick={handleSubmit}>
+            <button type="submit" className="btn btn-info text-white " onClick={handleSubmit}>
               Submit
             </button>{" "}
             <button
               onClick={handleClose}
-              className="btn btn-danger text-white rounded-0"
+              className="btn btn-danger text-white "
             >
               Discard
             </button>

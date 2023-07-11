@@ -20,7 +20,7 @@ import Attendances from "./pages/Attendances";
 import Screen from "./components/Screen";
 import AdminCreate from "./Admin/AdminCreate";
 import AdminDashboard from "./Admin/AdminDashboard";
-import ProjectDashboard from "./company/ProjectDashboard";
+import CompanyDashboard from "./company/CompanyDashboard";
 
 function App() {
   // const [emailname, setEmailName] = useState(false);
@@ -56,7 +56,7 @@ function App() {
             <Routes>
               <Route path="/" element={<AdminCreate />} />
               <Route path="/admin" element={<AdminDashboard email={data.emailName}  user={data.usernames}  />} />
-              <Route path="/company" element={<ProjectDashboard />} />
+              <Route path="/company" element={<CompanyDashboard />} />
               <Route path="/login" element={<Login/>} />
               {/* <Route path="/signup" element={userName ? <Index /> : <Signup/>} />
               <Route path="/employee/login" element={<LoginEmp/>} />
