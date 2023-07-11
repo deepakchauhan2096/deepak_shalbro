@@ -16,6 +16,9 @@ import {
   Typography,
 } from "@mui/material";
 
+
+
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -168,15 +171,12 @@ export default function ProjectCreate(props) {
                     name="PROJECT_EMROLMNT_TYPE"
                     value={createProject.PROJECT_EMROLMNT_TYPE}
                   >
-         
                     <option selected>Choose...</option>
                     <option>Painter</option>
                     <option>Fitter</option>
                     <option>Plumber</option>
                     <option>Engineer</option>
                   </select>
-
-                  
                 </div>
 
                 <div className="form-group col-md-6">

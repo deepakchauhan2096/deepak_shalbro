@@ -56,7 +56,9 @@ function App() {
             <Routes>
               <Route path="/" element={<AdminCreate />} />
               <Route path="/admin" element={<AdminDashboard email={data.emailName}  user={data.usernames}  />} />
-              <Route path="/project" element={<ProjectDashboard />} />
+              <Route path="/company" element={<ProjectDashboard />} />
+             
+
               <Route path="/login" element={<Login/>} />
               {/* <Route path="/dashboard" element={userName ? <Index /> : <Login/>} /> */}
               {/* <Route path="/signup" element={userName ? <Index /> : <Signup/>} />

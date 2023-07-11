@@ -4,10 +4,9 @@ import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import AddProject from "../modal/AddProject";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Button, Container } from "@mui/material";
-import { useLocation } from "react-router-dom";
-
-
+import { Avatar, Button, Container, Divider, Drawer, List, ListItem, ListItemButton, Paper, Tooltip, styled } from "@mui/material";
+import { Link, useLocation } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
 import CircularProgress from "@mui/material/CircularProgress";
 import Navbar from "./Navbar";
 
@@ -73,7 +72,7 @@ const ProjectDashboard = () => {
       );
       setTimeout(() => {
         const data = response.data;
-        setProjectData(data.result);
+        setProjectData(data?.result);
         setIsLoading(false);
         console.log("contracts Data : =>", data);
       }, 1000);
@@ -178,17 +177,108 @@ const ProjectDashboard = () => {
   }
 
   // console.log(filterData, "data-GGG");
-  const filterData = data.row;
+  const filterData = data?.row;
   console.log(filterData, "f-data");
+
+
+
+
+
+  const NavScreens = styled(Paper)((props) => ({
+    height: "calc(100vh - 37px)",
+    padding: 0,
+    paddingBottom: "0",
+    overflow: "auto",
+    borderRadius: 0,
+    Border: 0,
+    display: props.screenIndex ? "block" : "none",
+  }));
+
+
+  const urls = [
+    {
+      listname: "Project",
+      listlink: "/project",
+    },
+    {
+      listname: "Dashboard",
+      listlink: "/dashboard",
+    }
+  ];
+
+  const [navIndex, setNavIndex] = useState(false)
+
+
+  const Lists = (props) => {
+    return (
+      <Box role="presentation" sx={{width:250}}>
+        
+          <List sx={{ py: 0 }} onClick={() => setNavIndex(props.value)}>
+            <ListItem
+              sx={{
+                background:
+                  props.value == navIndex ? "#3596d9" : "",
+              }}
+              disablePadding
+            >
+              <ListItemButton sx={{ color: "#fff" }}>
+                {props.listname}
+              </ListItemButton>
+            </ListItem>
+          </List>
+     
+      </Box>
+    );
+  };
+  
 
   return (
     <>
 {/* 
    <Box className="box">
           <div className="container-fluid d-flex pb-0 g-0 flex-column"> */}
+      {/* <Navbar  /> */}
+      <Drawer
+        anchor="left"
+        variant="permanent"
+        PaperProps={{
+          className: "sidebar",
+          sx:{
+            overflow:"hidden"
+          }
+        }}
+      >
+        
+        <div
+          className="sidebar-header d-flex"
+          style={{ justifyContent: "space-between" }}
+        >
+          <h3>{location.state.props.COMPANY_NAME}</h3>
+          <Tooltip title={"deepak"}>
+            <Avatar>{[location.state.props.COMPANY_NAME][0].charAt(0).toUpperCase()}</Avatar>
+          </Tooltip>
+        </div>
 
-      <Navbar companyName={location.state.props.COMPANY_NAME} />
-      <Container
+        <Divider/>
+
+        {urls.map((post,index) => (
+          <Lists listname={post.listname} listlink={post.listlink} value={index} />
+        ))}
+
+        <div
+          className="login sidebar_footer position-absolute"
+          style={{ bottom: "0" }}
+        >
+          <div className="logout_icon">
+            <LogoutIcon style={{ display: "inline" }} />{" "}
+            <div className="logout_icon d-inline" >
+              <Link className="text-white" to="/admin">Exit</Link>
+            </div>
+          </div>
+        </div>
+      </Drawer>
+
+      {navIndex === 0 ? <Container
         id="content"
         sx={{ height: "100vh", position: "relative" }}
         maxWidth="xl"
@@ -1053,7 +1143,7 @@ const ProjectDashboard = () => {
             ""
           )}
         </Box>
-   </Container>
+      </Container> : navIndex === 1 ? "dashboard" : ""}
     </>
   );
 };

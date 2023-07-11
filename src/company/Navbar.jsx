@@ -16,7 +16,7 @@ import {
   Tooltip,
 } from "@mui/material";
 
-const Navbar = (props) => {
+const Navbar = () => {
   const [userName, setUserName] = useState("U");
 
   const [showProfile, setShowProfile] = useState(false);
@@ -59,43 +59,32 @@ const Navbar = (props) => {
       listname: "Dashboard",
       listlink: "/dashboard",
     },
-    
     {
       listname: "Project",
       listlink: "/project",
-    },
-    // {
-    //   listname: "Sub Contract",
-    //   listlink: "/subcontract",
-    // },
-    // {
-
-    //   listname: "Employee",
-    //   listlink: "/employee",
-    // },
-   
+    }
   ];
 
 
 
-  const Lists = (post) => {
+  const Lists = (props) => {
     return (
       <Box role="presentation" sx={{width:250}}>
-        <Link to={post.listlink}>
+        
           <List sx={{ py: 0 }}>
             <ListItem
               sx={{
                 background:
-                  location.pathname === post.listlink ? "#3596d9" : "",
+                  location.pathname === props.listlink ? "#3596d9" : "",
               }}
               disablePadding
             >
-              <ListItemButton sx={{ color: "#fff" }} disabled>
-                {post.listname}
+              <ListItemButton sx={{ color: "#fff" }}>
+                {props.listname}
               </ListItemButton>
             </ListItem>
           </List>
-        </Link>
+     
       </Box>
     );
   };
@@ -119,9 +108,9 @@ const Navbar = (props) => {
           className="sidebar-header d-flex"
           style={{ justifyContent: "space-between" }}
         >
-          <h3>{props.companyName}</h3>
-          <Tooltip title={props.companyName}>
-            <Avatar>{props.companyName.charAt(0).toUpperCase()}</Avatar>
+          <h3>Shalbro</h3>
+          <Tooltip title={userName}>
+            <Avatar>{userName.charAt(0).toUpperCase()}</Avatar>
           </Tooltip>
         </div>
 
@@ -138,7 +127,7 @@ const Navbar = (props) => {
           <div className="logout_icon">
             <LogoutIcon style={{ display: "inline" }} />{" "}
             <div className="logout_icon d-inline" onClick={Logout}>
-              Logout
+              Exit
             </div>
           </div>
         </div>
