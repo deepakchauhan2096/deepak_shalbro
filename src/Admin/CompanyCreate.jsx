@@ -2,7 +2,6 @@ import * as React from "react";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-// import pluslogo from "../assests/images/plus.png"
 import axios from "axios";
 import { Button, Container, Hidden } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -36,7 +35,9 @@ export default function CompanyCreate(props) {
     COMPANY_CITY: "",
   });
 
-  // console.log("All state Data",create_company)
+  const handleCreate = (e) => {
+    setCreate_company({ ...create_company, [e.target.name]: e.target.value });
+  };
 
   const headers = {
     "Content-Type": "application/json",
@@ -45,19 +46,6 @@ export default function CompanyCreate(props) {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const handleCreate = (e) => {
-    setCreate_company({ ...create_company, [e.target.name]: e.target.value });
-    // console.log("heello world",create_company)
-  };
-
-
- 
-
-
-
-  
-
 
 
   console.log(create_company, props.ID, "jungli");
@@ -83,9 +71,12 @@ export default function CompanyCreate(props) {
   };
 
   const StyledFab = styled(Fab)({
-    position: "absolute",
-    top: "20px",
-    right: "60px",
+
+    position: "fixed",
+    top: "80px",
+    right: "80px",
+
+
   });
 
  
