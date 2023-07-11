@@ -71,9 +71,12 @@ export default function CompanyCreate(props) {
   };
 
   const StyledFab = styled(Fab)({
+
     position: "fixed",
     top: "80px",
     right: "80px",
+
+
   });
 
  
