@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-import InputControl from "../../components/InputControl";
+import InputControl from "../components/InputControl";
 // import { auth } from "../firebase";
 
-import styles from "../../assests/css/Login.module.css";
+import styles from "../assests/css/Login.module.css";
 
 function Login() {
   const navigate = useNavigate();

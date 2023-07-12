@@ -16,7 +16,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import Snippet from "./Snippet";
+import Snippet from "../Employee/Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import CloseIcon from "@mui/icons-material/Close";
