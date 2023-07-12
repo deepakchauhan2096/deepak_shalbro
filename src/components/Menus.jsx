@@ -30,7 +30,7 @@ const Menus = () => {
         aria-haspopup="true"
         onClick={handleClicks}
       >
-        <MoreVertIcon sx={{ fontSize: "20px" }} />
+        <MoreVertIcon sx={{ fontSize: "18px" }} />
       </IconButton>
       <Menu
         id="long-menu"

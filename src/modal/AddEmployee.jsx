@@ -115,7 +115,7 @@ export default function AddEmployee(props) {
 
   return (
     <>
-      <Button className="btn button btn-blue" variant="contained">
+      <Button size="small" className="btn button btn-blue" variant="contained">
               {props.name ? props.name : "Enter Name"}
       </Button>
       <Button
@@ -123,6 +123,7 @@ export default function AddEmployee(props) {
         sx={{ color: "#277099" }}
         className="rounded-0 border-0"
         variant="outlined"
+        size="small"
       >
         + Add {props.name}
       </Button>

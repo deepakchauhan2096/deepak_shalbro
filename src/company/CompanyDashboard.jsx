@@ -25,7 +25,11 @@ import Navbar from "./Navbar";
 import ProjectCreate from "./ProjectCreate";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
-import Upload from "./Upload";
+import Upload from "./ProjectUpload";
+import ProjectUpload from "./ProjectUpload";
+import EmployeeCreate from "../Employee/EmployeeCreate";
+import EmployeeSrc from "../components/EmployeeSrc";
+import EmployeeAttendance from "../Employee/EmployeeAttendance";
 
 const ProjectDashboard = () => {
   const [data, setData] = useState({
@@ -76,7 +80,8 @@ const ProjectDashboard = () => {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const fetchProjects = async () => {
+  const fetchProjects = async (e) => {
+    
     try {
       const response = await axios.put(
         "http://54.89.160.62:5001/get_projects",
@@ -221,6 +226,12 @@ const ProjectDashboard = () => {
     },
     {
       listname: "Document",
+    },
+    {
+      listname: "Employees",
+    },
+    {
+      listname: "Attendance",
     },
   ];
 
@@ -1186,10 +1197,16 @@ const ProjectDashboard = () => {
                 New documnent&nbsp;
                 <AddIcon fontSize="small" />
               </Button>
-              <Upload />
+              <ProjectUpload />
             </MyScreenbox>
           </MyScreen>
         </Box>
+      </NavScreen>
+      <NavScreen screenIndex={navIndex === 3}>
+        <EmployeeSrc empData={location.state.props}/>
+      </NavScreen>
+      <NavScreen screenIndex={navIndex === 4}>
+        <EmployeeAttendance empData={location.state.props} />
       </NavScreen>
     </>
   );

@@ -11,7 +11,8 @@ import Employee from "./pages/Employee";
 import "./assests/css/graph.css";
 import Project from "./pages/Project";
 import Login from "./pages/Login";
-import LoginEmp from "./Employee/Auth/Login"
+import LoginEmp from "./Employee/Login"
+import CreateEmp from "./Employee/EmployeeCreate"
 import { auth } from "./firebase";
 import Page404 from "./pages/PageNotFound";
 import Loader from "./pages/Loader";
@@ -58,6 +59,8 @@ function App() {
               <Route path="/admin" element={<AdminDashboard email={data.emailName}  user={data.usernames}  />} />
               <Route path="/company" element={<CompanyDashboard />} />
               <Route path="/login" element={<Login/>} />
+              <Route path="/employee" element={<LoginEmp/>} />
+              <Route path="/createemp" element={<CreateEmp/>} />
               {/* <Route path="/signup" element={userName ? <Index /> : <Signup/>} />
               <Route path="/employee/login" element={<LoginEmp/>} />
               <Route path="/login" element={emailname ? <Index /> : <Login/>} />

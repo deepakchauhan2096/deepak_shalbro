@@ -17,13 +17,15 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import Snippet from "./Snippet";
+import Snippet from "../Employee/Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import CloseIcon from "@mui/icons-material/Close";
 import Mymenu from "../components/Menus";
 
-const EmployeeSrc = () => {
+const EmployeeSrc = (props) => {
+
+ console.log(props, "empdtat")
   const [isLoading, setIsLoading] = useState(true);
 
   const [allempData, setAllempData] = useState({
@@ -35,6 +37,9 @@ const EmployeeSrc = () => {
 
   // console.log("employeerowdata: =>", employeDatatable);
   console.log("All_employe_data: =>", allempData);
+
+  const filterallempData =  props.empData;
+  console.log(filterallempData,"f-all-data")
 
   useEffect(() => {
     fetchAllEmployee();
@@ -57,7 +62,7 @@ const EmployeeSrc = () => {
       EMPLOYEE_MEMBER_PARENT_USERNAME: "deepanshu1",
       EMPLOYEE_ROLE: "",
       EMPLOYEE_NAME: "",
-      EMPLOYEE_PHONE: null,
+      EMPLOYEE_PHONE: "",
       EMPLOYEE_EMAIL: "",
       EMPLOYEE_USERNAME: "",
       __v: 0,
@@ -77,10 +82,12 @@ const EmployeeSrc = () => {
   const fetchAllEmployee = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_employee_all",
+        "http://54.89.160.62:5001/get_employee",
         {
-          EMPLOYEE_MEMBER_PARENT_ID: 18,
-          EMPLOYEE_MEMBER_PARENT_USERNAME: "deepanshu1",
+          EMPLOYEE_MEMBER_PARENT_ID: filterallempData.COMPANY_PARENT_ID,
+          EMPLOYEE_MEMBER_PARENT_USERNAME: filterallempData.COMPANY_PARENT_USERNAME,
+          EMPLOYEE_PARENT_USERNAME: filterallempData.COMPANY_USERNAME,
+          EMPLOYEE_PARENT_ID: filterallempData.COMPANY_ID,
         },
         { headers }
       );
@@ -89,7 +96,7 @@ const EmployeeSrc = () => {
         const data = response.data;
         // setAllempData(data.result[0].COMPANY_EMPLOYIES);
         setAllempData(data.result);
-        console.log("all employee data", data.result[0].EMPLOYEE_NAME);
+        // console.log("all employee data", data.result[0].EMPLOYEE_NAME);
         setIsLoading(false);
       }, 1000);
     } catch (err) {
@@ -138,21 +145,21 @@ const EmployeeSrc = () => {
     {
       field: "EMPLOYEE_HOURLY_WAGE",
       headerName: "Hourly Wages",
-      width: 60,
-      // editable: true,
-    },
-    {
-      field: "EMPLOYEE_ADD",
-      headerName: "Address",
       width: 120,
       // editable: true,
     },
-    {
-      field: "EMPLOYEE_CITY",
-      headerName: "City",
-      width: 80,
-      // editable: true,
-    },
+    // {
+    //   field: "EMPLOYEE_ADD",
+    //   headerName: "Address",
+    //   width: 120,
+    //   // editable: true,
+    // },
+    // {
+    //   field: "EMPLOYEE_CITY",
+    //   headerName: "City",
+    //   width: 80,
+    //   // editable: true,
+    // },
     {
       field: "EMPLOYEE_EMPLMNTTYPE",
       headerName: "Employement Type",
@@ -322,9 +329,10 @@ const EmployeeSrc = () => {
           <Button
             onClick={handleClose}
             variant="contained"
-            className="btn rounded-0"
+            className="btn rounded-0 border-0"
+            size="small"
           >
-            <ArrowBackIcon style={{ fontSize: "25px" }} />
+            <ArrowBackIcon style={{ fontSize: "22.5px" }} />
           </Button>
           {[
             "Employee Details",
@@ -337,21 +345,23 @@ const EmployeeSrc = () => {
               onClick={(e, index) => setIndex(value)}
               variant={index === value ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
+              size="small"
             >
               {item}
             </Button>
           ))}
 
-          <Mymenu />
-          <Button
+          {/* <Mymenu /> */}
+          {/* <Button
             onClick={handleClose}
             variant={"contained"}
             className="btn rounded-0 border border-top-0 border-bottom-0"
             color="error"
             style={{ position: "absolute", right: "0" }}
+            size="small"
           >
             {<CloseIcon />}
-          </Button>
+          </Button> */}
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
