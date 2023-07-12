@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-import InputControl from "./InputControl";
+import InputControl from "../components/InputControl";
 import { auth } from "../firebase";
 
 import styles from "../assests/css/Login.module.css";
@@ -46,7 +46,7 @@ function AdminLogin() {
   return (
     <div className={styles.container}>
       <div className={styles.innerBox}>
-        <h1 className={styles.heading}>Login</h1>
+        <h1 className={styles.heading}>Login<sup style={{ fontSize: "20px", color: "tomato" }}>Admin</sup></h1>
 
         <InputControl
           label="Email"

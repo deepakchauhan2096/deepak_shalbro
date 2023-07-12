@@ -114,8 +114,7 @@ const EmployeeAttendance = (props) => {
         "http://54.89.160.62:5001/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: filterallempData.COMPANY_PARENT_ID,
-          EMPLOYEE_MEMBER_PARENT_USERNAME:
-            filterallempData.COMPANY_PARENT_USERNAME,
+          EMPLOYEE_MEMBER_PARENT_USERNAME:filterallempData.COMPANY_PARENT_USERNAME,
           EMPLOYEE_PARENT_USERNAME: filterallempData.COMPANY_USERNAME,
           EMPLOYEE_PARENT_ID: filterallempData.COMPANY_ID,
         },
@@ -196,16 +195,6 @@ const EmployeeAttendance = (props) => {
               Employee Attendance
             </Button>
           </div>
-          <input
-            className="search-box mr-sm-2 glassmorph"
-            // style={{ backgroundImage: `url(${searchicon})`, width:"100%" }}
-            value={name}
-            onChange={filtered}
-            // onClick={topFunction}
-            type="search"
-            placeholder="Search User"
-            aria-label="Search"
-          />
 
           <div style={screen}>
             <Grid
