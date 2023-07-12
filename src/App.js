@@ -22,6 +22,7 @@ import Screen from "./components/Screen";
 import AdminCreate from "./Admin/AdminCreate";
 import AdminDashboard from "./Admin/AdminDashboard";
 import CompanyDashboard from "./company/CompanyDashboard";
+import AdminLogin from "./Admin/AdminLogin";
 
 function App() {
   // const [emailname, setEmailName] = useState(false);
@@ -58,7 +59,7 @@ function App() {
               <Route path="/" element={<AdminCreate />} />
               <Route path="/admin" element={<AdminDashboard email={data.emailName}  user={data.usernames}  />} />
               <Route path="/company" element={<CompanyDashboard />} />
-              <Route path="/login" element={<Login/>} />
+              <Route path="/login" element={<AdminLogin/>} />
 
               <Route path="/employee" element={<LoginEmp/>} />
               <Route path="/createemp" element={<CreateEmp/>} />
