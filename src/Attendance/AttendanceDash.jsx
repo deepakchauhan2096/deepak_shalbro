@@ -22,7 +22,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import AddIcon from "@mui/icons-material/Add";
-import CompanyCreate from "./CompanyCreate";
+import CompanyCreate from "./Attendance";
 import { useNavigate } from "react-router-dom";
 import ProjectCreate from "../company/ProjectCreate";
 import Modal from "@mui/material/Modal";
@@ -37,7 +37,7 @@ const style = {
   p: 4,
 };
 
-const AdminDashboard = (props) => {
+const AttendanceDash = (props) => {
   const [open, setOpen] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -346,4 +346,4 @@ const AdminDashboard = (props) => {
   );
 };
 
-export default AdminDashboard;
+export default AttendanceDash;

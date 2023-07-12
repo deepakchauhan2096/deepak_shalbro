@@ -2,7 +2,6 @@ import * as React from "react";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-// import pluslogo from "../assests/images/plus.png"
 import axios from "axios";
 import { Button, Container, Hidden } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -36,7 +35,9 @@ export default function CompanyCreate(props) {
     COMPANY_CITY: "",
   });
 
-  // console.log("All state Data",create_company)
+  const handleCreate = (e) => {
+    setCreate_company({ ...create_company, [e.target.name]: e.target.value });
+  };
 
   const headers = {
     "Content-Type": "application/json",
@@ -46,10 +47,6 @@ export default function CompanyCreate(props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleCreate = (e) => {
-    setCreate_company({ ...create_company, [e.target.name]: e.target.value });
-    // console.log("heello world",create_company)
-  };
 
   console.log(create_company, props.ID, "jungli");
 
@@ -61,32 +58,30 @@ export default function CompanyCreate(props) {
         headers,
       })
       .then((response) => {
-        console.log("response1 : ", response);
-        props.update(response.data);
-        alert("response");
+        props.Update(()=> response.data.result);
+        console.log("fuck")
+        if(response){
+          handleClose();
+        }
       })
       .catch((error) => {
         console.error(error);
       });
-    // handleClose();
+    
   };
 
   const StyledFab = styled(Fab)({
-    display: "absolute",
-    top: "50px",
-    left: "95%",
-    transform: "translate(-50%,-50%)",
-    justifyItems: "center",
+
+    position: "fixed",
+    top: "80px",
+    right: "80px",
+
+
   });
 
-  // const input = (props) => {
-  //   return (
-  //     <div className="form-group py-2 col-xl-6">
-  //       <label className="py-1">{props.label}</label>
-  //       <input {...props} />
-  //     </div>
-  //   );
-  // };
+ 
+
+  
 
   return (
     // <div style={{ outline: "none" }}>
@@ -138,33 +133,14 @@ export default function CompanyCreate(props) {
                     type="text"
                     className="form-control rounded-0"
                     placeholder="Username"
-                    // value={create_company.COMPANY_USERNAME}
+                    value={create_company.COMPANY_USERNAME}
                     name="COMPANY_USERNAME"
                     onChange={handleCreate}
                     label="Company username"
                   />
                 </div>
               </div>
-              {/* <div className="row">
-                <input
-                  type="text"
-                  className="form-control rounded-0"
-                  id="inputEmail4"
-                  placeholder="Email"
-                  value={create_company.COMPANY_PARENT_ID}
-                  name="COMPANY_PARENT_ID"
-                  label="Admin ID"
-                />
-                <input
-                  type="text"
-                  className="form-control rounded-0"
-                  id="inputusername"
-                  placeholder=" Parent Username"
-                  value={create_company.COMPANY_PARENT_USERNAME}
-                  name="COMPANY_PARENT_USERNAME"
-                  label="Admin username"
-                />
-              </div> */}
+
               <div className="row">
               <div className="form-group py-2 col-xl-6">
                   <label>Phone Number</label>

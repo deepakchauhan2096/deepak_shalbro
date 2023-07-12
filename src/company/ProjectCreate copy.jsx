@@ -34,11 +34,6 @@ export default function ProjectCreate(props) {
   const handleClose = () => setOpen(false);
   const [index, setIndex] = React.useState(1);
 
-  // const [inputFields, setInputFields] = useState({
-  //   email: "",
-  //   password: "",
-  //   age: null
-  // });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -58,65 +53,98 @@ export default function ProjectCreate(props) {
     PROJECT_EMROLMNT_TYPE: "",
   });
 
+  const validationRules = {
+    PROJECT_USERNAME: [
+      {
+        rule: (value) => value.trim() !== "",
+        message: "Username is required",
+      },
+      {
+        rule: (value) => value.length >= 6 && value.length <= 10,
+        message: "Username length must be between 6 and 10",
+      },
+      {
+        rule: (value) => /^[a-zA-Z0-9]+$/.test(value),
+        message: "Username should not contain symbols",
+      },
+    ],
+    PROJECT_NAME: [
+      {
+        rule: (value) => value.trim() !== "",
+        message: "Project Name is required",
+      },
+      {
+        rule: (value) => value.length >= 6 && value.length <= 10,
+        message: "Project Name length must be between 6 and 10",
+      },
+      {
+        rule: (value) => /^[a-zA-Z0-9]+$/.test(value),
+        message: "Project Name should not contain symbols",
+      },
+    ],
+    PROJECT_PHONE: [
+      {
+        rule: (value) => value.trim() !== "",
+        message: "Phone Number is required",
+      },
+      {
+        rule: (value) => value.length >= 6 && value.length <= 10,
+        message: "Phone Number length must be between 6 and 10",
+      },
+      {
+        rule: (value) => /^[a-zA-Z0-9]+$/.test(value),
+        message: "Phone Number should not contain symbols",
+      },
+    ],
+    PROJECT_ADD: [
+      {
+        rule: (value) => value.trim() !== "",
+        message: "Address is required",
+      },
+      {
+        rule: (value) => value.length >= 6 && value.length <= 10,
+        message: "Address length must be between 6 and 10",
+      },
+      {
+        rule: (value) => /^[a-zA-Z0-9]+$/.test(value),
+        message: "Address should not contain symbols",
+      },
+    ],
+  };
+  
+  // Rest of the code...
+  
+  const validateField = (fieldName, value) => {
+    const rules = validationRules[fieldName];
+    const errorMessages = [];
+  
+    if (rules) {
+      rules.forEach((rule) => {
+        if (!rule.rule(value)) {
+          errorMessages.push(rule.message);
+        }
+      });
+    }
+  
+    return errorMessages;
+  };
+  
   const validateValues = (inputValues) => {
     let errors = {};
-
-    if (inputValues.PROJECT_USERNAME.trim() === "") {
-      errors.PROJECT_USERNAME = "Username is required";
-    } else if (
-      inputValues.PROJECT_USERNAME.length < 6 ||
-      inputValues.PROJECT_USERNAME.length > 10
-    ) {
-      errors.PROJECT_USERNAME = "Username length must be between 6 and 10";
-    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.PROJECT_USERNAME)) {
-      errors.PROJECT_USERNAME = "Username should not contain symbols";
-    }
-
-    if (inputValues.PROJECT_NAME.trim() === "") {
-      errors.PROJECT_NAME = "Project Name is required";
-    } else if (inputValues.PROJECT_NAME.length > 10) {
-      errors.PROJECT_NAME = "Project Name should not exceed 10 characters";
-    } else if (/\d/.test(inputValues.PROJECT_NAME)) {
-      errors.PROJECT_NAME = "Project Name should not contain numbers";
-    } else if (/[!@#$%^&*(),.?":{}|<>]/.test(inputValues.PROJECT_NAME)) {
-      errors.PROJECT_NAME = "Project Name should not contain symbols";
-    }
-
-    if (inputValues.PROJECT_PHONE.trim() === "") {
-      errors.PROJECT_PHONE = "Phone Number is required";
-    }
-    if (inputValues.PROJECT_EMROLMNT_TYPE.trim() === "") {
-      errors.PROJECT_EMROLMNT_TYPE = "Please select an option";
-    }
-    if (inputValues.PROJECT_START_DATE.trim() === "") {
-      errors.PROJECT_START_DATE = "Start Date is required";
-    } else {
-      const currentDate = new Date().toISOString().split("T")[0];
-      if (inputValues.PROJECT_START_DATE < currentDate) {
-        errors.PROJECT_START_DATE = "Start Date cannot be in the past";
+  
+    for (const fieldName in inputValues) {
+      const value = inputValues[fieldName];
+      const errorMessages = validateField(fieldName, value);
+      if (errorMessages.length > 0) {
+        errors[fieldName] = errorMessages;
       }
     }
-
-    if (inputValues.PROJECT_END_DATE.trim() === "") {
-      errors.PROJECT_END_DATE = "End Date is required";
-    } else if (inputValues.PROJECT_START_DATE > inputValues.PROJECT_END_DATE) {
-      errors.PROJECT_END_DATE = "End Date must be greater than Start Date";
-    }
-    if (inputValues.PROJECT_EMROLMNT_TYPE.trim() === "") {
-      errors.PROJECT_EMROLMNT_TYPE = "Please select Enrollment Type";
-    }
-    if (inputValues.PROJECT_SUPERVISOR.trim() === "") {
-      errors.PROJECT_SUPERVISOR = "Please Provide the Supervisor's Name";
-    }
-    if (inputValues.PROJECT_ADD.trim() === "") {
-      errors.PROJECT_ADD = "Address is Required";
-    }
-    if (inputValues.PROJECT_CITY.trim() === "") {
-      errors.PROJECT_CITY = "City is Required";
-    }
-
+  
     return errors;
   };
+  
+  // Rest of the code...
+  
 
   const headers = {
     "Content-Type": "application/json",
@@ -129,7 +157,6 @@ export default function ProjectCreate(props) {
   };
 
   const handleSubmit = (e) => {
-    console.log("on btn submit");
     e.preventDefault();
     setErrors(validateValues(createProject));
     setSubmitting(true);
@@ -146,9 +173,11 @@ export default function ProjectCreate(props) {
         console.error(error);
       });
   };
+
   const finishSubmit = () => {
     console.log(createProject);
   };
+
   useEffect(() => {
     if (Object.keys(errors).length === 0 && submitting) {
       finishSubmit();
@@ -174,7 +203,6 @@ export default function ProjectCreate(props) {
       >
         <Box sx={style}>
           <center>
-            {" "}
             {Object.keys(errors).length === 0 && submitting ? (
               <span className="text-success fs-5">
                 Successfully submitted ✓
@@ -186,7 +214,7 @@ export default function ProjectCreate(props) {
           <form onSubmit={handleSubmit}>
             <div className="row py-2">
               <div className="form-group col-xl-4">
-                <label> Project Username</label>
+                <label>Project Username</label>
                 <input
                   type="text"
                   className="form-control "
@@ -197,9 +225,11 @@ export default function ProjectCreate(props) {
                   onChange={handleCreate}
                 />
                 {errors.PROJECT_USERNAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_USERNAME}
-                  </p>
+                  <ul className="error text-danger fw-light">
+                    {errors.PROJECT_USERNAME.map((errorMessage) => (
+                      <li key={errorMessage}>{errorMessage}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
               <div className="form-group col-xl-4">
@@ -214,9 +244,11 @@ export default function ProjectCreate(props) {
                   onChange={handleCreate}
                 />
                 {errors.PROJECT_NAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_NAME}
-                  </p>
+                  <ul className="error text-danger fw-light">
+                    {errors.PROJECT_NAME.map((errorMessage) => (
+                      <li key={errorMessage}>{errorMessage}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
               <div className="form-group col-xl-4">
@@ -231,9 +263,11 @@ export default function ProjectCreate(props) {
                   onChange={handleCreate}
                 />
                 {errors.PROJECT_PHONE && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_PHONE}
-                  </p>
+                  <ul className="error text-danger fw-light">
+                    {errors.PROJECT_PHONE.map((errorMessage) => (
+                      <li key={errorMessage}>{errorMessage}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
             </div>
@@ -248,9 +282,11 @@ export default function ProjectCreate(props) {
                   className="form-control"
                 />
                 {errors.PROJECT_START_DATE && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_START_DATE}
-                  </p>
+                  <ul className="error text-danger fw-light">
+                    {errors.PROJECT_START_DATE.map((errorMessage) => (
+                      <li key={errorMessage}>{errorMessage}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
               <div className="form-group col-xl-6">
@@ -263,9 +299,11 @@ export default function ProjectCreate(props) {
                   className="form-control"
                 />
                 {errors.PROJECT_END_DATE && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_END_DATE}
-                  </p>
+                  <ul className="error text-danger fw-light">
+                    {errors.PROJECT_END_DATE.map((errorMessage) => (
+                      <li key={errorMessage}>{errorMessage}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
             </div>
@@ -274,125 +312,92 @@ export default function ProjectCreate(props) {
                 <label>Enrollment</label>
                 <select
                   id="inputEnroll"
-                  className="form-control "
+                  className="form-control"
                   onChange={handleCreate}
                   name="PROJECT_EMROLMNT_TYPE"
                   value={createProject.PROJECT_EMROLMNT_TYPE}
                 >
-                  <option selected>Choose...</option>
+                  <option defaultValue>Choose...</option>
                   <option>Painter</option>
                   <option>Fitter</option>
                   <option>Plumber</option>
                   <option>Engineer</option>
                 </select>
                 {errors.PROJECT_EMROLMNT_TYPE && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_EMROLMNT_TYPE}
-                  </p>
+                  <ul className="error text-danger fw-light">
+                    {errors.PROJECT_EMROLMNT_TYPE.map((errorMessage) => (
+                      <li key={errorMessage}>{errorMessage}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
-
               <div className="form-group col-md-6">
                 <label>Supervisor</label>
                 <input
                   type="text"
-                  className="form-control "
+                  className="form-control"
                   id="inputsupervisor"
                   name="PROJECT_SUPERVISOR"
                   value={createProject.PROJECT_SUPERVISOR}
                   onChange={handleCreate}
                 />
                 {errors.PROJECT_SUPERVISOR && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_SUPERVISOR}
-                  </p>
+                  <ul className="error text-danger fw-light">
+                    {errors.PROJECT_SUPERVISOR.map((errorMessage) => (
+                      <li key={errorMessage}>{errorMessage}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
             </div>
+            <div className="form-group py-2">
+              <label>Address</label>
+              <textarea
+                type="text"
+                className="form-control"
+                id="inputAddress2"
+                placeholder="Apartment, studio, or floor"
+                name="PROJECT_ADD"
+                value={createProject.PROJECT_ADD}
+                onChange={handleCreate}
+              />
+              {errors.PROJECT_ADD && (
+                <ul className="error text-danger fw-light">
+                  {errors.PROJECT_ADD.map((errorMessage) => (
+                    <li key={errorMessage}>{errorMessage}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
             <div className="row py-2">
-              <div className="form-group  col-md-8">
-                <label>Address</label>
-                <textarea
-                  type="text"
-                  className="form-control "
-                  id="inputAddress2"
-                  placeholder="Apartment, studio, or floor"
-                  name="PROJECT_ADD"
-                  value={createProject.PROJECT_ADD}
-                  onChange={handleCreate}
-                />
-
-                {errors.PROJECT_ADD && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_ADD}
-                  </p>
-                )}
-              </div>
-              <div className="form-group col-md-4">
+              <div className="form-group col-md-6">
                 <label>City</label>
                 <input
                   type="text"
-                  className="form-control "
+                  className="form-control"
                   id="inputCity"
                   name="PROJECT_CITY"
                   value={createProject.PROJECT_CITY}
                   onChange={handleCreate}
                 />
                 {errors.PROJECT_CITY && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_CITY}
-                  </p>
+                  <ul className="error text-danger fw-light">
+                    {errors.PROJECT_CITY.map((errorMessage) => (
+                      <li key={errorMessage}>{errorMessage}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
             </div>
-            <div className="row py-2">
-              {/* <div className="form-group py-2 col-md-4">
-              <label for="file" >Compliance doc</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-
-              {/* <div className="form-group py-2 col-md-4">
-              <label for="file" >Policies</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-
-              {/* <div className="form-group py-2 col-md-4">
-              <label for="file" >Auto policies</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-              {/* 
-            <div className="form-group py-2 col-md-4">
-              <label for="file" >Law suits</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-            </div>
+            <div className="row py-2">{/* Additional file input fields */}</div>
             <button
               type="submit"
-              className="btn btn-info text-white "
+              className="btn btn-info text-white"
               onClick={handleSubmit}
             >
               Submit
             </button>{" "}
-            <button
-              onClick={handleClose}
-              className="btn btn-danger text-white "
-            >
+            <button onClick={handleClose} className="btn btn-danger text-white">
               Discard
             </button>
           </form>
