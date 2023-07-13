@@ -20,10 +20,10 @@ const style = {
 };
 
 export default function AddEmployee(props) {
-  
   const [open, setOpen] = React.useState(false);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+
   const [createEmployee, setCreateEmployee] = useState({
     EMPLOYEE_NAME: "",
     EMPLOYEE_EMAIL: "",
@@ -39,18 +39,13 @@ export default function AddEmployee(props) {
     EMPLOYEE_USERNAME: "",
     EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME,
     EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID,
-    EMPLOYEE_PARENT_USERNAME:props.mainData.COMPANY_USERNAME,
+    EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME,
     EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID,
   });
-  // const [values, setValues] = useState({
-  //   name: createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME,
-  //   email: createEmployee.EMPLOYEE_EMAIL,
-  //   pass: createEmployee.EMPLOYEE_USERNAME,
-  // });
-  
+
   const validateValues = (inputValues) => {
     let errors = {};
-    // Employee Name 
+    // Employee Name
     if (inputValues.EMPLOYEE_NAME.trim() === "") {
       errors.EMPLOYEE_NAME = "Employee Name is required";
     } else if (
@@ -58,7 +53,7 @@ export default function AddEmployee(props) {
       inputValues.EMPLOYEE_NAME.length > 20
     ) {
       errors.EMPLOYEE_NAME = "Employee Name length must be between 6 and 20";
-    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_NAME)) {
+    } else if (!/^[a-zA-Z0-9- ]+$/.test(inputValues.EMPLOYEE_NAME)) {
       errors.EMPLOYEE_NAME = "Employee Name should not contain symbols";
     } else if (/\d/.test(inputValues.EMPLOYEE_NAME)) {
       errors.EMPLOYEE_NAME = "Employee Name should not contain numbers";
@@ -69,25 +64,24 @@ export default function AddEmployee(props) {
       errors.EMPLOYEE_USERNAME = "Username is required";
     } else if (
       inputValues.EMPLOYEE_USERNAME.length < 6 ||
-      inputValues.EMPLOYEE_USERNAME.length > 10
+      inputValues.EMPLOYEE_USERNAME.length > 20
     ) {
       errors.EMPLOYEE_USERNAME = "Username length must be between 6 and 10";
     } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
+      errors.EMPLOYEE_USERNAME = "Should not contain spaces and symbols";
+    }
+    //Employee Mail
+    if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
+      errors.EMPLOYEE_EMAIL = "Email is required";
+    } else if (inputValues.EMPLOYEE_EMAIL.length > 25) {
+      errors.EMPLOYEE_EMAIL = "Email should not exceed 25 characters";
+    } else if (!/@/.test(inputValues.EMPLOYEE_EMAIL)) {
+      errors.EMPLOYEE_EMAIL = "Email is invalid";
+    
+    } else if (!/^[a-zA-Z0-@]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
       errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
     }
-//Employee Mail
-if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
-  errors.EMPLOYEE_EMAIL = "Email is required";
-} else if (inputValues.EMPLOYEE_EMAIL.length > 25) {
-  errors.EMPLOYEE_EMAIL = "Email should not exceed 25 characters";
-} else if (!/@/.test(inputValues.EMPLOYEE_EMAIL)) {
-  errors.EMPLOYEE_EMAIL = "Email is invalid";
-} else if (/\d/.test(inputValues.EMPLOYEE_EMAIL)) {
-  errors.EMPLOYEE_EMAIL = "Email should not contain numbers";
-} else if (!/^[a-zA-Z0-9@]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
-  errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
-}
-//Employee Phone
+    //Employee Phone
 
     if (inputValues.EMPLOYEE_PHONE.trim() === "") {
       errors.EMPLOYEE_PHONE = "Phone Number is required";
@@ -96,7 +90,7 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
     if (inputValues.EMPLOYEE_EMPLMNTTYPE.trim() === "") {
       errors.EMPLOYEE_EMPLMNTTYPE = "Please select Employement Type";
     }
-    //Hire Date 
+    //Hire Date
     if (inputValues.EMPLOYEE_HIRE_DATE.trim() === "") {
       errors.EMPLOYEE_HIRE_DATE = "Start Date is required";
     } else {
@@ -106,12 +100,11 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
       }
     }
 
-   
     // Wages
     if (inputValues.EMPLOYEE_HOURLY_WAGE.trim() === "") {
       errors.EMPLOYEE_HOURLY_WAGE = "Please Provide the Your Hourly Wages";
     }
-    // Adress 
+    // Adress
     if (inputValues.EMPLOYEE_ADD.trim() === "") {
       errors.EMPLOYEE_ADD = "Address is Required";
     }
@@ -119,20 +112,17 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
     if (inputValues.EMPLOYEE_ROLE.trim() === "") {
       errors.EMPLOYEE_ROLE = "Choose your Role";
     }
-    // City 
+    // City
     if (inputValues.EMPLOYEE_CITY.trim() === "") {
       errors.EMPLOYEE_CITY = "City is Required";
     }
-   
+
     if (inputValues.EMPLOYEE_STATE.trim() === "") {
       errors.EMPLOYEE_STATE = "State is Required";
     }
 
     return errors;
   };
-
-  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
-
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -152,21 +142,23 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
     e.preventDefault();
     setErrors(validateValues(createEmployee));
     setSubmitting(true);
-
+    // if(fff && hgjgh)
     axios
-    .post("http://54.89.160.62:5001/create_employee", createEmployee, {
-      headers,
-    })
-    .then((response) => {
-      console.log("response1 : ", response);
-      // props.update(response.data);
-      console.log("response", response.data);
-      
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+      .post("http://54.89.160.62:5001/create_employee", createEmployee, {
+        headers,
+      })
+      .then((response) => {
+        console.log("response1 : ", response);
+        // props.update(response.data);
+        console.log("response", response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
+
+
+  
   const finishSubmit = () => {
     console.log(createEmployee);
   };
@@ -176,13 +168,10 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
     }
   }, [errors]);
 
-
-  
-
   return (
     <>
       <Button size="small" className="btn button btn-blue" variant="contained">
-              {/* {props.name ? props.name : "Enter Name"} */} Employee
+        {/* {props.name ? props.name : "Enter Name"} */} Employee
       </Button>
       <Button
         onClick={handleOpen}
@@ -191,7 +180,7 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
         variant="outlined"
         size="small"
       >
-         + Add New Employee
+        + Add New Employee
       </Button>
       <Modal
         open={open}
@@ -205,16 +194,16 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
           maxWidth="xl"
         >
           <Box sx={style}>
-          <center>
-            {" "}
-            {Object.keys(errors).length === 0 && submitting ? (
-              <span className="text-success fs-5">
-                Successfully submitted ✓
-              </span>
-            ) : (
-              ""
-            )}
-          </center>
+            <center>
+              {" "}
+              {Object.keys(errors).length === 0 && submitting ? (
+                <span className="text-success fs-5">
+                  Successfully submitted ✓
+                </span>
+              ) : (
+                ""
+              )}
+            </center>
             <form onSubmit={handleSubmit}>
               <div className="row py-2">
                 <div className="form-group col-xl-3">
@@ -228,11 +217,11 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_NAME"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_NAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_NAME}
-                  </p>
-                )}
+                  {errors.EMPLOYEE_NAME && (
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_NAME}
+                    </p>
+                  )}
                 </div>
                 <div className="form-group col-xl-3">
                   <label>E-mail</label>
@@ -245,11 +234,11 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_EMAIL"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_EMAIL && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_EMAIL}
-                  </p>
-                )}
+                  {errors.EMPLOYEE_EMAIL && (
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_EMAIL}
+                    </p>
+                  )}
                 </div>
                 <div className="form-group col-xl-3">
                   <label>State</label>
@@ -262,11 +251,11 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_STATE"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_STATE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_STATE}
-                  </p>
-                )}
+                  {errors.EMPLOYEE_STATE && (
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_STATE}
+                    </p>
+                  )}
                 </div>{" "}
                 <div className="form-group col-xl-3">
                   <label>City</label>
@@ -279,11 +268,11 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_CITY"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_CITY && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_CITY}
-                  </p>
-                )}
+                  {errors.EMPLOYEE_CITY && (
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_CITY}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="row py-2">
@@ -298,11 +287,11 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_PHONE"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_PHONE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_PHONE}
-                  </p>
-                )}
+                  {errors.EMPLOYEE_PHONE && (
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_PHONE}
+                    </p>
+                  )}
                 </div>
                 <div className="form-group col-xl-4">
                   <label>Hourly wages</label>
@@ -315,11 +304,11 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_HOURLY_WAGE"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_HOURLY_WAGE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_HOURLY_WAGE}
-                  </p>
-                )}
+                  {errors.EMPLOYEE_HOURLY_WAGE && (
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_HOURLY_WAGE}
+                    </p>
+                  )}
                 </div>
                 <div className="form-group col-xl-4">
                   <label for="inputPassword4">Employee Role</label>
@@ -331,7 +320,7 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     onChange={handleCreate}
                   >
                     <option selected>Choose role...</option>
-                    <option >Employee</option>
+                    <option>Employee</option>
                     <option>Trainee</option>
                     <option>Student</option>
                     <option>SuperWiser</option>
@@ -339,13 +328,10 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     <option>other</option>
                   </select>
                   {errors.EMPLOYEE_ROLE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_ROLE}
-                  </p>
-                )}
-
-
-
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_ROLE}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="row py-2">
@@ -365,10 +351,10 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     <option>other</option>
                   </select>
                   {errors.EMPLOYEE_EMPLMNTTYPE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_EMPLMNTTYPE}
-                  </p>
-                )}
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_EMPLMNTTYPE}
+                    </p>
+                  )}
                 </div>
                 <div className="form-group col-xl-4">
                   <label for="inputPassword4">Date Of Birth</label>
@@ -381,11 +367,11 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_DOB"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_DOB && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_DOB}
-                  </p>
-                )}
+                  {errors.EMPLOYEE_DOB && (
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_DOB}
+                    </p>
+                  )}
                 </div>
                 <div className="form-group col-xl-4">
                   <label for="inputPassword4">Hired Date</label>
@@ -398,11 +384,11 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_HIRE_DATE"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_HIRE_DATE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_HIRE_DATE}
-                  </p>
-                )}
+                  {errors.EMPLOYEE_HIRE_DATE && (
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_HIRE_DATE}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="row">
@@ -417,14 +403,13 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_ADD"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_ADD && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_ADD}
-                  </p>
-                )}
+                  {errors.EMPLOYEE_ADD && (
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_ADD}
+                    </p>
+                  )}
                 </div>
               </div>
-             
               <div className="row py-2">
                 <div className="form-group col-xl-6">
                   <label for="inputqual">Employee username</label>
@@ -436,79 +421,26 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_USERNAME"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_USERNAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_USERNAME}
-                  </p>
-                )}
+                  {errors.EMPLOYEE_USERNAME && (
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_USERNAME}
+                    </p>
+                  )}
                 </div>
-                
-                {/* <div className="form-group col-xl-6">
-                  <label for="inputPassword4">
-                    EMPLOYEE_MEMBER_PARENT_USERNAME
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control rounded-0"
-                    id="inputPassword4"
-                    placeholder="Enter hire date"
-                    value={createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME}
-                    name="EMPLOYEE_MEMBER_PARENT_USERNAME"
-                    onChange={handleCreate}
-                  />
-                </div>
-                <div className="form-group col-xl-6">
-                  <label for="inputPassword4">EMPLOYEE_MEMBER_PARENT_ID</label>
-                  <input
-                    type="text"
-                    className="form-control rounded-0"
-                    id="inputPassword4"
-                    placeholder="Enter hire date"
-                    value={createEmployee.EMPLOYEE_MEMBER_PARENT_ID}
-                    name="EMPLOYEE_MEMBER_PARENT_USERNAME_ID"
-                    onChange={handleCreate}
-                  />
-                </div> */}
               </div>
-              {/* <div className="row py-2">
-                <div className="form-group col-xl-6">
-                  <label for="inputqual">EMPLOYEE_PARENT_ID</label>
-                  <input
-                    type="text"
-                    className="form-control rounded-0"
-                    id="inputZip"
-                    value={createEmployee.EMPLOYEE_PARENT_ID}
-                    name="EMPLOYEE_PARENT_ID"
-                    onChange={handleCreate}
-                  />
-                </div>
-                <div className="form-group col-xl-6">
-                  <label for="inputPassword4">EMPLOYEE_PARENT_USERNAME</label>
-                  <input
-                    type="text"
-                    className="form-control rounded-0"
-                    id="inputPassword4"
-                    placeholder="Enter hire date"
-                    value={createEmployee.EMPLOYEE_PARENT_USERNAME}
-                    name="EMPLOYEE_PARENT_USERNAME"
-                    onChange={handleCreate}
-                  />
-                </div>
-              </div> */}
-         
               <button
-              type="submit"
-              className="btn btn-info text-white "
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>{" "}
-            <button
-              onClick={handleClose}
-              className="btn btn-danger text-white "
-            >
-              Discard
-            </button>
+                type="submit"
+                className="btn btn-info text-white "
+                onClick={handleSubmit}
+              >
+                Submit
+              </button>{" "}
+              <button
+                onClick={handleClose}
+                className="btn btn-danger text-white "
+              >
+                Discard
+              </button>
             </form>
           </Box>
         </Container>

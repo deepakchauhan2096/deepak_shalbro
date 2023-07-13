@@ -43,7 +43,7 @@ const EmployeeSrc = (props) => {
 
   useEffect(() => {
     fetchAllEmployee();
-  },[updatedata]);
+  },[]);
 
   const [filterData, setFilteredData] = useState({
     row: {
@@ -348,18 +348,6 @@ const EmployeeSrc = (props) => {
               {item}
             </Button>
           ))}
-
-          {/* <Mymenu /> */}
-          {/* <Button
-            onClick={handleClose}
-            variant={"contained"}
-            className="btn rounded-0 border border-top-0 border-bottom-0"
-            color="error"
-            style={{ position: "absolute", right: "0" }}
-            size="small"
-          >
-            {<CloseIcon />}
-          </Button> */}
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>

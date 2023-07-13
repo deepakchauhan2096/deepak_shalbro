@@ -23,8 +23,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import CircularProgress from "@mui/material/CircularProgress";
 import Navbar from "./Navbar";
 import ProjectCreate from "./ProjectCreate";
-import AddIcon from "@mui/icons-material/Add";
-import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+
 import Upload from "./ProjectUpload";
 import ProjectUpload from "./ProjectUpload";
 import EmployeeCreate from "../Employee/EmployeeCreate";
@@ -482,82 +481,6 @@ const CompanyDashboard = () => {
                 </div>
 
                 <hr />
-
-                {/* <div className="row">
-                  <div className="col-3">
-                    <b>Cost Breakdown</b>
-                    <div className="bg-light rounded-3 pb-2">
-                      <div className="px-2 py-1 rounded-3 bg-light">
-                        <div>
-                          Material - <b>2365$</b>
-                        </div>
-                        <div
-                          style={{
-                            background: "grey",
-                            content: "",
-                            height: "12px",
-                            width: "100%",
-                          }}
-                        >
-                          <div
-                            style={{
-                              background: "aqua",
-                              content: "",
-                              height: "12px",
-                              width: "50%",
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div className="px-2 py-1 rounded-3 bg-light">
-                        <div>
-                          Labour - <b>365$</b>
-                        </div>
-                        <div
-                          style={{
-                            background: "grey",
-                            content: "",
-                            height: "12px",
-                            width: "100%",
-                          }}
-                        >
-                          <div
-                            style={{
-                              background: "red",
-                              content: "",
-                              height: "12px",
-                              width: "59%",
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div className="px-2  py-1 rounded-3 bg-light">
-                        <div>
-                          Equipments - <b>2365$</b>
-                        </div>
-                        <div
-                          style={{
-                            background: "grey",
-                            content: "",
-                            height: "12px",
-                            width: "100%",
-                          }}
-                        >
-                          <div
-                            style={{
-                              background: "green",
-                              content: "",
-                              height: "12px",
-                              width: "90%",
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </div>
           ) : index === 2 ? (
@@ -1186,7 +1109,7 @@ const CompanyDashboard = () => {
         <Box className="box">
           <MyScreen screenIndex={true}>
             <MyScreenbox sx={{ m: 3 }}>
-              <Button variant="contained" className="button rounded-2 lowercase">
+              {/* <Button variant="contained" className="button rounded-2 lowercase">
                 
                 Upload documnent&nbsp;
                 <ArrowCircleUpIcon fontSize="small"  />
@@ -1196,8 +1119,8 @@ const CompanyDashboard = () => {
                 
                 New documnent&nbsp;
                 <AddIcon fontSize="small" />
-              </Button>
-              <ProjectUpload />
+              </Button> */}
+              <ProjectUpload uploadData={location.state.props} />
             </MyScreenbox>
           </MyScreen>
         </Box>
