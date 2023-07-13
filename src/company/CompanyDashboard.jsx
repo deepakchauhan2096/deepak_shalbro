@@ -28,13 +28,12 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import Upload from "./ProjectUpload";
 import ProjectUpload from "./ProjectUpload";
 import EmployeeCreate from "../Employee/EmployeeCreate";
-import EmployeeSrc from "../components/EmployeeSrc";
+import EmployeeSrc from "../Employee/EmployeeSrc";
 import EmployeeAttendance from "../Employee/EmployeeAttendance";
 
-const ProjectDashboard = () => {
+const CompanyDashboard = () => {
   const [data, setData] = useState({
     row: {
-      _id: "649a71ca12c8d41898147a9d",
       PROJECT_ID: 52,
       PROJECT_PARENT_ID: 45,
       PROJECT_PARENT_USERNAME: "company21",
@@ -181,7 +180,7 @@ const ProjectDashboard = () => {
   };
 
   const filterData = data?.row;
-  console.log(filterData, "f-data");
+  console.log(filterData, "f-data ggvvg");
 
   const NavScreen = styled(Paper)((props) => ({
     height: "calc(100vh)",
@@ -243,7 +242,7 @@ const ProjectDashboard = () => {
         <List sx={{ py: 0 }} onClick={() => setNavIndex(props.value)}>
           <ListItem
             sx={{
-              background: props.value == navIndex ? "#3596d9" : "",
+              background: props.value === navIndex ? "#3596d9" : "",
             }}
             disablePadding
           >
@@ -273,6 +272,7 @@ const ProjectDashboard = () => {
           style={{ justifyContent: "space-between" }}
         >
           <h3>{location.state.props.COMPANY_NAME}</h3>
+
           <Tooltip title={location.state.props.COMPANY_USERNAME}>
             <Avatar>
               {[location.state.props.COMPANY_NAME][0].charAt(0).toUpperCase()}
@@ -1212,4 +1212,4 @@ const ProjectDashboard = () => {
   );
 };
 
-export default ProjectDashboard;
+export default CompanyDashboard;

@@ -25,7 +25,6 @@ export default function AddEmployee(props) {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [createEmployee, setCreateEmployee] = useState({
-    EMPLOYEE_ID: "",
     EMPLOYEE_NAME: "",
     EMPLOYEE_EMAIL: "",
     EMPLOYEE_STATE: "",
@@ -38,10 +37,10 @@ export default function AddEmployee(props) {
     EMPLOYEE_HIRE_DATE: "",
     EMPLOYEE_ADD: "",
     EMPLOYEE_USERNAME: "",
-    EMPLOYEE_MEMBER_PARENT_USERNAME: "deepanshu1",
-    EMPLOYEE_PARENT_ID: 45,
-    EMPLOYEE_PARENT_USERNAME: "company21",
-    EMPLOYEE_MEMBER_PARENT_ID: 18,
+    EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME,
+    EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID,
+    EMPLOYEE_PARENT_USERNAME:props.mainData.COMPANY_USERNAME,
+    EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID,
   });
   // const [values, setValues] = useState({
   //   name: createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME,
@@ -443,7 +442,8 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                   </p>
                 )}
                 </div>
-                <div className="form-group col-xl-6">
+                
+                {/* <div className="form-group col-xl-6">
                   <label for="inputPassword4">
                     EMPLOYEE_MEMBER_PARENT_USERNAME
                   </label>
@@ -468,9 +468,9 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_MEMBER_PARENT_USERNAME_ID"
                     onChange={handleCreate}
                   />
-                </div>
+                </div> */}
               </div>
-              <div className="row py-2">
+              {/* <div className="row py-2">
                 <div className="form-group col-xl-6">
                   <label for="inputqual">EMPLOYEE_PARENT_ID</label>
                   <input
@@ -494,37 +494,8 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     onChange={handleCreate}
                   />
                 </div>
-              </div>
-              {/* <div className="row py-2">
-            <div className="form-group py-2 col-md-4">
-              <label for="file" >Education Doc</label>
-                <input
-                  className="form-control rounded-0"
-                  type="file"
-                  id="file"
-                />
-            </div>
-
-            <div className="form-group py-2 col-md-4">
-              <label for="file" >Valid ID</label>
-                <input
-                  className="form-control rounded-0"
-                  type="file"
-                  id="file"
-                />
-            </div>
-
-            <div className="form-group py-2 col-md-4">
-              <label for="file" >Other</label>
-                <input
-                  className="form-control rounded-0"
-                  type="file"
-                  id="file"
-                />
-            </div>
-
-            </div>
- */}
+              </div> */}
+         
               <button
               type="submit"
               className="btn btn-info text-white "

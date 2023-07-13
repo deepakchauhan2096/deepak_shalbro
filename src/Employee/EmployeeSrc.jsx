@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
-import AddEmployee from "../modal/AddEmployee";
+import EmployeeCreate from "../Employee/EmployeeCreate";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import teamImg1 from "../assests/images/team-1.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -17,7 +17,7 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import Snippet from "../Employee/Snippet";
+import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import CloseIcon from "@mui/icons-material/Close";
@@ -39,7 +39,7 @@ const EmployeeSrc = (props) => {
   console.log("All_employe_data: =>", allempData);
 
   const filterallempData =  props.empData;
-  console.log(filterallempData,"f-all-data")
+  console.log(filterallempData,"single data")
 
   useEffect(() => {
     fetchAllEmployee();
@@ -47,7 +47,6 @@ const EmployeeSrc = (props) => {
 
   const [filterData, setFilteredData] = useState({
     row: {
-      _id: "6496d035a6835b787aa7b7b1",
       EMPLOYEE_DOB: "",
       EMPLOYEE_EMPLMNTTYPE: "",
       EMPLOYEE_HIRE_DATE: "",
@@ -55,7 +54,6 @@ const EmployeeSrc = (props) => {
       EMPLOYEE_ADD: "",
       EMPLOYEE_STATE: "",
       EMPLOYEE_CITY: "",
-      EMPLOYEE_ID: 51,
       EMPLOYEE_PARENT_ID: 45,
       EMPLOYEE_PARENT_USERNAME: "company21",
       EMPLOYEE_MEMBER_PARENT_ID: 18,
@@ -291,7 +289,7 @@ const EmployeeSrc = (props) => {
   return (
     <>
       <Box className="box">
-        <AddEmployee update={(event) => updateDate(event)} name={"Employee"} />
+        <EmployeeCreate  mainData={filterallempData} update={(event) => updateDate(event)} name={"Employee"} />
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
