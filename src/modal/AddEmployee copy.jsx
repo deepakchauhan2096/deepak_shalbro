@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -16,14 +16,9 @@ const style = {
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
-  borderRadius: 4,
 };
 
-export default function AddEmployee() {
-  
-  const [open, setOpen] = React.useState(false);
-  const [errors, setErrors] = useState({});
-  const [submitting, setSubmitting] = useState(false);
+export default function AddEmployee(props) {
   const [createEmployee, setCreateEmployee] = useState({
     EMPLOYEE_ID: "",
     EMPLOYEE_NAME: "",
@@ -43,96 +38,18 @@ export default function AddEmployee() {
     EMPLOYEE_PARENT_USERNAME: "company21",
     EMPLOYEE_MEMBER_PARENT_ID: 18,
   });
-  // const [values, setValues] = useState({
-  //   name: createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME,
-  //   email: createEmployee.EMPLOYEE_EMAIL,
-  //   pass: createEmployee.EMPLOYEE_USERNAME,
-  // });
-  
-  const validateValues = (inputValues) => {
-    let errors = {};
-    // Employee Name 
-    if (inputValues.EMPLOYEE_NAME.trim() === "") {
-      errors.EMPLOYEE_NAME = "Employee Name is required";
-    } else if (
-      inputValues.EMPLOYEE_NAME.length < 6 ||
-      inputValues.EMPLOYEE_NAME.length > 20
-    ) {
-      errors.EMPLOYEE_NAME = "Employee Name length must be between 6 and 20";
-    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_NAME)) {
-      errors.EMPLOYEE_NAME = "Employee Name should not contain symbols";
-    } else if (/\d/.test(inputValues.EMPLOYEE_NAME)) {
-      errors.EMPLOYEE_NAME = "Employee Name should not contain numbers";
-    }
-
-    // Employee Username
-    if (inputValues.EMPLOYEE_USERNAME.trim() === "") {
-      errors.EMPLOYEE_USERNAME = "Username is required";
-    } else if (
-      inputValues.EMPLOYEE_USERNAME.length < 6 ||
-      inputValues.EMPLOYEE_USERNAME.length > 10
-    ) {
-      errors.EMPLOYEE_USERNAME = "Username length must be between 6 and 10";
-    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
-      errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
-    }
-//Employee Mail
-if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
-  errors.EMPLOYEE_EMAIL = "Email is required";
-} else if (inputValues.EMPLOYEE_EMAIL.length > 25) {
-  errors.EMPLOYEE_EMAIL = "Email should not exceed 25 characters";
-} else if (!/@/.test(inputValues.EMPLOYEE_EMAIL)) {
-  errors.EMPLOYEE_EMAIL = "Email is invalid";
-} else if (/\d/.test(inputValues.EMPLOYEE_EMAIL)) {
-  errors.EMPLOYEE_EMAIL = "Email should not contain numbers";
-} else if (!/^[a-zA-Z0-9@]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
-  errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
-}
-//Employee Phone
-
-    if (inputValues.EMPLOYEE_PHONE.trim() === "") {
-      errors.EMPLOYEE_PHONE = "Phone Number is required";
-    }
-    //Employement Type
-    if (inputValues.EMPLOYEE_EMPLMNTTYPE.trim() === "") {
-      errors.EMPLOYEE_EMPLMNTTYPE = "Please select Employement Type";
-    }
-    //Hire Date 
-    if (inputValues.EMPLOYEE_HIRE_DATE.trim() === "") {
-      errors.EMPLOYEE_HIRE_DATE = "Start Date is required";
-    } else {
-      const currentDate = new Date().toISOString().split("T")[0];
-      if (inputValues.EMPLOYEE_HIRE_DATE < currentDate) {
-        errors.EMPLOYEE_HIRE_DATE = "Start Date cannot be in the past";
-      }
-    }
-
-   
-    // Wages
-    if (inputValues.EMPLOYEE_HOURLY_WAGE.trim() === "") {
-      errors.EMPLOYEE_HOURLY_WAGE = "Please Provide the Your Hourly Wages";
-    }
-    // Adress 
-    if (inputValues.EMPLOYEE_ADD.trim() === "") {
-      errors.EMPLOYEE_ADD = "Address is Required";
-    }
-    //Role
-    if (inputValues.EMPLOYEE_ROLE.trim() === "") {
-      errors.EMPLOYEE_ROLE = "Choose your Role";
-    }
-    // City 
-    if (inputValues.EMPLOYEE_CITY.trim() === "") {
-      errors.EMPLOYEE_CITY = "City is Required";
-    }
-   
-    if (inputValues.EMPLOYEE_STATE.trim() === "") {
-      errors.EMPLOYEE_STATE = "State is Required";
-    }
-
-    return errors;
-  };
-
+  const [open, setOpen] = React.useState(false);
+  const [values, setValues] = useState({
+    name: createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME,
+    email: createEmployee.EMPLOYEE_EMAIL,
+    pass: createEmployee.EMPLOYEE_USERNAME,
+  });
+  const [errorMsg, setErrorMsg] = useState("");
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+
+
+
+
 
 
   const handleOpen = () => setOpen(true);
@@ -148,34 +65,50 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
     console.log("heello world", createEmployee);
   };
 
+  const handleSubmission = () => {
+    if (!values.name || !values.email || !values.pass) {
+      setErrorMsg("Fill all fields");
+      return;
+    }
+    setErrorMsg("");
+
+    setSubmitButtonDisabled(true);
+    createUserWithEmailAndPassword(auth, values.email, values.pass)
+      .then(async (res) => {
+        setSubmitButtonDisabled(false);
+        const user = res.user;
+        await updateProfile(user, {
+          displayName: values.name,
+        });
+        alert("sucess")
+        // navigate("/dashboard");
+      })
+      .catch((err) => {
+        setSubmitButtonDisabled(false);
+        setErrorMsg(err.message);
+      });
+  };
+
   const handleSubmit = (e) => {
+    handleSubmission()
     console.log("on btn submit");
     e.preventDefault();
-    setErrors(validateValues(createEmployee));
-    setSubmitting(true);
-
     axios
-    .post("http://54.89.160.62:5001/create_employee", createEmployee, {
-      headers,
-    })
-    .then((response) => {
-      console.log("response1 : ", response);
-      // props.update(response.data);
-      console.log("response", response.data);
-      
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+      .post("http://54.89.160.62:5001/create_employee", createEmployee, {
+        headers,
+      })
+      .then((response) => {
+        console.log("response1 : ", response);
+        props.update(response.data);
+        console.log("response", response.data);
+        handleClose();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    
   };
-  const finishSubmit = () => {
-    console.log(createEmployee);
-  };
-  useEffect(() => {
-    if (Object.keys(errors).length === 0 && submitting) {
-      finishSubmit();
-    }
-  }, [errors]);
+
 
 
   
@@ -183,7 +116,7 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
   return (
     <>
       <Button size="small" className="btn button btn-blue" variant="contained">
-              {/* {props.name ? props.name : "Enter Name"} */} Employee
+              {props.name ? props.name : "Enter Name"}
       </Button>
       <Button
         onClick={handleOpen}
@@ -192,7 +125,7 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
         variant="outlined"
         size="small"
       >
-         + Add New Employee
+        + Add {props.name}
       </Button>
       <Modal
         open={open}
@@ -206,17 +139,7 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
           maxWidth="xl"
         >
           <Box sx={style}>
-          <center>
-            {" "}
-            {Object.keys(errors).length === 0 && submitting ? (
-              <span className="text-success fs-5">
-                Successfully submitted ✓
-              </span>
-            ) : (
-              ""
-            )}
-          </center>
-            <form onSubmit={handleSubmit}>
+            <form>
               <div className="row py-2">
                 <div className="form-group col-xl-3">
                   <label>Employee Name</label>
@@ -229,11 +152,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_NAME"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_NAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_NAME}
-                  </p>
-                )}
                 </div>
                 <div className="form-group col-xl-3">
                   <label>E-mail</label>
@@ -246,11 +164,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_EMAIL"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_EMAIL && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_EMAIL}
-                  </p>
-                )}
                 </div>
                 <div className="form-group col-xl-3">
                   <label>State</label>
@@ -263,11 +176,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_STATE"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_STATE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_STATE}
-                  </p>
-                )}
                 </div>{" "}
                 <div className="form-group col-xl-3">
                   <label>City</label>
@@ -280,11 +188,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_CITY"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_CITY && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_CITY}
-                  </p>
-                )}
                 </div>
               </div>
               <div className="row py-2">
@@ -299,11 +202,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_PHONE"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_PHONE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_PHONE}
-                  </p>
-                )}
                 </div>
                 <div className="form-group col-xl-4">
                   <label>Hourly wages</label>
@@ -316,11 +214,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_HOURLY_WAGE"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_HOURLY_WAGE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_HOURLY_WAGE}
-                  </p>
-                )}
                 </div>
                 <div className="form-group col-xl-4">
                   <label for="inputPassword4">Employee Role</label>
@@ -332,21 +225,13 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     onChange={handleCreate}
                   >
                     <option selected>Choose role...</option>
-                    <option >Employee</option>
+                    <option selected>Employee</option>
                     <option>Trainee</option>
                     <option>Student</option>
                     <option>SuperWiser</option>
                     <option>Worker</option>
                     <option>other</option>
                   </select>
-                  {errors.EMPLOYEE_ROLE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_ROLE}
-                  </p>
-                )}
-
-
-
                 </div>
               </div>
               <div className="row py-2">
@@ -365,11 +250,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     <option>Trainee</option>
                     <option>other</option>
                   </select>
-                  {errors.EMPLOYEE_EMPLMNTTYPE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_EMPLMNTTYPE}
-                  </p>
-                )}
                 </div>
                 <div className="form-group col-xl-4">
                   <label for="inputPassword4">Date Of Birth</label>
@@ -382,11 +262,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_DOB"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_DOB && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_DOB}
-                  </p>
-                )}
                 </div>
                 <div className="form-group col-xl-4">
                   <label for="inputPassword4">Hired Date</label>
@@ -399,11 +274,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_HIRE_DATE"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_HIRE_DATE && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_HIRE_DATE}
-                  </p>
-                )}
                 </div>
               </div>
               <div className="row">
@@ -418,11 +288,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_ADD"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_ADD && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_ADD}
-                  </p>
-                )}
                 </div>
               </div>
               {/* <div className="row py-2">
@@ -467,11 +332,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                     name="EMPLOYEE_USERNAME"
                     onChange={handleCreate}
                   />
-                   {errors.EMPLOYEE_USERNAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_USERNAME}
-                  </p>
-                )}
                 </div>
                 <div className="form-group col-xl-6">
                   <label for="inputPassword4">
@@ -567,19 +427,22 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                 </label>
               </div>
             </div> */}
-              <button
-              type="submit"
-              className="btn btn-info text-white "
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>{" "}
-            <button
-              onClick={handleClose}
-              className="btn btn-danger text-white "
-            >
-              Discard
-            </button>
+              <Button
+                type="submit"
+                variant="contained"
+                className="btn text-white rounded-0 mt-2"
+                onClick={handleSubmit}
+              >
+                Submit
+              </Button>{" "}
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleClose}
+                className="btn text-white rounded-0 mt-2"
+              >
+                Discard
+              </Button>
             </form>
           </Box>
         </Container>
