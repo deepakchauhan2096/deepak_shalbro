@@ -5,7 +5,6 @@ import Attendance from '../components/Attendance'
 const Attendances = () => {
   return (
   <>
-  <Navbar/>
   <Attendance/>
   </>
   )

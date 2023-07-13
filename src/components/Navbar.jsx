@@ -16,7 +16,7 @@ import {
   Tooltip,
 } from "@mui/material";
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [userName, setUserName] = useState("U");
 
   const [showProfile, setShowProfile] = useState(false);
@@ -126,9 +126,9 @@ const Navbar = () => {
           className="sidebar-header d-flex"
           style={{ justifyContent: "space-between" }}
         >
-          <h3>Shalbro</h3>
+          <h3>{props.companyName}</h3>
           <Tooltip title={userName}>
-            <Avatar>{userName.charAt(0).toUpperCase()}</Avatar>
+            <Avatar>{props.companyName.charAt(0).toUpperCase()}</Avatar>
           </Tooltip>
         </div>
 

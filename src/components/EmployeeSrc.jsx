@@ -22,6 +22,7 @@ import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import CloseIcon from "@mui/icons-material/Close";
 import Mymenu from "../components/Menus";
+import EmployeeCreate from "../Employee/EmployeeCreate";
 
 const EmployeeSrc = (props) => {
 
@@ -291,7 +292,7 @@ const EmployeeSrc = (props) => {
   return (
     <>
       <Box className="box">
-        <AddEmployee update={(event) => updateDate(event)} name={"Employee"} />
+        <EmployeeCreate update={(event) => updateDate(event)} name={"Employee"} empData={filterallempData} />
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (

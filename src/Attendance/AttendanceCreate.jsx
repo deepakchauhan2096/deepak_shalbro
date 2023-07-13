@@ -57,7 +57,7 @@ function AdminCreate() {
         headers,
       })
       .then((response) => {
-        navigate("/login");
+        // navigate("/dashboard");
         alert("successfully sign up")
         console.log("response1 : ", response);
         // props.update(response.data);

@@ -86,7 +86,7 @@ export default function CompanyCreate(props) {
   return (
     // <div style={{ outline: "none" }}>
     <>
-      <StyledFab onClick={handleOpen} size="medium" color="secondary" aria-label="add">
+      <StyledFab onClick={handleOpen} color="secondary" aria-label="add">
         <AddIcon />
       </StyledFab>
 

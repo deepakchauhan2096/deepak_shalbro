@@ -1,263 +1,408 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import pluslogo from "../assests/images/plus.png";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import InputControl from "../components/InputControl";
-import { auth } from "../firebase";
 
-import styles from "../assests/css/Signup.module.css";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  Paper,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 
-function EmployeeCreate(props) {
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "60%",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 4,
+};
 
-  const alldata = props?.empData;
-  console.log(alldata,"allData")
-  const navigate = useNavigate();
 
-  const [values, setValues] = useState({
-    EMPLOYEE_PASSWORD: "",
+
+export default function EmployeeCreate(props) {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [index, setIndex] = React.useState(1);
+
+  // const [inputFields, setInputFields] = useState({
+  //   email: "",
+  //   password: "",
+  //   age: null
+  // });
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  console.log(props.empData, "date kkkk")
+
+  const [createEmployee, setCreateEmployee] = useState({
+    EMPLOYEE_PARENT_ID: props.empData.COMPANY_ID,
+    EMPLOYEE_PARENT_USERNAME: props.empData.COMPANY_USERNAME,
+    EMPLOYEE_MEMBER_PARENT_ID: props.empData.COMPANY_PARENT_ID,
+    EMPLOYEE_MEMBER_PARENT_USERNAME: props.empData.COMPANY_PARENT_USERNAME,
     EMPLOYEE_NAME: "",
-    EMPLOYEE_PHONE: "",
-    EMPLOYEE_EMAIL: "",
     EMPLOYEE_USERNAME: "",
-    EMPLOYEE_EMPLMNTTYPE:"",
-    EMPLOYEE_HOURLY_WAGE:"",
-    EMPLOYEE_PASSWORD:"",
-    EMPLOYEE_HIRE_DATE:"",
-    EMPLOYEE_ADD:"",
+    EMPLOYEE_PHONE: "",
+    EMPLOYEE_ADD: "",
+    EMPLOYEE_CITY: "",
+    EMPLOYEE_SUPERVISOR: "",
+    EMPLOYEE_EMROLMNT_TYPE: "",
+    EMPLOYEE_STATE:"",
     EMPLOYEE_DOB:"",
-    EMPLOYEE_MEMBER_PARENT_USERNAME: "deepanshu1",
-    EMPLOYEE_PARENT_ID: 45,
-    EMPLOYEE_PARENT_USERNAME: "company21",
-    EMPLOYEE_MEMBER_PARENT_ID: 18,
+    EMPLOYEE_HIRE_DATE:"",
   });
 
-  const [errorMsg, setErrorMsg] = useState("");
-  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+ 
 
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const handleSubmission = () => {
-    if (
-      !values.EMPLOYEE_NAME ||
-      !values.EMPLOYEE_EMAIL ||
-      !values.EMPLOYEE_PASSWORD
-    ) {
-      setErrorMsg("Fill all fields");
-      return;
-    }
-    setErrorMsg("");
-
-    setSubmitButtonDisabled(true);
-    createUserWithEmailAndPassword(
-      auth,
-      values.EMPLOYEE_EMAIL,
-      values.EMPLOYEE_PASSWORD
-    )
-      .then(async (res) => {
-        setSubmitButtonDisabled(false);
-        const user = res.user;
-        await updateProfile(user, {
-          displayName: values.EMPLOYEE_USERNAME,
-        });
-        handleSubmit();
-      })
-      .catch((err) => {
-        setSubmitButtonDisabled(false);
-        setErrorMsg(err.message);
-      });
+  const handleCreate = (e) => {
+    setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
+    console.log("heello world", createEmployee);
   };
+
+
+  // const validateValues = (inputValues) => {
+  //   let errors = {};
+
+  //   if (inputValues.EMPLOYEE_USERNAME.trim() === "") {
+  //     errors.EMPLOYEE_USERNAME = "Username is required";
+  //   } else if (
+  //     inputValues.EMPLOYEE_USERNAME.length < 6 ||
+  //     inputValues.EMPLOYEE_USERNAME.length > 10
+  //   ) 
+  //   {
+  //     errors.EMPLOYEE_USERNAME = "Username length must be between 6 and 10";
+  //   } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
+  //     errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
+  //   }
+
+  // }
+
+
+
+
+
 
   const handleSubmit = (e) => {
     console.log("on btn submit");
-    // e.preventDefault();
+    e.preventDefault();
+    // setErrors(validateValues(createEmployee));
+    setSubmitting(true);
+
     axios
-      .post("http://54.89.160.62:5001/create_employee", values, {
+      .post("http://54.89.160.62:5001/create_employee", createEmployee, {
         headers,
       })
       .then((response) => {
-        // navigate("/dashboard");
-        alert("successfully sign up");
-        console.log("response1 : ", response);
-        // props.update(response.data);
-        console.log("response", response.data);
+        console.log("response emp : ", response);
+        console.log("response emp2", response.data);
       })
       .catch((error) => {
         console.error(error);
       });
-    // handleClose();
   };
+  const finishSubmit = () => {
+    console.log(createEmployee);
+  };
+  useEffect(() => {
+    if (Object.keys(errors).length === 0 && submitting) {
+      finishSubmit();
+    }
+  }, [errors]);
+
+
+
+
+
 
   return (
-    <div className={styles.container}>
-      <div className={styles.innerBox} style={{width:"60%"}}>
-        <form>
-          <div className="row">
-            <h1 className={styles.heading}>
-              Create
-              <sup style={{ fontSize: "20px", color: "tomato" }}>EMPLOYEE</sup>
-            </h1>
-            <div className="form-group col-xl-6">
-              <InputControl
-                label="User Name"
-                placeholder="Enter your username"
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    EMPLOYEE_USERNAME: event.target.value,
-                  }))
-                }
-              />
+    <>
+      <Button
+        onClick={handleOpen}
+        sx={{ color: "#277099" }}
+        className=" border-0"
+        variant="outlined"
+      >
+        + Add New Employee
+      </Button>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          {/* <center>
+            {" "}
+            {Object.keys(errors).length === 0 && submitting ? (
+              <span className="text-success fs-5">
+                Successfully submitted ✓
+              </span>
+            ) : (
+              ""
+            )}
+          </center> */}
+          <form onSubmit={handleSubmit}>
+            <div className="row py-2">
+              <div className="form-group col-xl-4">
+                <label> Employee Username</label>
+                <input
+                  type="text"
+                  className="form-control "
+                  id="inputusername"
+                  placeholder="Username"
+                  value={createEmployee.EMPLOYEE_USERNAME}
+                  name="EMPLOYEE_USERNAME"
+                  onChange={handleCreate}
+                />
+                {/* {errors.EMPLOYEE_USERNAME && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_USERNAME}
+                  </p>
+                )} */}
+              </div>
+              <div className="form-group col-xl-4">
+                <label>Employee Name</label>
+                <input
+                  type="text"
+                  className="form-control "
+                  id="inputname"
+                  placeholder="Employee Name"
+                  value={createEmployee.EMPLOYEE_NAME}
+                  name="EMPLOYEE_NAME"
+                  onChange={handleCreate}
+                />
+                {/* {errors.EMPLOYEE_NAME && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_NAME}
+                  </p>
+                )} */}
+              </div>
+              <div className="form-group col-xl-4">
+                <label>Contact</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="inputPassword4"
+                  placeholder="Enter Phone Number"
+                  name="EMPLOYEE_PHONE"
+                  value={createEmployee.EMPLOYEE_PHONE}
+                  onChange={handleCreate}
+                />
+                {/* {errors.EMPLOYEE_PHONE && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_PHONE}
+                  </p>
+                )} */}
+              </div>
             </div>
-            <div className="form-group col-xl-6">
-              <InputControl
-                label="Name"
-                placeholder="Enter your name"
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    EMPLOYEE_NAME: event.target.value,
-                  }))
-                }
-              />
+            {/* <div className="row py-2">
+              <div className="form-group col-xl-6">
+                <label>Employee start date</label>
+                <input
+                  type="date"
+                  value={createEmployee.EMPLOYEE_START_DATE}
+                  name="EMPLOYEE_START_DATE"
+                  onChange={handleCreate}
+                  className="form-control"
+                />
+                {errors.EMPLOYEE_START_DATE && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_START_DATE}
+                  </p>
+                )}
+              </div>
+              <div className="form-group col-xl-6">
+                <label>Employee End date</label>
+                <input
+                  type="date"
+                  value={createEmployee.EMPLOYEE_END_DATE}
+                  name="EMPLOYEE_END_DATE"
+                  onChange={handleCreate}
+                  className="form-control"
+                />
+                {errors.EMPLOYEE_END_DATE && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_END_DATE}
+                  </p>
+                )}
+              </div>
+            </div> */}
+            <div className="row py-2">
+              <div className="form-group col-xl-6">
+                <label>Enrollment</label>
+                <select
+                  id="inputEnroll"
+                  className="form-control "
+                  onChange={handleCreate}
+                  name="EMPLOYEE_EMROLMNTTYPE"
+                  value={createEmployee.EMPLOYEE_EMROLMNTTYPE}
+                >
+                  <option selected>Choose...</option>
+                  <option>Painter</option>
+                  <option>Fitter</option>
+                  <option>Plumber</option>
+                  <option>Engineer</option>
+                </select>
+                {/* {errors.EMPLOYEE_EMROLMNTTYPE && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_EMROLMNTTYPE}
+                  </p>
+                )} */}
+              </div>
+
+              <div className="form-group col-md-6">
+                <label>HOURLY WAGES</label>
+                <input
+                  type="text"
+                  className="form-control "
+                  id="inputsupervisor"
+                  name="EMPLOYEE_HOURLY_WAGE"
+                  value={createEmployee.EMPLOYEE_HOURLY_WAGE}
+                  onChange={handleCreate}
+                />
+                {/* {errors.EMPLOYEE_HOURLY_WAGE && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_HOURLY_WAGE}
+                  </p>
+                )} */}
+              </div>
             </div>
-            <div className="form-group col-xl-6">
-              <InputControl
-                label="Email"
-                placeholder="Enter email address"
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    EMPLOYEE_EMAIL: event.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div className="form-group col-xl-6">
-              <InputControl
-                label="Phone"
-                type="number"
-                placeholder="Enter phone"
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    EMPLOYEE_PHONE: event.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div className="form-group col-xl-6">
-              <InputControl
-                label="Role"
-                type="text"
-                placeholder="Enter Role"
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    EMPLOYEE_ROLE: event.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div className="form-group col-xl-6">
-              <InputControl
-                label="Empolyement Type"
-                type="text"
-                placeholder="Enter Empolyement Type"
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    EMPLOYEE_EMPLMNTTYPE: event.target.value,
-                  }))
-                }
-              />
+            <div className="row py-2">
+              <div className="form-group  col-md-8">
+                <label>Address</label>
+                <textarea
+                  type="text"
+                  className="form-control "
+                  id="inputAddress2"
+                  placeholder="Apartment, studio, or floor"
+                  name="EMPLOYEE_ADD"
+                  value={createEmployee.EMPLOYEE_ADD}
+                  onChange={handleCreate}
+                />
+
+                {/* {errors.EMPLOYEE_ADD && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_ADD}
+                  </p>
+                )} */}
+              </div>
+              <div className="form-group col-md-4">
+                <label>STATE</label>
+                <input
+                  type="text"
+                  className="form-control "
+                  id="inputCity"
+                  name="EMPLOYEE_STATE"
+                  value={createEmployee.EMPLOYEE_STATE}
+                  onChange={handleCreate}
+                />
+                {/* {errors.EMPLOYEE_STATE && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_STATE}
+                  </p>
+                )} */}
+              </div>
+              <div className="form-group col-md-4">
+                <label>City</label>
+                <input
+                  type="text"
+                  className="form-control "
+                  id="inputCity"
+                  name="EMPLOYEE_CITY"
+                  value={createEmployee.EMPLOYEE_CITY}
+                  onChange={handleCreate}
+                />
+                {/* {errors.EMPLOYEE_CITY && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_CITY}
+                  </p>
+                )} */}
+              </div>
+              <div className="form-group col-md-4">
+                <label>Email</label>
+                <input
+                  type="text"
+                  className="form-control "
+                  id="inputCity"
+                  name="EMPLOYEE_EMAIL"
+                  value={createEmployee.EMPLOYEE_EMAIL}
+                  onChange={handleCreate}
+                />
+                {/* {errors.EMPLOYEE_EMAIL && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_EMAIL}
+                  </p>
+                )} */}
+              </div>
+              <div className="form-group col-md-4">
+                <label>DOB</label>
+                <input
+                  type="date"
+                  className="form-control "
+                  id="inputCity"
+                  name="EMPLOYEE_DOB"
+                  value={createEmployee.EMPLOYEE_DOB}
+                  onChange={handleCreate}
+                />
+                {/* {errors.EMPLOYEE_DOB && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_DOB}
+                  </p>
+                )} */}
+              </div>
+              <div className="form-group col-md-4">
+                <label>HIRE DATE</label>
+                <input
+                  type="date"
+                  className="form-control "
+                  id="inputCity"
+                  name="EMPLOYEE_HIRE_DATE"
+                  value={createEmployee.EMPLOYEE_HIRE_DATE}
+                  onChange={handleCreate}
+                />
+                {/* {errors.EMPLOYEE_HIRE_DATE && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_HIRE_DATE}
+                  </p>
+                )} */}
+              </div>
             </div>
 
-            <div className="form-group col-xl-6">
-              <InputControl
-                label="Hourly Wages"
-                type="text"
-                placeholder="Enter Wages"
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    EMPLOYEE_HOURLY_WAGE: event.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div className="form-group col-xl-6">
-              <InputControl
-                label="Date of birth"
-                type="date"
-                placeholder="Enter date of birth"
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    EMPLOYEE_DOB: event.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div className="form-group col-xl-6">
-              <InputControl
-                label="Password"
-                placeholder="Enter password"
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    EMPLOYEE_PASSWORD: event.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div className="form-group col-xl-6">
-              <InputControl
-                label="Hire Date"
-                placeholder="Enter Hire Date"
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    EMPLOYEE_HIRE_DATE: event.target.value,
-                  }))
-                }
-              />
-            </div>
-            <div className="form-group col-xl-6">
-              <InputControl
-                label="Address"
-                placeholder="Enter Address"
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    EMPLOYEE_ADD: event.target.value,
-                  }))
-                }
-              />
-            </div>
 
-            <div className={styles.footer}>
-              <b className={styles.error}>{errorMsg}</b>
-              <button
-                onClick={handleSubmission}
-                disabled={submitButtonDisabled}
-              >
-                Create Employee
-              </button>
-              <p>
-                Already have an account?{" "}
-                <span>
-                  <Link to="/login">Login</Link>
-                </span>
-              </p>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+
+            <button
+              type="submit"
+              className="btn btn-info text-white "
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>{" "}
+            <button
+              onClick={handleClose}
+              className="btn btn-danger text-white "
+            >
+              Discard
+            </button>
+          </form>
+        </Box>
+      </Modal>
+    </>
   );
 }
-
-export default EmployeeCreate;
