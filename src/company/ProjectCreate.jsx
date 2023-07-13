@@ -34,11 +34,6 @@ export default function ProjectCreate(props) {
   const handleClose = () => setOpen(false);
   const [index, setIndex] = React.useState(1);
 
-  // const [inputFields, setInputFields] = useState({
-  //   email: "",
-  //   password: "",
-  //   age: null
-  // });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
