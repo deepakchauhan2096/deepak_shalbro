@@ -29,6 +29,9 @@ import ProjectUpload from "./ProjectUpload";
 import EmployeeCreate from "../Employee/EmployeeCreate";
 import EmployeeSrc from "../Employee/EmployeeSrc";
 import EmployeeAttendance from "../Employee/EmployeeAttendance";
+import FileInput from "./FileInput"
+import AllDocument from "./AllDocument";
+import UploadUi from "./UploadUi";
 
 const CompanyDashboard = () => {
   const [data, setData] = useState({
@@ -65,7 +68,7 @@ const CompanyDashboard = () => {
 
   useEffect(() => {
     fetchProjects();
-  }, [updateProjectData]);
+  },[]);
 
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
@@ -82,7 +85,7 @@ const CompanyDashboard = () => {
     
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_projects",
+        "http://3.84.137.243:5001/get_projects",
         {
           PROJECT_PARENT_ID: location.state.props.COMPANY_ID,
           PROJECT_PARENT_USERNAME: location.state.props.COMPANY_USERNAME,

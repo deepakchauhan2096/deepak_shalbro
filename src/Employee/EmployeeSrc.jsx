@@ -80,7 +80,7 @@ const EmployeeSrc = (props) => {
   const fetchAllEmployee = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_employee",
+        "http://3.84.137.243:5001/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: filterallempData.COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME: filterallempData.COMPANY_PARENT_USERNAME,

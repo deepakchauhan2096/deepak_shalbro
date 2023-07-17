@@ -144,7 +144,7 @@ export default function AddEmployee(props) {
     setSubmitting(true);
     // if(fff && hgjgh)
     axios
-      .post("http://54.89.160.62:5001/create_employee", createEmployee, {
+      .post("http://3.84.137.243:5001/create_employee", createEmployee, {
         headers,
       })
       .then((response) => {

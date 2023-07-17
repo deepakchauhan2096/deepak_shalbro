@@ -155,7 +155,7 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
     setSubmitting(true);
 
     axios
-    .post("http://54.89.160.62:5001/create_employee", createEmployee, {
+    .post("http://3.84.137.243:5001/create_employee", createEmployee, {
       headers,
     })
     .then((response) => {

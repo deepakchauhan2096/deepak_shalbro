@@ -56,7 +56,7 @@
 //   const fetchProjects = async () => {
 //     try {
 //       const response = await axios.put(
-//         "http://54.89.160.62:5001/get_projects",
+//         "http://3.84.137.243:5001/get_projects",
 //         {
 //           PROJECT_MEMBER_PARENT_ID: 18,
 //           PROJECT_MEMBER_PARENT_USERNAME: "deepanshu1",

@@ -35,6 +35,8 @@ export default function ProjectCreate(props) {
   const handleClose = () => setOpen(false);
   const [index, setIndex] = React.useState(1);
 
+
+
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -114,6 +116,13 @@ export default function ProjectCreate(props) {
     return errors;
   };
 
+  
+  useEffect(() => {
+    if (Object.keys(errors).length === 0 && submitting) {
+      finishSubmit();
+    }
+  }, [errors]);
+
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
@@ -131,7 +140,7 @@ export default function ProjectCreate(props) {
     setSubmitting(true);
 
     axios
-      .post("http://54.89.160.62:5001/create_project", createProject, {
+      .post("http://3.84.137.243:5001/create_project", createProject, {
         headers,
       })
       .then((response) => {
@@ -142,15 +151,11 @@ export default function ProjectCreate(props) {
         console.error(error);
       });
   };
+
   const finishSubmit = () => {
     console.log(createProject);
   };
-  useEffect(() => {
-    if (Object.keys(errors).length === 0 && submitting) {
-      finishSubmit();
-    }
-  }, [errors]);
-
+ 
   return (
     <>
       <Button
