@@ -96,11 +96,6 @@ export default function CompanyCreate(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Container
-          id="content"
-          style={{ height: "100vh", position: "relative" }}
-          maxWidth="xl"
-        >
           <Box sx={style}>
             <Box
               sx={{
@@ -236,7 +231,6 @@ export default function CompanyCreate(props) {
               </Button>
             </form>
           </Box>
-        </Container>
       </Modal>
     </>
     // </div>

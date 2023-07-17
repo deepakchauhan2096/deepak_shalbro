@@ -38,7 +38,7 @@ function AdminLogin() {
   return (
     <div className={styles.container}>
       <div className={styles.innerBox}>
-        <h1 className={styles.heading}>Login</h1>
+        <h1 className={styles.heading}>Login<sup style={{ fontSize: "20px", color: "tomato" }}>Admin</sup></h1>
 
         <InputControl
           label="Email"

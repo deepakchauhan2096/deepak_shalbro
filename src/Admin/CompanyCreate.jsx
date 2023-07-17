@@ -84,9 +84,8 @@ export default function CompanyCreate(props) {
   
 
   return (
-    // <div style={{ outline: "none" }}>
     <>
-      <StyledFab onClick={handleOpen} color="secondary" aria-label="add">
+      <StyledFab onClick={handleOpen} size="medium" color="secondary" aria-label="add">
         <AddIcon />
       </StyledFab>
 
@@ -102,17 +101,6 @@ export default function CompanyCreate(props) {
           maxWidth="xl"
         >
           <Box sx={style}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-              className="bg-primary p-1 px-4 text-white"
-            >
-              <Box>Create company</Box>
-              <Box>x</Box>
-            </Box>
             <form className="p-4">
               <div className="row">
                 <div className="form-group py-2 col-xl-6">
@@ -239,6 +227,5 @@ export default function CompanyCreate(props) {
         </Container>
       </Modal>
     </>
-    // </div>
   );
 }

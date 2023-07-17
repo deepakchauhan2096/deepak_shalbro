@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
+import moment from "moment/moment";
 import { DataGrid } from "@mui/x-data-grid";
 import AddEmployee from "../modal/AddEmployee";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -20,6 +21,7 @@ import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import CloseIcon from "@mui/icons-material/Close";
+import { right } from "@popperjs/core";
 
 const EmployeeAttendance = (props) => {
   const [indone, setIndone] = useState("");
@@ -58,9 +60,11 @@ const EmployeeAttendance = (props) => {
   const OutDataSuccess = { ...inData, ATTENDANCE_OUT: new Date() };
   const inDataSuccess = { ...inData, ATTENDANCE_IN: new Date() };
 
+  console.log(inDataSuccess, "GGGG");
+
   const handleSubmitIn = (event) => {
     console.log(event, "in");
-
+    event.preventDefault()
     let config = {
       method: "post",
       maxBodyLength: Infinity,
@@ -76,7 +80,7 @@ const EmployeeAttendance = (props) => {
       .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
-        setOutdone(response.data);
+        setIndone(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -85,7 +89,7 @@ const EmployeeAttendance = (props) => {
 
   const handleSubmitOut = (event) => {
     console.log(event, "out");
-
+    event.preventDefault()
     let config = {
       method: "post",
       maxBodyLength: Infinity,
@@ -100,7 +104,6 @@ const EmployeeAttendance = (props) => {
     axios
       .request(config)
       .then((response) => {
-        console.log(JSON.stringify(response.data));
         setOutdone(response.data);
       })
       .catch((error) => {
@@ -175,7 +178,32 @@ const EmployeeAttendance = (props) => {
       const results = finalData.filter((post) => {
         return post.EMPLOYEE_ID == parseInt(keyword);
       });
+      console.log(results, "result");
       setFoundUsers(results);
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_ADMIN_ID: results[0]?.EMPLOYEE_MEMBER_PARENT_ID,
+      }));
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_ADMIN_USERNAME: results[0]?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+      }));
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_COMPANY_ID: results[0]?.EMPLOYEE_PARENT_ID,
+      }));
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_COMPANY_USERNAME: results[0]?.EMPLOYEE_PARENT_USERNAME,
+      }));
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_EMPLOYEE_ID: results[0]?.EMPLOYEE_ID,
+      }));
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_EMPLOYEE_USERNAME: results[0]?.EMPLOYEE_USERNAME,
+      }));
     } else {
       // setFoundUsers(finalData);
     }
@@ -198,16 +226,6 @@ const EmployeeAttendance = (props) => {
               Employee Attendance
             </Button>
           </div>
-          <input
-            className="search-box mr-sm-2 glassmorph"
-            // style={{ backgroundImage: `url(${searchicon})`, width:"100%" }}
-            value={name}
-            onChange={filtered}
-            // onClick={topFunction}
-            type="search"
-            placeholder="Search User"
-            aria-label="Search"
-          />
 
           <div style={screen}>
             <Grid
@@ -251,11 +269,10 @@ const EmployeeAttendance = (props) => {
                     />
 
                     {foundUsers[0]?.EMPLOYEE_USERNAME ? (
-                      <>
-                        {/* <div>
-                          <b>Employee Username : </b>&nbsp;
-                          {foundUsers[0]?.EMPLOYEE_USERNAME}
-                        </div> */}
+                      <><div>
+                      <b>Employee ID : </b>&nbsp;
+                      {foundUsers[0]?.EMPLOYEE_ID}
+                    </div>
                         <div>
                           <b>Employee Username : </b>&nbsp;
                           {foundUsers[0]?.EMPLOYEE_USERNAME}
@@ -273,8 +290,9 @@ const EmployeeAttendance = (props) => {
                       ""
                     )}
                   </div>
-                  <div className="form-group py-2 col-xl-12">
-                    {outdone ? (
+
+                  <div className="form-group py-2 col-xl-12" style={{position:"absolute", right:"-10px",bottom:0}}>
+                    {indone ? (
                       <Button
                         disabled
                         name="in_btn"
@@ -295,7 +313,7 @@ const EmployeeAttendance = (props) => {
                         ATTENDANCE IN
                       </Button>
                     )}{" "}
-                    {indone ? (
+                    {outdone ? (
                       <Button
                         disabled
                         name="in_btn"

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
@@ -162,6 +162,7 @@ export default function AddEmployee(props) {
   const finishSubmit = () => {
     console.log(createEmployee);
   };
+  
   useEffect(() => {
     if (Object.keys(errors).length === 0 && submitting) {
       finishSubmit();
@@ -205,8 +206,24 @@ export default function AddEmployee(props) {
               )}
             </center>
             <form onSubmit={handleSubmit}>
-              <div className="row py-2">
-                <div className="form-group col-xl-3">
+              <div className="row py-1">
+                <div className="form-group col-xl-6">
+                  <label for="inputqual">Employee username</label>
+                  <input
+                    type="text"
+                    className="form-control rounded-0"
+                    id="inputZip"
+                    value={createEmployee.EMPLOYEE_USERNAME}
+                    name="EMPLOYEE_USERNAME"
+                    onChange={handleCreate}
+                  />
+                  {errors.EMPLOYEE_USERNAME && (
+                    <p className="error text-danger fw-light mb-0">
+                      {errors.EMPLOYEE_USERNAME}
+                    </p>
+                  )}
+                </div>
+                <div className="form-group col-xl-6">
                   <label>Employee Name</label>
                   <input
                     type="text"
@@ -223,7 +240,9 @@ export default function AddEmployee(props) {
                     </p>
                   )}
                 </div>
-                <div className="form-group col-xl-3">
+              </div>
+              <div className="row">
+                <div className="form-group col-xl-6 py-1">
                   <label>E-mail</label>
                   <input
                     type="email"
@@ -240,7 +259,7 @@ export default function AddEmployee(props) {
                     </p>
                   )}
                 </div>
-                <div className="form-group col-xl-3">
+                <div className="form-group col-xl-6 py-1">
                   <label>State</label>
                   <input
                     type="text"
@@ -293,7 +312,62 @@ export default function AddEmployee(props) {
                     </p>
                   )}
                 </div>
-                <div className="form-group col-xl-4">
+                <div className="form-group col-xl-6 py-1">
+                  <label for="inputPassword4">Date Of Birth</label>
+                  <input
+                    type="date"
+                    className="form-control rounded-0"
+                    id="inputPassword4"
+                    placeholder="Enter Date of birth"
+                    value={createEmployee.EMPLOYEE_DOB}
+                    name="EMPLOYEE_DOB"
+                    onChange={handleCreate}
+                  />
+                  {errors.EMPLOYEE_DOB && (
+                    <p className="error text-danger fw-light mb-0">
+                      {errors.EMPLOYEE_DOB}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="row">
+              <div className="row">
+                <div className="form-group col-xl-12 py-1">
+                  <label for="inputAddress">Address</label>
+                  <textarea
+                    type="text"
+                    className="form-control rounded-0"
+                    id="inputAddress"
+                    placeholder="Enter Address"
+                    value={createEmployee.EMPLOYEE_ADD}
+                    name="EMPLOYEE_ADD"
+                    onChange={handleCreate}
+                  />
+                  {errors.EMPLOYEE_ADD && (
+                    <p className="error text-danger fw-light mb-0">
+                      {errors.EMPLOYEE_ADD}
+                    </p>
+                  )}
+                </div>
+              </div>
+                <div className="form-group col-xl-4 py-1">
+                  <label>City</label>
+                  <input
+                    type="text"
+                    className="form-control rounded-0"
+                    id="city"
+                    placeholder="Enter Your city.."
+                    value={createEmployee.EMPLOYEE_CITY}
+                    name="EMPLOYEE_CITY"
+                    onChange={handleCreate}
+                  />
+                  {errors.EMPLOYEE_CITY && (
+                    <p className="error text-danger fw-light mb-0">
+                      {errors.EMPLOYEE_CITY}
+                    </p>
+                  )}
+                </div>
+                <div className="form-group col-xl-4 py-1">
                   <label>Hourly wages</label>
                   <input
                     type="number"
@@ -310,7 +384,7 @@ export default function AddEmployee(props) {
                     </p>
                   )}
                 </div>
-                <div className="form-group col-xl-4">
+                <div className="form-group col-xl-4 py-1">
                   <label for="inputPassword4">Employee Role</label>
                   <select
                     id="inputqual"
@@ -334,8 +408,12 @@ export default function AddEmployee(props) {
                   )}
                 </div>
               </div>
-              <div className="row py-2">
-                <div className="form-group col-xl-4">
+              <div className="row py-1">
+                
+               
+              </div>
+              <div className="row">
+                <div className="form-group col-xl-4 py-1">
                   <label for="inputqual">Employement Type</label>
                   <select
                     id="inputqual"
