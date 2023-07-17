@@ -62,18 +62,6 @@ function App() {
               <Route path="/login" element={<AdminLogin/>} />
               <Route path="/employee" element={<LoginEmp/>} />
               <Route path="/createemp" element={<CreateEmp/>} />
-
-              {/* <Route path="/dashboard" element={userName ? <Index /> : <Login/>} /> */}
-
-              {/* <Route path="/signup" element={userName ? <Index /> : <Signup/>} />
-              <Route path="/employee/login" element={<LoginEmp/>} />
-              <Route path="/login" element={emailname ? <Index /> : <Login/>} />
-              <Route path="/subcontract" element={ userName ? <SubContract /> : ""} />
-              <Route path="/company" element={ userName ? <Company /> : ""} />
-              <Route path="/employee" element={userName ? <Employee /> : ""} />
-              <Route path="/project" element={ userName ? <Project /> : ""} />
-              <Route path="/attendance" element={ userName ? <Attendances /> : ""} />
-              <Route path="*" element={ userName ? <Page404 link="/dashboard" /> : <Page404 link="/" />} /> */}
             </Routes>
           </BrowserRouter>
       </div>

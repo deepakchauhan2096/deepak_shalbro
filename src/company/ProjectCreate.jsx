@@ -33,14 +33,10 @@ export default function ProjectCreate(props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [index, setIndex] = React.useState(1);
+  const [resError, setResError] = useState();
 
-  // const [inputFields, setInputFields] = useState({
-  //   email: "",
-  //   password: "",
-  //   age: null
-  // });
   const [errors, setErrors] = useState({});
-  const [submitting, setSubmitting] = useState(false);
+  // const [submitting, setSubmitting] = useState(false);
 
   const [createProject, setCreateProject] = useState({
     PROJECT_PARENT_ID: props.usernameId.COMPANY_ID,
@@ -128,32 +124,44 @@ export default function ProjectCreate(props) {
     console.log("heello world", createProject);
   };
 
+  //api create project
   const handleSubmit = (e) => {
-    console.log("on btn submit");
     e.preventDefault();
     setErrors(validateValues(createProject));
-    setSubmitting(true);
-
-    axios
-      .post("http://54.89.160.62:5001/create_project", createProject, {
-        headers,
-      })
-      .then((response) => {
-        console.log("response1 : ", response);
-        console.log("response", response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-  const finishSubmit = () => {
-    console.log(createProject);
-  };
-  useEffect(() => {
-    if (Object.keys(errors).length === 0 && submitting) {
-      finishSubmit();
+    if (Object.keys(errors).length === 0) {
+      axios
+        .post("http://3.84.137.243:5001/create_project", createProject, {
+          headers,
+        })
+        .then((response) => {
+          console.log("response of create project", response.data.errorMsg);
+          props.update(response.data.result);
+          
+          setTimeout(()=>{
+            const error = response.data.errorMsg;
+            setResError(error)
+          },1000)
+          
+        })
+        .catch((error) => {
+          console.error(error, "ERR");
+          
+        });
     }
-  }, [errors]);
+  };
+
+  // const finishSubmit = () => {
+  //   console.log(createProject);
+  // };
+
+  // useEffect(() => {
+  //   if (Object.keys(errors).length === 0 && submitting) {
+  //     finishSubmit();
+  //   }
+  // }, [errors]);
+
+  console.log(Object.keys(errors).length, "errors");
+  console.log(resError)
 
   return (
     <>
@@ -162,6 +170,7 @@ export default function ProjectCreate(props) {
         sx={{ color: "#277099" }}
         className=" border-0"
         variant="outlined"
+        size="small"
       >
         + Add New Project
       </Button>
@@ -173,16 +182,6 @@ export default function ProjectCreate(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <center>
-            {" "}
-            {Object.keys(errors).length === 0 && submitting ? (
-              <span className="text-success fs-5">
-                Successfully submitted ✓
-              </span>
-            ) : (
-              ""
-            )}
-          </center>
           <form onSubmit={handleSubmit}>
             <div className="row py-2">
               <div className="form-group col-xl-4">
@@ -200,6 +199,14 @@ export default function ProjectCreate(props) {
                   <p className="error text-danger fw-light">
                     {errors.PROJECT_USERNAME}
                   </p>
+                )}
+
+                {resError ? (
+                  <p className="error text-danger fw-light">
+                    {resError}
+                  </p>
+                ) : (
+                  ""
                 )}
               </div>
               <div className="form-group col-xl-4">
@@ -345,43 +352,7 @@ export default function ProjectCreate(props) {
                 )}
               </div>
             </div>
-            <div className="row py-2">
-              {/* <div className="form-group py-2 col-md-4">
-              <label for="file" >Compliance doc</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-
-              {/* <div className="form-group py-2 col-md-4">
-              <label for="file" >Policies</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-
-              {/* <div className="form-group py-2 col-md-4">
-              <label for="file" >Auto policies</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-              {/* 
-            <div className="form-group py-2 col-md-4">
-              <label for="file" >Law suits</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-            </div>
+            <div className="row py-2"></div>
             <button
               type="submit"
               className="btn btn-info text-white "
@@ -395,6 +366,9 @@ export default function ProjectCreate(props) {
             >
               Discard
             </button>
+            {/* <center>
+            
+           </center> */}
           </form>
         </Box>
       </Modal>

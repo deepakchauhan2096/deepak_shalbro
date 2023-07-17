@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
+import moment from "moment/moment";
 import { DataGrid } from "@mui/x-data-grid";
 import AddEmployee from "../modal/AddEmployee";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -20,6 +21,7 @@ import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import CloseIcon from "@mui/icons-material/Close";
+import { right } from "@popperjs/core";
 
 const EmployeeAttendance = (props) => {
   const [indone, setIndone] = useState("");
@@ -40,26 +42,43 @@ const EmployeeAttendance = (props) => {
   let month = date.getMonth() + 1;
   let year = date.getFullYear();
 
+  console.log(year, month, day);
+  var MyDate = new Date();
+  var MyDateString;
+
+  MyDate.setDate(MyDate.getDate()-1);
+
+  MyDateString =
+    MyDate.getFullYear() +
+    "-" +
+    ("0" + (MyDate.getMonth() + 1)).slice(-2) +
+    "-" +
+    ("0" + MyDate.getDate()).slice(-2);
+
+  
+
   const [inData, setInData] = useState({
-    ATTENDANCE_ADMIN_ID: 18,
-    ATTENDANCE_ADMIN_USERNAME: "deepanshu1",
-    ATTENDANCE_COMPANY_ID: 45,
-    ATTENDANCE_COMPANY_USERNAME: "company21",
-    ATTENDANCE_EMPLOYEE_ID: 47,
-    ATTENDANCE_EMPLOYEE_USERNAME: "EMP0123",
-    ATTENDANCE_DATE_ID: new Date(),
+    ATTENDANCE_ADMIN_ID: "",
+    ATTENDANCE_ADMIN_USERNAME: "",
+    ATTENDANCE_COMPANY_ID: "",
+    ATTENDANCE_COMPANY_USERNAME: "",
+    ATTENDANCE_EMPLOYEE_ID: "",
+    ATTENDANCE_EMPLOYEE_USERNAME: "",
+    ATTENDANCE_DATE_ID: MyDateString,
   });
 
   const OutDataSuccess = { ...inData, ATTENDANCE_OUT: new Date() };
   const inDataSuccess = { ...inData, ATTENDANCE_IN: new Date() };
 
+  console.log(inDataSuccess, "GGGG");
+
   const handleSubmitIn = (event) => {
     console.log(event, "in");
-
+    event.preventDefault()
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://54.89.160.62:5001/create_emp_attendence",
+      url: "http://3.84.137.243:5001/create_emp_attendence",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
@@ -71,7 +90,7 @@ const EmployeeAttendance = (props) => {
       .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
-        setOutdone(response.data);
+        setIndone(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -80,11 +99,11 @@ const EmployeeAttendance = (props) => {
 
   const handleSubmitOut = (event) => {
     console.log(event, "out");
-
+    event.preventDefault()
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://54.89.160.62:5001/create_emp_attendence",
+      url: "http://3.84.137.243:5001/create_emp_attendence",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
@@ -95,7 +114,6 @@ const EmployeeAttendance = (props) => {
     axios
       .request(config)
       .then((response) => {
-        console.log(JSON.stringify(response.data));
         setOutdone(response.data);
       })
       .catch((error) => {
@@ -109,28 +127,27 @@ const EmployeeAttendance = (props) => {
   };
 
   const fetchAllEmployee = async () => {
-    try {
-      const response = await axios.put(
-        "http://54.89.160.62:5001/get_employee",
-        {
-          EMPLOYEE_MEMBER_PARENT_ID: filterallempData.COMPANY_PARENT_ID,
-          EMPLOYEE_MEMBER_PARENT_USERNAME:filterallempData.COMPANY_PARENT_USERNAME,
-          EMPLOYEE_PARENT_USERNAME: filterallempData.COMPANY_USERNAME,
-          EMPLOYEE_PARENT_ID: filterallempData.COMPANY_ID,
-        },
-        { headers }
-      );
-      setTimeout(() => {
-        console.log("ALL EMPLOYEE data ", response);
-        const data = response.data;
-        // setAllempData(data.result[0].COMPANY_EMPLOYIES);
-        setAllempData(data.result);
-        console.log("fuck", data);
-        setIsLoading(false);
-      }, 1000);
-    } catch (err) {
-      console.log("something Went wrong: =>", err);
-    }
+      try {
+        const response = await axios.put(
+          "http://3.84.137.243:5001/get_employee",
+          {
+            EMPLOYEE_MEMBER_PARENT_ID: filterallempData.COMPANY_PARENT_ID,
+            EMPLOYEE_MEMBER_PARENT_USERNAME: filterallempData.COMPANY_PARENT_USERNAME,
+            EMPLOYEE_PARENT_USERNAME: filterallempData.COMPANY_USERNAME,
+            EMPLOYEE_PARENT_ID: filterallempData.COMPANY_ID,
+          },
+          { headers }
+        );
+        setTimeout(() => {
+          console.log("ALL EMPLOYEE ATTEN", response);
+          const data = response.data;
+          setAllempData(data.result);
+          setIsLoading(false);
+        }, 1000);
+      } catch (err) {
+        console.log("something Went wrong: =>", err);
+      }
+
   };
 
   useEffect(() => {
@@ -172,7 +189,32 @@ const EmployeeAttendance = (props) => {
       const results = finalData.filter((post) => {
         return post.EMPLOYEE_ID == parseInt(keyword);
       });
+      console.log(results, "result");
       setFoundUsers(results);
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_ADMIN_ID: results[0]?.EMPLOYEE_MEMBER_PARENT_ID,
+      }));
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_ADMIN_USERNAME: results[0]?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+      }));
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_COMPANY_ID: results[0]?.EMPLOYEE_PARENT_ID,
+      }));
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_COMPANY_USERNAME: results[0]?.EMPLOYEE_PARENT_USERNAME,
+      }));
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_EMPLOYEE_ID: results[0]?.EMPLOYEE_ID,
+      }));
+      setInData((prev) => ({
+        ...prev,
+        ATTENDANCE_EMPLOYEE_USERNAME: results[0]?.EMPLOYEE_USERNAME,
+      }));
     } else {
       // setFoundUsers(finalData);
     }
@@ -238,11 +280,10 @@ const EmployeeAttendance = (props) => {
                     />
 
                     {foundUsers[0]?.EMPLOYEE_USERNAME ? (
-                      <>
-                        {/* <div>
-                          <b>Employee Username : </b>&nbsp;
-                          {foundUsers[0]?.EMPLOYEE_USERNAME}
-                        </div> */}
+                      <><div>
+                      <b>Employee ID : </b>&nbsp;
+                      {foundUsers[0]?.EMPLOYEE_ID}
+                    </div>
                         <div>
                           <b>Employee Username : </b>&nbsp;
                           {foundUsers[0]?.EMPLOYEE_USERNAME}
@@ -260,8 +301,9 @@ const EmployeeAttendance = (props) => {
                       ""
                     )}
                   </div>
-                  <div className="form-group py-2 col-xl-12">
-                    {outdone ? (
+
+                  <div className="form-group py-2 col-xl-12" style={{position:"absolute", right:"-10px",bottom:0}}>
+                    {indone ? (
                       <Button
                         disabled
                         name="in_btn"
@@ -282,7 +324,7 @@ const EmployeeAttendance = (props) => {
                         ATTENDANCE IN
                       </Button>
                     )}{" "}
-                    {indone ? (
+                    {outdone ? (
                       <Button
                         disabled
                         name="in_btn"

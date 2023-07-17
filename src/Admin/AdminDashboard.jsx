@@ -26,6 +26,8 @@ import CompanyCreate from "./CompanyCreate";
 import { useNavigate } from "react-router-dom";
 import ProjectCreate from "../company/ProjectCreate";
 import Modal from "@mui/material/Modal";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 const style = {
   position: "absolute",
   top: "50%",
@@ -44,15 +46,10 @@ const AdminDashboard = (props) => {
   const [update, setUpdateData] = React.useState(null);
   const [tableRows, setTableRows] = useState([{
     ADMIN_ID: "",
-    ADMIN_EMAIL: "meenu@gmail.com",
-    ADMIN_USERNAME: "Meenu12345",
+    ADMIN_EMAIL: "",
+    ADMIN_USERNAME: "",
   }]);
-  const [Rows, setRows] = useState([
-    {
-      COMPANY_ID: "",
-      COMPANY_USERNAME: "",
-    },
-  ]);
+  const [Rows, setRows] = useState([]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -81,7 +78,7 @@ const AdminDashboard = (props) => {
   const getAdminData = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_admin",
+        "http://3.84.137.243:5001/get_admin",
         { ADMIN_EMAIL: props?.email, ADMIN_USERNAME: props?.user },
         { headers }
       );
@@ -100,7 +97,7 @@ const AdminDashboard = (props) => {
   const getCompanyData = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_all_company",
+        "http://3.84.137.243:5001/get_all_company",
         {
           COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
           COMPANY_PARENT_USERNAME: props.user,
@@ -130,7 +127,6 @@ const AdminDashboard = (props) => {
   };
 
   const MyScreen = styled(Paper)((props) => ({
-    // height: "calc(100vh - 37px)",
     height: "100vh",
     padding: 0,
     paddingBottom: "0",
@@ -139,12 +135,10 @@ const AdminDashboard = (props) => {
     Border: 0,
     display: props.screenIndex ? "block" : "none",
     width: "100%",
-    // background:"pink"
   }));
   
   const MyScreenbox = styled(Paper)((props) => ({
     height: "calc(100vh - 68.5px)",
-    // height: "100vh",
     padding: "50px",
     paddingBottom: "0",
     overflow: "scroll",
@@ -155,16 +149,26 @@ const AdminDashboard = (props) => {
     background: "#f9f9f9",
   }));
 
-  const StyledFab = styled(Fab)({
-    display: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%,-50%)",
-    justifyItems: "center",
-  });
+ 
 
   const settings = [props.email, "Account", "Dashboard", "Logout"];
   const pages = [props.email, tableRows?.ADMIN_ID];
+
+
+  const navigate = useNavigate();
+
+  const Logout = () => {
+    // setShowProfile(false);
+    signOut(auth)
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
+
+  console.log(Rows.length, "Rows")
 
   return (
     <>
@@ -252,8 +256,9 @@ const AdminDashboard = (props) => {
                   </Button>
                 ))}
               </Box>
-
-              <Box sx={{ flexGrow: 0 }}>
+              <div onClick={Logout}>Logout </div>{" "}
+              {/* <Box sx={{ flexGrow: 0 }}>
+               
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
@@ -284,7 +289,7 @@ const AdminDashboard = (props) => {
                     </MenuItem>
                   ))}
                 </Menu>
-              </Box>
+              </Box> */}
             </Toolbar>
           </Container>
         </AppBar>
@@ -296,7 +301,7 @@ const AdminDashboard = (props) => {
           />
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
+              {Rows.length != 0 ? <TableHead>
                 <TableRow>
                   {[
                     "Company Name",
@@ -311,14 +316,13 @@ const AdminDashboard = (props) => {
                     <TableCell size="large">{item}</TableCell>
                   ))}
                 </TableRow>
-              </TableHead>
+              </TableHead> : ""}
               <TableBody>
                 {Rows?.map((post) => (
                   <>
                     <TableRow
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      {/* <TableCell component="th" scope="row"></TableCell> */}
                       <TableCell size="small">{post.COMPANY_NAME}</TableCell>
                       <TableCell size="small">{post.COMPANY_ID}</TableCell>
                       <TableCell size="small">

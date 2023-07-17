@@ -81,7 +81,7 @@ const AttendanceDash = (props) => {
   const getAdminData = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_admin",
+        "http://3.84.137.243:5001/get_admin",
         { ADMIN_EMAIL: props?.email, ADMIN_USERNAME: props?.user },
         { headers }
       );
@@ -100,7 +100,7 @@ const AttendanceDash = (props) => {
   const getCompanyData = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_all_company",
+        "http://3.84.137.243:5001/get_all_company",
         {
           COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
           COMPANY_PARENT_USERNAME: props.user,

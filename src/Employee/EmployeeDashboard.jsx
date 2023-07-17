@@ -42,6 +42,7 @@ const EmployeeDashboard = (props) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [update, setUpdateData] = React.useState(null);
+  
   const [tableRows, setTableRows] = useState([{
     ADMIN_ID: "",
     ADMIN_EMAIL: "meenu@gmail.com",
@@ -69,19 +70,17 @@ const EmployeeDashboard = (props) => {
     setAnchorElUser(null);
   };
 
-  useEffect(() => {
-    getAdminData();
-  }, [props.user]);
-
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
+  
+
   const getAdminData = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_admin",
+        "http://3.84.137.243:5001/get_admin",
         { ADMIN_EMAIL: props?.email, ADMIN_USERNAME: props?.user },
         { headers }
       );
@@ -100,7 +99,7 @@ const EmployeeDashboard = (props) => {
   const getCompanyData = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_all_company",
+        "http://3.84.137.243:5001/get_all_company",
         {
           COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
           COMPANY_PARENT_USERNAME: props.user,
@@ -117,6 +116,12 @@ const EmployeeDashboard = (props) => {
       console.log("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    getAdminData();
+  }, [props.user]);
+
+ 
 
   useEffect(() => {
     getCompanyData();
@@ -139,12 +144,10 @@ const EmployeeDashboard = (props) => {
     Border: 0,
     display: props.screenIndex ? "block" : "none",
     width: "100%",
-    // background:"pink"
   }));
   
   const MyScreenbox = styled(Paper)((props) => ({
     height: "calc(100vh - 68.5px)",
-    // height: "100vh",
     padding: "50px",
     paddingBottom: "0",
     overflow: "scroll",

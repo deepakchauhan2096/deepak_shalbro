@@ -28,13 +28,12 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import Upload from "./ProjectUpload";
 import ProjectUpload from "./ProjectUpload";
 import EmployeeCreate from "../Employee/EmployeeCreate";
-import EmployeeSrc from "../components/EmployeeSrc";
+import EmployeeSrc from "../Employee/EmployeeSrc";
 import EmployeeAttendance from "../Employee/EmployeeAttendance";
 
-const ProjectDashboard = () => {
+const CompanyDashboard = () => {
   const [data, setData] = useState({
     row: {
-      _id: "649a71ca12c8d41898147a9d",
       PROJECT_ID: 52,
       PROJECT_PARENT_ID: 45,
       PROJECT_PARENT_USERNAME: "company21",
@@ -52,13 +51,18 @@ const ProjectDashboard = () => {
     },
   });
 
+  
+  const [open, setOpen] = React.useState(false);
+  const [index, setIndex] = useState(1);
   const [ProjectData, setProjectData] = useState([]);
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [updateProjectData, setUpdateProjectData] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [navIndex, setNavIndex] = useState(0);
+  const [updatedata, setUpdateData] = useState([]);
+
+
+ // modal
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   // console.log("all contracts: =>>>",ProjectData)
   const location = useLocation();
@@ -67,13 +71,8 @@ const ProjectDashboard = () => {
 
   useEffect(() => {
     fetchProjects();
-  }, [updateProjectData]);
+  }, [updatedata]);
 
-  const [open, setOpen] = React.useState(false);
-  const [index, setIndex] = useState(1);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   const headers = {
     "Content-Type": "application/json",
@@ -84,7 +83,7 @@ const ProjectDashboard = () => {
     
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_projects",
+        "http://3.84.137.243:5001/get_projects",
         {
           PROJECT_PARENT_ID: location.state.props.COMPANY_ID,
           PROJECT_PARENT_USERNAME: location.state.props.COMPANY_USERNAME,
@@ -176,12 +175,14 @@ const ProjectDashboard = () => {
   };
 
   // for updating the event according when add contract reflect back on page at the same time
-  const updateProject = (event) => {
-    setUpdateProjectData(event);
+  const updateDate = (event) => {
+    event.preventDefault()
+    setUpdateData(event);
+    console.log(event, "event");
   };
 
   const filterData = data?.row;
-  console.log(filterData, "f-data");
+  console.log(filterData, "f-data ggvvg");
 
   const NavScreen = styled(Paper)((props) => ({
     height: "calc(100vh)",
@@ -243,7 +244,7 @@ const ProjectDashboard = () => {
         <List sx={{ py: 0 }} onClick={() => setNavIndex(props.value)}>
           <ListItem
             sx={{
-              background: props.value == navIndex ? "#3596d9" : "",
+              background: props.value === navIndex ? "#3596d9" : "",
             }}
             disablePadding
           >
@@ -273,9 +274,10 @@ const ProjectDashboard = () => {
           style={{ justifyContent: "space-between" }}
         >
           <h3>{location.state.props.COMPANY_NAME}</h3>
+
           <Tooltip title={location.state.props.COMPANY_USERNAME}>
             <Avatar>
-              {[location.state.props.COMPANY_NAME][0].charAt(0).toUpperCase()}
+              {[location.state.props.COMPANY_NAME][0]?.charAt(0).toUpperCase()}
             </Avatar>
           </Tooltip>
         </div>
@@ -309,11 +311,11 @@ const ProjectDashboard = () => {
         <Box className="box">
           <div className="container-fluid d-flex pb-0 g-0 flex-column">
             <div style={{ height: "20%" }}>
-              <Button className="btn button btn-blue" variant="contained">
+              <Button className="btn button btn-blue" variant="contained"  size="small">
                 All Project
               </Button>
               <ProjectCreate
-                update={(event) => updateProject(event)}
+                update={(event) => updateDate(event)}
                 usernameId={location.state.props}
               />
             </div>
@@ -364,6 +366,7 @@ const ProjectDashboard = () => {
               onClick={handleClose}
               variant="contained"
               className="btn rounded-0"
+              size="small"
             >
               <ArrowBackIcon style={{ fontSize: "25px" }} />
             </Button>
@@ -371,6 +374,7 @@ const ProjectDashboard = () => {
               onClick={(e) => setIndex(1)}
               variant={index === 1 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
+              size="small"
             >
               Detail
             </Button>
@@ -379,6 +383,7 @@ const ProjectDashboard = () => {
               onClick={(e) => setIndex(2)}
               variant={index === 2 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
+              size="small"
             >
               Payment
             </Button>
@@ -387,6 +392,7 @@ const ProjectDashboard = () => {
               onClick={(e) => setIndex(3)}
               variant={index === 3 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
+              size="small"
             >
               Compliance
             </Button>
@@ -395,6 +401,7 @@ const ProjectDashboard = () => {
               onClick={(e) => setIndex(4)}
               variant={index === 4 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
+              size="small"
             >
               Documents
             </Button>
@@ -1212,4 +1219,4 @@ const ProjectDashboard = () => {
   );
 };
 
-export default ProjectDashboard;
+export default CompanyDashboard;

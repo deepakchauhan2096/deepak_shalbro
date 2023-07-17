@@ -54,7 +54,7 @@ export default function CompanyCreate(props) {
     console.log("on btn submit");
     e.preventDefault();
     axios
-      .post("http://54.89.160.62:5001/create_company", create_company, {
+      .post("http://3.84.137.243:5001/create_company", create_company, {
         headers,
       })
       .then((response) => {
@@ -96,11 +96,6 @@ export default function CompanyCreate(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Container
-          id="content"
-          style={{ height: "100vh", position: "relative" }}
-          maxWidth="xl"
-        >
           <Box sx={style}>
             <Box
               sx={{
@@ -236,7 +231,6 @@ export default function CompanyCreate(props) {
               </Button>
             </form>
           </Box>
-        </Container>
       </Modal>
     </>
     // </div>

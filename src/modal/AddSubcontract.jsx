@@ -49,7 +49,7 @@ export default function AddSubContract() {
   }
   const handleSubmit = (e) => {
    e.preventDefault();
-   axios.post("http://54.89.160.62:5001/create_subcontractor",{},{headers})
+   axios.post("http://3.84.137.243:5001/create_subcontractor",{},{headers})
    .then((response)=>{
     console.log("subcontract Form Data: =>", response)
    })

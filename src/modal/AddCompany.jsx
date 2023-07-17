@@ -55,7 +55,7 @@ export default function AddCompany(props) {
   const handleSubmit = (e) => {
     console.log("on btn submit")
     e.preventDefault();
-    axios.post("http://54.89.160.62:5001/create_company", create_company, { headers })
+    axios.post("http://3.84.137.243:5001/create_company", create_company, { headers })
       .then((response) => {
         console.log("response1 : ",response)
         props.update(response.data);

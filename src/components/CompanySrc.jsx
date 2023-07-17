@@ -36,7 +36,7 @@ const ContractSrc = () => {
   const fetchData = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_all_company",
+        "http://3.84.137.243:5001/get_all_company",
         { COMPANY_PARENT_ID: 18, COMPANY_PARENT_USERNAME: "deepanshu1" },
         { headers }
       );

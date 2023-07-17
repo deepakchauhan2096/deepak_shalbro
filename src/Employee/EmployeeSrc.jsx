@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
-import AddEmployee from "../modal/AddEmployee";
+import EmployeeCreate from "../Employee/EmployeeCreate";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import teamImg1 from "../assests/images/team-1.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -17,12 +17,13 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import Snippet from "../Employee/Snippet";
+import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import CloseIcon from "@mui/icons-material/Close";
 import Mymenu from "../components/Menus";
-import EmployeeCreate from "../Employee/EmployeeCreate";
+import EmployeeTimeSheet from "./EmployeeTimeSheet";
+
 
 const EmployeeSrc = (props) => {
 
@@ -40,7 +41,7 @@ const EmployeeSrc = (props) => {
   console.log("All_employe_data: =>", allempData);
 
   const filterallempData =  props.empData;
-  console.log(filterallempData,"f-all-data")
+  console.log(filterallempData,"single data")
 
   useEffect(() => {
     fetchAllEmployee();
@@ -48,7 +49,6 @@ const EmployeeSrc = (props) => {
 
   const [filterData, setFilteredData] = useState({
     row: {
-      _id: "6496d035a6835b787aa7b7b1",
       EMPLOYEE_DOB: "",
       EMPLOYEE_EMPLMNTTYPE: "",
       EMPLOYEE_HIRE_DATE: "",
@@ -56,7 +56,6 @@ const EmployeeSrc = (props) => {
       EMPLOYEE_ADD: "",
       EMPLOYEE_STATE: "",
       EMPLOYEE_CITY: "",
-      EMPLOYEE_ID: 51,
       EMPLOYEE_PARENT_ID: 45,
       EMPLOYEE_PARENT_USERNAME: "company21",
       EMPLOYEE_MEMBER_PARENT_ID: 18,
@@ -83,7 +82,7 @@ const EmployeeSrc = (props) => {
   const fetchAllEmployee = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_employee",
+        "http://3.84.137.243:5001/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: filterallempData.COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME: filterallempData.COMPANY_PARENT_USERNAME,
@@ -292,7 +291,7 @@ const EmployeeSrc = (props) => {
   return (
     <>
       <Box className="box">
-        <EmployeeCreate update={(event) => updateDate(event)} name={"Employee"} empData={filterallempData} />
+        <EmployeeCreate  mainData={filterallempData} update={(event) => updateDate(event)} name={"Employee"} />
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
@@ -337,7 +336,7 @@ const EmployeeSrc = (props) => {
           </Button>
           {[
             "Employee Details",
-            "Documents",
+            // "Documents",
             "Timesheet",
             "Worksheet",
             "Acknowledge",
@@ -480,7 +479,7 @@ const EmployeeSrc = (props) => {
             </Grid>
           </Grid>
         </MyScreen>
-        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
+        {/* <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
           <div
             className="form-control rounded-0 mb-1"
@@ -522,128 +521,21 @@ const EmployeeSrc = (props) => {
               Download file
             </button>
           </div>
-        </MyScreen>
+        </MyScreen> */}
 
-        <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
-          <p>
-            {" "}
-            <b style={{ fontWeight: "600", color: "black" }}>
-              Employee Name :{" "}
-            </b>
-            {filterData.row.EMPLOYEE_NAME}
-          </p>
-          <p>
-            {" "}
-            <b style={{ fontWeight: "600", color: "black" }}>Manager Name : </b>
-            Varun Kamboj
-          </p>
-          <p style={{ textAlign: "right" }}>
-            {" "}
-            <b style={{ fontWeight: "600", color: "black" }}>
-              Week Starting :{" "}
-            </b>
-            6/23/2022
-          </p>
-          <table className="table table-hover border">
-            <thead style={{ border: "1px solid black" }}>
-              <tr className="table-dark">
-                <th scope="col">Date</th>
-                <th scope="col">Day</th>
-                <th scope="col">Status</th>
-                <th scope="col">In</th>
-                <th scope="col">Out</th>
-                <th scope="col">Working hours</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tablerows?.map((item) => (
-                <tr className="table table-striped">
-                  <td>{item.date}</td>
-                  <td>{item.day}</td>
-                  <td>
-                    <span className=" bg-success text-light rounded-pill p-1">
-                      {item.status}
-                    </span>
-                  </td>
-                  <td>{item.in}</td>
-                  <td>{item.out}</td>
-                  <td>{item.workinghrs}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="container">
-            <div className="row border">
-              <div className="col-6  pt-5 ">
-                <p className="fw-semibold text-dark">
-                  Employee Signature:{" "}
-                  <span
-                    style={{
-                      borderBottom: "2px solid black",
-                      width: "200px",
-                    }}
-                  ></span>
-                </p>
-                <p className="fw-semibold text-dark  mt-2">
-                  Manager Signature: <span></span>
-                </p>
-              </div>
-
-              <div className="col-5  border m-2">
-                <div className="row">
-                  <div className="col-5  m-2">
-                    <p className="text-dark fw-semibold">Total Hours</p>
-                    <p className="text-dark fw-semibold">Rate Per Hour</p>
-                    <p className="text-dark fw-semibold">Total Pay</p>
-                  </div>
-                  <div className="col-2  m-2">
-                    <p className="bg-warning text-center fs-6 text-light">48</p>
-                    <p className="bg-primary text-center fs-6 text-light">
-                      100
-                    </p>
-                    <p className="bg-success text-center fs-6 text-light">
-                      $4800
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="container">
-                <div className="row float-end  border border-danger">
-                  <div className="col-6  ">
-                    <button
-                      className="btn btn-info text-white rounded-0 border-white"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Previous Week"
-                    >
-                      <ArrowBackIcon />
-                    </button>
-                  </div>
-                  <div className="col-6 ">
-                    <button
-                      className="btn btn-info text-white rounded-0 border-white"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-title="Tooltip on top"
-                    >
-                      <ArrowForwardIcon />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
+          <EmployeeTimeSheet mainData={filterData.row}/>
         </MyScreen>
 
         <MyScreen
-          screenIndex={index === 3}
+          screenIndex={index === 2}
           sx={{ background: "#696969", padding: 3 }}
           className="rounded-0"
         >
           <Snippet />
         </MyScreen>
 
-        <MyScreen screenIndex={index === 4} sx={{ padding: "0" }}>
+        <MyScreen screenIndex={index === 3} sx={{ padding: "0" }}>
           <PDFViewer
             style={{
               width: "100%",

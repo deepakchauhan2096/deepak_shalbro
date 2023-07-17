@@ -53,7 +53,7 @@ function AdminCreate() {
     console.log("on btn submit");
     // e.preventDefault();
     axios
-      .post("http://54.89.160.62:5001/create_admin", values, {
+      .post("http://3.84.137.243:5001/create_admin", values, {
         headers,
       })
       .then((response) => {

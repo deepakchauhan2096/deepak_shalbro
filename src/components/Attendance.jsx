@@ -53,7 +53,7 @@ const Attendance = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://54.89.160.62:5001/create_emp_attendence",
+      url: "http://3.84.137.243:5001/create_emp_attendence",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
@@ -78,7 +78,7 @@ const Attendance = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://54.89.160.62:5001/create_emp_attendence",
+      url: "http://3.84.137.243:5001/create_emp_attendence",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
