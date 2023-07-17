@@ -53,13 +53,18 @@ const CompanyDashboard = () => {
     },
   });
 
+  
+  const [open, setOpen] = React.useState(false);
+  const [index, setIndex] = useState(1);
   const [ProjectData, setProjectData] = useState([]);
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [updateProjectData, setUpdateProjectData] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [navIndex, setNavIndex] = useState(0);
+  const [updatedata, setUpdateData] = useState([]);
+
+
+ // modal
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   // console.log("all contracts: =>>>",ProjectData)
   const location = useLocation();
@@ -70,11 +75,6 @@ const CompanyDashboard = () => {
     fetchProjects();
   },[]);
 
-  const [open, setOpen] = React.useState(false);
-  const [index, setIndex] = useState(1);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   const headers = {
     "Content-Type": "application/json",
@@ -177,8 +177,10 @@ const CompanyDashboard = () => {
   };
 
   // for updating the event according when add contract reflect back on page at the same time
-  const updateProject = (event) => {
-    setUpdateProjectData(event);
+  const updateDate = (event) => {
+    event.preventDefault()
+    setUpdateData(event);
+    console.log(event, "event");
   };
 
   const filterData = data?.row;
@@ -277,7 +279,7 @@ const CompanyDashboard = () => {
 
           <Tooltip title={location.state.props.COMPANY_USERNAME}>
             <Avatar>
-              {[location.state.props.COMPANY_NAME][0].charAt(0).toUpperCase()}
+              {[location.state.props.COMPANY_NAME][0]?.charAt(0).toUpperCase()}
             </Avatar>
           </Tooltip>
         </div>
@@ -311,11 +313,11 @@ const CompanyDashboard = () => {
         <Box className="box">
           <div className="container-fluid d-flex pb-0 g-0 flex-column">
             <div style={{ height: "20%" }}>
-              <Button className="btn button btn-blue" variant="contained">
+              <Button className="btn button btn-blue" variant="contained"  size="small">
                 All Project
               </Button>
               <ProjectCreate
-                update={(event) => updateProject(event)}
+                update={(event) => updateDate(event)}
                 usernameId={location.state.props}
               />
             </div>
@@ -366,6 +368,7 @@ const CompanyDashboard = () => {
               onClick={handleClose}
               variant="contained"
               className="btn rounded-0"
+              size="small"
             >
               <ArrowBackIcon style={{ fontSize: "25px" }} />
             </Button>
@@ -373,6 +376,7 @@ const CompanyDashboard = () => {
               onClick={(e) => setIndex(1)}
               variant={index === 1 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
+              size="small"
             >
               Detail
             </Button>
@@ -381,6 +385,7 @@ const CompanyDashboard = () => {
               onClick={(e) => setIndex(2)}
               variant={index === 2 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
+              size="small"
             >
               Payment
             </Button>
@@ -389,6 +394,7 @@ const CompanyDashboard = () => {
               onClick={(e) => setIndex(3)}
               variant={index === 3 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
+              size="small"
             >
               Compliance
             </Button>
@@ -397,6 +403,7 @@ const CompanyDashboard = () => {
               onClick={(e) => setIndex(4)}
               variant={index === 4 ? "outlined" : "contained"}
               className="btn rounded-0 border-0"
+              size="small"
             >
               Documents
             </Button>

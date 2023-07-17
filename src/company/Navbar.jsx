@@ -84,7 +84,6 @@ const Navbar = () => {
               </ListItemButton>
             </ListItem>
           </List>
-     
       </Box>
     );
   };

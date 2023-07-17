@@ -3,9 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../firebase";
-import { Button, Container } from "@mui/material";
+import pluslogo from "../assests/images/plus.png";
+import { Button } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -19,7 +18,7 @@ const style = {
   borderRadius: 4,
 };
 
-export default function AddEmployee() {
+export default function AddEmployee(props) {
   
   const [open, setOpen] = React.useState(false);
   const [errors, setErrors] = useState({});
@@ -137,6 +136,23 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [index, setIndex] = React.useState(1);
+
+  const [createEMPLOYEE, setCreateEMPLOYEE] = useState({
+    EMPLOYEE_PARENT_ID: props.usernameId.COMPANY_ID,
+    EMPLOYEE_PARENT_USERNAME: props.usernameId.COMPANY_USERNAME,
+    EMPLOYEE_MEMBER_PARENT_ID: props.usernameId.COMPANY_PARENT_ID,
+    EMPLOYEE_MEMBER_PARENT_USERNAME:  props.usernameId.COMPANY_PARENT_USERNAME,
+    EMPLOYEE_NAME: "",
+    EMPLOYEE_USERNAME: "",
+    EMPLOYEE_PHONE: "",
+    EMPLOYEE_ADD: "",
+    EMPLOYEE_CITY: "",
+    EMPLOYEE_START_DATE: "",
+    EMPLOYEE_END_DATE: "",
+    EMPLOYEE_SUPERVISOR: "",
+    EMPLOYEE_EMROLMNT_TYPE: "",
+  });
 
   const headers = {
     "Content-Type": "application/json",
@@ -190,21 +206,16 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
         sx={{ color: "#277099" }}
         className="rounded-0 border-0"
         variant="outlined"
-        size="small"
       >
          + Add New Employee
       </Button>
+
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Container
-          id="content"
-          style={{ height: "100vh", position: "relative" }}
-          maxWidth="xl"
-        >
           <Box sx={style}>
           <center>
             {" "}
@@ -325,11 +336,11 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                 <div className="form-group col-xl-4">
                   <label for="inputPassword4">Employee Role</label>
                   <select
-                    id="inputqual"
+                    id="inputEnroll"
                     className="form-control rounded-0"
-                    value={createEmployee.EMPLOYEE_ROLE}
-                    name="EMPLOYEE_ROLE"
                     onChange={handleCreate}
+                    name="EMPLOYEE_EMROLMNT_TYPE"
+                    value={createEMPLOYEE.EMPLOYEE_EMROLMNT_TYPE}
                   >
                     <option selected>Choose role...</option>
                     <option >Employee</option>
@@ -348,6 +359,18 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
 
 
                 </div>
+
+                <div className="form-group col-md-6">
+                <label>Supervisor</label>
+                <input
+                  type="text"
+                  className="form-control rounded-0"
+                  id="inputsupervisor"
+                  name="EMPLOYEE_SUPERVISOR"
+                  value={createEMPLOYEE.EMPLOYEE_SUPERVISOR}
+                  onChange={handleCreate}
+                />
+            
               </div>
               <div className="row py-2">
                 <div className="form-group col-xl-4">
@@ -427,34 +450,25 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
               </div>
               {/* <div className="row py-2">
               <div className="form-group col-md-6">
-                <label for="inputCity">City</label>
+                <label>City</label>
                 <input
                   type="text"
                   className="form-control rounded-0"
                   id="inputCity"
-                  value={createEmployee.EMPLOYEE_CITY}
                   name="EMPLOYEE_CITY"
+                  value={createEMPLOYEE.EMPLOYEE_CITY}
                   onChange={handleCreate}
                 />
               </div>
-              <div className="form-group col-md-4">
-                <label for="inputState">State</label>
-                <select id="inputState" className="form-control rounded-0">
-                  <option selected>Choose...</option>
-                  <option>...</option>
-                </select>
-              </div>
-              <div className="form-group col-md-2">
-                <label for="inputZip">Hourly Wages</label>
+            </div>
+            <div className="row py-2">
+              {/* <div className="form-group py-2 col-md-4">
+              <label for="file" >Compliance doc</label>
                 <input
-                  type="text"
                   className="form-control rounded-0"
-                  id="inputZip"
-                  value={createEmployee.EMPLOYEE_HOURLY_WAGES}
-                  name="EMPLOYEE_HOURLY_WAGES"
-                  onChange={handleCreate}
+                  type="file"
+                  id="file"
                 />
-              </div>
             </div> */}
               <div className="row py-2">
                 <div className="form-group col-xl-6">
@@ -525,48 +539,6 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
                   />
                 </div>
               </div>
-              {/* <div className="row py-2">
-            <div className="form-group py-2 col-md-4">
-              <label for="file" >Education Doc</label>
-                <input
-                  className="form-control rounded-0"
-                  type="file"
-                  id="file"
-                />
-            </div>
-
-            <div className="form-group py-2 col-md-4">
-              <label for="file" >Valid ID</label>
-                <input
-                  className="form-control rounded-0"
-                  type="file"
-                  id="file"
-                />
-            </div>
-
-            <div className="form-group py-2 col-md-4">
-              <label for="file" >Other</label>
-                <input
-                  className="form-control rounded-0"
-                  type="file"
-                  id="file"
-                />
-            </div>
-
-            </div>
-
-            <div className="form-group py-2">
-              <div className="form-check">
-                <input
-                  className="form-check-input rounded-0"
-                  type="checkbox"
-                  id="gridCheck"
-                />
-                <label className="form-check-label" for="gridCheck">
-                  Check me out
-                </label>
-              </div>
-            </div> */}
               <button
               type="submit"
               className="btn btn-info text-white "
@@ -580,9 +552,10 @@ if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
             >
               Discard
             </button>
+            </div>
             </form>
+          
           </Box>
-        </Container>
       </Modal>
     </>
   );

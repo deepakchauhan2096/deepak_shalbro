@@ -70,14 +70,12 @@ const EmployeeDashboard = (props) => {
     setAnchorElUser(null);
   };
 
-  useEffect(() => {
-    getAdminData();
-  }, [props.user]);
-
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
+
+  
 
   const getAdminData = async () => {
     try {
@@ -124,6 +122,12 @@ const EmployeeDashboard = (props) => {
   };
 
   useEffect(() => {
+    getAdminData();
+  }, [props.user]);
+
+ 
+
+  useEffect(() => {
     getCompanyData();
   }, [tableRows, update]);
 
@@ -144,12 +148,10 @@ const EmployeeDashboard = (props) => {
     Border: 0,
     display: props.screenIndex ? "block" : "none",
     width: "100%",
-    // background:"pink"
   }));
   
   const MyScreenbox = styled(Paper)((props) => ({
     height: "calc(100vh - 68.5px)",
-    // height: "100vh",
     padding: "50px",
     paddingBottom: "0",
     overflow: "scroll",

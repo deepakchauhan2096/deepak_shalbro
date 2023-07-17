@@ -33,24 +33,24 @@
 //     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
 //   };
 
-//   const fetchData = async () => {
-//     try {
-//       const response = await axios.put(
-//         "http://3.84.137.243:5001/get_all_company",
-//         { COMPANY_PARENT_ID: 18, COMPANY_PARENT_USERNAME: "deepanshu1" },
-//         { headers }
-//       );
-//       setTimeout(() => {
-//         console.log("response.data : ", response.data);
-//         const data = response.data;
-//         console.log("first1", data);
-//         setTableRows(data.result);
-//       }, 1000);
-//       setIsLoading(false);
-//     } catch (error) {
-//       console.log("Error fetching data:", error);
-//     }
-//   };
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.put(
+  //       "http://3.84.137.243:5001/get_all_company",
+  //       { COMPANY_PARENT_ID: 18, COMPANY_PARENT_USERNAME: "deepanshu1" },
+  //       { headers }
+  //     );
+  //     setTimeout(() => {
+  //       console.log("response.data : ", response.data);
+  //       const data = response.data;
+  //       console.log("first1", data);
+  //       setTableRows(data.result);
+  //     }, 1000);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     console.log("Error fetching data:", error);
+  //   }
+  // };
 
 //   const [filterData, setFilteredData] = useState({
 //     row: {

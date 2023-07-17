@@ -35,8 +35,6 @@ export default function ProjectCreate(props) {
   const handleClose = () => setOpen(false);
   const [index, setIndex] = React.useState(1);
 
-
-
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -116,13 +114,6 @@ export default function ProjectCreate(props) {
     return errors;
   };
 
-  
-  useEffect(() => {
-    if (Object.keys(errors).length === 0 && submitting) {
-      finishSubmit();
-    }
-  }, [errors]);
-
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
@@ -151,11 +142,15 @@ export default function ProjectCreate(props) {
         console.error(error);
       });
   };
-
   const finishSubmit = () => {
     console.log(createProject);
   };
- 
+  useEffect(() => {
+    if (Object.keys(errors).length === 0 && submitting) {
+      finishSubmit();
+    }
+  }, [errors]);
+
   return (
     <>
       <Button
