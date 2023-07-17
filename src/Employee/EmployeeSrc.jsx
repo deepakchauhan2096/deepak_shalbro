@@ -41,9 +41,9 @@ const EmployeeSrc = (props) => {
   const filterallempData =  props.empData;
   console.log(filterallempData,"single data")
 
-  // useEffect(() => {
-  //   fetchAllEmployee();
-  // },[]);
+  useEffect(() => {
+    fetchAllEmployee();
+  },[]);
 
   const [filterData, setFilteredData] = useState({
     row: {

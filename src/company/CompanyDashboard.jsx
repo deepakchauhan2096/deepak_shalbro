@@ -1123,11 +1123,7 @@ const CompanyDashboard = () => {
                 New documnent&nbsp;
                 <AddIcon fontSize="small" />
               </Button> */}
-              {/* <ProjectUpload uploadData={location.state.props} /> */}
-            
-              {/* <FileInput uploadData={location.state.props} />  */}
-              <UploadUi uploadData={location.state.props}/>
-            
+              <ProjectUpload uploadData={location.state.props} />
             </MyScreenbox>
           </MyScreen>
         </Box>
