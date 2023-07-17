@@ -35,7 +35,6 @@ function App() {
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
-      console.log(user,"user")
       if (user) {
         setData(prev=>{
           return {...prev,
@@ -43,7 +42,6 @@ function App() {
           usernames : user.displayName
         }
       });
-        // setUserName(user.);
       } else setData("");
     });
   }, []);

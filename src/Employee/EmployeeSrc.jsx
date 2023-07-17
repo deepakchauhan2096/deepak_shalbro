@@ -41,9 +41,9 @@ const EmployeeSrc = (props) => {
   const filterallempData =  props.empData;
   console.log(filterallempData,"single data")
 
-  useEffect(() => {
-    fetchAllEmployee();
-  },[updatedata]);
+  // useEffect(() => {
+  //   fetchAllEmployee();
+  // },[]);
 
   const [filterData, setFilteredData] = useState({
     row: {
@@ -80,7 +80,7 @@ const EmployeeSrc = (props) => {
   const fetchAllEmployee = async () => {
     try {
       const response = await axios.put(
-        "http://54.89.160.62:5001/get_employee",
+        "http://3.84.137.243:5001/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: filterallempData.COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME: filterallempData.COMPANY_PARENT_USERNAME,
@@ -348,18 +348,6 @@ const EmployeeSrc = (props) => {
               {item}
             </Button>
           ))}
-
-          {/* <Mymenu /> */}
-          {/* <Button
-            onClick={handleClose}
-            variant={"contained"}
-            className="btn rounded-0 border border-top-0 border-bottom-0"
-            color="error"
-            style={{ position: "absolute", right: "0" }}
-            size="small"
-          >
-            {<CloseIcon />}
-          </Button> */}
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>

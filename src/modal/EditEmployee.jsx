@@ -55,7 +55,7 @@ export default function EditEmployee(props) {
     console.log("on btn submit");
     e.preventDefault();
     axios
-      .post("http://54.89.160.62:5001/create_employee", createEmployee, {
+      .post("http://3.84.137.243:5001/create_employee", createEmployee, {
         headers,
       })
       .then((response) => {
