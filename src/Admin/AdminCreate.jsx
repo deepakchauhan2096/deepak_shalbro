@@ -4,12 +4,9 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import axios from "axios";
 import InputControl from "../components/InputControl";
 import { auth } from "../firebase";
-
 import styles from "../assests/css/Signup.module.css";
 
 function AdminCreate() {
-  const navigate = useNavigate();
-  
   const [values, setValues] = useState({
     ADMIN_PASSWORD: "",
     ADMIN_NAME: "",
@@ -17,9 +14,10 @@ function AdminCreate() {
     ADMIN_EMAIL: "",
     ADMIN_USERNAME: "",
   });
-
   const [errorMsg, setErrorMsg] = useState("");
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+
+  const navigate = useNavigate();
 
   const headers = {
     "Content-Type": "application/json",
@@ -57,16 +55,13 @@ function AdminCreate() {
         headers,
       })
       .then((response) => {
-        navigate("/login");
         alert("successfully sign up")
-        console.log("response1 : ", response);
-        // props.update(response.data);
+        navigate("/login");
         console.log("response", response.data);
       })
       .catch((error) => {
         console.error(error);
       });
-    // handleClose();
   };
 
   return (

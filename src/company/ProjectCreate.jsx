@@ -136,12 +136,9 @@ export default function ProjectCreate(props) {
         .then((response) => {
           console.log("response of create project", response.data.errorMsg);
           props.update(response.data.result);
-          
-          setTimeout(()=>{
-            const error = response.data.errorMsg;
-            setResError(error)
-          },1000)
-          
+          if(response.data.result) {
+            handleClose()
+          }          
         })
         .catch((error) => {
           console.error(error, "ERR");

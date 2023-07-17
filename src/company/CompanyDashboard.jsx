@@ -14,6 +14,7 @@ import {
   ListItem,
   ListItemButton,
   Paper,
+  Skeleton,
   Tooltip,
   styled,
 } from "@mui/material";
@@ -21,7 +22,7 @@ import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import { Link, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CircularProgress from "@mui/material/CircularProgress";
-import Navbar from "./Navbar";
+import CompanyNavbar from "./CompanyNavbar";
 import ProjectCreate from "./ProjectCreate";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
@@ -55,7 +56,7 @@ const CompanyDashboard = () => {
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
   const [ProjectData, setProjectData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [navIndex, setNavIndex] = useState(0);
   const [updatedata, setUpdateData] = useState([]);
 
@@ -257,6 +258,23 @@ const CompanyDashboard = () => {
     );
   };
 
+
+  const Animations = () => {
+    return (
+      <Box sx={{ width: "100%" }}>
+        <Skeleton animation="pulse" height={60} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+      </Box>
+    );
+  };
+
+
   return (
     <>
       <Drawer
@@ -322,14 +340,9 @@ const CompanyDashboard = () => {
 
             {isLoading ? (
               <Box
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%,-50%)",
-                }}
+             style={{ height: "100%", padding: 20, paddingBottom: "0" }}
               >
-                <CircularProgress />
+                <Animations />
               </Box>
             ) : (
               <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
