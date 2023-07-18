@@ -43,6 +43,14 @@ export default function AddEmployee(props) {
     EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID,
   });
 
+  // const [values, setValues] = useState({
+  //   name: createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME,
+  //   email: createEmployee.EMPLOYEE_EMAIL,
+  //   pass: createEmployee.EMPLOYEE_USERNAME,
+  // });
+  const [newdata, setNewdata] = useState([])
+
+
   const validateValues = (inputValues) => {
     let errors = {};
     // Employee Name
@@ -148,9 +156,14 @@ export default function AddEmployee(props) {
         headers,
       })
       .then((response) => {
-        console.log("response1 : ", response);
-        // props.update(response.data);
-        console.log("response", response.data);
+
+        if (response.data.operation == "failed") {
+          setOpen(true);
+        } else if (response.data.operation == "successfull") {
+          setOpen(false);
+          props.update(true);
+        }
+
       })
       .catch((error) => {
         console.error(error);
@@ -168,6 +181,7 @@ export default function AddEmployee(props) {
       finishSubmit();
     }
   }, [errors]);
+
 
   return (
     <>

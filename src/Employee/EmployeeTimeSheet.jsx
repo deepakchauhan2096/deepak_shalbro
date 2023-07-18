@@ -4,6 +4,37 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import moment from "moment/moment";
 
+
+let MyDateCurrent = new Date();
+let MyDateStringCurrent;
+MyDateCurrent.setDate(MyDateCurrent.getDate());
+MyDateStringCurrent =
+MyDateCurrent.getFullYear() +
+"-" +
+("0" + (MyDateCurrent.getMonth() + 1)).slice(-2) +
+"-" +
+("0" + MyDateCurrent.getDate()).slice(-2);
+
+console.log(MyDateStringCurrent,"Mydate")
+
+
+//Day after seven
+
+let MyDateAfter = new Date();
+let MyDateStringAfter;
+
+MyDateAfter.setDate(MyDateAfter.getDate());
+
+MyDateStringAfter =
+MyDateAfter.getFullYear() +
+"-" +
+("0" + (MyDateAfter.getMonth() + 7)).slice(-2) +
+"-" +
+("0" + MyDateAfter.getDate()).slice(-2);
+
+console.log(MyDateStringAfter,"Mydate")
+
+
 const EmployeeTimeSheet = (props) => {
   console.log(props, "props data in timesheet");
 
@@ -11,11 +42,17 @@ const EmployeeTimeSheet = (props) => {
   const [timeResultIN, settimeResultIN] = useState([]);
   const [timeResultOUT, settimeResultOUT] = useState([]);
   const [dateValue, setDate] = useState({
-    ATTENDANCE_START_DATE: "",
-    ATTENDANCE_END_DATE: "",
+    ATTENDANCE_START_DATE: MyDateStringCurrent,
+    ATTENDANCE_END_DATE: MyDateAfter,
   });
 
+  useEffect(() => {
+    gettimesheet();
+  },[props.mainData.EMPLOYEE_MEMBER_PARENT_USERNAME]);
+
   console.log(dateValue, "datevalue");
+
+  // get employee report
 
   const headers = {
     "Content-Type": "application/json",
@@ -24,7 +61,6 @@ const EmployeeTimeSheet = (props) => {
 
   const gettimesheet = async (e) => {
     try {
-      e.preventDefault();
       const response = await axios.put(
         "http://3.84.137.243:5001/get_employee_all_for_attendence",
         {
@@ -45,6 +81,11 @@ const EmployeeTimeSheet = (props) => {
     }
   };
 
+  
+
+
+  // time calculation
+
   const timeValueHours = (x, y) => {
     return new Date(x).getUTCHours() - new Date(y).getUTCHours();
   };
@@ -63,30 +104,12 @@ const EmployeeTimeSheet = (props) => {
     );
   });
 
-  console.log(allHours, "work");
-
-  //   const totaltime = () => {
-
-  //   }
-
-  // const arrayOfTimes = ["02:24", "01:30"]; //25 hours and 56 minutes in total
 
   const sum = allHours.reduce(
     (time1, time2) => time1.add(moment.duration(time2)),
     moment.duration()
   );
 
-  // console.log(sum, "sum");
-
-  // let time = workvalue.ATTENDANCE_IN;
-  // console.log(time, "time");
-
-  //   var startTime = moment("12:16:59 am", "hh:mm:ss a");
-  //   var endTime = moment("06:12:07 pm", "hh:mm:ss a");
-
-  //   const final = endTime.diff(startTime, "");
-
-  //  console.log(final,"final")
 
   var startTime = moment("12:16:59 am", "hh:mm:ss a");
   var endTime = moment("06:12:07 pm", "hh:mm:ss a");
@@ -99,28 +122,23 @@ const EmployeeTimeSheet = (props) => {
 
   console.log(result, "hhh");
 
-  return (
-    <div>
-      {/* <h4 className="ml-3 text-dark text-center">
-        Total time worked:
-        {Math.floor(sum.hours()) +
-          " hours and " +
-          sum.minutes() +
-          " minutes"}{" "}
-        //here is where it's showing 1 hour and 56 minutes instead of 25 hours
-        and 56 minutes
-      </h4> */}
 
+
+  //gate cuurent and addition seven days
+ 
+
+ 
+  
+
+
+  return (
+    <>
+    <div className="container-fluid border" style={{height:"70vh"}}>
       <p>
         {" "}
         <b style={{ fontWeight: "600", color: "black" }}>Employee Name : </b>
         {props.mainData.EMPLOYEE_NAME}
       </p>
-      {/* <p>
-        {" "}
-        <b style={{ fontWeight: "600", color: "black" }}>Manager Name : </b>
-        Varun Kamboj
-      </p> */}
       <form style={{ display: "flex", gap: 10, padding: "5px 0" }}>
         <div className="form-group col-xl-1">
           <label>Date From: </label>
@@ -189,8 +207,9 @@ const EmployeeTimeSheet = (props) => {
           ))}
         </tbody>
       </table>
-      <div className="container">
-        <div className="row border">
+      </div>
+      <div className="container" style={{position:"",bottom:"0"}}>
+        <div className="row border" >
           <div className="col-6  pt-5 ">
             <p className="fw-semibold text-dark">
               Employee Signature:{" "}
@@ -206,7 +225,7 @@ const EmployeeTimeSheet = (props) => {
             </p> */}
           </div>
 
-          <div className="col-5  border m-2" style={{position:"sticky",bottom:"0"}}>
+          <div className="col-5" >
             <div className="row">
               <div className="col-5  m-2">
                 <p className="text-dark fw-semibold">Total Hours</p>
@@ -217,38 +236,14 @@ const EmployeeTimeSheet = (props) => {
                 <p className="bg-warning text-center fs-6 text-light">
                   {Math.floor(sum.hours()) + "hours"+" " + sum.minutes() + "mins"}
                 </p>
-                <p className="bg-primary text-center fs-6 text-light">100</p>
-                <p className="bg-success text-center fs-6 text-light">{Math.floor(sum.hours())*100} $</p>
+                <p className="bg-primary text-center fs-6 text-light"> {props.mainData.EMPLOYEE_HOURLY_WAGE}</p>
+                <p className="bg-success text-center fs-6 text-light">{Math.floor(sum.hours())*(props.mainData.EMPLOYEE_HOURLY_WAGE)} $</p>
               </div>
             </div>
           </div>
-          {/* <div className="container">
-            <div className="row float-end  border border-danger">
-              <div className="col-6  ">
-                <button
-                  className="btn btn-info text-white rounded-0 border-white"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  data-bs-title="Previous Week"
-                >
-                  <ArrowBackIcon />
-                </button>
-              </div>
-              <div className="col-6 ">
-                <button
-                  className="btn btn-info text-white rounded-0 border-white"
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  data-bs-title="Tooltip on top"
-                >
-                  <ArrowForwardIcon />
-                </button>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
