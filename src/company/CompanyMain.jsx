@@ -1166,7 +1166,7 @@ const CompanyMain = () => {
         <Box className="box">
           <MyScreen screenIndex={true}>
             <MyScreenbox sx={{ m: 3 }}>
-              <Button
+              {/* <Button
                 variant="contained"
                 className="button rounded-2 lowercase"
               >
@@ -1177,7 +1177,7 @@ const CompanyMain = () => {
               <Button variant="outlined" className="button rounded-2 lowercase">
                 New documnent&nbsp;
                 <AddIcon fontSize="small" />
-              </Button>
+              </Button> */}
               <ProjectUpload />
             </MyScreenbox>
           </MyScreen>
