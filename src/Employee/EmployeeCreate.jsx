@@ -46,6 +46,7 @@ export default function AddEmployee(props) {
   //   email: createEmployee.EMPLOYEE_EMAIL,
   //   pass: createEmployee.EMPLOYEE_USERNAME,
   // });
+  const [newdata, setNewdata] = useState([])
 
   const validateValues = (inputValues) => {
     let errors = {};
@@ -155,10 +156,11 @@ export default function AddEmployee(props) {
         headers,
       })
       .then((response) => {
-        console.log("response emp", response.data);
-        props.update(response.data.result)
-        if(response.data.result) {
-          handleClose()
+        if (response.data.operation == "failed") {
+          setOpen(true);
+        } else if (response.data.operation == "successfull") {
+          setOpen(false);
+          props.update(true);
         }
       })
       .catch((error) => {
@@ -177,6 +179,7 @@ export default function AddEmployee(props) {
     }
   }, [errors]);
 
+  console.log("newdata",newdata);
   
 
   return (

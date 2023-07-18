@@ -2,8 +2,9 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import pluslogo from "../assests/images/plus.png";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { MyContext } from "./Mycontext";
 
 import {
   Button,
@@ -32,17 +33,19 @@ export default function ProjectCreate(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [index, setIndex] = React.useState(1);
+  const [index, setIndex] = React.useState([]);
   const [resError, setResError] = useState();
-
   const [errors, setErrors] = useState({});
-  // const [submitting, setSubmitting] = useState(false);
+  const { text } = React.useContext(MyContext);
+  const { setProject } = React.useContext(MyContext);
+
+  console.log(text, "allcontext");
 
   const [createProject, setCreateProject] = useState({
-    PROJECT_PARENT_ID: props.usernameId.COMPANY_ID,
-    PROJECT_PARENT_USERNAME: props.usernameId.COMPANY_USERNAME,
-    PROJECT_MEMBER_PARENT_ID: props.usernameId.COMPANY_PARENT_ID,
-    PROJECT_MEMBER_PARENT_USERNAME: props.usernameId.COMPANY_PARENT_USERNAME,
+    PROJECT_PARENT_ID: text?.COMPANY_ID,
+    PROJECT_PARENT_USERNAME: text?.COMPANY_USERNAME,
+    PROJECT_MEMBER_PARENT_ID: text?.COMPANY_PARENT_ID,
+    PROJECT_MEMBER_PARENT_USERNAME: text?.COMPANY_PARENT_USERNAME,
     PROJECT_NAME: "",
     PROJECT_USERNAME: "",
     PROJECT_PHONE: "",
@@ -134,31 +137,21 @@ export default function ProjectCreate(props) {
           headers,
         })
         .then((response) => {
-          console.log("response of create project", response.data.errorMsg);
-          props.update(response.data.result);
-          if(response.data.result) {
-            handleClose()
-          }          
+          console.log("response of create project", response.data);
+          if (response.data.operation == "failed") {
+            setOpen(true);
+          } else if (response.data.operation == "successfull") {
+            setOpen(false);
+            setProject(response.data.result);
+          }
         })
         .catch((error) => {
           console.error(error, "ERR");
-          
         });
     }
   };
 
-  // const finishSubmit = () => {
-  //   console.log(createProject);
-  // };
-
-  // useEffect(() => {
-  //   if (Object.keys(errors).length === 0 && submitting) {
-  //     finishSubmit();
-  //   }
-  // }, [errors]);
-
-  console.log(Object.keys(errors).length, "errors");
-  console.log(resError)
+  console.log("ind", index);
 
   return (
     <>
@@ -199,9 +192,7 @@ export default function ProjectCreate(props) {
                 )}
 
                 {resError ? (
-                  <p className="error text-danger fw-light">
-                    {resError}
-                  </p>
+                  <p className="error text-danger fw-light">{resError}</p>
                 ) : (
                   ""
                 )}
@@ -363,9 +354,6 @@ export default function ProjectCreate(props) {
             >
               Discard
             </button>
-            {/* <center>
-            
-           </center> */}
           </form>
         </Box>
       </Modal>
