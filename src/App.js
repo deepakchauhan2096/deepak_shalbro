@@ -2,46 +2,41 @@ import "../src/assests/css/sidebar.css";
 import "../src/assests/css/style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
-import Index from "./pages/index";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Signup from "./pages/Signup";
-import SubContract from "./pages/SubContract";
-import Company from "./pages/Company";
-import Employee from "./pages/Employee";
 import "./assests/css/graph.css";
-import Project from "./pages/Project";
-import Login from "./pages/Login";
-import LoginEmp from "./Employee/Login"
-import CreateEmp from "./Employee/EmployeeCreate"
+import CreateEmp from "./Employee/EmployeeCreate";
 import { auth } from "./firebase";
-import Page404 from "./pages/PageNotFound";
-import Loader from "./pages/Loader";
-import { faL } from "@fortawesome/free-solid-svg-icons";
-import Attendances from "./pages/Attendances";
-import Screen from "./components/Screen";
 import AdminCreate from "./Admin/AdminCreate";
 import AdminDashboard from "./Admin/AdminDashboard";
-import CompanyDashboard from "./company/CompanyDashboard";
+import CompanyMain from "./company/CompanyMain";
 import AdminLogin from "./Admin/AdminLogin";
+import { MyContext } from "./company/Mycontext";
 
 function App() {
   // const [emailname, setEmailName] = useState(false);
-  const [data, setData] = useState(
-    {
-      emailName:"",
-      usernames:""
-    }
-  );
+  const [data, setData] = useState({
+    emailName: "",
+    usernames: "",
+  });
+
+  const [text, setText] = useState("")
+  const [alldata, setallData] = useState("")
+const [projectcreatedata, setProject] = useState([])
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
+
+      console.log(user, "user");
       if (user) {
-        setData(prev=>{
-          return {...prev,
-          emailName : user.email, 
-          usernames : user.displayName
-        }
-      });
+        setData((prev) => {
+          return {
+            ...prev,
+            emailName: user.email,
+            usernames: user.displayName,
+          };
+        });
+        // setUserName(user.);
+
       } else setData("");
     });
   }, []);
@@ -52,16 +47,26 @@ function App() {
         className="wrapper"
         style={{ overflowX: "scroll", overflow: "hidden" }}
       >
+        <MyContext.Provider value={{ text, setText, data, setData, projectcreatedata, setProject }}>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<AdminCreate />} />
-              <Route path="/admin" element={<AdminDashboard email={data.emailName}  user={data.usernames}  />} />
-              <Route path="/company" element={<CompanyDashboard />} />
-              <Route path="/login" element={<AdminLogin/>} />
-              <Route path="/employee" element={<LoginEmp/>} />
-              <Route path="/createemp" element={<CreateEmp/>} />
+              <Route
+                path="/admin"
+                element={
+                  <AdminDashboard
+                    email={data.emailName}
+                    user={data.usernames}
+                  />
+                }
+              />
+              <Route path="/company" element={<CompanyMain />} />
+              <Route path="/login" element={<AdminLogin />} />
+              {/* <Route path="/employee" element={<LoginEmp />} /> */}
+              <Route path="/createemp" element={<CreateEmp />} />
             </Routes>
           </BrowserRouter>
+        </MyContext.Provider>
       </div>
     </>
   );

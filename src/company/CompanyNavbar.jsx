@@ -16,7 +16,7 @@ import {
   Tooltip,
 } from "@mui/material";
 
-const Navbar = () => {
+const CompanyNavbar = () => {
   const [userName, setUserName] = useState("U");
 
   const [showProfile, setShowProfile] = useState(false);
@@ -137,4 +137,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default CompanyNavbar;

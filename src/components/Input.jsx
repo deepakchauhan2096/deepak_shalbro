@@ -1,7 +1,3 @@
-
-
-
-
 export const Input = ({ label, type, id, placeholder }) => {
     return (
       <div className="flex flex-col w-full gap-2">

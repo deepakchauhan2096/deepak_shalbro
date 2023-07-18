@@ -35,7 +35,7 @@ const EmployeeSrc = (props) => {
     COMPANY_PARENT_USERNAME: "deepanshu1",
   });
 
-  const [updatedata, setUpdateData] = useState([]);
+  const [updatedata, setUpdateData] = useState(false);
 
   // console.log("employeerowdata: =>", employeDatatable);
   console.log("All_employe_data: =>", allempData);
@@ -46,6 +46,8 @@ const EmployeeSrc = (props) => {
   useEffect(() => {
     fetchAllEmployee();
   },[]);
+
+  console.log(updatedata, "updateddata")
 
   const [filterData, setFilteredData] = useState({
     row: {
@@ -94,9 +96,7 @@ const EmployeeSrc = (props) => {
       setTimeout(() => {
         console.log("ALL EMPLOYEE data ", response);
         const data = response.data;
-        // setAllempData(data.result[0].COMPANY_EMPLOYIES);
         setAllempData(data.result);
-        // console.log("all employee data", data.result[0].EMPLOYEE_NAME);
         setIsLoading(false);
       }, 1000);
     } catch (err) {
@@ -257,7 +257,7 @@ const EmployeeSrc = (props) => {
   ];
 
   const MyScreen = styled(Paper)((props) => ({
-    height: "calc(100vh - 37px)",
+    height: "calc(100vh - 32px)",
     padding: 0,
     paddingBottom: "0",
     overflow: "auto",
@@ -266,9 +266,8 @@ const EmployeeSrc = (props) => {
     display: props.screenIndex ? "block" : "none",
   }));
 
-  const updateDate = (event) => {
+  const updateData = (event) => {
     setUpdateData(event);
-    console.log(event, "event");
   };
 
   console.log(index, "index");
@@ -291,7 +290,7 @@ const EmployeeSrc = (props) => {
   return (
     <>
       <Box className="box">
-        <EmployeeCreate  mainData={filterallempData} update={(event) => updateDate(event)} name={"Employee"} />
+        <EmployeeCreate  mainData={filterallempData} update={(event) => updateData(event)} name={"Employee"} />
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
