@@ -45,7 +45,7 @@ const EmployeeSrc = (props) => {
 
   useEffect(() => {
     fetchAllEmployee();
-  },[updatedata]);
+  },[]);
 
   console.log(updatedata, "updateddata")
 

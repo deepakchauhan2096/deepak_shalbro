@@ -31,6 +31,20 @@ const EmployeeAttendance = (props) => {
 
   const [allempData, setAllempData] = useState({});
   const [foundUsers, setFoundUsers] = useState(allempData);
+  const [inData, setInData] = useState({
+    ATTENDANCE_ADMIN_ID: 18,
+    ATTENDANCE_ADMIN_USERNAME: "deepanshu1",
+    ATTENDANCE_COMPANY_ID: 45,
+    ATTENDANCE_COMPANY_USERNAME: "company21",
+    ATTENDANCE_EMPLOYEE_ID: 47,
+    ATTENDANCE_EMPLOYEE_USERNAME: "EMP0123",
+    ATTENDANCE_DATE_ID: new Date(),
+  });
+  
+    
+    // useEffect(() => {
+    //     fetchAllEmployee();
+    // }, []); 
 
   const filterallempData = props.empData;
 
@@ -42,30 +56,6 @@ const EmployeeAttendance = (props) => {
   let month = date.getMonth() + 1;
   let year = date.getFullYear();
 
-  console.log(year, month, day);
-  var MyDate = new Date();
-  var MyDateString;
-
-  MyDate.setDate(MyDate.getDate()-1);
-
-  MyDateString =
-    MyDate.getFullYear() +
-    "-" +
-    ("0" + (MyDate.getMonth() + 1)).slice(-2) +
-    "-" +
-    ("0" + MyDate.getDate()).slice(-2);
-
-  
-
-  const [inData, setInData] = useState({
-    ATTENDANCE_ADMIN_ID: "",
-    ATTENDANCE_ADMIN_USERNAME: "",
-    ATTENDANCE_COMPANY_ID: "",
-    ATTENDANCE_COMPANY_USERNAME: "",
-    ATTENDANCE_EMPLOYEE_ID: "",
-    ATTENDANCE_EMPLOYEE_USERNAME: "",
-    ATTENDANCE_DATE_ID: MyDateString,
-  });
 
   const OutDataSuccess = { ...inData, ATTENDANCE_OUT: new Date() };
   const inDataSuccess = { ...inData, ATTENDANCE_IN: new Date() };
@@ -127,32 +117,31 @@ const EmployeeAttendance = (props) => {
   };
 
   const fetchAllEmployee = async () => {
-      try {
-        const response = await axios.put(
-          "http://3.84.137.243:5001/get_employee",
-          {
-            EMPLOYEE_MEMBER_PARENT_ID: filterallempData.COMPANY_PARENT_ID,
-            EMPLOYEE_MEMBER_PARENT_USERNAME: filterallempData.COMPANY_PARENT_USERNAME,
-            EMPLOYEE_PARENT_USERNAME: filterallempData.COMPANY_USERNAME,
-            EMPLOYEE_PARENT_ID: filterallempData.COMPANY_ID,
-          },
-          { headers }
-        );
-        setTimeout(() => {
-          console.log("ALL EMPLOYEE ATTEN", response);
-          const data = response.data;
-          setAllempData(data.result);
-          setIsLoading(false);
-        }, 1000);
-      } catch (err) {
-        console.log("something Went wrong: =>", err);
-      }
-
+    try {
+      const response = await axios.put(
+        "http://3.84.137.243:5001/get_employee",
+        {
+          EMPLOYEE_MEMBER_PARENT_ID: filterallempData.COMPANY_PARENT_ID,
+          EMPLOYEE_MEMBER_PARENT_USERNAME:
+            filterallempData.COMPANY_PARENT_USERNAME,
+          EMPLOYEE_PARENT_USERNAME: filterallempData.COMPANY_USERNAME,
+          EMPLOYEE_PARENT_ID: filterallempData.COMPANY_ID,
+        },
+        { headers }
+      );
+      setTimeout(() => {
+        console.log("ALL EMPLOYEE data ", response);
+      //   const data = response.data;
+      //   // setAllempData(data.result[0].COMPANY_EMPLOYIES);
+      //   setAllempData(data.result);
+      //   console.log("fuck", data);
+      //   setIsLoading(false);
+      }, 1000);
+    } catch (err) {
+      console.log("something Went wrong: =>", err);
+    }
   };
 
-  useEffect(() => {
-    fetchAllEmployee();
-  }, []);
 
   console.log(currentTime, "datanew");
 

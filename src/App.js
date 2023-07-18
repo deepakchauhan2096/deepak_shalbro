@@ -25,6 +25,7 @@ const [projectcreatedata, setProject] = useState([])
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
+
       console.log(user, "user");
       if (user) {
         setData((prev) => {
@@ -35,6 +36,7 @@ const [projectcreatedata, setProject] = useState([])
           };
         });
         // setUserName(user.);
+
       } else setData("");
     });
   }, []);
