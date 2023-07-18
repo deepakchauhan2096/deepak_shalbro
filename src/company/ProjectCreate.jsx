@@ -30,11 +30,9 @@ const style = {
 };
 
 export default function ProjectCreate(props) {
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   const [index, setIndex] = React.useState([]);
   const [resError, setResError] = useState();
   const [errors, setErrors] = useState({});
@@ -42,7 +40,6 @@ export default function ProjectCreate(props) {
   const { setProject } = React.useContext(MyContext);
 
   console.log(text, "allcontext");
-
 
   const [createProject, setCreateProject] = useState({
     PROJECT_PARENT_ID: text?.COMPANY_ID,
@@ -67,10 +64,10 @@ export default function ProjectCreate(props) {
       errors.PROJECT_USERNAME = "Username is required";
     } else if (
       inputValues.PROJECT_USERNAME.length < 6 ||
-      inputValues.PROJECT_USERNAME.length > 20
+      inputValues.PROJECT_USERNAME.length > 10
     ) {
       errors.PROJECT_USERNAME = "Username length must be between 6 and 10";
-    } else if (!/^[a-zA-Z0-9- ]+$/.test(inputValues.PROJECT_USERNAME)) {
+    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.PROJECT_USERNAME)) {
       errors.PROJECT_USERNAME = "Username should not contain symbols";
     }
 
@@ -130,11 +127,10 @@ export default function ProjectCreate(props) {
     console.log("heello world", createProject);
   };
 
+  //api create project
   const handleSubmit = (e) => {
-    console.log("on btn submit");
     e.preventDefault();
     setErrors(validateValues(createProject));
-
     if (Object.keys(errors).length === 0) {
       axios
         .post("http://3.84.137.243:5001/create_project", createProject, {
@@ -157,7 +153,6 @@ export default function ProjectCreate(props) {
 
   console.log("ind", index);
 
-
   return (
     <>
       <Button
@@ -165,6 +160,7 @@ export default function ProjectCreate(props) {
         sx={{ color: "#277099" }}
         className=" border-0"
         variant="outlined"
+        size="small"
       >
         + Add New Project
       </Button>
@@ -176,16 +172,6 @@ export default function ProjectCreate(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <center>
-            {" "}
-            {Object.keys(errors).length === 0 && submitting ? (
-              <span className="text-success fs-5">
-                Successfully submitted ✓
-              </span>
-            ) : (
-              ""
-            )}
-          </center>
           <form onSubmit={handleSubmit}>
             <div className="row py-2">
               <div className="form-group col-xl-4">
@@ -205,13 +191,11 @@ export default function ProjectCreate(props) {
                   </p>
                 )}
 
-
                 {resError ? (
                   <p className="error text-danger fw-light">{resError}</p>
                 ) : (
                   ""
                 )}
-
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Name</label>
@@ -356,43 +340,7 @@ export default function ProjectCreate(props) {
                 )}
               </div>
             </div>
-            <div className="row py-2">
-              {/* <div className="form-group py-2 col-md-4">
-              <label for="file" >Compliance doc</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-
-              {/* <div className="form-group py-2 col-md-4">
-              <label for="file" >Policies</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-
-              {/* <div className="form-group py-2 col-md-4">
-              <label for="file" >Auto policies</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-              {/* 
-            <div className="form-group py-2 col-md-4">
-              <label for="file" >Law suits</label>
-                <input
-                  className="form-control "
-                  type="file"
-                  id="file"
-                />
-            </div> */}
-            </div>
+            <div className="row py-2"></div>
             <button
               type="submit"
               className="btn btn-info text-white "
