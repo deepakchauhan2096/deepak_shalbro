@@ -23,7 +23,6 @@ export default function AddEmployee(props) {
   const [open, setOpen] = React.useState(false);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
-
   const [createEmployee, setCreateEmployee] = useState({
     EMPLOYEE_NAME: "",
     EMPLOYEE_EMAIL: "",
@@ -42,14 +41,12 @@ export default function AddEmployee(props) {
     EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME,
     EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID,
   });
-
   // const [values, setValues] = useState({
   //   name: createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME,
   //   email: createEmployee.EMPLOYEE_EMAIL,
   //   pass: createEmployee.EMPLOYEE_USERNAME,
   // });
   const [newdata, setNewdata] = useState([])
-
 
   const validateValues = (inputValues) => {
     let errors = {};
@@ -61,7 +58,7 @@ export default function AddEmployee(props) {
       inputValues.EMPLOYEE_NAME.length > 20
     ) {
       errors.EMPLOYEE_NAME = "Employee Name length must be between 6 and 20";
-    } else if (!/^[a-zA-Z0-9- ]+$/.test(inputValues.EMPLOYEE_NAME)) {
+    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_NAME)) {
       errors.EMPLOYEE_NAME = "Employee Name should not contain symbols";
     } else if (/\d/.test(inputValues.EMPLOYEE_NAME)) {
       errors.EMPLOYEE_NAME = "Employee Name should not contain numbers";
@@ -72,11 +69,11 @@ export default function AddEmployee(props) {
       errors.EMPLOYEE_USERNAME = "Username is required";
     } else if (
       inputValues.EMPLOYEE_USERNAME.length < 6 ||
-      inputValues.EMPLOYEE_USERNAME.length > 20
+      inputValues.EMPLOYEE_USERNAME.length > 10
     ) {
       errors.EMPLOYEE_USERNAME = "Username length must be between 6 and 10";
     } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
-      errors.EMPLOYEE_USERNAME = "Should not contain spaces and symbols";
+      errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
     }
     //Employee Mail
     if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
@@ -85,8 +82,9 @@ export default function AddEmployee(props) {
       errors.EMPLOYEE_EMAIL = "Email should not exceed 25 characters";
     } else if (!/@/.test(inputValues.EMPLOYEE_EMAIL)) {
       errors.EMPLOYEE_EMAIL = "Email is invalid";
-    
-    } else if (!/^[a-zA-Z0-@]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
+    } else if (/\d/.test(inputValues.EMPLOYEE_EMAIL)) {
+      errors.EMPLOYEE_EMAIL = "Email should not contain numbers";
+    } else if (!/^[a-zA-Z0-9@]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
       errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
     }
     //Employee Phone
@@ -132,6 +130,8 @@ export default function AddEmployee(props) {
     return errors;
   };
 
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -150,27 +150,24 @@ export default function AddEmployee(props) {
     e.preventDefault();
     setErrors(validateValues(createEmployee));
     setSubmitting(true);
-    // if(fff && hgjgh)
+    if(Object.keys(errors).length === 0){
     axios
       .post("http://3.84.137.243:5001/create_employee", createEmployee, {
         headers,
       })
       .then((response) => {
-
         if (response.data.operation == "failed") {
           setOpen(true);
         } else if (response.data.operation == "successfull") {
           setOpen(false);
           props.update(true);
         }
-
       })
       .catch((error) => {
         console.error(error);
       });
+    }
   };
-
-
   
   const finishSubmit = () => {
     console.log(createEmployee);
@@ -182,11 +179,13 @@ export default function AddEmployee(props) {
     }
   }, [errors]);
 
+  console.log("newdata",newdata);
+  
 
   return (
     <>
       <Button size="small" className="btn button btn-blue" variant="contained">
-        {/* {props.name ? props.name : "Enter Name"} */} Employee
+        Employee
       </Button>
       <Button
         onClick={handleOpen}
@@ -209,16 +208,6 @@ export default function AddEmployee(props) {
           maxWidth="xl"
         >
           <Box sx={style}>
-            <center>
-              {" "}
-              {Object.keys(errors).length === 0 && submitting ? (
-                <span className="text-success fs-5">
-                  Successfully submitted ✓
-                </span>
-              ) : (
-                ""
-              )}
-            </center>
             <form onSubmit={handleSubmit}>
               <div className="row py-1">
                 <div className="form-group col-xl-6">
@@ -249,7 +238,7 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                   />
                   {errors.EMPLOYEE_NAME && (
-                    <p className="error text-danger fw-light">
+                    <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_NAME}
                     </p>
                   )}
@@ -268,7 +257,7 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                   />
                   {errors.EMPLOYEE_EMAIL && (
-                    <p className="error text-danger fw-light">
+                    <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_EMAIL}
                     </p>
                   )}
@@ -285,31 +274,12 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                   />
                   {errors.EMPLOYEE_STATE && (
-                    <p className="error text-danger fw-light">
+                    <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_STATE}
                     </p>
                   )}
                 </div>{" "}
-                <div className="form-group col-xl-3">
-                  <label>City</label>
-                  <input
-                    type="text"
-                    className="form-control rounded-0"
-                    id="city"
-                    placeholder="Enter Your city.."
-                    value={createEmployee.EMPLOYEE_CITY}
-                    name="EMPLOYEE_CITY"
-                    onChange={handleCreate}
-                  />
-                  {errors.EMPLOYEE_CITY && (
-                    <p className="error text-danger fw-light">
-                      {errors.EMPLOYEE_CITY}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="row py-2">
-                <div className="form-group col-xl-4">
+                <div className="form-group col-xl-6 py-1">
                   <label>Phone</label>
                   <input
                     type="number"
@@ -321,7 +291,7 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                   />
                   {errors.EMPLOYEE_PHONE && (
-                    <p className="error text-danger fw-light">
+                    <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_PHONE}
                     </p>
                   )}
@@ -393,7 +363,7 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                   />
                   {errors.EMPLOYEE_HOURLY_WAGE && (
-                    <p className="error text-danger fw-light">
+                    <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_HOURLY_WAGE}
                     </p>
                   )}
@@ -416,7 +386,7 @@ export default function AddEmployee(props) {
                     <option>other</option>
                   </select>
                   {errors.EMPLOYEE_ROLE && (
-                    <p className="error text-danger fw-light">
+                    <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_ROLE}
                     </p>
                   )}
@@ -443,29 +413,13 @@ export default function AddEmployee(props) {
                     <option>other</option>
                   </select>
                   {errors.EMPLOYEE_EMPLMNTTYPE && (
-                    <p className="error text-danger fw-light">
+                    <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_EMPLMNTTYPE}
                     </p>
                   )}
                 </div>
-                <div className="form-group col-xl-4">
-                  <label for="inputPassword4">Date Of Birth</label>
-                  <input
-                    type="date"
-                    className="form-control rounded-0"
-                    id="inputPassword4"
-                    placeholder="Enter Date of birth"
-                    value={createEmployee.EMPLOYEE_DOB}
-                    name="EMPLOYEE_DOB"
-                    onChange={handleCreate}
-                  />
-                  {errors.EMPLOYEE_DOB && (
-                    <p className="error text-danger fw-light">
-                      {errors.EMPLOYEE_DOB}
-                    </p>
-                  )}
-                </div>
-                <div className="form-group col-xl-4">
+                
+                <div className="form-group col-xl-4 py-1">
                   <label for="inputPassword4">Hired Date</label>
                   <input
                     type="date"
@@ -477,49 +431,13 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                   />
                   {errors.EMPLOYEE_HIRE_DATE && (
-                    <p className="error text-danger fw-light">
+                    <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_HIRE_DATE}
                     </p>
                   )}
                 </div>
               </div>
-              <div className="row">
-                <div className="form-group py-2">
-                  <label for="inputAddress">Address</label>
-                  <input
-                    type="text"
-                    className="form-control rounded-0"
-                    id="inputAddress"
-                    placeholder="Enter Address"
-                    value={createEmployee.EMPLOYEE_ADD}
-                    name="EMPLOYEE_ADD"
-                    onChange={handleCreate}
-                  />
-                  {errors.EMPLOYEE_ADD && (
-                    <p className="error text-danger fw-light">
-                      {errors.EMPLOYEE_ADD}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="row py-2">
-                <div className="form-group col-xl-6">
-                  <label for="inputqual">Employee username</label>
-                  <input
-                    type="text"
-                    className="form-control rounded-0"
-                    id="inputZip"
-                    value={createEmployee.EMPLOYEE_USERNAME}
-                    name="EMPLOYEE_USERNAME"
-                    onChange={handleCreate}
-                  />
-                  {errors.EMPLOYEE_USERNAME && (
-                    <p className="error text-danger fw-light">
-                      {errors.EMPLOYEE_USERNAME}
-                    </p>
-                  )}
-                </div>
-              </div>
+              
               <button
                 type="submit"
                 className="btn btn-info text-white "
