@@ -72,81 +72,81 @@ export default function ProjectCreate(props) {
 
 
   
-  const validateValues = (inputValues) => {
-    let errors = {};
+  // const validateValues = (inputValues) => {
+  //   let errors = {};
 
-    if (inputValues.PROJECT_USERNAME.trim() === "") {
-      errors.PROJECT_USERNAME = "Username is required";
-    } else if (inputValues.PROJECT_USERNAME.length > 15) {
-      errors.PROJECT_USERNAME = "Username should not exceed 15 characters";
-    } else if (/[!@#$%^&*(),.?":{}|<>]/.test(inputValues.PROJECT_USERNAME)) {
-      errors.PROJECT_USERNAME = "Username should not contain symbols";
-    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.PROJECT_USERNAME)) {
-      errors.PROJECT_USERNAME = "Username should not contain symbols";
-    } else if (
-      inputValues.PROJECT_USERNAME.length < 6 ||
-      inputValues.PROJECT_USERNAME.length > 10
-    ) {
-      errors.PROJECT_USERNAME = "Username length must be between 6 and 10";
-    }
+  //   if (inputValues.PROJECT_USERNAME.trim() === "") {
+  //     errors.PROJECT_USERNAME = "Username is //required";
+  //   } else if (inputValues.PROJECT_USERNAME.length > 15) {
+  //     errors.PROJECT_USERNAME = "Username should not exceed 15 characters";
+  //   } else if (/[!@#$%^&*(),.?":{}|<>]/.test(inputValues.PROJECT_USERNAME)) {
+  //     errors.PROJECT_USERNAME = "Username should not contain symbols";
+  //   } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.PROJECT_USERNAME)) {
+  //     errors.PROJECT_USERNAME = "Username should not contain symbols";
+  //   } else if (
+  //     inputValues.PROJECT_USERNAME.length < 6 ||
+  //     inputValues.PROJECT_USERNAME.length > 10
+  //   ) {
+  //     errors.PROJECT_USERNAME = "Username length must be between 6 and 10";
+  //   }
 
-    if (inputValues.PROJECT_NAME.trim() === "") {
-      errors.PROJECT_NAME = "Project Name is required";
-    } else if (inputValues.PROJECT_NAME.length > 15) {
-      errors.PROJECT_NAME = "Project Name should not exceed 15 characters";
-    } else if (/[!@#$%^*(),.?":{}|<>]/.test(inputValues.PROJECT_NAME)) {
-      errors.PROJECT_NAME = "Project Name should not contain symbols";
-    }
+  //   if (inputValues.PROJECT_NAME.trim() === "") {
+  //     errors.PROJECT_NAME = "Project Name is //required";
+  //   } else if (inputValues.PROJECT_NAME.length > 15) {
+  //     errors.PROJECT_NAME = "Project Name should not exceed 15 characters";
+  //   } else if (/[!@#$%^*(),.?":{}|<>]/.test(inputValues.PROJECT_NAME)) {
+  //     errors.PROJECT_NAME = "Project Name should not contain symbols";
+  //   }
 
-    if (inputValues.PROJECT_PHONE.trim() === "") {
-      errors.PROJECT_PHONE = "Phone Number is required";
-    } else if (
-      inputValues.PROJECT_PHONE.length < 6 ||
-      inputValues.PROJECT_PHONE.length > 15
-    ) {
-      errors.PROJECT_PHONE = "Phone Number length must be between 6 and 10";
-    }
+  //   if (inputValues.PROJECT_PHONE.trim() === "") {
+  //     errors.PROJECT_PHONE = "Phone Number is //required";
+  //   } else if (
+  //     inputValues.PROJECT_PHONE.length < 6 ||
+  //     inputValues.PROJECT_PHONE.length > 15
+  //   ) {
+  //     errors.PROJECT_PHONE = "Phone Number length must be between 6 and 10";
+  //   }
 
-    if (inputValues.PROJECT_EMROLMNT_TYPE.trim() === "") {
-      errors.PROJECT_EMROLMNT_TYPE = "Please select an option";
-    }
-    if (inputValues.PROJECT_START_DATE.trim() === "") {
-      errors.PROJECT_START_DATE = "Start Date is required";
-    } else {
-      const currentDate = new Date().toISOString().split("T")[0];
-      if (inputValues.PROJECT_START_DATE < currentDate) {
-        errors.PROJECT_START_DATE = "Start Date cannot be in the past";
-      }
-    }
+  //   if (inputValues.PROJECT_EMROLMNT_TYPE.trim() === "") {
+  //     errors.PROJECT_EMROLMNT_TYPE = "Please select an option";
+  //   }
+  //   if (inputValues.PROJECT_START_DATE.trim() === "") {
+  //     errors.PROJECT_START_DATE = "Start Date is //required";
+  //   } else {
+  //     const currentDate = new Date().toISOString().split("T")[0];
+  //     if (inputValues.PROJECT_START_DATE < currentDate) {
+  //       errors.PROJECT_START_DATE = "Start Date cannot be in the past";
+  //     }
+  //   }
 
-    if (inputValues.PROJECT_END_DATE.trim() === "") {
-      errors.PROJECT_END_DATE = "End Date is required";
-    } else if (inputValues.PROJECT_START_DATE > inputValues.PROJECT_END_DATE) {
-      errors.PROJECT_END_DATE = "End Date must be greater than Start Date";
-    }
-    if (inputValues.PROJECT_EMROLMNT_TYPE.trim() === "") {
-      errors.PROJECT_EMROLMNT_TYPE = "Please select Enrollment Type";
-    }
-    if (inputValues.PROJECT_SUPERVISOR.trim() === "") {
-      errors.PROJECT_SUPERVISOR = "Please Provide the Supervisor's Name";
-    }
-    if (inputValues.PROJECT_ADD.trim() === "") {
-      errors.PROJECT_ADD = "Address is Required";
-    }
-    if (inputValues.PROJECT_CITY.trim() === "") {
-      errors.PROJECT_CITY = "City is Required";
-    }
+  //   if (inputValues.PROJECT_END_DATE.trim() === "") {
+  //     errors.PROJECT_END_DATE = "End Date is //required";
+  //   } else if (inputValues.PROJECT_START_DATE > inputValues.PROJECT_END_DATE) {
+  //     errors.PROJECT_END_DATE = "End Date must be greater than Start Date";
+  //   }
+  //   if (inputValues.PROJECT_EMROLMNT_TYPE.trim() === "") {
+  //     errors.PROJECT_EMROLMNT_TYPE = "Please select Enrollment Type";
+  //   }
+  //   if (inputValues.PROJECT_SUPERVISOR.trim() === "") {
+  //     errors.PROJECT_SUPERVISOR = "Please Provide the Supervisor's Name";
+  //   }
+  //   if (inputValues.PROJECT_ADD.trim() === "") {
+  //     errors.PROJECT_ADD = "Address is //required";
+  //   }
+  //   if (inputValues.PROJECT_CITY.trim() === "") {
+  //     errors.PROJECT_CITY = "City is //required";
+  //   }
 
-    if (inputValues.PROJECT_COUNTRY.trim() === "") {
-      errors.PROJECT_CITY = "Country is Required";
-    }
+  //   if (inputValues.PROJECT_COUNTRY.trim() === "") {
+  //     errors.PROJECT_CITY = "Country is //required";
+  //   }
 
-    if (inputValues.PROJECT_STATE.trim() === "") {
-      errors.PROJECT_CITY = "State is Required";
-    }
+  //   if (inputValues.PROJECT_STATE.trim() === "") {
+  //     errors.PROJECT_CITY = "State is //required";
+  //   }
 
-    return errors;
-  };
+  //   return errors;
+  // };
 
   const headers = {
     "Content-Type": "application/json",
@@ -158,56 +158,58 @@ export default function ProjectCreate(props) {
     console.log("heello world", createProject);
   };
 
-  const handleSubmission = () => {
-    setErrors(validateValues(createProject));
-    if (
-      !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
-      !createProject.PROJECT_EMAIL ||
-      !createProject.PROJECT_PASSWORD ||
-      !createProject.PROJECT_NAME ||
-      !createProject.PROJECT_STATE ||
-      !createProject.PROJECT_CITY ||
-      !createProject.PROJECT_PHONE ||
-      !createProject.PROJECT_HOURLY_WAGE ||
-      !createProject.PROJECT_ROLE ||
-      !createProject.PROJECT_ADD ||
-      !createProject.PROJECT_USERNAME
-    ) {
-      setErrorMsg("Fill all fields");
-      return;
-    }
-    setErrorMsg("");
+  // const handleSubmission = () => {
+  //   setErrors(validateValues(createProject));
+  //   if (
+  //     !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
+  //     !createProject.PROJECT_NAME ||
+  //     !createProject.PROJECT_STATE ||
+  //     !createProject.PROJECT_CITY ||
+  //     !createProject.PROJECT_PHONE ||
+  //     !createProject.PROJECT_ADD ||
+  //     !createProject.PROJECT_USERNAME
+  //   ) {
+  //     setErrorMsg("Fill all fields");
+  //     return;
+  //   }
+  //   setErrorMsg("");
 
-    if (
-      createProject.PROJECT_MEMBER_PARENT_USERNAME &&
-      createProject.PROJECT_EMAIL
-    ) {
-            handleSubmission();
-    }
-  };
+  //   if (
+  //     createProject.PROJECT_MEMBER_PARENT_USERNAME 
+  //   ) {
+  //           handleSubmit();
+  //   }
+  // };
 
   //api create project
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (Object.keys(errors).length === 0) {
+    // if (Object.keys(errors).length === 0) {
       axios
         .post("http://3.84.137.243:5001/create_project", createProject, {
           headers,
         })
         .then((response) => {
           console.log("response of create project", response.data);
-          if (response.data.operation == "failed") {
-            setOpen(true);
-          } else if (response.data.operation == "successfull") {
-            setOpen(false);
             setProject(response.data.result);
-          }
+            setOpen(false);
+
+
+      //     if (response.data.operation === "failed") {
+      //       setOpen(true);
+      //     } else if (response.data.operation === "successfull") {
+      //       setOpen(false);
+      //       setProject(response.data.result);
+      // ;
+
+      //     }
         })
         .catch((error) => {
           console.error(error, "ERR");
         });
-    }
+
+    // }
   };
 
   console.log("ind", index);
@@ -246,13 +248,13 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
                   onChange={handleCreate}
-                  required
+                  //required
                 />
-                {errors.PROJECT_USERNAME && (
+                {/* {errors.PROJECT_USERNAME && (
                   <p className="error text-danger fw-light">
                     {errors.PROJECT_USERNAME}
                   </p>
-                )}
+                )} */}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Name</label>
@@ -264,7 +266,7 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_NAME}
                   name="PROJECT_NAME"
                   onChange={handleCreate}
-                  required
+                  //required
                 />
               </div>
               <div className="form-group col-xl-4">
@@ -277,7 +279,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_PHONE"
                   value={createProject.PROJECT_PHONE}
                   onChange={handleCreate}
-                  required
+                  //required
                 />
               </div>
             </div>
@@ -290,7 +292,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_START_DATE"
                   onChange={handleCreate}
                   className="form-control"
-                  required
+                  //required
                 />
               </div>
               <div className="form-group col-xl-6">
@@ -301,7 +303,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_END_DATE"
                   onChange={handleCreate}
                   className="form-control"
-                  required
+                  //required
                 />
               </div>
             </div>
@@ -314,7 +316,7 @@ export default function ProjectCreate(props) {
                   onChange={handleCreate}
                   name="PROJECT_EMROLMNT_TYPE"
                   value={createProject.PROJECT_EMROLMNT_TYPE}
-                  required
+                  //required
                 >
                   <option selected>Choose...</option>
                   <option>Painter</option>
@@ -333,7 +335,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_SUPERVISOR"
                   value={createProject.PROJECT_SUPERVISOR}
                   onChange={handleCreate}
-                  required
+                  //required
                 />
               </div>
             </div>
@@ -348,7 +350,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_ADD"
                   value={createProject.PROJECT_ADD}
                   onChange={handleCreate}
-                  required
+                  //required
                 />
               </div>
             </div>
@@ -361,7 +363,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_COUNTRY"
                   value={createProject.PROJECT_COUNTRY}
                   onChange={handleCreate}
-                  required
+                  //required
                 >
                   <option>--Choose Country--</option>
 
@@ -383,7 +385,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_STATE"
                   value={createProject.PROJECT_STATE}
                   onChange={handleCreate}
-                  required
+                  //required
                 >
                   <option>--Choose State--</option>
                   {availableState?.states?.map((e, key) => {
@@ -404,7 +406,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_CITY"
                   value={createProject.PROJECT_CITY}
                   onChange={handleCreate}
-                  required
+                  //required
                 >
                   <option>--Choose City--</option>
                   {availableCities?.cities?.map((e, key) => {
@@ -424,7 +426,7 @@ export default function ProjectCreate(props) {
             <button
               type="submit"
               className="btn btn-info text-white "
-              onClick={handleSubmission}
+              onClick={handleSubmit}
             >
               Submit
             </button>{" "}
