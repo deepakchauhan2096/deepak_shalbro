@@ -125,7 +125,7 @@ export default function AddEmployee(props) {
             displayName:display,
           });
           if (res) {
-            handleSubmission();
+            handleSubmit();
           }
         })
         .catch((err) => {

@@ -62,7 +62,7 @@ const [projectcreatedata, setProject] = useState([])
               />
               <Route path="/company" element={<CompanyMain />} />
               <Route path="/login" element={<AdminLogin />} />
-              {/* <Route path="/employee" element={<LoginEmp />} /> */}
+              <Route path="/" element={<AdminLogin />} />
               <Route path="/createemp" element={<CreateEmp />} />
             </Routes>
           </BrowserRouter>
