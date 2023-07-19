@@ -143,8 +143,8 @@ const Navbar = (props) => {
           style={{ bottom: "0" }}
         >
           <div className="logout_icon">
-            <LogoutIcon style={{ display: "inline" }} />{" "}
-            <div className="logout_icon d-inline" onClick={Logout}>
+            <LogoutIcon style={{ display: "inline"}} />{" "}
+            <div className="logout_icon d-inline" onClick={Logout} style={{cursor:"pointer"}}>
               Logout
             </div>
           </div>

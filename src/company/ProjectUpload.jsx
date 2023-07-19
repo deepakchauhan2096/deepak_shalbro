@@ -2,40 +2,49 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
 import "../assests/css/document.css";
+import Box from "@mui/material/Box";
+import { Button } from "@mui/material";
 import pdf from "../assests/images/pdf.png";
 import jpg from "../assests/images/jpg.png";
 import png from "../assests/images/png.png";
+import AddIcon from "@mui/icons-material/Add";
+import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
+import ViewListIcon from "@mui/icons-material/ViewList";
 
 export default function ProjectUpload(props) {
-
   const [postImage, setPostImage] = useState({
     myFile: "",
   });
-
+  const [selectedFileName, setSelectedFileName] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [imagesData, setImagesData] = useState({});
   const [show, setShow] = useState(false);
+  // New state to manage visibility of the documents list
+  const [showDocuments, setShowDocuments] = useState(false);
   console.log("Images data is here:=>", imagesData.result);
+  // this is data of company for fetch the company username
+  const DocData = props.empData;
+  console.table(DocData, "<<=====================company data");
 
   useEffect(() => {
     getalldocument();
   }, []);
-
-  const downloadLinkRef = useRef(null);
 
   const headers = {
     "Content-Type": "multipart/form-data",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
+  // Download file
   const downloadFile = (base64Data, fileName) => {
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = `data:application/octet-stream;base64,${base64Data}`;
     link.download = fileName;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
-  
+
   //create document
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,20 +54,32 @@ export default function ProjectUpload(props) {
         headers,
       })
       .then((response) => {
-        console.log("response data:", response.data);
+        console.log("response data  anurag pal:", response.data);
+        getalldocument();
+        setSuccessMessage("Document uploaded successfully!");
+        setSelectedFileName("");
+
+        setTimeout(() => setSuccessMessage(""), 1000);
       })
       .catch((error) => {
         console.error(error);
+        setSuccessMessage("");
       });
   };
-//upload document throught input
+  //upload document throught input
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     const formdata = new FormData();
     formdata.append("file", file);
-    formdata.append("DOCUMENT_REF_ID", "12");
-    formdata.append("DOCUMENT_ADMIN_USERNAME", "deepanshu1");
+    formdata.append("DOCUMENT_REF_ID", DocData.COMPANY_ID);
+    formdata.append("DOCUMENT_ADMIN_USERNAME", DocData.COMPANY_PARENT_USERNAME);
     setPostImage({ myFile: formdata });
+    setSelectedFileName(file.name);
+
+    console.table(
+      "deepanshu===========Hoooooo=========>",
+      DocData.COMPANY_PARENT_USERNAME
+    );
   };
 
   //get all Document
@@ -69,8 +90,8 @@ export default function ProjectUpload(props) {
       myHeaders.append("Content-Type", "application/json");
 
       var raw = JSON.stringify({
-        DOCUMENT_REF_ID: 12,
-        DOCUMENT_ADMIN_USERNAME: "deepanshu1",
+        DOCUMENT_REF_ID: DocData.COMPANY_ID,
+        DOCUMENT_ADMIN_USERNAME: DocData.COMPANY_PARENT_USERNAME,
       });
 
       var requestOptions = {
@@ -105,99 +126,161 @@ export default function ProjectUpload(props) {
     backgroundColor: theme.palette.background.paper,
   }));
 
-  const handleDownload = async (documentId,fileName) => {
+  const handleDownload = async (documentId, fileName) => {
     try {
       const data = JSON.stringify({
         DOCUMENT_ID: documentId,
-
-        DOCUMENT_ADMIN_USERNAME: "deepanshu1",
+        DOCUMENT_ADMIN_USERNAME: DocData.COMPANY_PARENT_USERNAME,
       });
 
       const config = {
-        method: 'put',
+        method: "put",
         maxBodyLength: Infinity,
-        url: 'http://3.84.137.243:5001/download_document',
+        url: "http://3.84.137.243:5001/download_document",
         headers: {
-          'authorization_key': 'qzOUsBmZFgMDlwGtrgYypxUz',
-          'Content-Type': 'application/json'
+          authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+          "Content-Type": "application/json",
         },
-        data: data
+        data: data,
       };
 
       const response = await axios.request(config);
       console.log(response.data);
-      downloadFile(response.data,fileName)
+      downloadFile(response.data, fileName);
       // console.log(FileDownload(response.data))
-
-   
     } catch (error) {
       console.log(error);
     }
   };
 
+
   return (
     <>
-      <div>
-        <h4 className="font-monospace">Upload Documents</h4>
-
-        <form onSubmit={handleSubmit}>
+      <Box>
+        <Box>
+          {/* Hidden file input */}
           <input
             type="file"
             label="Image"
             name="myFile"
             className="font-monospace"
             accept=".jpeg, .png, .jpg, .pdf"
+            style={{ display: "none" }}
             onChange={(e) => handleFileUpload(e)}
           />
-
-          <button onClick={handleSubmit} className="font-monospace">Submit</button>
-        </form>
-      </div>
+          {/* Upload document button */}
+          <Button
+            variant="outlined"
+            className="button rounded-2 lowercase"
+            onClick={() => document.querySelector('input[type="file"]').click()}
+          >
+            Add New document&nbsp;
+            <AddIcon fontSize="small" />
+          </Button>
+          &nbsp;&nbsp;
+          {/* New document button */}
+          <Button
+            variant="contained"
+            className="button rounded-2 lowercase"
+            onClick={handleSubmit}
+          >
+            Upload document&nbsp;
+            <ArrowCircleUpIcon fontSize="small" />
+          </Button>
+          {selectedFileName && (
+            <p className="font-monospace pt-2 text-success">
+              Selected Document: {selectedFileName}
+            </p>
+          )}
+          {successMessage && (
+            <p className="font-monospace" style={{ color: "green" }}>
+              {successMessage}
+            </p>
+          )}
+        </Box>
+      </Box>
 
       <hr />
 
-      <div>
+      <div cla>
         <h4 className="font-monospace">Uploaded Documents</h4>
+        <Button
+          variant="outlined"
+          className="button rounded-2 lowercase "
+          onClick={() => setShow((s) => !s)}
+        >
+          Show All Documents&nbsp;
+          <ViewListIcon fontSize="small" />
+        </Button> 
 
-        <ul className="Doc_ul" style={{ display: show ? "none" : "flex"}}>
-          {imagesData.result?.map((docs, index) => {
-            const fileName = docs.DOCUMENT_FILEDATA.originalname;
-            const fileType = fileName.split('.').pop().toLowerCase();
-            const isPDF = fileType === 'pdf';
-            const isJPG = fileType === 'jpg' || fileType === 'jpeg';
+        <ul className="Doc_ul">
+          {!show
+            ? imagesData.result?.slice(0, 8).map((docs, index) => {
+                const fileName = docs.DOCUMENT_FILEDATA.originalname;
+                const fileType = fileName.split(".").pop().toLowerCase();
+                const isPDF = fileType === "pdf";
+                const isJPG = fileType === "jpg" || fileType === "jpeg";
 
-            return (
-              <li className="Doc_li" key={index}>
-               <span className="Docfile-icon">
-                  {" "}
-                  {isPDF ? (
-                    <img src={pdf} />
-                  ) : isJPG ? (
-                    <img src={jpg} />
-                  ) : (
-                    <img src={png} />
-                  )}
-                </span>
-                <span className="Docfile-name font-monospace">
-                  {fileName.length > 15 ? `${fileName.substring(0, 10)}...` : fileName}
-                </span>
-                <button
-                  className="doc_anchor font-monospace"
-                  onClick={() => handleDownload(docs.DOCUMENT_ID,fileName)}
-                >
-                  Download
-                </button>
+                return (
+                  <li className="Doc_li" key={index}>
+                    <span className="Docfile-icon">
+                      {" "}
+                      {isPDF ? (
+                        <img src={pdf} />
+                      ) : isJPG ? (
+                        <img src={jpg} />
+                      ) : (
+                        <img src={png} />
+                      )}
+                    </span>
+                    <span className="Docfile-name font-monospace">
+                      {fileName.length > 15
+                        ? `${fileName.substring(0, 10)}...`
+                        : fileName}
+                    </span>
+                    <button
+                      className="doc_anchor font-monospace"
+                      onClick={() => handleDownload(docs.DOCUMENT_ID, fileName)}
+                    >
+                      Download
+                    </button>
+                  </li>
+                );
+              })
+            : imagesData.result?.map((docs, index) => {
+                const fileName = docs.DOCUMENT_FILEDATA.originalname;
+                const fileType = fileName.split(".").pop().toLowerCase();
+                const isPDF = fileType === "pdf";
+                const isJPG = fileType === "jpg" || fileType === "jpeg";
 
-                <a
-                  ref={downloadLinkRef}
-                  style={{ display: "none" }}
-                >
-                  Hidden download link
-                </a>
-              </li>
-            );
-          })}
+                return (
+                  <li className="Doc_li" key={index}>
+                    <span className="Docfile-icon">
+                      {" "}
+                      {isPDF ? (
+                        <img src={pdf} />
+                      ) : isJPG ? (
+                        <img src={jpg} />
+                      ) : (
+                        <img src={png} />
+                      )}
+                    </span>
+                    <span className="Docfile-name font-monospace">
+                      {fileName.length > 15
+                        ? `${fileName.substring(0, 10)}...`
+                        : fileName}
+                    </span>
+                    <button
+                      className="doc_anchor font-monospace"
+                      onClick={() => handleDownload(docs.DOCUMENT_ID, fileName)}
+                    >
+                      Download
+                    </button>
+                  </li>
+                );
+              })}
         </ul>
+        <hr></hr>
       </div>
     </>
   );
