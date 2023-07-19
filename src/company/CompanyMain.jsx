@@ -199,6 +199,7 @@ const CompanyMain = () => {
     overflow: "auto",
     borderRadius: 0,
     Border: 0,
+    background:"#277099",
     display: props.screenIndex ? "block" : "none",
   }));
 
@@ -239,9 +240,9 @@ const CompanyMain = () => {
     {
       listname: "Employees",
     },
-    {
-      listname: "Attendance",
-    },
+    // {
+    //   listname: "Attendance",
+    // },
   ];
 
   console.log(navIndex, "navindex");
@@ -330,10 +331,10 @@ const CompanyMain = () => {
         </div>
       </Drawer>
 
-      <NavScreen screenIndex={navIndex === 0}>
+      <NavScreen screenIndex={navIndex === 0} >
         <Box className="box">
           <div className="container-fluid d-flex pb-0 g-0 flex-column">
-            <div style={{ height: "20%" }}>
+            <div style={{ height: "20%",background:"#277099" }}>
               <Button
                 className="btn button btn-blue"
                 variant="contained"
@@ -349,7 +350,7 @@ const CompanyMain = () => {
                 <Animations />
               </Box>
             ) : (
-              <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
+              <div style={{ height: "89vh", padding: 20, paddingBottom: "0"}}>
                 <DataGrid
                   sx={{ border: "none" }}
                   rows={rows}
@@ -378,7 +379,7 @@ const CompanyMain = () => {
           }}
           className="box position-absolute overflow-auto"
         >
-          <div className="container-fluid pb-0 g-0">
+          <div className="container-fluid pb-0 g-0" style={{background:"#277099" }}>
             <Button
               onClick={handleClose}
               variant="contained"
@@ -390,7 +391,7 @@ const CompanyMain = () => {
             <Button
               onClick={(e) => setIndex(1)}
               variant={index === 1 ? "outlined" : "contained"}
-              className="btn rounded-0 border-0"
+              className="btn rounded-0 border-0  rounded-0 text-light"
               size="small"
             >
               Detail
@@ -414,14 +415,14 @@ const CompanyMain = () => {
               Save
             </Button>} 
 
-            {/* <Button
+            <Button
               onClick={(e) => setIndex(2)}
               variant={index === 2 ? "outlined" : "contained"}
-              className="btn rounded-0 border-0"
+              className="btn rounded-0 border-0  rounded-0 text-light"
               size="small"
             >
               Payment
-            </Button> */}
+            </Button>
 
             {/* <Button
               onClick={(e) => setIndex(3)}
@@ -1189,9 +1190,9 @@ const CompanyMain = () => {
         <EmployeeSrc empData={location.state.props} />
       </NavScreen>
 
-      <NavScreen screenIndex={navIndex === 4}>
+      {/* <NavScreen screenIndex={navIndex === 4}>
         <EmployeeAttendance empData={location.state.props} />
-      </NavScreen>
+      </NavScreen> */}
     </>
   );
 };

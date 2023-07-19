@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Fab, Paper, styled } from "@mui/material";
+import { Fab, Paper, styled, Skeleton } from "@mui/material";
 import { Link } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -44,11 +44,14 @@ const AdminDashboard = (props) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [update, setUpdateData] = React.useState(null);
-  const [tableRows, setTableRows] = useState([{
-    ADMIN_ID: "",
-    ADMIN_EMAIL: "",
-    ADMIN_USERNAME: "",
-  }]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [tableRows, setTableRows] = useState([
+    {
+      ADMIN_ID: "",
+      ADMIN_EMAIL: "",
+      ADMIN_USERNAME: "",
+    },
+  ]);
   const [Rows, setRows] = useState([]);
 
   const handleOpenNavMenu = (event) => {
@@ -86,13 +89,12 @@ const AdminDashboard = (props) => {
         console.log("response.data : ", response.data);
         const data = response.data;
         setTableRows(data.result[0]);
+        setIsLoading(false);
       }, 1000);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
   };
-
-
 
   const getCompanyData = async () => {
     try {
@@ -136,7 +138,7 @@ const AdminDashboard = (props) => {
     display: props.screenIndex ? "block" : "none",
     width: "100%",
   }));
-  
+
   const MyScreenbox = styled(Paper)((props) => ({
     height: "calc(100vh - 68.5px)",
     padding: "50px",
@@ -149,11 +151,8 @@ const AdminDashboard = (props) => {
     background: "#f9f9f9",
   }));
 
- 
-
-  const settings = [props.email, "Account", "Dashboard", "Logout"];
-  const pages = [props.email, tableRows?.ADMIN_ID];
-
+  const settings = [props?.email, "Account", "Dashboard", "Logout"];
+  const pages = [props?.email, tableRows?.ADMIN_ID];
 
   const navigate = useNavigate();
 
@@ -168,7 +167,19 @@ const AdminDashboard = (props) => {
       });
   };
 
-  console.log(Rows.length, "Rows")
+  console.log(Rows.length, "Rows");
+
+  const Animations = () => {
+    return (
+      <Box sx={{ width: "100%" }}>
+        <Skeleton animation="pulse" height={100} />
+        <Skeleton animation="pulse" height={70} />
+        <Skeleton animation="pulse" height={70} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={70} />
+      </Box>
+    );
+  };
 
   return (
     <>
@@ -176,7 +187,7 @@ const AdminDashboard = (props) => {
         <AppBar position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              <Typography
+              {isLoading ? <Skeleton variant="rectangular" width={100} height={20} /> : <Typography
                 variant="h6"
                 noWrap
                 href="/"
@@ -189,8 +200,7 @@ const AdminDashboard = (props) => {
                 }}
               >
                 {props.user}
-              </Typography>
-
+              </Typography>}
               <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                 <IconButton
                   size="large"
@@ -202,7 +212,7 @@ const AdminDashboard = (props) => {
                 >
                   <MenuIcon />
                 </IconButton>
-                <Menu
+                {isLoading ? <Skeleton variant="rectangular" width={200} height={20} /> : <Menu
                   id="menu-appbar"
                   anchorEl={anchorElNav}
                   anchorOrigin={{
@@ -225,10 +235,10 @@ const AdminDashboard = (props) => {
                       <Typography textAlign="center">{page}</Typography>
                     </MenuItem>
                   ))}
-                </Menu>
+                </Menu>}
               </Box>
               <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-              <Typography
+              {isLoading ? <Skeleton variant="rectangular" width={100} height={20} /> : <Typography
                 variant="h5"
                 noWrap
                 component="a"
@@ -244,8 +254,8 @@ const AdminDashboard = (props) => {
                 }}
               >
                 {props.user}
-              </Typography>
-              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              </Typography>}
+              {isLoading ? <Skeleton variant="rectangular" width={100} height={20} /> : <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                 {pages.map((page) => (
                   <Button
                     key={page}
@@ -255,62 +265,87 @@ const AdminDashboard = (props) => {
                     {page}
                   </Button>
                 ))}
-              </Box>
-              <div onClick={Logout}>Logout </div>{" "}
+              </Box>}
+              {isLoading ? <Skeleton variant="rectangular" width={100} height={20} /> : <div onClick={Logout}>Logout </div>}
             </Toolbar>
           </Container>
         </AppBar>
         <MyScreenbox screenIndex={true}>
-          <CompanyCreate
-            ID={tableRows?.ADMIN_ID}
-            Username={tableRows?.ADMIN_USERNAME}
-            Update={(e) => setUpdateData(e)}
-          />
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              {Rows.length != 0 ? <TableHead>
-                <TableRow>
-                  {[
-                    "Company Name",
-                    "Company ID",
-                    "Company username",
-                    "Phone",
-                    "Email",
-                    "Address",
-                    "State",
-                    "Detail",
-                  ].map((item) => (
-                    <TableCell size="large">{item}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead> : ""}
-              <TableBody>
-                {Rows?.map((post) => (
-                  <>
-                    <TableRow
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell size="small">{post.COMPANY_NAME}</TableCell>
-                      <TableCell size="small">{post.COMPANY_ID}</TableCell>
-                      <TableCell size="small">
-                        {post.COMPANY_USERNAME}
-                      </TableCell>
-                      <TableCell size="small">{post.COMPANY_PHONE}</TableCell>
-                      <TableCell size="small">{post.COMPANY_EMAIL}</TableCell>
-                      <TableCell size="small">{post.COMPANY_ADD2}</TableCell>
-                      <TableCell size="small">{post.COMPANY_STATE}</TableCell>
-                      <TableCell size="small">
-                        <Button onClick={(e) => ShowCompDetail(post)}>
-                          {" "}
-                          view
-                        </Button>
-                      </TableCell>
+          {isLoading ? (
+            <Skeleton
+              variant="circular"
+              width={40}
+              height={40}
+              sx={{ position: "fixed", top: "80px", right: "80px" }}
+            />
+          ) : (
+            <CompanyCreate
+              ID={tableRows?.ADMIN_ID}
+              Username={tableRows?.ADMIN_USERNAME}
+              Update={(e) => setUpdateData(e)}
+            />
+          )}
+          {isLoading ? (
+            <Animations />
+          ) : (
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                {Rows?.length != 0 ? (
+                  <TableHead>
+                    <TableRow>
+                      {[
+                        "Company Name",
+                        "Company ID",
+                        "Company username",
+                        "Phone",
+                        "Email",
+                        "Address",
+                        "State",
+                        "Detail",
+                      ].map((item) => (
+                        <TableCell size="large">{item}</TableCell>
+                      ))}
                     </TableRow>
-                  </>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                  </TableHead>
+                ) : (
+                  ""
+                )}
+                <TableBody>
+                  {Rows?.map((post) => (
+                    <>
+                      <TableRow
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell size="small">{post?.COMPANY_NAME}</TableCell>
+                        <TableCell size="small">{post?.COMPANY_ID}</TableCell>
+                        <TableCell size="small">
+                          {post?.COMPANY_USERNAME}
+                        </TableCell>
+                        <TableCell size="small">
+                          {post?.COMPANY_PHONE}
+                        </TableCell>
+                        <TableCell size="small">
+                          {post?.COMPANY_EMAIL}
+                        </TableCell>
+                        <TableCell size="small">{post?.COMPANY_ADD2}</TableCell>
+                        <TableCell size="small">
+                          {post?.COMPANY_STATE}
+                        </TableCell>
+                        <TableCell size="small">
+                          <Button onClick={(e) => ShowCompDetail(post)}>
+                            {" "}
+                            view
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </MyScreenbox>
       </MyScreen>
     </>

@@ -60,6 +60,7 @@ export default function ProjectCreate(props) {
     PROJECT_COUNTRY:"",
     PROJECT_STATE:""
   });
+  const [errorMsg, setErrorMsg] = useState("");
 
 
   const availableState = country?.find((c) => c.name === createProject.PROJECT_COUNTRY);
@@ -75,9 +76,9 @@ export default function ProjectCreate(props) {
     let errors = {};
 
     if (inputValues.PROJECT_USERNAME.trim() === "") {
-      errors.PROJECT_USERNAME = "Username Name is required";
+      errors.PROJECT_USERNAME = "Username is required";
     } else if (inputValues.PROJECT_USERNAME.length > 15) {
-      errors.PROJECT_USERNAME = "Username Name should not exceed 15 characters";
+      errors.PROJECT_USERNAME = "Username should not exceed 15 characters";
     } else if (/[!@#$%^&*(),.?":{}|<>]/.test(inputValues.PROJECT_USERNAME)) {
       errors.PROJECT_USERNAME = "Username should not contain symbols";
     } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.PROJECT_USERNAME)) {
@@ -157,10 +158,38 @@ export default function ProjectCreate(props) {
     console.log("heello world", createProject);
   };
 
+  const handleSubmission = () => {
+    setErrors(validateValues(createProject));
+    if (
+      !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
+      !createProject.PROJECT_EMAIL ||
+      !createProject.PROJECT_PASSWORD ||
+      !createProject.PROJECT_NAME ||
+      !createProject.PROJECT_STATE ||
+      !createProject.PROJECT_CITY ||
+      !createProject.PROJECT_PHONE ||
+      !createProject.PROJECT_HOURLY_WAGE ||
+      !createProject.PROJECT_ROLE ||
+      !createProject.PROJECT_ADD ||
+      !createProject.PROJECT_USERNAME
+    ) {
+      setErrorMsg("Fill all fields");
+      return;
+    }
+    setErrorMsg("");
+
+    if (
+      createProject.PROJECT_MEMBER_PARENT_USERNAME &&
+      createProject.PROJECT_EMAIL
+    ) {
+            handleSubmission();
+    }
+  };
+
   //api create project
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors(validateValues(createProject));
+    
     if (Object.keys(errors).length === 0) {
       axios
         .post("http://3.84.137.243:5001/create_project", createProject, {
@@ -190,9 +219,11 @@ export default function ProjectCreate(props) {
       <Button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
-        className=" border-0"
-        variant="outlined"
+        className="btn rounded-0 border-0  rounded-0 text-light"
+        // variant="outlined"
+        variant="contained"
         size="small"
+
       >
         + Add New Project
       </Button>
@@ -211,22 +242,16 @@ export default function ProjectCreate(props) {
                 <input
                   type="text"
                   className="form-control "
-                  id="inputusername"
                   placeholder="Username"
                   value={createProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
                   onChange={handleCreate}
+                  required
                 />
                 {errors.PROJECT_USERNAME && (
                   <p className="error text-danger fw-light">
                     {errors.PROJECT_USERNAME}
                   </p>
-                )}
-
-                {resError ? (
-                  <p className="error text-danger fw-light">{resError}</p>
-                ) : (
-                  ""
                 )}
               </div>
               <div className="form-group col-xl-4">
@@ -239,12 +264,8 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_NAME}
                   name="PROJECT_NAME"
                   onChange={handleCreate}
+                  required
                 />
-                {errors.PROJECT_NAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_NAME}
-                  </p>
-                )}
               </div>
               <div className="form-group col-xl-4">
                 <label>Contact</label>
@@ -256,12 +277,8 @@ export default function ProjectCreate(props) {
                   name="PROJECT_PHONE"
                   value={createProject.PROJECT_PHONE}
                   onChange={handleCreate}
+                  required
                 />
-                {errors.PROJECT_PHONE && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_PHONE}
-                  </p>
-                )}
               </div>
             </div>
             <div className="row py-2">
@@ -273,12 +290,8 @@ export default function ProjectCreate(props) {
                   name="PROJECT_START_DATE"
                   onChange={handleCreate}
                   className="form-control"
+                  required
                 />
-                {errors.PROJECT_START_DATE && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_START_DATE}
-                  </p>
-                )}
               </div>
               <div className="form-group col-xl-6">
                 <label>Project End date</label>
@@ -288,12 +301,8 @@ export default function ProjectCreate(props) {
                   name="PROJECT_END_DATE"
                   onChange={handleCreate}
                   className="form-control"
+                  required
                 />
-                {errors.PROJECT_END_DATE && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_END_DATE}
-                  </p>
-                )}
               </div>
             </div>
             <div className="row py-2">
@@ -305,6 +314,7 @@ export default function ProjectCreate(props) {
                   onChange={handleCreate}
                   name="PROJECT_EMROLMNT_TYPE"
                   value={createProject.PROJECT_EMROLMNT_TYPE}
+                  required
                 >
                   <option selected>Choose...</option>
                   <option>Painter</option>
@@ -312,11 +322,6 @@ export default function ProjectCreate(props) {
                   <option>Plumber</option>
                   <option>Engineer</option>
                 </select>
-                {errors.PROJECT_EMROLMNT_TYPE && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_EMROLMNT_TYPE}
-                  </p>
-                )}
               </div>
 
               <div className="form-group col-md-6">
@@ -328,12 +333,8 @@ export default function ProjectCreate(props) {
                   name="PROJECT_SUPERVISOR"
                   value={createProject.PROJECT_SUPERVISOR}
                   onChange={handleCreate}
+                  required
                 />
-                {errors.PROJECT_SUPERVISOR && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_SUPERVISOR}
-                  </p>
-                )}
               </div>
             </div>
             <div className="row py-2">
@@ -347,13 +348,8 @@ export default function ProjectCreate(props) {
                   name="PROJECT_ADD"
                   value={createProject.PROJECT_ADD}
                   onChange={handleCreate}
+                  required
                 />
-
-                {errors.PROJECT_ADD && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_ADD}
-                  </p>
-                )}
               </div>
             </div>
             <div className="row py-2">
@@ -365,8 +361,10 @@ export default function ProjectCreate(props) {
                   name="PROJECT_COUNTRY"
                   value={createProject.PROJECT_COUNTRY}
                   onChange={handleCreate}
+                  required
                 >
                   <option>--Choose Country--</option>
+
                   {country?.map((value, key) => {
                     return (
                       <option value={value.name} key={key}>
@@ -375,11 +373,6 @@ export default function ProjectCreate(props) {
                     );
                   })}
                 </select>
-                {errors.PROJECT_COUNTRY && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_COUNTRY}
-                  </p>
-                )}
               </div>
 
               <div className="form-group col-xl-4">
@@ -390,6 +383,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_STATE"
                   value={createProject.PROJECT_STATE}
                   onChange={handleCreate}
+                  required
                 >
                   <option>--Choose State--</option>
                   {availableState?.states?.map((e, key) => {
@@ -400,11 +394,6 @@ export default function ProjectCreate(props) {
                     );
                   })}
                 </select>
-                {errors.PROJECT_STATE && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_STATE}
-                  </p>
-                )}
               </div>
 
               <div className="form-group col-xl-4">
@@ -415,6 +404,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_CITY"
                   value={createProject.PROJECT_CITY}
                   onChange={handleCreate}
+                  required
                 >
                   <option>--Choose City--</option>
                   {availableCities?.cities?.map((e, key) => {
@@ -425,17 +415,16 @@ export default function ProjectCreate(props) {
                     );
                   })}
                 </select>
-                {errors.PROJECT_CITY && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_CITY}
-                  </p>
-                )}
               </div>
             </div>
+           <center>{errorMsg && <p className=" text-danger fw-light mb-0">
+                  {errorMsg}
+                    </p>
+                  }</center> 
             <button
               type="submit"
               className="btn btn-info text-white "
-              onClick={handleSubmit}
+              onClick={handleSubmission}
             >
               Submit
             </button>{" "}
