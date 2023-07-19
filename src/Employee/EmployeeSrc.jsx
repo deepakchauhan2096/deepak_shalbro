@@ -45,7 +45,7 @@ const EmployeeSrc = (props) => {
 
   useEffect(() => {
     fetchAllEmployee();
-  },[]);
+  },[updatedata]);
 
   console.log(updatedata, "updateddata")
 
@@ -266,9 +266,9 @@ const EmployeeSrc = (props) => {
     display: props.screenIndex ? "block" : "none",
   }));
 
-  const updateData = (event) => {
-    setUpdateData(event);
-  };
+  // const updateData = (event) => {
+  //   setUpdateData(event);
+  // };
 
   console.log(index, "index");
 
@@ -290,7 +290,7 @@ const EmployeeSrc = (props) => {
   return (
     <>
       <Box className="box">
-        <EmployeeCreate  mainData={filterallempData} update={(event) => updateData(event)} name={"Employee"} />
+        <EmployeeCreate  mainData={filterallempData} update={(event) => setUpdateData(event)} name={"Employee"} />
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (

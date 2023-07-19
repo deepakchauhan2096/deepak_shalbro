@@ -69,12 +69,13 @@ export default function AddEmployee(props) {
       errors.EMPLOYEE_USERNAME = "Username is required";
     } else if (
       inputValues.EMPLOYEE_USERNAME.length < 6 ||
-      inputValues.EMPLOYEE_USERNAME.length > 10
+      inputValues.EMPLOYEE_USERNAME.length > 15
     ) {
       errors.EMPLOYEE_USERNAME = "Username length must be between 6 and 10";
     } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
       errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
     }
+
     //Employee Mail
     if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
       errors.EMPLOYEE_EMAIL = "Email is required";
@@ -91,6 +92,11 @@ export default function AddEmployee(props) {
 
     if (inputValues.EMPLOYEE_PHONE.trim() === "") {
       errors.EMPLOYEE_PHONE = "Phone Number is required";
+    }else if (
+      inputValues.EMPLOYEE_PHONE.length < 9 ||
+      inputValues.EMPLOYEE_PHONE.length > 15
+    ) {
+      errors.EMPLOYEE_PHONE = "Phone Number length must be between 6 and 10";
     }
     //Employement Type
     if (inputValues.EMPLOYEE_EMPLMNTTYPE.trim() === "") {
@@ -149,8 +155,7 @@ export default function AddEmployee(props) {
     console.log("on btn submit");
     e.preventDefault();
     setErrors(validateValues(createEmployee));
-    setSubmitting(true);
-    if(Object.keys(errors).length === 0){
+    if(Object.keys(errors).length === 0 && createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME){
     axios
       .post("http://3.84.137.243:5001/create_employee", createEmployee, {
         headers,
@@ -215,6 +220,7 @@ export default function AddEmployee(props) {
                   <input
                     type="text"
                     className="form-control rounded-0"
+                    placeholder="Enter Employee Username"
                     id="inputZip"
                     value={createEmployee.EMPLOYEE_USERNAME}
                     name="EMPLOYEE_USERNAME"
@@ -232,7 +238,7 @@ export default function AddEmployee(props) {
                     type="text"
                     className="form-control rounded-0"
                     id="empName"
-                    placeholder="Name of the Employee"
+                    placeholder="Enter Employee name"
                     value={createEmployee.EMPLOYEE_NAME}
                     name="EMPLOYEE_NAME"
                     onChange={handleCreate}
@@ -437,7 +443,8 @@ export default function AddEmployee(props) {
                   )}
                 </div>
               </div>
-              
+              <div className="row pt-2">
+                <div className="col-12">
               <button
                 type="submit"
                 className="btn btn-info text-white "
@@ -451,6 +458,8 @@ export default function AddEmployee(props) {
               >
                 Discard
               </button>
+              </div>
+              </div>
             </form>
           </Box>
         </Container>

@@ -5,6 +5,8 @@ import pluslogo from "../assests/images/plus.png";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { MyContext } from "./Mycontext";
+import country from "../Api/countriess.json"
+// import states from "../Api/states.json"
 
 import {
   Button,
@@ -55,35 +57,55 @@ export default function ProjectCreate(props) {
     PROJECT_END_DATE: "",
     PROJECT_SUPERVISOR: "",
     PROJECT_EMROLMNT_TYPE: "",
+    PROJECT_COUNTRY:"",
+    PROJECT_STATE:""
   });
 
+
+  const availableState = country?.find((c) => c.name === createProject.PROJECT_COUNTRY);
+  const availableCities = availableState?.states?.find(
+    (s) => s.name === createProject.PROJECT_STATE
+  );
+
+  console.log(availableCities, "cities")
+
+
+  
   const validateValues = (inputValues) => {
     let errors = {};
 
     if (inputValues.PROJECT_USERNAME.trim() === "") {
-      errors.PROJECT_USERNAME = "Username is required";
+      errors.PROJECT_USERNAME = "Username Name is required";
+    } else if (inputValues.PROJECT_USERNAME.length > 15) {
+      errors.PROJECT_USERNAME = "Username Name should not exceed 15 characters";
+    } else if (/[!@#$%^&*(),.?":{}|<>]/.test(inputValues.PROJECT_USERNAME)) {
+      errors.PROJECT_USERNAME = "Username should not contain symbols";
+    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.PROJECT_USERNAME)) {
+      errors.PROJECT_USERNAME = "Username should not contain symbols";
     } else if (
       inputValues.PROJECT_USERNAME.length < 6 ||
       inputValues.PROJECT_USERNAME.length > 10
     ) {
       errors.PROJECT_USERNAME = "Username length must be between 6 and 10";
-    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.PROJECT_USERNAME)) {
-      errors.PROJECT_USERNAME = "Username should not contain symbols";
     }
 
     if (inputValues.PROJECT_NAME.trim() === "") {
       errors.PROJECT_NAME = "Project Name is required";
-    } else if (inputValues.PROJECT_NAME.length > 10) {
-      errors.PROJECT_NAME = "Project Name should not exceed 10 characters";
-    } else if (/\d/.test(inputValues.PROJECT_NAME)) {
-      errors.PROJECT_NAME = "Project Name should not contain numbers";
-    } else if (/[!@#$%^&*(),.?":{}|<>]/.test(inputValues.PROJECT_NAME)) {
+    } else if (inputValues.PROJECT_NAME.length > 15) {
+      errors.PROJECT_NAME = "Project Name should not exceed 15 characters";
+    } else if (/[!@#$%^*(),.?":{}|<>]/.test(inputValues.PROJECT_NAME)) {
       errors.PROJECT_NAME = "Project Name should not contain symbols";
     }
 
     if (inputValues.PROJECT_PHONE.trim() === "") {
       errors.PROJECT_PHONE = "Phone Number is required";
+    } else if (
+      inputValues.PROJECT_PHONE.length < 6 ||
+      inputValues.PROJECT_PHONE.length > 15
+    ) {
+      errors.PROJECT_PHONE = "Phone Number length must be between 6 and 10";
     }
+
     if (inputValues.PROJECT_EMROLMNT_TYPE.trim() === "") {
       errors.PROJECT_EMROLMNT_TYPE = "Please select an option";
     }
@@ -112,6 +134,14 @@ export default function ProjectCreate(props) {
     }
     if (inputValues.PROJECT_CITY.trim() === "") {
       errors.PROJECT_CITY = "City is Required";
+    }
+
+    if (inputValues.PROJECT_COUNTRY.trim() === "") {
+      errors.PROJECT_CITY = "Country is Required";
+    }
+
+    if (inputValues.PROJECT_STATE.trim() === "") {
+      errors.PROJECT_CITY = "State is Required";
     }
 
     return errors;
@@ -152,6 +182,8 @@ export default function ProjectCreate(props) {
   };
 
   console.log("ind", index);
+
+  //state city api
 
   return (
     <>
@@ -305,7 +337,7 @@ export default function ProjectCreate(props) {
               </div>
             </div>
             <div className="row py-2">
-              <div className="form-group  col-md-8">
+              <div className="form-group  col-md-12">
                 <label>Address</label>
                 <textarea
                   type="text"
@@ -323,16 +355,76 @@ export default function ProjectCreate(props) {
                   </p>
                 )}
               </div>
-              <div className="form-group col-md-4">
+            </div>
+            <div className="row py-2">
+              <div className="form-group col-xl-4">
+                <label>Country</label>
+                <select
+                className="form-control"
+                  placeholder="Country"
+                  name="PROJECT_COUNTRY"
+                  value={createProject.PROJECT_COUNTRY}
+                  onChange={handleCreate}
+                >
+                  <option>--Choose Country--</option>
+                  {country?.map((value, key) => {
+                    return (
+                      <option value={value.name} key={key}>
+                        {value.name}
+                      </option>
+                    );
+                  })}
+                </select>
+                {errors.PROJECT_COUNTRY && (
+                  <p className="error text-danger fw-light">
+                    {errors.PROJECT_COUNTRY}
+                  </p>
+                )}
+              </div>
+
+              <div className="form-group col-xl-4">
+                <label>State</label>
+                <select
+                className="form-control"
+                  placeholder="State"
+                  name="PROJECT_STATE"
+                  value={createProject.PROJECT_STATE}
+                  onChange={handleCreate}
+                >
+                  <option>--Choose State--</option>
+                  {availableState?.states?.map((e, key) => {
+                    return (
+                      <option value={e.name} key={key}>
+                        {e.name}
+                      </option>
+                    );
+                  })}
+                </select>
+                {errors.PROJECT_STATE && (
+                  <p className="error text-danger fw-light">
+                    {errors.PROJECT_STATE}
+                  </p>
+                )}
+              </div>
+
+              <div className="form-group col-xl-4">
                 <label>City</label>
-                <input
-                  type="text"
-                  className="form-control "
-                  id="inputCity"
+                <select
+                className="form-control"
+                  placeholder="City"
                   name="PROJECT_CITY"
                   value={createProject.PROJECT_CITY}
                   onChange={handleCreate}
-                />
+                >
+                  <option>--Choose City--</option>
+                  {availableCities?.cities?.map((e, key) => {
+                    return (
+                      <option value={e.name} key={key}>
+                        {e.name}
+                      </option>
+                    );
+                  })}
+                </select>
                 {errors.PROJECT_CITY && (
                   <p className="error text-danger fw-light">
                     {errors.PROJECT_CITY}
@@ -340,7 +432,6 @@ export default function ProjectCreate(props) {
                 )}
               </div>
             </div>
-            <div className="row py-2"></div>
             <button
               type="submit"
               className="btn btn-info text-white "
