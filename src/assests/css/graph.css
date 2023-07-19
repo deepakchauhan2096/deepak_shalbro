@@ -1,0 +1,44 @@
+.progress-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+       
+  }
+  
+  .progress-bar .counter {
+    content: "";
+  }
+
+  /* searchbar */
+  .search-container {
+    display: flex;
+    border: 1px solid whitesmoke;
+  }
+  
+  .search-container input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+    outline: none;
+  }
+  
+  .search-container button {
+    float: right;
+    padding: 6px 15px;
+    margin-top: 0;
+    margin-right: 0;
+    background: #ddd;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .search-container button:hover {
+    background: #ccc;
+  }
+  

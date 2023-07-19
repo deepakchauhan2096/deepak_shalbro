@@ -1,0 +1,93 @@
+/* h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 1.5rem !important;
+} */
+
+/* p,
+b,
+div,
+button,
+tr,
+th,
+td,
+li {
+  font-size: 0.9rem !important;
+} */
+*{
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+p,b{
+  font-size: 1rem;
+}
+
+.fw-light {
+  font-size: 12px;
+  margin-bottom: 0;
+}
+
+.form-control{
+  height: 35px !important;
+}
+
+.containers {
+  background-color: #f9f9f9;
+}
+
+.box {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(100% - 250px);
+  height: 100vh;
+  background: #fff;
+  margin-left: 250px;
+}
+
+.box-tab {
+  height: 88vh;
+}
+
+.button {
+  border: none;
+  border-radius: 0 !important;
+}
+
+.btn-blue {
+  background: "#3596d9";
+}
+
+.view-btn {
+  border-radius: 20px !important;
+  font-size: 12px !important;
+}
+
+.btn {
+  box-shadow: none !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
