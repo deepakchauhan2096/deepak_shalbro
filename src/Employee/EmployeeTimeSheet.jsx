@@ -48,7 +48,7 @@ const EmployeeTimeSheet = (props) => {
 
   useEffect(() => {
     gettimesheet();
-  },[props.mainData.EMPLOYEE_MEMBER_PARENT_USERNAME]);
+  },[props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME]);
 
   console.log(dateValue, "datevalue");
 
@@ -65,8 +65,8 @@ const EmployeeTimeSheet = (props) => {
         "http://3.84.137.243:5001/get_employee_all_for_attendence",
         {
           ATTENDANCE_ADMIN_USERNAME:
-            props.mainData.EMPLOYEE_MEMBER_PARENT_USERNAME,
-          ATTENDANCE_EMPLOYEE_USERNAME: props.mainData.EMPLOYEE_USERNAME,
+            props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+          ATTENDANCE_EMPLOYEE_USERNAME: props.mainData?.EMPLOYEE_USERNAME,
           ATTENDANCE_START_DATE: dateValue.ATTENDANCE_START_DATE,
           ATTENDANCE_END_DATE: dateValue.ATTENDANCE_END_DATE,
         },
@@ -139,7 +139,7 @@ const EmployeeTimeSheet = (props) => {
         <b style={{ fontWeight: "600", color: "black" }}>Employee Name : </b>
         {props.mainData.EMPLOYEE_NAME}
       </p>
-      <form style={{ display: "flex", gap: 10, padding: "5px 0" }}>
+      <div style={{ display: "flex", gap: 10, padding: "5px 0" }}>
         <div className="form-group col-xl-1">
           <label>Date From: </label>
           <input
@@ -175,7 +175,7 @@ const EmployeeTimeSheet = (props) => {
             value="Submit"
           />
         </div>
-      </form>
+      </div>
       <table className="table table-hover border">
         <thead style={{ border: "1px solid black" }}>
           <tr className="table-dark">
