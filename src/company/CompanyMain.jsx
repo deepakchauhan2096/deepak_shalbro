@@ -18,17 +18,10 @@ import {
   Tooltip,
   styled,
 } from "@mui/material";
-import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import { Link, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
-import CircularProgress from "@mui/material/CircularProgress";
-import CompanyNavbar from "./CompanyNavbar";
 import ProjectCreate from "./ProjectCreate";
-import AddIcon from "@mui/icons-material/Add";
-import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import Upload from "./ProjectUpload";
 import ProjectUpload from "./ProjectUpload";
-import EmployeeCreate from "../Employee/EmployeeCreate";
 import EmployeeSrc from "../Employee/EmployeeSrc";
 import EmployeeAttendance from "../Employee/EmployeeAttendance";
 import { MyContext } from "./Mycontext";
@@ -183,11 +176,6 @@ const CompanyMain = () => {
     handleOpen();
   };
 
-  // for updating the event according when add contract reflect back on page at the same time
-  // const updateDate = (event) => {
-  //   setUpdateData(event);
-  //   console.log(event, "event");
-  // };
 
   const filterData = data?.row;
   console.log(filterData, "f-data ggvvg");
@@ -199,6 +187,7 @@ const CompanyMain = () => {
     overflow: "auto",
     borderRadius: 0,
     Border: 0,
+    background:"#277099",
     display: props.screenIndex ? "block" : "none",
   }));
 
@@ -215,15 +204,11 @@ const CompanyMain = () => {
 
   const MyScreenbox = styled(Paper)((props) => ({
     height: "calc(100vh - 50.5px)",
-    // height: "100vh",
-    // padding: "50px",
     paddingBottom: "0",
-    // overflow: "scroll",
     borderRadius: 0,
     Border: 0,
     position: "relative",
     boxShadow: "none",
-    // borderRadius:"10px"
   }));
 
   const urls = [
@@ -239,9 +224,9 @@ const CompanyMain = () => {
     {
       listname: "Employees",
     },
-    {
-      listname: "Attendance",
-    },
+    // {
+    //   listname: "Attendance",
+    // },
   ];
 
   console.log(navIndex, "navindex");
@@ -330,10 +315,10 @@ const CompanyMain = () => {
         </div>
       </Drawer>
 
-      <NavScreen screenIndex={navIndex === 0}>
+      <NavScreen screenIndex={navIndex === 0} >
         <Box className="box">
           <div className="container-fluid d-flex pb-0 g-0 flex-column">
-            <div style={{ height: "20%" }}>
+            <div style={{ height: "20%",background:"#277099" }}>
               <Button
                 className="btn button btn-blue"
                 variant="contained"
@@ -349,7 +334,7 @@ const CompanyMain = () => {
                 <Animations />
               </Box>
             ) : (
-              <div style={{ height: "88vh", padding: 20, paddingBottom: "0" }}>
+              <div style={{ height: "89vh", padding: 20, paddingBottom: "0"}}>
                 <DataGrid
                   sx={{ border: "none" }}
                   rows={rows}
@@ -378,7 +363,7 @@ const CompanyMain = () => {
           }}
           className="box position-absolute overflow-auto"
         >
-          <div className="container-fluid pb-0 g-0">
+          <div className="container-fluid pb-0 g-0" style={{background:"#277099" }}>
             <Button
               onClick={handleClose}
               variant="contained"
@@ -390,11 +375,12 @@ const CompanyMain = () => {
             <Button
               onClick={(e) => setIndex(1)}
               variant={index === 1 ? "outlined" : "contained"}
-              className="btn rounded-0 border-0"
+              className="btn rounded-0 border-0  rounded-0 text-light"
               size="small"
             >
               Detail
             </Button>
+            
             {!Edit ? <Button
               onClick={(e) => setEdit(true)}
               variant={"contained"}
@@ -413,14 +399,15 @@ const CompanyMain = () => {
               Save
             </Button>} 
 
-            {/* <Button
+
+            <Button
               onClick={(e) => setIndex(2)}
               variant={index === 2 ? "outlined" : "contained"}
-              className="btn rounded-0 border-0"
+              className="btn rounded-0 border-0  rounded-0 text-light"
               size="small"
             >
               Payment
-            </Button> */}
+            </Button>
 
             {/* <Button
               onClick={(e) => setIndex(3)}
@@ -439,6 +426,7 @@ const CompanyMain = () => {
             >
               Documents
             </Button> */}
+
           </div>
 
           {index === 1 ? (
@@ -972,184 +960,6 @@ const CompanyMain = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* <div className="row">
-                  
-
-                  <div className="col">
-                    <b>Contractor Name</b>
-                    <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.row.companyName}
-                    </p>
-                  </div>
-                  <div className="col">
-                    <b>Phone</b>
-                    <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.row.PhoneNumber}
-                    </p>
-                  </div>
-                  <div className="col">
-                    <b>State</b>
-                    <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.row.state}
-                    </p>
-                  </div>
-                  <div className="col">
-                    <b>City</b>
-                    <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.row.city}
-                    </p>
-                  </div>
-                  <div className="col">
-                    <b>Address</b>
-                    <p className="bg-light text-dark px-2 rounded-4">
-                      {filterData.row.address}
-                    </p>
-                  </div>
-                </div>
-
-                <hr />
-
-                <div className="row">
-                  <div className="col">
-                    <b>Project Name</b>
-                    <select
-                      className="border-none rounded-3 bg-light"
-                      style={{
-                        width: "100%",
-                        height: "22px",
-                        lineHeight: "0",
-                        paddingTop: "0",
-                        border: "none",
-                        outline: "none",
-                      }}
-                    >
-                      <option value="sun Tower">sun Tower</option>
-                      <option value="sun Tower">School</option>
-                      <option value="sun Tower">temple</option>
-                      <option value="sun Tower">star city</option>
-                      <option value="sun Tower">bridge</option>
-                    </select>
-                  </div>
-                  <div className="col">
-                    <b>Client</b>
-                    <p className="bg-light text-dark px-2 rounded-4">L&T</p>
-                  </div>
-                  <div className="col">
-                    <b>Project Status</b>
-                    <p className="bg-success text-white px-2 rounded-4">
-                      In Execution
-                    </p>
-                  </div>
-                  <div className="col">
-                    <b>Project Start</b>
-                    <p className="bg-light text-dark px-2 rounded-4">
-                      20-05-2020
-                    </p>
-                  </div>
-                  <div className="col">
-                    <b>Project End</b>
-                    <p className="bg-light text-dark px-2 rounded-4">
-                      30-09-2023
-                    </p>
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div className="col">
-                    <b>Project Progress</b>
-                    <div className="p-2 rounded-3 bg-light">
-                      <div
-                        className="progress-bar"
-                        style={{
-                          background: `radial-gradient(closest-side, white 79%, transparent 80% 100%),conic-gradient(hotpink ${filterData.row.projectprogress}, pink 0)`,
-                        }}
-                      >
-                        <div className="counter">
-                          {filterData.row.projectprogress}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <hr />
-
-                <div className="row">
-                  <div className="col-3">
-                    <b>Cost Breakdown</b>
-                    <div className="bg-light rounded-3 pb-2">
-                      <div className="px-2 py-1 rounded-3 bg-light">
-                        <div>
-                          Material - <b>2365$</b>
-                        </div>
-                        <div
-                          style={{
-                            background: "grey",
-                            content: "",
-                            height: "12px",
-                            width: "100%",
-                          }}
-                        >
-                          <div
-                            style={{
-                              background: "aqua",
-                              content: "",
-                              height: "12px",
-                              width: "50%",
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div className="px-2 py-1 rounded-3 bg-light">
-                        <div>
-                          Labour - <b>365$</b>
-                        </div>
-                        <div
-                          style={{
-                            background: "grey",
-                            content: "",
-                            height: "12px",
-                            width: "100%",
-                          }}
-                        >
-                          <div
-                            style={{
-                              background: "red",
-                              content: "",
-                              height: "12px",
-                              width: "59%",
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-
-                      <div className="px-2  py-1 rounded-3 bg-light">
-                        <div>
-                          Equipments - <b>2365$</b>
-                        </div>
-                        <div
-                          style={{
-                            background: "grey",
-                            content: "",
-                            height: "12px",
-                            width: "100%",
-                          }}
-                        >
-                          <div
-                            style={{
-                              background: "green",
-                              content: "",
-                              height: "12px",
-                              width: "90%",
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </div>
           ) : (
@@ -1166,19 +976,7 @@ const CompanyMain = () => {
         <Box className="box">
           <MyScreen screenIndex={true}>
             <MyScreenbox sx={{ m: 3 }}>
-              {/* <Button
-                variant="contained"
-                className="button rounded-2 lowercase"
-              >
-                Upload documnent&nbsp;
-                <ArrowCircleUpIcon fontSize="small" />
-              </Button>
-              &nbsp;&nbsp;
-              <Button variant="outlined" className="button rounded-2 lowercase">
-                New documnent&nbsp;
-                <AddIcon fontSize="small" />
-              </Button> */}
-              <ProjectUpload />
+              <ProjectUpload empData={location.state.props}/>
             </MyScreenbox>
           </MyScreen>
         </Box>
@@ -1188,9 +986,9 @@ const CompanyMain = () => {
         <EmployeeSrc empData={location.state.props} />
       </NavScreen>
 
-      <NavScreen screenIndex={navIndex === 4}>
+      {/* <NavScreen screenIndex={navIndex === 4}>
         <EmployeeAttendance empData={location.state.props} />
-      </NavScreen>
+      </NavScreen> */}
     </>
   );
 };

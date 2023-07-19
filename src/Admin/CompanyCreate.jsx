@@ -202,14 +202,14 @@ export default function CompanyCreate(props) {
                   name="COMPANY_ADD2"
                   value={create_company.COMPANY_ADD2}
                   onChange={handleCreate}
-                  rows="4"
-                  cols="50"
+                  // rows="4"
+                  // cols="50"
                 />
               </div>
               <Button
                 type="submit"
                 variant="contained"
-                className="btn text-white rounded-0 mt-2"
+                className="btn text-white rounded-2 mt-2"
                 onClick={handleSubmit}
               >
                 Submit
@@ -218,7 +218,7 @@ export default function CompanyCreate(props) {
                 variant="contained"
                 color="error"
                 onClick={handleClose}
-                className="btn text-white rounded-0 mt-2"
+                className="btn text-white rounded-2 mt-2"
               >
                 Discard
               </Button>

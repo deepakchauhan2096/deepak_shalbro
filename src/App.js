@@ -50,7 +50,7 @@ const [projectcreatedata, setProject] = useState([])
         <MyContext.Provider value={{ text, setText, data, setData, projectcreatedata, setProject }}>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<AdminCreate />} />
+              <Route path="/signup" element={<AdminCreate />} />
               <Route
                 path="/admin"
                 element={
@@ -62,7 +62,7 @@ const [projectcreatedata, setProject] = useState([])
               />
               <Route path="/company" element={<CompanyMain />} />
               <Route path="/login" element={<AdminLogin />} />
-              {/* <Route path="/employee" element={<LoginEmp />} /> */}
+              <Route path="/" element={<AdminLogin />} />
               <Route path="/createemp" element={<CreateEmp />} />
             </Routes>
           </BrowserRouter>

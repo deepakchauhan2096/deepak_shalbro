@@ -20,8 +20,6 @@ import {
 import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
-import CloseIcon from "@mui/icons-material/Close";
-import Mymenu from "../components/Menus";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 
 
@@ -41,11 +39,12 @@ const EmployeeSrc = (props) => {
   console.log("All_employe_data: =>", allempData);
 
   const filterallempData =  props.empData;
+  
   console.log(filterallempData,"single data")
 
   useEffect(() => {
     fetchAllEmployee();
-  },[]);
+  },[updatedata]);
 
   console.log(updatedata, "updateddata")
 
@@ -58,10 +57,10 @@ const EmployeeSrc = (props) => {
       EMPLOYEE_ADD: "",
       EMPLOYEE_STATE: "",
       EMPLOYEE_CITY: "",
-      EMPLOYEE_PARENT_ID: 45,
-      EMPLOYEE_PARENT_USERNAME: "company21",
-      EMPLOYEE_MEMBER_PARENT_ID: 18,
-      EMPLOYEE_MEMBER_PARENT_USERNAME: "deepanshu1",
+      EMPLOYEE_PARENT_ID: "",
+      EMPLOYEE_PARENT_USERNAME: "",
+      EMPLOYEE_MEMBER_PARENT_ID: "",
+      EMPLOYEE_MEMBER_PARENT_USERNAME: "",
       EMPLOYEE_ROLE: "",
       EMPLOYEE_NAME: "",
       EMPLOYEE_PHONE: "",
@@ -86,10 +85,10 @@ const EmployeeSrc = (props) => {
       const response = await axios.put(
         "http://3.84.137.243:5001/get_employee",
         {
-          EMPLOYEE_MEMBER_PARENT_ID: filterallempData.COMPANY_PARENT_ID,
-          EMPLOYEE_MEMBER_PARENT_USERNAME: filterallempData.COMPANY_PARENT_USERNAME,
-          EMPLOYEE_PARENT_USERNAME: filterallempData.COMPANY_USERNAME,
-          EMPLOYEE_PARENT_ID: filterallempData.COMPANY_ID,
+          EMPLOYEE_MEMBER_PARENT_ID: filterallempData?.COMPANY_PARENT_ID,
+          EMPLOYEE_MEMBER_PARENT_USERNAME: filterallempData?.COMPANY_PARENT_USERNAME,
+          EMPLOYEE_PARENT_USERNAME: filterallempData?.COMPANY_USERNAME,
+          EMPLOYEE_PARENT_ID: filterallempData?.COMPANY_ID,
         },
         { headers }
       );
@@ -225,7 +224,7 @@ const EmployeeSrc = (props) => {
     {
       date: "14/06/23",
       day: "Wednesday",
-      status: "Absend",
+      status: "Absent",
       in: 11,
       out: 6,
       workinghrs: 7,
@@ -266,9 +265,9 @@ const EmployeeSrc = (props) => {
     display: props.screenIndex ? "block" : "none",
   }));
 
-  const updateData = (event) => {
-    setUpdateData(event);
-  };
+  // const updateData = (event) => {
+  //   setUpdateData(event);
+  // };
 
   console.log(index, "index");
 
@@ -289,10 +288,10 @@ const EmployeeSrc = (props) => {
 
   return (
     <>
-      <Box className="box">
-        <EmployeeCreate  mainData={filterallempData} update={(event) => updateData(event)} name={"Employee"} />
+      <Box className="box" style={{background:"#277099" }}>
+        <EmployeeCreate  mainData={filterallempData} update={(event) => setUpdateData(event)} name={"Employee"} />
         <MyScreen sx={{ display: "block", padding: 3 }}>
-          <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
+          <Box style={{ height: "89vh", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
               <Animations />
             ) : (
@@ -324,7 +323,7 @@ const EmployeeSrc = (props) => {
         }}
         className="box position-absolute overflow-auto"
       >
-        <div className="container-fluid pb-0 g-0 position-sticky top-0">
+        <div className="container-fluid pb-0 g-0 position-sticky top-0 " style={{background:"#277099" }}>
           <Button
             onClick={handleClose}
             variant="contained"
@@ -343,7 +342,7 @@ const EmployeeSrc = (props) => {
             <Button
               onClick={(e, index) => setIndex(value)}
               variant={index === value ? "outlined" : "contained"}
-              className="btn rounded-0 border-0"
+              className="btn rounded-0 border-0  rounded-0 text-light"
               size="small"
             >
               {item}
