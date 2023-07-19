@@ -56,7 +56,7 @@ function AdminLogin() {
         />
 
         <div className={styles.footer}>
-          <b className={styles.error}>{errorMsg}</b>
+         <center><p className=" text-danger fw-light mb-0">{errorMsg}</p></center> 
           <button disabled={submitButtonDisabled} onClick={handleSubmission}>
             Login
           </button>

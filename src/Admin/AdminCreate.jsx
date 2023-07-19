@@ -25,7 +25,12 @@ function AdminCreate() {
   };
 
   const handleSubmission = () => {
-    if (!values.ADMIN_NAME || !values.ADMIN_EMAIL || !values.ADMIN_PASSWORD) {
+    if (!values.ADMIN_NAME || 
+      !values.ADMIN_EMAIL || 
+      !values.ADMIN_PASSWORD ||
+      !values.ADMIN_PHONE ||
+      !values.ADMIN_USERNAME
+      ) {
       setErrorMsg("Fill all fields");
       return;
     }
@@ -74,12 +79,14 @@ function AdminCreate() {
         <InputControl
           label="User Name"
           placeholder="Enter your username"
+          className="form-control"
           onChange={(event) =>
             setValues((prev) => ({ ...prev, ADMIN_USERNAME: event.target.value }))
           }
         />
         <InputControl
           label="Name"
+          className="form-control"
           placeholder="Enter your name"
           onChange={(event) =>
             setValues((prev) => ({ ...prev, ADMIN_NAME: event.target.value }))
@@ -87,6 +94,7 @@ function AdminCreate() {
         />
         <InputControl
           label="Email"
+          className="form-control"
           placeholder="Enter email address"
           onChange={(event) =>
             setValues((prev) => ({ ...prev, ADMIN_EMAIL: event.target.value }))
@@ -94,22 +102,25 @@ function AdminCreate() {
         />
         <InputControl
           label="Phone"
-          type="number"
+          // type="number"
+          className="form-control"
           placeholder="Enter phone"
           onChange={(event) =>
             setValues((prev) => ({ ...prev, ADMIN_PHONE: event.target.value }))
           }
         />
         <InputControl
+          type="password"
           label="Password"
           placeholder="Enter password"
+          className="form-control"
           onChange={(event) =>
             setValues((prev) => ({ ...prev, ADMIN_PASSWORD: event.target.value }))
           }
         />
 
         <div className={styles.footer}>
-          <b className={styles.error}>{errorMsg}</b>
+        <center><p className=" text-danger fw-light mb-0">{errorMsg}</p></center> 
           <button onClick={handleSubmission} disabled={submitButtonDisabled}>
             Signup
           </button>

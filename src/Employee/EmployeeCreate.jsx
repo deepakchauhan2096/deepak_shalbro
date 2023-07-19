@@ -41,102 +41,10 @@ export default function AddEmployee(props) {
     EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME,
     EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID,
   });
-  // const [values, setValues] = useState({
-  //   name: createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME,
-  //   email: createEmployee.EMPLOYEE_EMAIL,
-  //   pass: createEmployee.EMPLOYEE_USERNAME,
-  // });
-  const [newdata, setNewdata] = useState([])
-
-  const validateValues = (inputValues) => {
-    let errors = {};
-    // Employee Name
-    if (inputValues.EMPLOYEE_NAME.trim() === "") {
-      errors.EMPLOYEE_NAME = "Employee Name is required";
-    } else if (
-      inputValues.EMPLOYEE_NAME.length < 6 ||
-      inputValues.EMPLOYEE_NAME.length > 20
-    ) {
-      errors.EMPLOYEE_NAME = "Employee Name length must be between 6 and 20";
-    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_NAME)) {
-      errors.EMPLOYEE_NAME = "Employee Name should not contain symbols";
-    } else if (/\d/.test(inputValues.EMPLOYEE_NAME)) {
-      errors.EMPLOYEE_NAME = "Employee Name should not contain numbers";
-    }
-
-    // Employee Username
-    if (inputValues.EMPLOYEE_USERNAME.trim() === "") {
-      errors.EMPLOYEE_USERNAME = "Username is required";
-    } else if (
-      inputValues.EMPLOYEE_USERNAME.length < 6 ||
-      inputValues.EMPLOYEE_USERNAME.length > 15
-    ) {
-      errors.EMPLOYEE_USERNAME = "Username length must be between 6 and 10";
-    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
-      errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
-    }
-
-    //Employee Mail
-    if (inputValues.EMPLOYEE_EMAIL.trim() === "") {
-      errors.EMPLOYEE_EMAIL = "Email is required";
-    } else if (inputValues.EMPLOYEE_EMAIL.length > 25) {
-      errors.EMPLOYEE_EMAIL = "Email should not exceed 25 characters";
-    } else if (!/@/.test(inputValues.EMPLOYEE_EMAIL)) {
-      errors.EMPLOYEE_EMAIL = "Email is invalid";
-    } else if (/\d/.test(inputValues.EMPLOYEE_EMAIL)) {
-      errors.EMPLOYEE_EMAIL = "Email should not contain numbers";
-    } else if (!/^[a-zA-Z0-9@]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
-      errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
-    }
-    //Employee Phone
-
-    if (inputValues.EMPLOYEE_PHONE.trim() === "") {
-      errors.EMPLOYEE_PHONE = "Phone Number is required";
-    }else if (
-      inputValues.EMPLOYEE_PHONE.length < 9 ||
-      inputValues.EMPLOYEE_PHONE.length > 15
-    ) {
-      errors.EMPLOYEE_PHONE = "Phone Number length must be between 6 and 10";
-    }
-    //Employement Type
-    if (inputValues.EMPLOYEE_EMPLMNTTYPE.trim() === "") {
-      errors.EMPLOYEE_EMPLMNTTYPE = "Please select Employement Type";
-    }
-    //Hire Date
-    if (inputValues.EMPLOYEE_HIRE_DATE.trim() === "") {
-      errors.EMPLOYEE_HIRE_DATE = "Start Date is required";
-    } else {
-      const currentDate = new Date().toISOString().split("T")[0];
-      if (inputValues.EMPLOYEE_HIRE_DATE < currentDate) {
-        errors.EMPLOYEE_HIRE_DATE = "Start Date cannot be in the past";
-      }
-    }
-
-    // Wages
-    if (inputValues.EMPLOYEE_HOURLY_WAGE.trim() === "") {
-      errors.EMPLOYEE_HOURLY_WAGE = "Please Provide the Your Hourly Wages";
-    }
-    // Adress
-    if (inputValues.EMPLOYEE_ADD.trim() === "") {
-      errors.EMPLOYEE_ADD = "Address is Required";
-    }
-    //Role
-    if (inputValues.EMPLOYEE_ROLE.trim() === "") {
-      errors.EMPLOYEE_ROLE = "Choose your Role";
-    }
-    // City
-    if (inputValues.EMPLOYEE_CITY.trim() === "") {
-      errors.EMPLOYEE_CITY = "City is Required";
-    }
-
-    if (inputValues.EMPLOYEE_STATE.trim() === "") {
-      errors.EMPLOYEE_STATE = "State is Required";
-    }
-
-    return errors;
-  };
-
+  const [errorMsg, setErrorMsg] = useState("");
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+
+  const [newdata, setNewdata] = useState([]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -146,46 +54,116 @@ export default function AddEmployee(props) {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
+   
+  const validateValues = (inputValues) => {
+    let errors = {};
+    if (inputValues.EMPLOYEE_USERNAME.trim() === "") {
+      errors.EMPLOYEE_USERNAME = "Username is required";
+    } else if (inputValues.EMPLOYEE_USERNAME.length > 15) {
+      errors.EMPLOYEE_USERNAME = "Username should not exceed 15 characters";
+    } else if (/[!@#$%^&*(),.?":{}|<>]/.test(inputValues.EMPLOYEE_USERNAME)) {
+      errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
+    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
+      errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
+    } else if (
+      inputValues.EMPLOYEE_USERNAME.length < 6 ||
+      inputValues.EMPLOYEE_USERNAME.length > 10
+    ) {
+      errors.EMPLOYEE_USERNAME = "Username length must be between 6 and 10";
+    }
+
+    return errors;
+  }
+
   const handleCreate = (e) => {
     setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
     console.log("heello world", createEmployee);
   };
 
+  //firbase authentication
+
+  const handleSubmission = () => {
+    setErrors(validateValues(createEmployee));
+    if (
+      !createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME ||
+      !createEmployee.EMPLOYEE_EMAIL ||
+      !createEmployee.EMPLOYEE_PASSWORD ||
+      !createEmployee.EMPLOYEE_NAME ||
+      !createEmployee.EMPLOYEE_STATE ||
+      !createEmployee.EMPLOYEE_CITY ||
+      !createEmployee.EMPLOYEE_PHONE ||
+      !createEmployee.EMPLOYEE_HOURLY_WAGE ||
+      !createEmployee.EMPLOYEE_ROLE ||
+      !createEmployee.EMPLOYEE_EMPLMNTTYPE ||
+      !createEmployee.EMPLOYEE_DOB ||
+      !createEmployee.EMPLOYEE_HIRE_DATE ||
+      !createEmployee.EMPLOYEE_ADD ||
+      !createEmployee.EMPLOYEE_USERNAME
+    ) {
+      setErrorMsg("Fill all fields");
+      return;
+    }
+    setErrorMsg("");
+
+    if (
+      createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME &&
+      createEmployee.EMPLOYEE_EMAIL &&
+      createEmployee.EMPLOYEE_PASSWORD
+    ) {
+      setSubmitButtonDisabled(true);
+      createUserWithEmailAndPassword(
+        auth,
+        createEmployee.EMPLOYEE_EMAIL,
+        createEmployee.EMPLOYEE_PASSWORD
+      )
+        .then(async (res) => {
+          setSubmitButtonDisabled(false);
+          const user = res.user;
+          const display = createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME +"%"+createEmployee.EMPLOYEE_USERNAME
+          await updateProfile(user, {
+            
+            displayName:display,
+          });
+          if (res) {
+            handleSubmission();
+          }
+        })
+        .catch((err) => {
+          setSubmitButtonDisabled(false);
+          setErrorMsg(err.message);
+        });
+    }
+  };
+
+  console.log()
+
   const handleSubmit = (e) => {
     console.log("on btn submit");
     e.preventDefault();
-    setErrors(validateValues(createEmployee));
-    if(Object.keys(errors).length === 0 && createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME){
-    axios
-      .post("http://3.84.137.243:5001/create_employee", createEmployee, {
-        headers,
-      })
-      .then((response) => {
-        if (response.data.operation == "failed") {
-          setOpen(true);
-        } else if (response.data.operation == "successfull") {
-          setOpen(false);
-          props.update(true);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // setErrors(validateValues(createEmployee));
+    if (
+      Object.keys(errors).length === 0 &&
+      createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME
+    ) {
+      axios
+        .post("http://3.84.137.243:5001/create_employee", createEmployee, {
+          headers,
+        })
+        .then((response) => {
+          if (response.data.operation == "failed") {
+            setOpen(true);
+          } else if (response.data.operation == "successfull") {
+            setOpen(false);
+            props.update(true);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
-  
-  const finishSubmit = () => {
-    console.log(createEmployee);
-  };
-  
-  useEffect(() => {
-    if (Object.keys(errors).length === 0 && submitting) {
-      finishSubmit();
-    }
-  }, [errors]);
 
-  console.log("newdata",newdata);
-  
+  console.log("newdata", newdata);
 
   return (
     <>
@@ -195,8 +173,8 @@ export default function AddEmployee(props) {
       <Button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
-        className="rounded-0 border-0"
-        variant="outlined"
+        className="btn rounded-0 border-0  rounded-0 text-light"
+        variant="contained"
         size="small"
       >
         + Add New Employee
@@ -216,7 +194,7 @@ export default function AddEmployee(props) {
             <form onSubmit={handleSubmit}>
               <div className="row py-1">
                 <div className="form-group col-xl-6">
-                  <label for="inputqual">Employee username</label>
+                  <label for="inputqual">Employee Username</label>
                   <input
                     type="text"
                     className="form-control rounded-0"
@@ -225,12 +203,18 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_USERNAME}
                     name="EMPLOYEE_USERNAME"
                     onChange={handleCreate}
+                    required
                   />
                   {errors.EMPLOYEE_USERNAME && (
+                  <p className="error text-danger fw-light">
+                    {errors.EMPLOYEE_USERNAME}
+                  </p>
+                  )}
+                  {/* {errors.EMPLOYEE_USERNAME && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_USERNAME}
                     </p>
-                  )}
+                  )} */}
                 </div>
                 <div className="form-group col-xl-6">
                   <label>Employee Name</label>
@@ -242,12 +226,13 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_NAME}
                     name="EMPLOYEE_NAME"
                     onChange={handleCreate}
+                    required
                   />
-                  {errors.EMPLOYEE_NAME && (
+                  {/* {errors.EMPLOYEE_NAME && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_NAME}
                     </p>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="row">
@@ -261,12 +246,17 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_EMAIL}
                     name="EMPLOYEE_EMAIL"
                     onChange={handleCreate}
+                    required
                   />
-                  {errors.EMPLOYEE_EMAIL && (
+                  {/* {errors.EMPLOYEE_EMAIL && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_EMAIL}
                     </p>
-                  )}
+                  )} */}
+                  {/* {errorMsg && <p className="error text-danger fw-light mb-0">
+                  {errorMsg}
+                    </p>
+                  } */}
                 </div>
                 <div className="form-group col-xl-6 py-1">
                   <label>State</label>
@@ -278,12 +268,13 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_STATE}
                     name="EMPLOYEE_STATE"
                     onChange={handleCreate}
+                    required
                   />
-                  {errors.EMPLOYEE_STATE && (
+                  {/* {errors.EMPLOYEE_STATE && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_STATE}
                     </p>
-                  )}
+                  )} */}
                 </div>{" "}
                 <div className="form-group col-xl-6 py-1">
                   <label>Phone</label>
@@ -295,12 +286,30 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_PHONE}
                     name="EMPLOYEE_PHONE"
                     onChange={handleCreate}
+                    required
                   />
-                  {errors.EMPLOYEE_PHONE && (
+                  {/* {errors.EMPLOYEE_PHONE && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_PHONE}
                     </p>
-                  )}
+                  )} */}
+                </div>
+                <div className="form-group col-xl-6 py-1">
+                  <label>Employee Password</label>
+                  <input
+                    type="text"
+                    className="form-control rounded-0"
+                    placeholder="Enter Employee password"
+                    value={createEmployee.EMPLOYEE_PASSWORD}
+                    name="EMPLOYEE_PASSWORD"
+                    onChange={handleCreate}
+                    required
+                  />
+                  {/* {errors.EMPLOYEE_PASSWORD && (
+                    <p className="error text-danger fw-light mb-0">
+                      {errors.EMPLOYEE_PASSWORD}
+                    </p>
+                  )} */}
                 </div>
                 <div className="form-group col-xl-6 py-1">
                   <label for="inputPassword4">Date Of Birth</label>
@@ -312,34 +321,36 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_DOB}
                     name="EMPLOYEE_DOB"
                     onChange={handleCreate}
+                    required
                   />
-                  {errors.EMPLOYEE_DOB && (
+                  {/* {errors.EMPLOYEE_DOB && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_DOB}
                     </p>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="row">
-              <div className="row">
-                <div className="form-group col-xl-12 py-1">
-                  <label for="inputAddress">Address</label>
-                  <textarea
-                    type="text"
-                    className="form-control rounded-0"
-                    id="inputAddress"
-                    placeholder="Enter Address"
-                    value={createEmployee.EMPLOYEE_ADD}
-                    name="EMPLOYEE_ADD"
-                    onChange={handleCreate}
-                  />
-                  {errors.EMPLOYEE_ADD && (
+                <div className="row">
+                  <div className="form-group col-xl-12 py-1">
+                    <label for="inputAddress">Address</label>
+                    <textarea
+                      type="text"
+                      className="form-control rounded-0"
+                      id="inputAddress"
+                      placeholder="Enter Address"
+                      value={createEmployee.EMPLOYEE_ADD}
+                      name="EMPLOYEE_ADD"
+                      onChange={handleCreate}
+                      required
+                    />
+                    {/* {errors.EMPLOYEE_ADD && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_ADD}
                     </p>
-                  )}
+                  )} */}
+                  </div>
                 </div>
-              </div>
                 <div className="form-group col-xl-4 py-1">
                   <label>City</label>
                   <input
@@ -350,12 +361,13 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_CITY}
                     name="EMPLOYEE_CITY"
                     onChange={handleCreate}
+                    required
                   />
-                  {errors.EMPLOYEE_CITY && (
+                  {/* {errors.EMPLOYEE_CITY && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_CITY}
                     </p>
-                  )}
+                  )} */}
                 </div>
                 <div className="form-group col-xl-4 py-1">
                   <label>Hourly wages</label>
@@ -367,12 +379,13 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_HOURLY_WAGE}
                     name="EMPLOYEE_HOURLY_WAGE"
                     onChange={handleCreate}
+                    required
                   />
-                  {errors.EMPLOYEE_HOURLY_WAGE && (
+                  {/* {errors.EMPLOYEE_HOURLY_WAGE && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_HOURLY_WAGE}
                     </p>
-                  )}
+                  )} */}
                 </div>
                 <div className="form-group col-xl-4 py-1">
                   <label for="inputPassword4">Employee Role</label>
@@ -382,6 +395,7 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_ROLE}
                     name="EMPLOYEE_ROLE"
                     onChange={handleCreate}
+                    required
                   >
                     <option selected>Choose role...</option>
                     <option>Employee</option>
@@ -391,17 +405,14 @@ export default function AddEmployee(props) {
                     <option>Worker</option>
                     <option>other</option>
                   </select>
-                  {errors.EMPLOYEE_ROLE && (
+                  {/* {errors.EMPLOYEE_ROLE && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_ROLE}
                     </p>
-                  )}
+                  )} */}
                 </div>
               </div>
-              <div className="row py-1">
-                
-               
-              </div>
+              <div className="row py-1"></div>
               <div className="row">
                 <div className="form-group col-xl-4 py-1">
                   <label for="inputqual">Employement Type</label>
@@ -411,6 +422,7 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_EMPLMNTTYPE}
                     name="EMPLOYEE_EMPLMNTTYPE"
                     onChange={handleCreate}
+                    required
                   >
                     <option selected>Choose type...</option>
                     <option>Permanent</option>
@@ -418,13 +430,13 @@ export default function AddEmployee(props) {
                     <option>Trainee</option>
                     <option>other</option>
                   </select>
-                  {errors.EMPLOYEE_EMPLMNTTYPE && (
+                  {/* {errors.EMPLOYEE_EMPLMNTTYPE && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_EMPLMNTTYPE}
                     </p>
-                  )}
+                  )} */}
                 </div>
-                
+
                 <div className="form-group col-xl-4 py-1">
                   <label for="inputPassword4">Hired Date</label>
                   <input
@@ -435,30 +447,35 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_HIRE_DATE}
                     name="EMPLOYEE_HIRE_DATE"
                     onChange={handleCreate}
+                    required
                   />
-                  {errors.EMPLOYEE_HIRE_DATE && (
+                  {/* {errors.EMPLOYEE_HIRE_DATE && (
                     <p className="error text-danger fw-light mb-0">
                       {errors.EMPLOYEE_HIRE_DATE}
                     </p>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="row pt-2">
+                {errorMsg && <p className="error text-danger fw-light mb-0">
+                  {errorMsg}
+                    </p>
+                  }
                 <div className="col-12">
-              <button
-                type="submit"
-                className="btn btn-info text-white "
-                onClick={handleSubmit}
-              >
-                Submit
-              </button>{" "}
-              <button
-                onClick={handleClose}
-                className="btn btn-danger text-white "
-              >
-                Discard
-              </button>
-              </div>
+                  <button
+                    type="submit"
+                    className="btn btn-info text-white "
+                    onClick={handleSubmission}
+                  >
+                    Submit
+                  </button>{" "}
+                  <button
+                    onClick={handleClose}
+                    className="btn btn-danger text-white "
+                  >
+                    Discard
+                  </button>
+                </div>
               </div>
             </form>
           </Box>
