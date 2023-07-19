@@ -11,12 +11,13 @@ h4 {
   flex-wrap: wrap;
   padding: 0;
   margin: 0 ;
-  justify-content: space-between;
+  justify-content: flex-start;
+align-items:center;
 }
 
 .Doc_li {
   align-items: center;
-  width: 120px;
+  width: 125px;
   height: auto;
   box-sizing: border-box;
   text-align: center;
@@ -26,8 +27,9 @@ h4 {
   border-radius: 5px;
   padding-top: 8px;
   overflow: hidden;
-  
 }
+
+
 
 .Docfile-icon {
   font-size: 30px;

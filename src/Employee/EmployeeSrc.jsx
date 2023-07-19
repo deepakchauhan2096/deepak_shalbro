@@ -41,6 +41,7 @@ const EmployeeSrc = (props) => {
   console.log("All_employe_data: =>", allempData);
 
   const filterallempData =  props.empData;
+  
   console.log(filterallempData,"single data")
 
   useEffect(() => {
@@ -225,7 +226,7 @@ const EmployeeSrc = (props) => {
     {
       date: "14/06/23",
       day: "Wednesday",
-      status: "Absend",
+      status: "Absent",
       in: 11,
       out: 6,
       workinghrs: 7,
