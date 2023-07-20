@@ -7,9 +7,6 @@ import axios from "axios";
 import { MyContext } from "./Mycontext";
 import country from "../Api/countriess.json"
 // import states from "../Api/states.json"
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 
 import {
   Button,
@@ -44,7 +41,6 @@ export default function ProjectCreate(props) {
   const { text } = React.useContext(MyContext);
   const { setProject } = React.useContext(MyContext);
   const [flag,setFlag] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   console.log(text, "allcontext");
 
@@ -75,63 +71,85 @@ export default function ProjectCreate(props) {
 
   // console.log(availableCities, "cities")
 
-  // Function to validate the form data
-  const validateForm = () => {
-    const errors = {};
-    let hasErrors = false;
-
-    // Check if the required fields are empty and set errors accordingly
-    if (!createProject.PROJECT_USERNAME) {
-      errors.PROJECT_USERNAME = "Project Username is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_NAME) {
-      errors.PROJECT_NAME = "Project Name is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_PHONE) {
-      errors.PROJECT_PHONE = "Contact is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_START_DATE) {
-      errors.PROJECT_START_DATE = "Project Start Date is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_END_DATE) {
-      errors.PROJECT_END_DATE = "Project End Date is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_EMROLMNT_TYPE) {
-      errors.PROJECT_EMROLMNT_TYPE = "Enrollment is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_SUPERVISOR) {
-      errors.PROJECT_SUPERVISOR = "Supervisor is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_ADD) {
-      errors.PROJECT_ADD = "Address is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_COUNTRY) {
-      errors.PROJECT_COUNTRY = "Country is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_STATE) {
-      errors.PROJECT_STATE = "State is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_CITY) {
-      errors.PROJECT_CITY = "City is required";
-      hasErrors = true;
-    }
-
-    setErrors(errors); // Save the validation errors to the state
-    return !hasErrors; // Return true if there are no errors, else false
-  };
 
 
-  
+
+  // const validateValues = (inputValues) => {
+  //   let errors = {};
+
+  //   if (inputValues.PROJECT_USERNAME.trim() === "") {
+  //     errors.PROJECT_USERNAME = "Username is //required";
+  //   } else if (inputValues.PROJECT_USERNAME.length > 15) {
+  //     errors.PROJECT_USERNAME = "Username should not exceed 15 characters";
+  //   } else if (/[!@#$%^&*(),.?":{}|<>]/.test(inputValues.PROJECT_USERNAME)) {
+  //     errors.PROJECT_USERNAME = "Username should not contain symbols";
+  //   } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.PROJECT_USERNAME)) {
+  //     errors.PROJECT_USERNAME = "Username should not contain symbols";
+  //   } else if (
+  //     inputValues.PROJECT_USERNAME.length < 6 ||
+  //     inputValues.PROJECT_USERNAME.length > 10
+  //   ) {
+  //     errors.PROJECT_USERNAME = "Username length must be between 6 and 10";
+  //   }
+
+  //   if (inputValues.PROJECT_NAME.trim() === "") {
+  //     errors.PROJECT_NAME = "Project Name is //required";
+  //   } else if (inputValues.PROJECT_NAME.length > 15) {
+  //     errors.PROJECT_NAME = "Project Name should not exceed 15 characters";
+  //   } else if (/[!@#$%^*(),.?":{}|<>]/.test(inputValues.PROJECT_NAME)) {
+  //     errors.PROJECT_NAME = "Project Name should not contain symbols";
+  //   }
+
+  //   if (inputValues.PROJECT_PHONE.trim() === "") {
+  //     errors.PROJECT_PHONE = "Phone Number is //required";
+  //   } else if (
+  //     inputValues.PROJECT_PHONE.length < 6 ||
+  //     inputValues.PROJECT_PHONE.length > 15
+  //   ) {
+  //     errors.PROJECT_PHONE = "Phone Number length must be between 6 and 10";
+  //   }
+
+  //   if (inputValues.PROJECT_EMROLMNT_TYPE.trim() === "") {
+  //     errors.PROJECT_EMROLMNT_TYPE = "Please select an option";
+  //   }
+  //   if (inputValues.PROJECT_START_DATE.trim() === "") {
+  //     errors.PROJECT_START_DATE = "Start Date is //required";
+  //   } else {
+  //     const currentDate = new Date().toISOString().split("T")[0];
+  //     if (inputValues.PROJECT_START_DATE < currentDate) {
+  //       errors.PROJECT_START_DATE = "Start Date cannot be in the past";
+  //     }
+  //   }
+
+  //   if (inputValues.PROJECT_END_DATE.trim() === "") {
+  //     errors.PROJECT_END_DATE = "End Date is //required";
+  //   } else if (inputValues.PROJECT_START_DATE > inputValues.PROJECT_END_DATE) {
+  //     errors.PROJECT_END_DATE = "End Date must be greater than Start Date";
+  //   }
+  //   if (inputValues.PROJECT_EMROLMNT_TYPE.trim() === "") {
+  //     errors.PROJECT_EMROLMNT_TYPE = "Please select Enrollment Type";
+  //   }
+  //   if (inputValues.PROJECT_SUPERVISOR.trim() === "") {
+  //     errors.PROJECT_SUPERVISOR = "Please Provide the Supervisor's Name";
+  //   }
+  //   if (inputValues.PROJECT_ADD.trim() === "") {
+  //     errors.PROJECT_ADD = "Address is //required";
+  //   }
+  //   if (inputValues.PROJECT_CITY.trim() === "") {
+  //     errors.PROJECT_CITY = "City is //required";
+  //   }
+
+  //   if (inputValues.PROJECT_COUNTRY.trim() === "") {
+  //     errors.PROJECT_CITY = "Country is //required";
+  //   }
+
+  //   if (inputValues.PROJECT_STATE.trim() === "") {
+  //     errors.PROJECT_CITY = "State is //required";
+  //   }
+
+  //   return errors;
+  // };
+
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
@@ -142,95 +160,71 @@ export default function ProjectCreate(props) {
     console.log("heello world", createProject);
   };
 
+  // const handleSubmission = () => {
+  //   setErrors(validateValues(createProject));
+  //   if (
+  //     !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
+  //     !createProject.PROJECT_NAME ||
+  //     !createProject.PROJECT_STATE ||
+  //     !createProject.PROJECT_CITY ||
+  //     !createProject.PROJECT_PHONE ||
+  //     !createProject.PROJECT_ADD ||
+  //     !createProject.PROJECT_USERNAME
+  //   ) {
+  //     setErrorMsg("Fill all fields");
+  //     return;
+  //   }
+  //   setErrorMsg("");
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   // Validate the form data before submission
-  //   if (validateForm()) {
-  //     axios
-  //       .post("http://3.84.137.243:5001/create_project", createProject, {
-  //         headers,
-  //       })
-  //       .then((response) => {
-  //         console.log("response of create project", response.data);
-  //         setProject(response.data.result);
-  //         setOpen(false);
-  //       })
-  //       .catch((error) => {
-  //         console.error(error, "ERR");
-  //       });
-  //   } else {
-  //     // If there are validation errors, set an error message
-  //     setErrorMsg("Please fill in all required fields.");
+  //   if (
+  //     createProject.PROJECT_MEMBER_PARENT_USERNAME 
+  //   ) {
+  //           handleSubmit();
   //   }
   // };
 
-
+  //api create project
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    // Validate the form data before submission
-    if (validateForm()) {
-      axios
-        .post("http://3.84.137.243:5001/create_project", createProject, {
-          headers,
-        })
-        .then((response) => {
-          console.log("response of create project", response.data);
-          setProject(response.data.result);
-          setOpen(false);
-          setIsSubmitted(true); // Set the submission status to true after successful submission
-          toast.success("Form submitted successfully!", {
-            position: toast.POSITION.TOP_CENTER,
-          });
-        })
-        .catch((error) => {
-          console.error(error, "ERR");
-        });
-    } else {
-      // If there are validation errors, set an error message
-      setErrorMsg("Please fill in all required fields.");
-    }
-  };
-  
-  
+if(!createProject.PROJECT_MEMBER_PARENT_USERNAME ||
+      !createProject.PROJECT_NAME ||
+      !createProject.PROJECT_STATE ||
+      !createProject.PROJECT_CITY ||
+      !createProject.PROJECT_PHONE ||
+      !createProject.PROJECT_ADD ||
+      !createProject.PROJECT_USERNAME){
+        setErrorMsg("All fields are Mandatory");
+            
+      }
+      else{
+        setFlag(true);
+      }
+    // if (Object.keys(errors).length === 0) {
+    axios
+      .post("http://3.84.137.243:5001/create_project", createProject, {
+        headers,
+      })
+      .then((response) => {
+        console.log("response of create project", response.data);
+        setProject(response.data.result);
+        setOpen(false);
 
 
-
-
-  
-
-  //api create project
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   // if (Object.keys(errors).length === 0) {
-  //   axios
-  //     .post("http://3.84.137.243:5001/create_project", createProject, {
-  //       headers,
-  //     })
-  //     .then((response) => {
-  //       console.log("response of create project", response.data);
-  //       setProject(response.data.result);
-  //       setOpen(false);
-
-
-  //       // if (response.data.operation === "failed") {
-  //       //   setOpen(true);
-  //       // } else if (response.data.operation === "successfull") {
-  //       //   setOpen(false);
-  //       //   setProject(response.data.result);
+        // if (response.data.operation === "failed") {
+        //   setOpen(true);
+        // } else if (response.data.operation === "successfull") {
+        //   setOpen(false);
+        //   setProject(response.data.result);
           
 
-  //       // }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error, "ERR");
-  //     });
+        // }
+      })
+      .catch((error) => {
+        console.error(error, "ERR");
+      });
 
-  //   // }
-  // };
+    // }
+  };
 
   console.log("ind", index);
 
