@@ -290,7 +290,7 @@ const EmployeeSrc = (props) => {
       <Box className="box" style={{background:"#277099" }}>
         <EmployeeCreate  mainData={filterallempData} update={(event) => setUpdateData(event)} name={"Employee"} />
         <MyScreen sx={{ display: "block", padding: 3 }}>
-          <Box style={{ height: "89vh", padding: 0, paddingBottom: "0" }}>
+          <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
               <Animations />
             ) : (

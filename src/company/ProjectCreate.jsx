@@ -50,13 +50,11 @@ export default function ProjectCreate(props) {
     PROJECT_MEMBER_PARENT_USERNAME: text?.COMPANY_PARENT_USERNAME,
     PROJECT_NAME: "",
     PROJECT_USERNAME: "",
-    PROJECT_PHONE: "",
     PROJECT_ADD: "",
     PROJECT_CITY: "",
     PROJECT_START_DATE: "",
     PROJECT_END_DATE: "",
     PROJECT_SUPERVISOR: "",
-    PROJECT_EMROLMNT_TYPE: "",
     PROJECT_COUNTRY:"",
     PROJECT_STATE:""
   });
@@ -68,13 +66,28 @@ export default function ProjectCreate(props) {
     (s) => s.name === createProject.PROJECT_STATE
   );
 
-  console.log(availableCities, "cities")
+  // console.log(availableCities, "cities")
 
 
-  
+
+
+  const headers = {
+    "Content-Type": "application/json",
+    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  };
+
+  const handleCreate = (e) => {
+    setCreateProject({ ...createProject, [e.target.name]: e.target.value });
+    console.log("heello world", createProject);
+  };
+
+
+
+
+  console.log(createProject, "create")
+
   const validateValues = (inputValues) => {
     let errors = {};
-
     if (inputValues.PROJECT_USERNAME.trim() === "") {
       errors.PROJECT_USERNAME = "Username is required";
     } else if (inputValues.PROJECT_USERNAME.length > 15) {
@@ -90,107 +103,33 @@ export default function ProjectCreate(props) {
       errors.PROJECT_USERNAME = "Username length must be between 6 and 10";
     }
 
-    if (inputValues.PROJECT_NAME.trim() === "") {
-      errors.PROJECT_NAME = "Project Name is required";
-    } else if (inputValues.PROJECT_NAME.length > 15) {
-      errors.PROJECT_NAME = "Project Name should not exceed 15 characters";
-    } else if (/[!@#$%^*(),.?":{}|<>]/.test(inputValues.PROJECT_NAME)) {
-      errors.PROJECT_NAME = "Project Name should not contain symbols";
-    }
-
-    if (inputValues.PROJECT_PHONE.trim() === "") {
-      errors.PROJECT_PHONE = "Phone Number is required";
-    } else if (
-      inputValues.PROJECT_PHONE.length < 6 ||
-      inputValues.PROJECT_PHONE.length > 15
-    ) {
-      errors.PROJECT_PHONE = "Phone Number length must be between 6 and 10";
-    }
-
-    if (inputValues.PROJECT_EMROLMNT_TYPE.trim() === "") {
-      errors.PROJECT_EMROLMNT_TYPE = "Please select an option";
-    }
-    if (inputValues.PROJECT_START_DATE.trim() === "") {
-      errors.PROJECT_START_DATE = "Start Date is required";
-    } else {
-      const currentDate = new Date().toISOString().split("T")[0];
-      if (inputValues.PROJECT_START_DATE < currentDate) {
-        errors.PROJECT_START_DATE = "Start Date cannot be in the past";
-      }
-    }
-
-    if (inputValues.PROJECT_END_DATE.trim() === "") {
-      errors.PROJECT_END_DATE = "End Date is required";
-    } else if (inputValues.PROJECT_START_DATE > inputValues.PROJECT_END_DATE) {
-      errors.PROJECT_END_DATE = "End Date must be greater than Start Date";
-    }
-    if (inputValues.PROJECT_EMROLMNT_TYPE.trim() === "") {
-      errors.PROJECT_EMROLMNT_TYPE = "Please select Enrollment Type";
-    }
-    if (inputValues.PROJECT_SUPERVISOR.trim() === "") {
-      errors.PROJECT_SUPERVISOR = "Please Provide the Supervisor's Name";
-    }
-    if (inputValues.PROJECT_ADD.trim() === "") {
-      errors.PROJECT_ADD = "Address is Required";
-    }
-    if (inputValues.PROJECT_CITY.trim() === "") {
-      errors.PROJECT_CITY = "City is Required";
-    }
-
-    if (inputValues.PROJECT_COUNTRY.trim() === "") {
-      errors.PROJECT_CITY = "Country is Required";
-    }
-
-    if (inputValues.PROJECT_STATE.trim() === "") {
-      errors.PROJECT_CITY = "State is Required";
-    }
-
     return errors;
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  };
-
-  const handleCreate = (e) => {
-    setCreateProject({ ...createProject, [e.target.name]: e.target.value });
-    console.log("heello world", createProject);
-  };
-
-  const handleSubmission = () => {
-    setErrors(validateValues(createProject));
-    if (
-      !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
-      !createProject.PROJECT_EMAIL ||
-      !createProject.PROJECT_PASSWORD ||
-      !createProject.PROJECT_NAME ||
-      !createProject.PROJECT_STATE ||
-      !createProject.PROJECT_CITY ||
-      !createProject.PROJECT_PHONE ||
-      !createProject.PROJECT_HOURLY_WAGE ||
-      !createProject.PROJECT_ROLE ||
-      !createProject.PROJECT_ADD ||
-      !createProject.PROJECT_USERNAME
-    ) {
-      setErrorMsg("Fill all fields");
-      return;
-    }
-    setErrorMsg("");
-
-    if (
-      createProject.PROJECT_MEMBER_PARENT_USERNAME &&
-      createProject.PROJECT_EMAIL
-    ) {
-            handleSubmission();
-    }
-  };
+  }
 
   //api create project
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if (Object.keys(errors).length === 0) {
+    if (
+      !createProject.PROJECT_PARENT_ID ||
+      !createProject.PROJECT_PARENT_USERNAME ||
+      !createProject.PROJECT_MEMBER_PARENT_ID ||
+      !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
+      !createProject.PROJECT_NAME ||
+      !createProject.PROJECT_USERNAME ||
+      !createProject.PROJECT_ADD ||
+      !createProject.PROJECT_START_DATE ||
+      !createProject.PROJECT_END_DATE ||
+      !createProject.PROJECT_SUPERVISOR ||
+      !createProject.PROJECT_COUNTRY ||
+      !createProject.PROJECT_CITY ||
+      !createProject.PROJECT_STATE
+    ) {
+      setErrorMsg("Fill all fields");
+      return;
+    }else {
+     setErrors(validateValues(createProject));
+     console.log(Object.keys(errors).length === 0,"log")
+    if (!Object.keys(errors).length === 0) {
       axios
         .post("http://3.84.137.243:5001/create_project", createProject, {
           headers,
@@ -208,6 +147,7 @@ export default function ProjectCreate(props) {
           console.error(error, "ERR");
         });
     }
+      }
   };
 
   console.log("ind", index);
@@ -421,10 +361,11 @@ export default function ProjectCreate(props) {
                   {errorMsg}
                     </p>
                   }</center> 
+            
             <button
               type="submit"
               className="btn btn-info text-white "
-              onClick={handleSubmission}
+              onClick={handleSubmit}
             >
               Submit
             </button>{" "}

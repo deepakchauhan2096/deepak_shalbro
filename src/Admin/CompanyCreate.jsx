@@ -47,9 +47,6 @@ export default function CompanyCreate(props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-
-  console.log(create_company, props.ID, "jungli");
-
   const handleSubmit = (e) => {
     console.log("on btn submit");
     e.preventDefault();
@@ -59,7 +56,6 @@ export default function CompanyCreate(props) {
       })
       .then((response) => {
         props.Update(()=> response.data.result);
-        console.log("fuck")
         if(response){
           handleClose();
         }

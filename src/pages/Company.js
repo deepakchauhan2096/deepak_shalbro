@@ -6,8 +6,6 @@ const Company = () => {
   return (
     <>
       <Navbar />
-      
-
       <CompanySrc />
     </>
   );
