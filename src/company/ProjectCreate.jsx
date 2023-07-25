@@ -7,6 +7,9 @@ import axios from "axios";
 import { MyContext } from "./Mycontext";
 import country from "../Api/countriess.json"
 // import states from "../Api/states.json"
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 import {
   Button,
@@ -40,6 +43,8 @@ export default function ProjectCreate(props) {
   const [errors, setErrors] = useState({});
   const { text } = React.useContext(MyContext);
   const { setProject } = React.useContext(MyContext);
+  const [flag, setFlag] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   console.log(text, "allcontext");
 
@@ -62,6 +67,8 @@ export default function ProjectCreate(props) {
 
 
   const availableState = country?.find((c) => c.name === createProject.PROJECT_COUNTRY);
+
+  console.log("all states : ===> ", availableState)
   const availableCities = availableState?.states?.find(
     (s) => s.name === createProject.PROJECT_STATE
   );
@@ -136,16 +143,19 @@ export default function ProjectCreate(props) {
         })
         .then((response) => {
           console.log("response of create project", response.data);
-          if (response.data.operation == "failed") {
-            setOpen(true);
-          } else if (response.data.operation == "successfull") {
-            setOpen(false);
-            setProject(response.data.result);
-          }
+          setProject(response.data.result);
+          setOpen(false);
+          setIsSubmitted(true); // Set the submission status to true after successful submission
+          toast.success("Form submitted successfully!", {
+            position: toast.POSITION.TOP_CENTER,
+          });
         })
         .catch((error) => {
           console.error(error, "ERR");
         });
+    } else {
+      // If there are validation errors, set an error message
+      setErrorMsg("Please fill in all required fields.");
     }
       }
   };
@@ -186,13 +196,13 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
                   onChange={handleCreate}
-                  required
+                //required
                 />
-                {errors.PROJECT_USERNAME && (
+                {/* {errors.PROJECT_USERNAME && (
                   <p className="error text-danger fw-light">
                     {errors.PROJECT_USERNAME}
                   </p>
-                )}
+                )} */}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Name</label>
@@ -230,7 +240,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_START_DATE"
                   onChange={handleCreate}
                   className="form-control"
-                  required
+                //required
                 />
               </div>
               <div className="form-group col-xl-6">
@@ -241,7 +251,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_END_DATE"
                   onChange={handleCreate}
                   className="form-control"
-                  required
+                //required
                 />
               </div>
             </div>
@@ -254,7 +264,7 @@ export default function ProjectCreate(props) {
                   onChange={handleCreate}
                   name="PROJECT_EMROLMNT_TYPE"
                   value={createProject.PROJECT_EMROLMNT_TYPE}
-                  required
+                //required
                 >
                   <option selected>Choose...</option>
                   <option>Painter</option>
@@ -273,7 +283,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_SUPERVISOR"
                   value={createProject.PROJECT_SUPERVISOR}
                   onChange={handleCreate}
-                  required
+                //required
                 />
               </div>
             </div>
@@ -288,7 +298,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_ADD"
                   value={createProject.PROJECT_ADD}
                   onChange={handleCreate}
-                  required
+                //required
                 />
               </div>
             </div>
@@ -296,12 +306,12 @@ export default function ProjectCreate(props) {
               <div className="form-group col-xl-4">
                 <label>Country</label>
                 <select
-                className="form-control"
+                  className="form-control"
                   placeholder="Country"
                   name="PROJECT_COUNTRY"
                   value={createProject.PROJECT_COUNTRY}
                   onChange={handleCreate}
-                  required
+                //required
                 >
                   <option>--Choose Country--</option>
 
@@ -318,12 +328,12 @@ export default function ProjectCreate(props) {
               <div className="form-group col-xl-4">
                 <label>State</label>
                 <select
-                className="form-control"
+                  className="form-control"
                   placeholder="State"
                   name="PROJECT_STATE"
                   value={createProject.PROJECT_STATE}
                   onChange={handleCreate}
-                  required
+                //required
                 >
                   <option>--Choose State--</option>
                   {availableState?.states?.map((e, key) => {
@@ -339,12 +349,12 @@ export default function ProjectCreate(props) {
               <div className="form-group col-xl-4">
                 <label>City</label>
                 <select
-                className="form-control"
+                  className="form-control"
                   placeholder="City"
                   name="PROJECT_CITY"
                   value={createProject.PROJECT_CITY}
                   onChange={handleCreate}
-                  required
+                //required
                 >
                   <option>--Choose City--</option>
                   {availableCities?.cities?.map((e, key) => {
@@ -357,11 +367,10 @@ export default function ProjectCreate(props) {
                 </select>
               </div>
             </div>
-           <center>{errorMsg && <p className=" text-danger fw-light mb-0">
-                  {errorMsg}
-                    </p>
-                  }</center> 
-            
+            <center>{errorMsg && <p className=" text-danger fw-light mb-0">
+              {errorMsg}
+            </p>
+            }</center>
             <button
               type="submit"
               className="btn btn-info text-white "

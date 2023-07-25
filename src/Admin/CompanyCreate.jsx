@@ -6,6 +6,7 @@ import axios from "axios";
 import { Button, Container, Hidden } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Fab, Paper, styled } from "@mui/material";
+import country from "../Api/countriess.json"
 
 const style = {
   position: "absolute",
@@ -33,6 +34,7 @@ export default function CompanyCreate(props) {
     COMPANY_ADD2: "",
     COMPANY_STATE: "",
     COMPANY_CITY: "",
+    COMPANY_COUNTRY: "",
   });
 
   const handleCreate = (e) => {
@@ -46,6 +48,18 @@ export default function CompanyCreate(props) {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+
+  // Finding the states and cities of the individaul country 
+  const SelectedCountryData = country?.find((c) => c.name === create_company.PROJECT_COUNTRY);
+
+  console.log("all states : ===> ", SelectedCountryData)
+
+  const availablestates = SelectedCountryData?.states?.find(
+    (s) => s.name === create_company.PROJECT_STATE
+  );
+
+  console.log("states data : ========>",availablestates);
 
   const handleSubmit = (e) => {
     console.log("on btn submit");
@@ -152,25 +166,26 @@ export default function CompanyCreate(props) {
                 </div>
               </div>
               <div className="row py-2">
-                <div className="form-group col-xl-6">
-                  <label>City</label>
+              <div className="form-group col-xl-4">
+                  <label>Country</label>
                   <select
                     className="form-control rounded-0"
-                    name="COMPANY_CITY"
-                    value={create_company.COMPANY_CITY}
+                    name="COMPANY_STATE"
+                    value={create_company.COMPANY_COUNTRY}
                     onChange={handleCreate}
                   >
                     <option selected>Choose...</option>
-                    <option>Haryana</option>
-                    <option>Uttar pradesh</option>
-                    <option>Himachal pradesh</option>
-                    <option>Madhya pradesh</option>
-                    <option>Bihar</option>
-                    <option>Jharkhand</option>
-                    <option>Jharkhand</option>
+                   
+                   {country.map((country,key)=>{
+                    return(
+                          <option value={country.name} key={key}>{country.name}</option>
+                    )
+                   })} 
+                    
                   </select>
                 </div>
-                <div className="form-group col-xl-6">
+
+                <div className="form-group col-xl-4">
                   <label>State</label>
                   <select
                     className="form-control rounded-0"
@@ -179,15 +194,35 @@ export default function CompanyCreate(props) {
                     onChange={handleCreate}
                   >
                     <option selected>Choose...</option>
-                    <option>Haryana</option>
-                    <option>Uttar pradesh</option>
-                    <option>Himachal pradesh</option>
-                    <option>Madhya pradesh</option>
-                    <option>Bihar</option>
-                    <option>Jharkhand</option>
-                    <option>Jharkhand</option>
+                  {SelectedCountryData?.states?.map((state,key) => {
+                    return(
+                      <option value={state.name} key={key} >{state.name}</option>
+                    )
+                  })} 
+                    
                   </select>
                 </div>
+
+                <div className="form-group col-xl-4">
+                  <label>City</label>
+                  <select
+                    className="form-control rounded-0"
+                    name="COMPANY_CITY"
+                    value={create_company.COMPANY_CITY}
+                    onChange={handleCreate}
+                  >
+                    <option selected>Choose...</option>
+                  {availablestates?.cities?.map((items,key)=> {
+                    return(
+                      <option value={items.name}>{items.name}</option>
+                    )
+                  })} 
+                    
+                  </select>
+                </div>
+               
+
+              
               </div>
               <div className="form-group col-xl-12">
                 <label>Address</label>

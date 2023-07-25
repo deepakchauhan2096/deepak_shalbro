@@ -38,6 +38,7 @@ import Project from "./Project";
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
   const [navIndex, setNavIndex] = useState(0);
+  const [projectData, setProjectData] =useState([])
 
   // modal
   const handleOpen = () => setOpen(true);
@@ -47,6 +48,10 @@ const CompanyMain = () => {
   // get Company data
   const navigate = useNavigate();
   const location = useLocation();
+
+  const filterallprojectData = location.state.props
+
+  console.log(location, "companies")
 
 
   const NavScreen = styled(Paper)((props) => ({
@@ -117,6 +122,44 @@ const CompanyMain = () => {
     );
   };
 
+  const headers = {
+    "Content-Type": "application/json",
+    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  };
+
+
+  const fetchProjects = async (e) => {
+    try {
+      const response = await axios.put(
+        "http://3.84.137.243:5001/get_projects",
+        {
+          PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
+          PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
+          PROJECT_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
+          PROJECT_MEMBER_PARENT_USERNAME:filterallprojectData?.COMPANY_PARENT_USERNAME,
+        },
+        { headers }
+      );
+      setTimeout(() => {
+        const data = response.data;
+        setProjectData(data?.result);
+        // setIsLoading(false);
+        console.log("contracts Data : =>", data);
+      }, 1000);
+    } catch (err) {
+      console.log("Something Went Wrong: =>", err);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+
+
+
+
 
   return (
     <>
@@ -179,26 +222,14 @@ const CompanyMain = () => {
         <Box className="box">
           <MyScreen screenIndex={true}>
             <MyScreenbox sx={{ m: 3 }}>
-              <Button
-                variant="contained"
-                className="button rounded-2 lowercase"
-              >
-                Upload documnent&nbsp;
-                <ArrowCircleUpIcon fontSize="small" />
-              </Button>
-              &nbsp;&nbsp;
-              <Button variant="outlined" className="button rounded-2 lowercase">
-                New documnent&nbsp;
-                <AddIcon fontSize="small" />
-              </Button>
-              <ProjectUpload />
+              <ProjectUpload empData={location.state.props} />
             </MyScreenbox>
           </MyScreen>
         </Box>
       </NavScreen>
 
       <NavScreen screenIndex={navIndex === 3}>
-        <EmployeeSrc empData={location.state.props} />
+        <EmployeeSrc empData={location.state.props} AssignProjectData={projectData}/>
       </NavScreen>
     </>
   );

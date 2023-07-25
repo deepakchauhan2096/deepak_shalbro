@@ -11,6 +11,7 @@ import AdminDashboard from "./Admin/AdminDashboard";
 import CompanyMain from "./company/CompanyMain";
 import AdminLogin from "./Admin/AdminLogin";
 import { MyContext } from "./company/Mycontext";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   // const [emailname, setEmailName] = useState(false);
@@ -47,6 +48,7 @@ const [projectcreatedata, setProject] = useState([])
         className="wrapper"
         style={{ overflowX: "scroll", overflow: "hidden" }}
       >
+        <ToastContainer />
         <MyContext.Provider value={{ text, setText, data, setData, projectcreatedata, setProject }}>
           <BrowserRouter>
             <Routes>
@@ -62,6 +64,7 @@ const [projectcreatedata, setProject] = useState([])
               />
               <Route path="/company" element={<CompanyMain />} />
               <Route path="/login" element={<AdminLogin />} />
+              <Route path="/" element={<AdminLogin />} />
               <Route path="/createemp" element={<CreateEmp />} />
             </Routes>
           </BrowserRouter>
