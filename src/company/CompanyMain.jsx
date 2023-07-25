@@ -983,7 +983,7 @@ const CompanyMain = () => {
       </NavScreen>
 
       <NavScreen screenIndex={navIndex === 3}>
-        <EmployeeSrc empData={location.state.props} />
+        <EmployeeSrc empData={location.state.props} AssignProjectData={ProjectData} />
       </NavScreen>
 
       {/* <NavScreen screenIndex={navIndex === 4}>

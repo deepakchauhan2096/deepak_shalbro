@@ -43,7 +43,7 @@ export default function ProjectCreate(props) {
   const [errors, setErrors] = useState({});
   const { text } = React.useContext(MyContext);
   const { setProject } = React.useContext(MyContext);
-  const [flag,setFlag] = useState(false);
+  const [flag, setFlag] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   console.log(text, "allcontext");
@@ -69,6 +69,8 @@ export default function ProjectCreate(props) {
 
 
   const availableState = country?.find((c) => c.name === createProject.PROJECT_COUNTRY);
+
+  console.log("all states : ===> ", availableState)
   const availableCities = availableState?.states?.find(
     (s) => s.name === createProject.PROJECT_STATE
   );
@@ -130,8 +132,6 @@ export default function ProjectCreate(props) {
     return !hasErrors; // Return true if there are no errors, else false
   };
 
-
-  
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
@@ -142,34 +142,9 @@ export default function ProjectCreate(props) {
     console.log("heello world", createProject);
   };
 
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   // Validate the form data before submission
-  //   if (validateForm()) {
-  //     axios
-  //       .post("http://3.84.137.243:5001/create_project", createProject, {
-  //         headers,
-  //       })
-  //       .then((response) => {
-  //         console.log("response of create project", response.data);
-  //         setProject(response.data.result);
-  //         setOpen(false);
-  //       })
-  //       .catch((error) => {
-  //         console.error(error, "ERR");
-  //       });
-  //   } else {
-  //     // If there are validation errors, set an error message
-  //     setErrorMsg("Please fill in all required fields.");
-  //   }
-  // };
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     // Validate the form data before submission
     if (validateForm()) {
       axios
@@ -193,44 +168,6 @@ export default function ProjectCreate(props) {
       setErrorMsg("Please fill in all required fields.");
     }
   };
-  
-  
-
-
-
-
-  
-
-  //api create project
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   // if (Object.keys(errors).length === 0) {
-  //   axios
-  //     .post("http://3.84.137.243:5001/create_project", createProject, {
-  //       headers,
-  //     })
-  //     .then((response) => {
-  //       console.log("response of create project", response.data);
-  //       setProject(response.data.result);
-  //       setOpen(false);
-
-
-  //       // if (response.data.operation === "failed") {
-  //       //   setOpen(true);
-  //       // } else if (response.data.operation === "successfull") {
-  //       //   setOpen(false);
-  //       //   setProject(response.data.result);
-          
-
-  //       // }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error, "ERR");
-  //     });
-
-  //   // }
-  // };
 
   console.log("ind", index);
 
@@ -286,7 +223,7 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_NAME}
                   name="PROJECT_NAME"
                   onChange={handleCreate}
-                required
+                  required
                 />
               </div>
               <div className="form-group col-xl-4">
@@ -299,7 +236,7 @@ export default function ProjectCreate(props) {
                   name="PROJECT_PHONE"
                   value={createProject.PROJECT_PHONE}
                   onChange={handleCreate}
-                required
+                  required
                 />
               </div>
             </div>
