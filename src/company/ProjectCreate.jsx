@@ -75,8 +75,6 @@ export default function ProjectCreate(props) {
 
   // console.log(availableCities, "cities")
 
-  // Function to validate the form data
- 
 
 
 
@@ -369,11 +367,10 @@ export default function ProjectCreate(props) {
                 </select>
               </div>
             </div>
-           <center>{errorMsg && <p className=" text-danger fw-light mb-0">
-                  {errorMsg}
-                    </p>
-                  }</center> 
-            
+            <center>{errorMsg && <p className=" text-danger fw-light mb-0">
+              {errorMsg}
+            </p>
+            }</center>
             <button
               type="submit"
               className="btn btn-info text-white "
