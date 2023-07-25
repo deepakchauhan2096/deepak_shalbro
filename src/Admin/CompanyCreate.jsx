@@ -70,7 +70,6 @@ export default function CompanyCreate(props) {
       })
       .then((response) => {
         props.Update(()=> response.data.result);
-        console.log("fuck")
         if(response){
           handleClose();
         }
