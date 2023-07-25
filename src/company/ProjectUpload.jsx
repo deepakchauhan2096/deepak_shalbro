@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
-import "../assests/css/document.css";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import pdf from "../assests/images/pdf.png";
@@ -11,6 +10,8 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ViewListIcon from "@mui/icons-material/ViewList";
 
+import "../assests/css/document.css" // Import the CSS file
+
 export default function ProjectUpload(props) {
   const [postImage, setPostImage] = useState({
     myFile: "",
@@ -19,6 +20,8 @@ export default function ProjectUpload(props) {
   const [successMessage, setSuccessMessage] = useState("");
   const [imagesData, setImagesData] = useState({});
   const [show, setShow] = useState(false);
+  const [totalDocuments, setTotalDocuments] = useState(0);
+
   // New state to manage visibility of the documents list
   const [showDocuments, setShowDocuments] = useState(false);
   console.log("Images data is here:=>", imagesData.result);
@@ -113,6 +116,7 @@ export default function ProjectUpload(props) {
           // Assuming setImagesData is a state-setting function for a React component
           setImagesData(data);
           console.log("setimages:======", data[0]);
+          setTotalDocuments(data.result?.length || 0)
         })
         .catch((error) => {
           console.log("Error Fetching Data :", error);
@@ -153,57 +157,64 @@ export default function ProjectUpload(props) {
     }
   };
 
-
   return (
-    <>
-      <Box>
-        <Box>
-          {/* Hidden file input */}
-          <input
-            type="file"
-            label="Image"
-            name="myFile"
-            className="font-monospace"
-            accept=".jpeg, .png, .jpg, .pdf"
-            style={{ display: "none" }}
-            onChange={(e) => handleFileUpload(e)}
-          />
-          {/* Upload document button */}
-          <Button
-            variant="outlined"
-            className="button rounded-2 lowercase"
-            onClick={() => document.querySelector('input[type="file"]').click()}
-          >
-            Add New document&nbsp;
-            <AddIcon fontSize="small" />
-          </Button>
-          &nbsp;&nbsp;
-          {/* New document button */}
-          <Button
-            variant="contained"
-            className="button rounded-2 lowercase"
-            onClick={handleSubmit}
-          >
-            Upload document&nbsp;
-            <ArrowCircleUpIcon fontSize="small" />
-          </Button>
-          {selectedFileName && (
-            <p className="font-monospace pt-2 text-success">
-              Selected Document: {selectedFileName}
-            </p>
-          )}
-          {successMessage && (
-            <p className="font-monospace" style={{ color: "green" }}>
-              {successMessage}
-            </p>
-          )}
-        </Box>
-      </Box>
+<>
+    <div className="ProjectMain">
 
+      <Box>
+        {/* Hidden file input */}
+        <input
+          type="file"
+          label="Image"
+          name="myFile"
+          className="font-monospace"
+          accept=".jpeg, .png, .jpg, .pdf"
+          style={{ display: "none" }}
+          onChange={(e) => handleFileUpload(e)}
+        />
+        {/* Upload document button */}
+        <Button
+          variant="outlined"
+          className="button rounded-2 lowercase"
+          onClick={() => document.querySelector('input[type="file"]').click()}
+        >
+          Add New document&nbsp;
+          <AddIcon fontSize="small" />
+        </Button>
+        &nbsp;&nbsp;
+        {/* New document button */}
+        <Button
+          variant="contained"
+          className="button rounded-2 lowercase"
+          onClick={handleSubmit}
+        >
+          Upload document&nbsp;
+          <ArrowCircleUpIcon fontSize="small" />
+        </Button>
+
+        {selectedFileName && (
+          <p className="font-monospace pt-2 text-success">
+            Selected Document: {selectedFileName}
+          </p>
+        )}
+        {successMessage && (
+          <p className="font-monospace" style={{ color: "green" }}>
+            {successMessage}
+          </p>
+        )}
+      </Box>
       <hr />
 
-      <div cla>
-        <h4 className="font-monospace">Uploaded Documents</h4>
+      <div className="documents-section">
+
+        <div className="documents-header">
+          <h4>Uploaded Documents</h4>
+          <div className="total-documents">
+            <p>Total Number of Documents: {totalDocuments}</p>
+          </div>
+
+        </div>
+
         <Button
           variant="outlined"
           className="button rounded-2 lowercase "
@@ -211,8 +222,9 @@ export default function ProjectUpload(props) {
         >
           Show All Documents&nbsp;
           <ViewListIcon fontSize="small" />
-        </Button> 
+        </Button>
 
+        <div className="documents-section">
         <ul className="Doc_ul">
           {!show
             ? imagesData.result?.slice(0, 8).map((docs, index) => {
@@ -280,8 +292,10 @@ export default function ProjectUpload(props) {
                 );
               })}
         </ul>
-        <hr></hr>
+          <hr />
+        </div>
       </div>
-    </>
-  );
+</div>
+</>
+      );
 }

@@ -241,7 +241,7 @@ const CompanyMain = () => {
             }}
             disablePadding
           >
-            <ListItemButton sx={{ color: "#fff" }}>
+            <ListItemButton sx={{ color: "whitesmoke" }}>
               {props.listname}
             </ListItemButton>
           </ListItem>
@@ -281,7 +281,7 @@ const CompanyMain = () => {
           className="sidebar-header d-flex"
           style={{ justifyContent: "space-between" }}
         >
-          <h3>{location.state.props.COMPANY_NAME}</h3>
+          <h4>{location.state.props.COMPANY_NAME}</h4>
 
           <Tooltip title={location.state.props.COMPANY_USERNAME}>
             <Avatar>
@@ -983,7 +983,7 @@ const CompanyMain = () => {
       </NavScreen>
 
       <NavScreen screenIndex={navIndex === 3}>
-        <EmployeeSrc empData={location.state.props} />
+        <EmployeeSrc empData={location.state.props} AssignProjectData={ProjectData} />
       </NavScreen>
 
       {/* <NavScreen screenIndex={navIndex === 4}>

@@ -7,6 +7,9 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import teamImg1 from "../assests/images/team-1.jpg";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { styled } from "@mui/material/styles";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import "../assests/css/employeesrc.css"
 import {
   Button,
   Card,
@@ -16,6 +19,8 @@ import {
   Paper,
   Skeleton,
   Typography,
+  MenuItem, Select,
+  List, ListItem, ListItemText,
 } from "@mui/material";
 import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
@@ -23,31 +28,22 @@ import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 
 
+
 const EmployeeSrc = (props) => {
-
- console.log(props, "empdtat")
+  //isLoading this is for the Skeleton
   const [isLoading, setIsLoading] = useState(true);
-
+  // assigned Project which is selected from using dropdown  
+  const [assignedProject, setAssignedProject] = useState([]);
+  // all employee data 
   const [allempData, setAllempData] = useState({
     COMPANY_PARENT_ID: 18,
     COMPANY_PARENT_USERNAME: "deepanshu1",
   });
-
+  // adding employee and it show chnages on run time 
   const [updatedata, setUpdateData] = useState(false);
-
-  // console.log("employeerowdata: =>", employeDatatable);
-  console.log("All_employe_data: =>", allempData);
-
-  const filterallempData =  props.empData;
-  
-  console.log(filterallempData,"single data")
-
-  useEffect(() => {
-    fetchAllEmployee();
-  },[updatedata]);
-
-  console.log(updatedata, "updateddata")
-
+  // all projects data which is existing projects 
+  const allProjectData = props.AssignProjectData;
+  // Assinging Projects
   const [filterData, setFilteredData] = useState({
     row: {
       EMPLOYEE_DOB: "",
@@ -71,9 +67,60 @@ const EmployeeSrc = (props) => {
   });
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
+  const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
+  const [selectedProject, setSelectedProject] = useState([]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const rows = allempData;
+
+  const filterallempData = props.empData;
+
+  const getallparam = allProjectData.filter((e => e.PROJECT_NAME === selectedProject))
+
+  console.log(getallparam, "buildings")
+
+  // console.log(props, "empdtat")
+
+  // console.table("Project Data for Assign", allProjectData)
+  useEffect(() => {
+    fetchAllEmployee();
+  }, [updatedata]);
+
+  const handleAssignProject = (e) => {
+    e.preventDefault();
+
+    // Create a new object that combines the selected project data and employee data
+    const mergedData = {
+      PROJECT_ID: getallparam[0]?.PROJECT_ID,
+      PROJECT_PARENT_ID: getallparam[0]?.PROJECT_PARENT_ID,
+      PROJECT_MEMBER_PARENT_ID: getallparam[0]?.PROJECT_MEMBER_PARENT_ID,
+      PROJECT_MEMBER_PARENT_USERNAME: getallparam[0]?.PROJECT_MEMBER_PARENT_USERNAME,
+      PROJECT_USERNAME: getallparam[0]?.PROJECT_USERNAME,
+      EMPLOYEE_ID: rows[0]?.EMPLOYEE_ID,
+      EMPLOYEE_PARENT_ID: rows[0]?.EMPLOYEE_PARENT_ID,
+      EMPLOYEE_PARENT_USERNAME: rows[0]?.EMPLOYEE_PARENT_USERNAME,
+      EMPLOYEE_MEMBER_PARENT_ID: rows[0]?.EMPLOYEE_MEMBER_PARENT_ID,
+      EMPLOYEE_MEMBER_PARENT_USERNAME: rows[0]?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+    };
+
+    // Validate the form data before submission
+
+    axios
+      .post("http://3.84.137.243:5001/assign_project", mergedData, {
+        headers,
+      })
+      .then((response) => {
+        console.log("response of create project", response.data);
+        setSelectedProject(response.data.result);
+        setIsSuccessMessageVisible(true);
+      })
+      .catch((error) => {
+        console.error(error, "ERR");
+      });
+  };
+
 
   const headers = {
     "Content-Type": "application/json",
@@ -147,18 +194,7 @@ const EmployeeSrc = (props) => {
       width: 120,
       // editable: true,
     },
-    // {
-    //   field: "EMPLOYEE_ADD",
-    //   headerName: "Address",
-    //   width: 120,
-    //   // editable: true,
-    // },
-    // {
-    //   field: "EMPLOYEE_CITY",
-    //   headerName: "City",
-    //   width: 80,
-    //   // editable: true,
-    // },
+
     {
       field: "EMPLOYEE_EMPLMNTTYPE",
       headerName: "Employement Type",
@@ -186,9 +222,7 @@ const EmployeeSrc = (props) => {
     },
   ];
 
-  // const rows = employeDatatable;allempData
-  const rows = allempData;
-  console.log("rows", rows);
+
 
   function downloadPDF(pdf) {
     const linkSource = `data:application/pdf;base64,${pdf}`;
@@ -204,56 +238,6 @@ const EmployeeSrc = (props) => {
     handleOpen();
   };
 
-  const tablerows = [
-    {
-      date: "12/06/23",
-      day: "Monday",
-      status: "Present",
-      in: 10,
-      out: 6,
-      workinghrs: 8,
-    },
-    {
-      date: "13/06/23",
-      day: "Tuesday",
-      status: "Present",
-      in: 10,
-      out: 6,
-      workinghrs: 8,
-    },
-    {
-      date: "14/06/23",
-      day: "Wednesday",
-      status: "Absent",
-      in: 11,
-      out: 6,
-      workinghrs: 7,
-    },
-    {
-      date: "14/06/23",
-      day: "Thursday",
-      status: "Present",
-      in: 11,
-      out: 6,
-      workinghrs: 7,
-    },
-    {
-      date: "14/06/23",
-      day: "Friday",
-      status: "Present",
-      in: 11,
-      out: 6,
-      workinghrs: 7,
-    },
-    {
-      date: "14/06/23",
-      day: "Saturday",
-      status: "Present",
-      in: 11,
-      out: 6,
-      workinghrs: 7,
-    },
-  ];
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
@@ -264,12 +248,6 @@ const EmployeeSrc = (props) => {
     Border: 0,
     display: props.screenIndex ? "block" : "none",
   }));
-
-  // const updateData = (event) => {
-  //   setUpdateData(event);
-  // };
-
-  console.log(index, "index");
 
   const Animations = () => {
     return (
@@ -286,10 +264,13 @@ const EmployeeSrc = (props) => {
     );
   };
 
+
+
   return (
     <>
-      <Box className="box" style={{background:"#277099" }}>
-        <EmployeeCreate  mainData={filterallempData} update={(event) => setUpdateData(event)} name={"Employee"} />
+      <Box className="box" style={{ background: "#277099" }}>
+        <EmployeeCreate mainData={filterallempData} update={(event) => setUpdateData(event)} name={"Employee"} />
+
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "89vh", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
@@ -323,7 +304,7 @@ const EmployeeSrc = (props) => {
         }}
         className="box position-absolute overflow-auto"
       >
-        <div className="container-fluid pb-0 g-0 position-sticky top-0 " style={{background:"#277099" }}>
+        <div className="container-fluid pb-0 g-0 position-sticky top-0 " style={{ background: "#277099" }}>
           <Button
             onClick={handleClose}
             variant="contained"
@@ -353,7 +334,7 @@ const EmployeeSrc = (props) => {
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
           <Grid container xl={12}>
             <Grid item xl={6} pr={2}>
-              <Card sx={{ display: "flex", height: "250px" }}>
+              <Card sx={{ display: "flex", height: "250px", backgroundColor: "#f5f5f5" }}>
                 <CardMedia
                   component="img"
                   sx={{ width: 200 }}
@@ -392,8 +373,8 @@ const EmployeeSrc = (props) => {
                 </Box>
               </Card>
             </Grid>
-            <Grid item xl={6} pl={2} screenIndex={index === 1}>
-              <Card sx={{ display: "flex", height: "250px" }}>
+            <Grid item xl={3} pl={2} screenIndex={index === 1}>
+              <Card sx={{ display: "flex", height: "250px", backgroundColor: "#f5f5f5" }}>
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <CardContent sx={{ flex: "1 0 auto" }}>
                     <Typography component="div" variant="h5">
@@ -431,8 +412,8 @@ const EmployeeSrc = (props) => {
                 </Box>
               </Card>
             </Grid>
-            <Grid item xl={6} pr={2} pt={2}>
-              <Card sx={{ display: "flex", height: "250px" }}>
+            <Grid item xl={3} pl={2}>
+              <Card sx={{ display: "flex", height: "250px", backgroundColor: "#f5f5f5" }}>
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <CardContent sx={{ flex: "1 0 auto" }}>
                     <Typography component="div" variant="h5">
@@ -463,9 +444,65 @@ const EmployeeSrc = (props) => {
                 </Box>
               </Card>
             </Grid>
+
+            <Grid item xl={12} pt={2}>
+              <Card sx={{ display: "flex", height: "250px", backgroundColor: "#f5f5f5" }}>
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  {/* Button and Dropdown */}
+                    <h4 style={{margin:"10px"}}>Assigning Projects to  <span style={{color:"tan"}}>{filterData.row.EMPLOYEE_NAME}</span></h4>
+                  <Box m={2} display="flex" alignItems="center">
+                    <div class="select">
+                      <select
+                        value={selectedProject}
+                        onChange={(e) => setSelectedProject(e.target.value)}
+                        name="format" id="format" >
+                        <option value="Select Project" selected>
+                          Select Project
+                        </option>
+                        {/* Here, you can map over the list of available projects and create a MenuItem for each one */}
+                        {allProjectData.map((project, key) => {
+                          return (
+                            <option value={project.PROJECT_NAME} key={key}>
+                              {project.PROJECT_NAME}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                    <button variant="contained" onClick={handleAssignProject} className="assignBtn">
+                      Assign Project
+                    </button>
+
+                    <Snackbar
+                      open={isSuccessMessageVisible}
+                      autoHideDuration={3000} // Hide after 3 seconds
+                      onClose={() => setIsSuccessMessageVisible(false)} // Close the Snackbar
+                      message="Project assigned successfully!"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    />
+                  </Box>
+                  <CardContent sx={{ flex: "1 0 auto" }}>
+                    <Box>
+                      <Typography variant="div" color="text.secondary" >List of Projects Assigned to Employee:</Typography>
+                      <List>
+                        {allProjectData.map((projects) => (
+                          <ListItem key={projects.PROJECT_ID}>
+                            <ListItemText primary={projects.PROJECT_NAME} />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Box>
+                  </CardContent>
+                </Box>
+              </Card>
+            </Grid>
           </Grid>
         </MyScreen>
-        {/* <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
+        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
           <div
             className="form-control rounded-0 mb-1"
@@ -507,10 +544,10 @@ const EmployeeSrc = (props) => {
               Download file
             </button>
           </div>
-        </MyScreen> */}
+        </MyScreen>
 
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-          <EmployeeTimeSheet mainData={filterData.row}/>
+          <EmployeeTimeSheet mainData={filterData.row} />
         </MyScreen>
 
         <MyScreen
@@ -536,6 +573,8 @@ const EmployeeSrc = (props) => {
             />
           </PDFViewer>
         </MyScreen>
+
+
       </Box>
     </>
   );
