@@ -35,16 +35,16 @@ const Navbar = (props) => {
 
   const navigate = useNavigate();
 
-  const Logout = () => {
-    setShowProfile(false);
-    signOut(auth)
-      .then(() => {
-        navigate("/login");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
-  };
+  // const Logout = () => {
+  //   setShowProfile(false);
+  //   signOut(auth)
+  //     .then(() => {
+  //       navigate("/login");
+  //     })
+  //     .catch((error) => {
+  //       // An error happened.
+  //     });
+  // };
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {

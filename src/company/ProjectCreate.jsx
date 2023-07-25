@@ -55,15 +55,13 @@ export default function ProjectCreate(props) {
     PROJECT_MEMBER_PARENT_USERNAME: text?.COMPANY_PARENT_USERNAME,
     PROJECT_NAME: "",
     PROJECT_USERNAME: "",
-    PROJECT_PHONE: "",
     PROJECT_ADD: "",
     PROJECT_CITY: "",
     PROJECT_START_DATE: "",
     PROJECT_END_DATE: "",
     PROJECT_SUPERVISOR: "",
-    PROJECT_EMROLMNT_TYPE: "",
-    PROJECT_COUNTRY: "",
-    PROJECT_STATE: ""
+    PROJECT_COUNTRY:"",
+    PROJECT_STATE:""
   });
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -78,59 +76,9 @@ export default function ProjectCreate(props) {
   // console.log(availableCities, "cities")
 
   // Function to validate the form data
-  const validateForm = () => {
-    const errors = {};
-    let hasErrors = false;
+ 
 
-    // Check if the required fields are empty and set errors accordingly
-    if (!createProject.PROJECT_USERNAME) {
-      errors.PROJECT_USERNAME = "Project Username is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_NAME) {
-      errors.PROJECT_NAME = "Project Name is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_PHONE) {
-      errors.PROJECT_PHONE = "Contact is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_START_DATE) {
-      errors.PROJECT_START_DATE = "Project Start Date is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_END_DATE) {
-      errors.PROJECT_END_DATE = "Project End Date is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_EMROLMNT_TYPE) {
-      errors.PROJECT_EMROLMNT_TYPE = "Enrollment is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_SUPERVISOR) {
-      errors.PROJECT_SUPERVISOR = "Supervisor is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_ADD) {
-      errors.PROJECT_ADD = "Address is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_COUNTRY) {
-      errors.PROJECT_COUNTRY = "Country is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_STATE) {
-      errors.PROJECT_STATE = "State is required";
-      hasErrors = true;
-    }
-    if (!createProject.PROJECT_CITY) {
-      errors.PROJECT_CITY = "City is required";
-      hasErrors = true;
-    }
 
-    setErrors(errors); // Save the validation errors to the state
-    return !hasErrors; // Return true if there are no errors, else false
-  };
 
   const headers = {
     "Content-Type": "application/json",
@@ -142,11 +90,55 @@ export default function ProjectCreate(props) {
     console.log("heello world", createProject);
   };
 
+
+
+
+  console.log(createProject, "create")
+
+  const validateValues = (inputValues) => {
+    let errors = {};
+    if (inputValues.PROJECT_USERNAME.trim() === "") {
+      errors.PROJECT_USERNAME = "Username is required";
+    } else if (inputValues.PROJECT_USERNAME.length > 15) {
+      errors.PROJECT_USERNAME = "Username should not exceed 15 characters";
+    } else if (/[!@#$%^&*(),.?":{}|<>]/.test(inputValues.PROJECT_USERNAME)) {
+      errors.PROJECT_USERNAME = "Username should not contain symbols";
+    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.PROJECT_USERNAME)) {
+      errors.PROJECT_USERNAME = "Username should not contain symbols";
+    } else if (
+      inputValues.PROJECT_USERNAME.length < 6 ||
+      inputValues.PROJECT_USERNAME.length > 10
+    ) {
+      errors.PROJECT_USERNAME = "Username length must be between 6 and 10";
+    }
+
+    return errors;
+  }
+
+  //api create project
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Validate the form data before submission
-    if (validateForm()) {
+    if (
+      !createProject.PROJECT_PARENT_ID ||
+      !createProject.PROJECT_PARENT_USERNAME ||
+      !createProject.PROJECT_MEMBER_PARENT_ID ||
+      !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
+      !createProject.PROJECT_NAME ||
+      !createProject.PROJECT_USERNAME ||
+      !createProject.PROJECT_ADD ||
+      !createProject.PROJECT_START_DATE ||
+      !createProject.PROJECT_END_DATE ||
+      !createProject.PROJECT_SUPERVISOR ||
+      !createProject.PROJECT_COUNTRY ||
+      !createProject.PROJECT_CITY ||
+      !createProject.PROJECT_STATE
+    ) {
+      setErrorMsg("Fill all fields");
+      return;
+    }else {
+     setErrors(validateValues(createProject));
+     console.log(Object.keys(errors).length === 0,"log")
+    if (!Object.keys(errors).length === 0) {
       axios
         .post("http://3.84.137.243:5001/create_project", createProject, {
           headers,
@@ -167,6 +159,7 @@ export default function ProjectCreate(props) {
       // If there are validation errors, set an error message
       setErrorMsg("Please fill in all required fields.");
     }
+      }
   };
 
   console.log("ind", index);
@@ -376,10 +369,11 @@ export default function ProjectCreate(props) {
                 </select>
               </div>
             </div>
-            <center>{errorMsg && <p className=" text-danger fw-light mb-0">
-              {errorMsg}
-            </p>
-            }</center>
+           <center>{errorMsg && <p className=" text-danger fw-light mb-0">
+                  {errorMsg}
+                    </p>
+                  }</center> 
+            
             <button
               type="submit"
               className="btn btn-info text-white "
@@ -398,4 +392,4 @@ export default function ProjectCreate(props) {
       </Modal>
     </>
   );
-}
+                }

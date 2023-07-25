@@ -24,48 +24,36 @@ function AdminCreate() {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const handleSubmission = () => {
-    if (!values.ADMIN_NAME || 
-      !values.ADMIN_EMAIL || 
+  const handleSubmit = (e) => {
+    if (
+      !values.ADMIN_NAME ||
+      !values.ADMIN_EMAIL ||
       !values.ADMIN_PASSWORD ||
       !values.ADMIN_PHONE ||
       !values.ADMIN_USERNAME
-      ) {
+    ) {
       setErrorMsg("Fill all fields");
       return;
     }
     setErrorMsg("");
-
-    setSubmitButtonDisabled(true);
-    createUserWithEmailAndPassword(auth, values.ADMIN_EMAIL, values.ADMIN_PASSWORD)
-      .then(async (res) => {
-        setSubmitButtonDisabled(false);
-        const user = res.user;
-        await updateProfile(user, {
-          displayName: values.ADMIN_USERNAME,
-        });
-        handleSubmit();
-      })
-      .catch((err) => {
-        setSubmitButtonDisabled(false);
-        setErrorMsg(err.message);
-      });
-  };
-
-  const handleSubmit = (e) => {
     console.log("on btn submit");
-    // e.preventDefault();
     axios
       .post("http://3.84.137.243:5001/create_admin", values, {
         headers,
       })
       .then((response) => {
-        alert("successfully sign up")
-        navigate("/login");
-        console.log("response", response.data);
+        setErrorMsg(response.errorMsg);
+        console.log(response, "myresponse");
+
+        if (response.data.operation == "failed") {
+          setErrorMsg(response.data.errorMsg);
+        } else if (response.data.operation == "successfull") {
+          alert("successfully sign up");
+          navigate("/login");
+        }
       })
       .catch((error) => {
-        console.error(error);
+        setErrorMsg("something want wrong");
       });
   };
 
@@ -81,7 +69,10 @@ function AdminCreate() {
           placeholder="Enter your username"
           className="form-control"
           onChange={(event) =>
-            setValues((prev) => ({ ...prev, ADMIN_USERNAME: event.target.value }))
+            setValues((prev) => ({
+              ...prev,
+              ADMIN_USERNAME: event.target.value,
+            }))
           }
         />
         <InputControl
@@ -115,13 +106,18 @@ function AdminCreate() {
           placeholder="Enter password"
           className="form-control"
           onChange={(event) =>
-            setValues((prev) => ({ ...prev, ADMIN_PASSWORD: event.target.value }))
+            setValues((prev) => ({
+              ...prev,
+              ADMIN_PASSWORD: event.target.value,
+            }))
           }
         />
 
         <div className={styles.footer}>
-        <center><p className=" text-danger fw-light mb-0">{errorMsg}</p></center> 
-          <button onClick={handleSubmission} disabled={submitButtonDisabled}>
+          <center>
+            <p className=" text-danger fw-light mb-0">{errorMsg}</p>
+          </center>
+          <button onClick={handleSubmit} disabled={submitButtonDisabled}>
             Signup
           </button>
           <p>
