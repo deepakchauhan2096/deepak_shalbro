@@ -2,37 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
-import AddProject from "../modal/AddProject";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import {
-  Avatar,
-  Button,
-  Container,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  Paper,
-  Skeleton,
-  Tooltip,
-  styled,
-} from "@mui/material";
-import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/Logout";
-import CircularProgress from "@mui/material/CircularProgress";
-import CompanyNavbar from "./CompanyNavbar";
+import {Button,Skeleton,Paper} from "@mui/material";
 import ProjectCreate from "./ProjectCreate";
-import AddIcon from "@mui/icons-material/Add";
-import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import Upload from "./ProjectUpload";
-import ProjectUpload from "./ProjectUpload";
-import EmployeeCreate from "../Employee/EmployeeCreate";
-import EmployeeSrc from "../Employee/EmployeeSrc";
-import EmployeeAttendance from "../Employee/EmployeeAttendance";
-import { MyContext } from "./Mycontext";
-import CompanyDashboard from "./CompanyDashboard";
+import { styled } from "@mui/material/styles";
+import { MyContext } from "../context/Mycontext";
 
 const Project = (props) => {
   const [data, setData] = useState({
@@ -57,8 +31,8 @@ const Project = (props) => {
   const [index, setIndex] = useState(1);
   const [ProjectData, setProjectData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-//   const [navIndex, setNavIndex] = useState(0);
   const [Edit, setEdit] = useState(false);
+  const [updatedata, setUpdateData] = useState(false);
 
   // modal
   const handleOpen = () => setOpen(true);
@@ -66,15 +40,7 @@ const Project = (props) => {
   const { alldata, setText } = useContext(MyContext);
   const { projectcreatedata } = useContext(MyContext);
 
-  // console.log("all contracts: =>>>",ProjectData)
-//   const navigate = useNavigate();
-//   const location = useLocation();
-
-//   console.log("location of the Project cerattion", location.state);
-
-//   useEffect(() => {
-//     setText(location.state.props);
-//   }, [setText]);
+ //update data
 
   useEffect(() => {
     fetchProjects();
@@ -120,39 +86,33 @@ const Project = (props) => {
       field: "PROJECT_USERNAME",
       headerName: "USername",
       width: 150,
-      // editable: true,
     },
     {
       field: "PROJECT_NAME",
       headerName: "Name",
       width: 150,
-      // editable: true,
     },
     {
       field: "PROJECT_PHONE",
       headerName: "Phone",
       width: 150,
-      // editable: true,
     },
     {
       field: "PROJECT_START_DATE",
       headerName: "Start Date",
       width: 150,
-      // editable: true,
     },
     {
       field: "PROJECT_END_DATE",
       headerName: "End Date",
       type: "number",
       width: 100,
-      // editable: true,
     },
 
     {
       field: "PROJECT_SUPERVISOR",
       headerName: "Supervisor",
       width: 200,
-      // editable: true,
     },
 
     {
@@ -186,7 +146,15 @@ const Project = (props) => {
 
   const filterData = data?.row;
 
-
+  const MyScreen = styled(Paper)((props) => ({
+    height: "calc(100vh - 32px)",
+    padding: 0,
+    paddingBottom: "0",
+    overflow: "auto",
+    borderRadius: 0,
+    Border: 0,
+    display: props.screenIndex ? "block" : "none",
+  }));
 
 
 
@@ -212,25 +180,17 @@ const Project = (props) => {
 
   return (
     <>
-      <Box className="box">
-        <div className="container-fluid d-flex pb-0 g-0 flex-column">
-          <div style={{ height: "20%", background: "#277099" }}>
-            <Button
-              className="btn button btn-blue"
-              variant="contained"
-              size="small"
-            >
-              All Project
-            </Button>
-            <ProjectCreate />
-          </div>
-
-          {isLoading ? (
-            <Box style={{ height: "100%", padding: 20, paddingBottom: "0" }}>
+      <Box className="box" style={{ background: "#277099" }}>
+      <ProjectCreate
+          companyData={filterallprojectData}
+          update={(event) => setUpdateData(event)}
+          name={"Project"}
+        />
+        <MyScreen sx={{ display: "block", padding: 3 }}>
+          <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
+            {isLoading ? (
               <Animations />
-            </Box>
-          ) : (
-            <div style={{ height: "89vh", padding: 20, paddingBottom: "0" }}>
+            ) : (
               <DataGrid
                 sx={{ border: "none" }}
                 rows={rows}
@@ -248,9 +208,9 @@ const Project = (props) => {
                 checkboxSelection
                 disableRowSelectionOnClick
               />
-            </div>
-          )}
-        </div>
+            )}
+          </Box>
+        </MyScreen>
       </Box>
 
       <Box
@@ -310,24 +270,6 @@ const Project = (props) => {
           >
             Payment
           </Button>
-
-          {/* <Button
-              onClick={(e) => setIndex(3)}
-              variant={index === 3 ? "outlined" : "contained"}
-              className="btn rounded-0 border-0"
-              size="small"
-            >
-              Compliance
-            </Button> */}
-
-          {/* <Button
-              onClick={(e) => setIndex(4)}
-              variant={index === 4 ? "outlined" : "contained"}
-              className="btn rounded-0 border-0"
-              size="small"
-            >
-              Documents
-            </Button> */}
         </div>
 
         {index === 1 ? (
