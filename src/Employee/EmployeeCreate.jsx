@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { ToastContainer, toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
@@ -23,6 +24,7 @@ export default function AddEmployee(props) {
   const [open, setOpen] = React.useState(false);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [createEmployee, setCreateEmployee] = useState({
     EMPLOYEE_NAME: "",
     EMPLOYEE_EMAIL: "",
@@ -36,6 +38,7 @@ export default function AddEmployee(props) {
     EMPLOYEE_HIRE_DATE: "",
     EMPLOYEE_ADD: "",
     EMPLOYEE_USERNAME: "",
+    EMPLOYEE_PASSWORD: "",
     EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME,
     EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID,
     EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME,
@@ -55,25 +58,6 @@ export default function AddEmployee(props) {
   };
 
    
-  const validateValues = (inputValues) => {
-    let errors = {};
-    if (inputValues.EMPLOYEE_USERNAME.trim() === "") {
-      errors.EMPLOYEE_USERNAME = "Username is required";
-    } else if (inputValues.EMPLOYEE_USERNAME.length > 15) {
-      errors.EMPLOYEE_USERNAME = "Username should not exceed 15 characters";
-    } else if (/[!@#$%^&*(),.?":{}|<>]/.test(inputValues.EMPLOYEE_USERNAME)) {
-      errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
-    } else if (!/^[a-zA-Z0-9]+$/.test(inputValues.EMPLOYEE_USERNAME)) {
-      errors.EMPLOYEE_USERNAME = "Username should not contain symbols";
-    } else if (
-      inputValues.EMPLOYEE_USERNAME.length < 6 ||
-      inputValues.EMPLOYEE_USERNAME.length > 10
-    ) {
-      errors.EMPLOYEE_USERNAME = "Username length must be between 6 and 10";
-    }
-
-    return errors;
-  }
 
   const handleCreate = (e) => {
     setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
@@ -82,8 +66,12 @@ export default function AddEmployee(props) {
 
   //firbase authentication
 
-  const handleSubmission = () => {
-    setErrors(validateValues(createEmployee));
+
+
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (
       !createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME ||
       !createEmployee.EMPLOYEE_EMAIL ||
@@ -105,68 +93,30 @@ export default function AddEmployee(props) {
     }
     setErrorMsg("");
 
-    if (
-      createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME &&
-      createEmployee.EMPLOYEE_EMAIL &&
-      createEmployee.EMPLOYEE_PASSWORD
-    ) {
-      setSubmitButtonDisabled(true);
-      createUserWithEmailAndPassword(
-        auth,
-        createEmployee.EMPLOYEE_EMAIL,
-        createEmployee.EMPLOYEE_PASSWORD
-      )
-        .then(async (res) => {
-          setSubmitButtonDisabled(false);
-          const user = res.user;
-          const display = createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME +"%"+createEmployee.EMPLOYEE_USERNAME
-          await updateProfile(user, {
-            
-            displayName:display,
-          });
-          if (res) {
-            handleSubmit();
-          }
-        })
-        .catch((err) => {
-          setSubmitButtonDisabled(false);
-          setErrorMsg(err.message);
-        });
-    }
-  };
-
-  console.log()
-
-  const handleSubmit = (e) => {
-    console.log("on btn submit");
-    e.preventDefault();
-    // setErrors(validateValues(createEmployee));
-    if (
-      Object.keys(errors).length === 0 &&
-      createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME
-    ) {
       axios
         .post("http://3.84.137.243:5001/create_employee", createEmployee, {
           headers,
         })
         .then((response) => {
           if (response.data.operation == "failed") {
-            setOpen(true);
+            setErrorMsg(response.data.errorMsg);
           } else if (response.data.operation == "successfull") {
-            setOpen(false);
+            setIsSubmitted(true); // Set the submission status to true after successful submission
+            toast.success("Form submitted successfully!", {
+              position: toast.POSITION.TOP_CENTER,
+            });
             props.update(true);
+            setOpen(false);
           }
         })
         .catch((error) => {
           console.error(error);
         });
-    }
   };
 
-  console.log("newdata", newdata);
 
   return (
-    <>
+    < >
       <Button size="small" className="btn button btn-blue" variant="contained">
         Employee
       </Button>
@@ -210,11 +160,6 @@ export default function AddEmployee(props) {
                     {errors.EMPLOYEE_USERNAME}
                   </p>
                   )}
-                  {/* {errors.EMPLOYEE_USERNAME && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_USERNAME}
-                    </p>
-                  )} */}
                 </div>
                 <div className="form-group col-xl-6">
                   <label>Employee Name</label>
@@ -228,11 +173,6 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {/* {errors.EMPLOYEE_NAME && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_NAME}
-                    </p>
-                  )} */}
                 </div>
               </div>
               <div className="row">
@@ -248,15 +188,6 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {/* {errors.EMPLOYEE_EMAIL && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_EMAIL}
-                    </p>
-                  )} */}
-                  {/* {errorMsg && <p className="error text-danger fw-light mb-0">
-                  {errorMsg}
-                    </p>
-                  } */}
                 </div>
                 <div className="form-group col-xl-6 py-1">
                   <label>State</label>
@@ -270,11 +201,6 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {/* {errors.EMPLOYEE_STATE && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_STATE}
-                    </p>
-                  )} */}
                 </div>{" "}
                 <div className="form-group col-xl-6 py-1">
                   <label>Phone</label>
@@ -288,11 +214,6 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {/* {errors.EMPLOYEE_PHONE && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_PHONE}
-                    </p>
-                  )} */}
                 </div>
                 <div className="form-group col-xl-6 py-1">
                   <label>Employee Password</label>
@@ -305,11 +226,6 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {/* {errors.EMPLOYEE_PASSWORD && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_PASSWORD}
-                    </p>
-                  )} */}
                 </div>
                 <div className="form-group col-xl-6 py-1">
                   <label for="inputPassword4">Date Of Birth</label>
@@ -323,11 +239,7 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {/* {errors.EMPLOYEE_DOB && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_DOB}
-                    </p>
-                  )} */}
+
                 </div>
               </div>
               <div className="row">
@@ -344,11 +256,6 @@ export default function AddEmployee(props) {
                       onChange={handleCreate}
                       required
                     />
-                    {/* {errors.EMPLOYEE_ADD && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_ADD}
-                    </p>
-                  )} */}
                   </div>
                 </div>
                 <div className="form-group col-xl-4 py-1">
@@ -363,11 +270,6 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {/* {errors.EMPLOYEE_CITY && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_CITY}
-                    </p>
-                  )} */}
                 </div>
                 <div className="form-group col-xl-4 py-1">
                   <label>Hourly wages</label>
@@ -381,17 +283,12 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {/* {errors.EMPLOYEE_HOURLY_WAGE && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_HOURLY_WAGE}
-                    </p>
-                  )} */}
                 </div>
                 <div className="form-group col-xl-4 py-1">
                   <label for="inputPassword4">Employee Role</label>
                   <select
                     id="inputqual"
-                    className="form-control rounded-0"
+                    className="form-control rounded-0 border"
                     value={createEmployee.EMPLOYEE_ROLE}
                     name="EMPLOYEE_ROLE"
                     onChange={handleCreate}
@@ -405,20 +302,15 @@ export default function AddEmployee(props) {
                     <option>Worker</option>
                     <option>other</option>
                   </select>
-                  {/* {errors.EMPLOYEE_ROLE && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_ROLE}
-                    </p>
-                  )} */}
+
                 </div>
               </div>
-              <div className="row py-1"></div>
               <div className="row">
-                <div className="form-group col-xl-4 py-1">
+                <div className="form-group col-xl-4 py-1 ">
                   <label for="inputqual">Employement Type</label>
                   <select
                     id="inputqual"
-                    className="form-control rounded-0"
+                    className="form-control rounded-0 border"
                     value={createEmployee.EMPLOYEE_EMPLMNTTYPE}
                     name="EMPLOYEE_EMPLMNTTYPE"
                     onChange={handleCreate}
@@ -430,11 +322,6 @@ export default function AddEmployee(props) {
                     <option>Trainee</option>
                     <option>other</option>
                   </select>
-                  {/* {errors.EMPLOYEE_EMPLMNTTYPE && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_EMPLMNTTYPE}
-                    </p>
-                  )} */}
                 </div>
 
                 <div className="form-group col-xl-4 py-1">
@@ -449,23 +336,19 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {/* {errors.EMPLOYEE_HIRE_DATE && (
-                    <p className="error text-danger fw-light mb-0">
-                      {errors.EMPLOYEE_HIRE_DATE}
-                    </p>
-                  )} */}
                 </div>
               </div>
               <div className="row pt-2">
-                {errorMsg && <p className="error text-danger fw-light mb-0">
-                  {errorMsg}
-                    </p>
-                  }
+              <center>
+              {errorMsg && (
+                <p className=" text-danger fw-light mb-0">{errorMsg}</p>
+              )}
+               </center>
                 <div className="col-12">
                   <button
                     type="submit"
                     className="btn btn-info text-white "
-                    onClick={handleSubmission}
+                    onClick={handleSubmit}
                   >
                     Submit
                   </button>{" "}

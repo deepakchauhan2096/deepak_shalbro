@@ -1,39 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
-import { DataGrid } from "@mui/x-data-grid";
-import AddProject from "../modal/AddProject";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   Avatar,
   Button,
-  Container,
   Divider,
   Drawer,
   List,
   ListItem,
   ListItemButton,
   Paper,
-  Skeleton,
   Tooltip,
   styled,
 } from "@mui/material";
-import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
-import CircularProgress from "@mui/material/CircularProgress";
-import CompanyNavbar from "./CompanyNavbar";
-import ProjectCreate from "./ProjectCreate";
-import AddIcon from "@mui/icons-material/Add";
-import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import Upload from "./ProjectUpload";
 import ProjectUpload from "./ProjectUpload";
-import EmployeeCreate from "../Employee/EmployeeCreate";
-import EmployeeSrc from "../Employee/EmployeeSrc";
-import EmployeeAttendance from "../Employee/EmployeeAttendance";
-import { MyContext } from "./Mycontext";
+import EmployeeSrc from "../employee/EmployeeSrc";
 import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
+import AttendanceReport from "../attendance/AttendanceReport";
 
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
@@ -97,6 +83,9 @@ const CompanyMain = () => {
     },
     {
       listname: "Employees",
+    },
+    {
+      listname: "Attendance Report",
     }
   ];
 
@@ -231,6 +220,10 @@ const CompanyMain = () => {
 
       <NavScreen screenIndex={navIndex === 3}>
         <EmployeeSrc empData={location.state.props} AssignProjectData={projectData}/>
+      </NavScreen>
+
+      <NavScreen screenIndex={navIndex === 4}>
+        <AttendanceReport />
       </NavScreen>
     </>
   );

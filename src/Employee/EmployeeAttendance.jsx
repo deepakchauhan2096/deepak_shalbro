@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
-import moment from "moment/moment";
-import { DataGrid } from "@mui/x-data-grid";
-import AddEmployee from "../modal/AddEmployee";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import teamImg1 from "../assests/images/team-1.jpg";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { styled } from "@mui/material/styles";
 import {
   Backdrop,
   Button,
