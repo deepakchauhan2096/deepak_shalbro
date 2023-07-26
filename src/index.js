@@ -4,10 +4,32 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// redux's imports
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, combineReducers } from "redux"
+import thunk from 'redux-thunk';
+import logger from 'redux-logger';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+// reducers
+import { accountReducer } from './redux/reducer/account';
+
+const middleware = [thunk, logger];
+
+let store = createStore(
+  combineReducers({
+    account: accountReducer
+  }),
+  composeWithDevTools(applyMiddleware(...middleware)),
+)
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );
 

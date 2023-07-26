@@ -28,6 +28,10 @@ import ProjectCreate from "../company/ProjectCreate";
 import Modal from "@mui/material/Modal";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
+import { useDispatch,useSelector } from "react-redux";
+
+import { initAdmin_fun ,initCompany_fun, selectedCompany_fun} from "../redux/action";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -49,6 +53,8 @@ const AdminDashboard = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [tableRows, setTableRows] = useState(adminData);
   const [Rows, setRows] = useState([]);
+
+  const dispatch = useDispatch()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -77,6 +83,7 @@ const AdminDashboard = (props) => {
         console.log("response.data : ", response.data);
         const data = response.data;
         setRows(data.result);
+        dispatch(initCompany_fun(data.result))
       }, 1000);
       setIsLoading(false);
     } catch (error) {
