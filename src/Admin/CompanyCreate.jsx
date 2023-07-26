@@ -51,15 +51,14 @@ export default function CompanyCreate(props) {
 
 
   // Finding the states and cities of the individaul country 
-  const SelectedCountryData = country?.find((c) => c.name === create_company.PROJECT_COUNTRY);
+  const availableState = country?.find((c) => c.name === create_company.PROJECT_COUNTRY);
 
-  console.log("all states : ===> ", SelectedCountryData)
-
-  const availablestates = SelectedCountryData?.states?.find(
+  console.log("all states : ===> ", availableState)
+  const availableCities = availableState?.states?.find(
     (s) => s.name === create_company.PROJECT_STATE
   );
 
-  console.log("states data : ========>",availablestates);
+  console.log("states data : ========>",availableState);
 
   const handleSubmit = (e) => {
     console.log("on btn submit");
@@ -169,16 +168,16 @@ export default function CompanyCreate(props) {
               <div className="form-group col-xl-4">
                   <label>Country</label>
                   <select
-                    className="form-control rounded-0"
+                    className="form-control border  rounded-0"
                     name="COMPANY_STATE"
                     value={create_company.COMPANY_COUNTRY}
                     onChange={handleCreate}
                   >
                     <option selected>Choose...</option>
                    
-                   {country.map((country,key)=>{
+                   {country.map((e,key)=>{
                     return(
-                          <option value={country.name} key={key}>{country.name}</option>
+                          <option value={e.name} key={key}>{e.name}</option>
                     )
                    })} 
                     
@@ -188,13 +187,13 @@ export default function CompanyCreate(props) {
                 <div className="form-group col-xl-4">
                   <label>State</label>
                   <select
-                    className="form-control rounded-0"
+                    className="form-control border  rounded-0"
                     name="COMPANY_STATE"
                     value={create_company.COMPANY_STATE}
                     onChange={handleCreate}
                   >
-                    <option selected>Choose...</option>
-                  {SelectedCountryData?.states?.map((state,key) => {
+                    <option selected >Choose... States</option>
+                  {availableState?.states?.map((state,key) => {
                     return(
                       <option value={state.name} key={key} >{state.name}</option>
                     )
@@ -206,18 +205,18 @@ export default function CompanyCreate(props) {
                 <div className="form-group col-xl-4">
                   <label>City</label>
                   <select
-                    className="form-control rounded-0"
+                    className="form-control border rounded-0"
                     name="COMPANY_CITY"
                     value={create_company.COMPANY_CITY}
                     onChange={handleCreate}
                   >
-                    <option selected>Choose...</option>
-                  {availablestates?.cities?.map((items,key)=> {
+                    <option selected>Choose City...</option>
+                  {availableCities?.cities?.map((e,key)=> {
                     return(
-                      <option value={items.name}>{items.name}</option>
+                      <option value={e.name} key={key}>{e.name}</option>
                     )
                   })} 
-                    
+                     
                   </select>
                 </div>
                
