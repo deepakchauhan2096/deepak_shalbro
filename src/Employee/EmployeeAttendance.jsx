@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
-import moment from "moment/moment";
-import { DataGrid } from "@mui/x-data-grid";
-import AddEmployee from "../modal/AddEmployee";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import teamImg1 from "../assests/images/team-1.jpg";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { styled } from "@mui/material/styles";
 import {
   Backdrop,
   Button,
@@ -17,11 +10,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import Snippet from "./Snippet";
-import EmployeePDF from "../Invoices/EmployeePDF";
-import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
-import CloseIcon from "@mui/icons-material/Close";
-import { right } from "@popperjs/core";
+
 
 const EmployeeAttendance = (props) => {
   const [indone, setIndone] = useState("");

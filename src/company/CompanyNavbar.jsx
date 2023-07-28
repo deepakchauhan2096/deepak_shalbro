@@ -16,7 +16,7 @@ import {
   Tooltip,
 } from "@mui/material";
 
-const CompanyNavbar = () => {
+const CompanyNavbar = (props) => {
   const [userName, setUserName] = useState("U");
 
   const [showProfile, setShowProfile] = useState(false);
@@ -29,22 +29,17 @@ const CompanyNavbar = () => {
     setShowProfile(true)
   }
 
-
+  // console.log(props,"myprops")
   const location = useLocation();
   console.log(location.pathname, "loc");
 
-  const navigate = useNavigate();
+  const sendData = props.data 
 
-  const Logout = () => {
-    setShowProfile(false);
-    signOut(auth)
-      .then(() => {
-        navigate("/login");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
+  const navigate = useNavigate();
+  const ShowCompDetail = (props) => {
+    return navigate("/company", { state: { sendData } });
   };
+
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -57,12 +52,30 @@ const CompanyNavbar = () => {
   const urls = [
     {
       listname: "Dashboard",
-      listlink: "/dashboard",
+      listlink: "/company/dashboard",
+    },
+    {
+      listname: "Company",
+      listlink: "/company",
     },
     {
       listname: "Project",
       listlink: "/project",
-    }
+    },
+    {
+      listname: "Sub Contract",
+      listlink: "/subcontract",
+    },
+    {
+
+      listname: "Employee",
+      listlink: "/employee",
+    },
+    {
+
+      listname: "Attendance",
+      listlink: "/attendance",
+    },
   ];
 
 
@@ -70,7 +83,7 @@ const CompanyNavbar = () => {
   const Lists = (props) => {
     return (
       <Box role="presentation" sx={{width:250}}>
-        
+        <Link to={props.listlink}>
           <List sx={{ py: 0 }}>
             <ListItem
               sx={{
@@ -79,16 +92,15 @@ const CompanyNavbar = () => {
               }}
               disablePadding
             >
-              <ListItemButton sx={{ color: "#fff" }}>
+              <ListItemButton sx={{ color: "#fff" }}  onClick={(e) => ShowCompDetail(props.listlink)}>
                 {props.listname}
               </ListItemButton>
             </ListItem>
           </List>
+        </Link>
       </Box>
     );
   };
-
-  
 
   return (
     <>
@@ -109,9 +121,9 @@ const CompanyNavbar = () => {
           className="sidebar-header d-flex"
           style={{ justifyContent: "space-between" }}
         >
-          <h3>Shalbro</h3>
+          <h3>{props.companyName}</h3>
           <Tooltip title={userName}>
-            <Avatar>{userName.charAt(0).toUpperCase()}</Avatar>
+            <Avatar>{"d"}</Avatar>
           </Tooltip>
         </div>
 
@@ -127,8 +139,8 @@ const CompanyNavbar = () => {
         >
           <div className="logout_icon">
             <LogoutIcon style={{ display: "inline" }} />{" "}
-            <div className="logout_icon d-inline" onClick={Logout}>
-              Exit
+            <div className="logout_icon d-inline" >
+              Logout
             </div>
           </div>
         </div>

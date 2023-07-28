@@ -23,11 +23,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import AddIcon from "@mui/icons-material/Add";
 import CompanyCreate from "./CompanyCreate";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ProjectCreate from "../company/ProjectCreate";
 import Modal from "@mui/material/Modal";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
+import { useDispatch, useSelector } from "react-redux";
+import CompanyEdit from "../Admin/CompanyEdit";
+import PlaylistPlayOutlinedIcon from '@mui/icons-material/PlaylistPlayOutlined';
+import { initAdmin_fun, initCompany_fun, selectedCompany_fun } from "../redux/action";
+import CompanyDelete from "./CompanyDelete";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -40,61 +46,34 @@ const style = {
 };
 
 const AdminDashboard = (props) => {
+  const location = useLocation();
+  const adminData = location.state?.data.result;
   const [open, setOpen] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [update, setUpdateData] = React.useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [tableRows, setTableRows] = useState([
-    {
-      ADMIN_ID: "",
-      ADMIN_EMAIL: "",
-      ADMIN_USERNAME: "",
-    },
-  ]);
+  const [tableRows, setTableRows] = useState(adminData);
   const [Rows, setRows] = useState([]);
+
+  const dispatch = useDispatch()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
-  useEffect(() => {
-    getAdminData();
-  }, [props.user]);
-
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const getAdminData = async () => {
-    try {
-      const response = await axios.put(
-        "http://3.84.137.243:5001/get_admin",
-        { ADMIN_EMAIL: props?.email, ADMIN_USERNAME: props?.user },
-        { headers }
-      );
-      setTimeout(() => {
-        console.log("response.data : ", response.data);
-        const data = response.data;
-        setTableRows(data.result[0]);
-        setIsLoading(false);
-      }, 1000);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    }
-  };
+  useEffect(() => {
+    getCompanyData();
+  }, [tableRows, update]);
 
   const getCompanyData = async () => {
     try {
@@ -102,30 +81,20 @@ const AdminDashboard = (props) => {
         "http://3.84.137.243:5001/get_all_company",
         {
           COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
-          COMPANY_PARENT_USERNAME: props.user,
+          COMPANY_PARENT_USERNAME: tableRows?.ADMIN_USERNAME,
         },
         { headers }
       );
       setTimeout(() => {
-        console.log("response.data : ", response.data);
+        // console.log("response.data : ", response.data);
         const data = response.data;
         setRows(data.result);
+        dispatch(initCompany_fun(data.result))
       }, 1000);
-      // setIsLoading(false);
+      setIsLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error);
     }
-  };
-
-  useEffect(() => {
-    getCompanyData();
-  }, [tableRows, update]);
-
-  // Mine work
-  const NavigateTo = useNavigate();
-
-  const ShowCompDetail = (props) => {
-    return NavigateTo("/company", { state: { props } });
   };
 
   const MyScreen = styled(Paper)((props) => ({
@@ -151,23 +120,20 @@ const AdminDashboard = (props) => {
     background: "#f9f9f9",
   }));
 
-  const settings = [props?.email, "Account", "Dashboard", "Logout"];
-  const pages = [props?.email, tableRows?.ADMIN_ID];
+  const settings = [
+    tableRows?.ADMIN_USERNAME,
+    "Account",
+    "Dashboard",
+    "Logout",
+  ];
+  const pages = [tableRows?.ADMIN_EMAIL, tableRows?.ADMIN_ID];
 
+  //send data to company dashboard
   const navigate = useNavigate();
 
-  const Logout = () => {
-    // setShowProfile(false);
-    signOut(auth)
-      .then(() => {
-        navigate("/login");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
+  const ShowCompDetail = (props) => {
+    return navigate("/company", { state: { props } });
   };
-
-  console.log(Rows.length, "Rows");
 
   const Animations = () => {
     return (
@@ -187,7 +153,7 @@ const AdminDashboard = (props) => {
         <AppBar position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              {isLoading ? <Skeleton variant="rectangular" width={100} height={20} /> : <Typography
+              <Typography
                 variant="h6"
                 noWrap
                 href="/"
@@ -199,8 +165,8 @@ const AdminDashboard = (props) => {
                   textDecoration: "none",
                 }}
               >
-                {props.user}
-              </Typography>}
+                {tableRows?.ADMIN_USERNAME}
+              </Typography>
               <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                 <IconButton
                   size="large"
@@ -212,7 +178,7 @@ const AdminDashboard = (props) => {
                 >
                   <MenuIcon />
                 </IconButton>
-                {isLoading ? <Skeleton variant="rectangular" width={200} height={20} /> : <Menu
+                <Menu
                   id="menu-appbar"
                   anchorEl={anchorElNav}
                   anchorOrigin={{
@@ -235,10 +201,10 @@ const AdminDashboard = (props) => {
                       <Typography textAlign="center">{page}</Typography>
                     </MenuItem>
                   ))}
-                </Menu>}
+                </Menu>
               </Box>
               <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-              {isLoading ? <Skeleton variant="rectangular" width={100} height={20} /> : <Typography
+              <Typography
                 variant="h5"
                 noWrap
                 component="a"
@@ -253,9 +219,9 @@ const AdminDashboard = (props) => {
                   textDecoration: "none",
                 }}
               >
-                {props.user}
-              </Typography>}
-              {isLoading ? <Skeleton variant="rectangular" width={100} height={20} /> : <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                {tableRows?.ADMIN_USERNAME}
+              </Typography>
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                 {pages.map((page) => (
                   <Button
                     key={page}
@@ -265,8 +231,7 @@ const AdminDashboard = (props) => {
                     {page}
                   </Button>
                 ))}
-              </Box>}
-              {isLoading ? <Skeleton variant="rectangular" width={100} height={20} /> : <div onClick={Logout}>Logout </div>}
+              </Box>
             </Toolbar>
           </Container>
         </AppBar>
@@ -290,7 +255,7 @@ const AdminDashboard = (props) => {
           ) : (
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                {Rows?.length != 0 ? (
+                {Rows?.length !== 0 ? (
                   <TableHead>
                     <TableRow>
                       {[
@@ -302,6 +267,8 @@ const AdminDashboard = (props) => {
                         "Address",
                         "State",
                         "Detail",
+                        "Edit",
+                        //  "Delete"
                       ].map((item) => (
                         <TableCell size="large">{item}</TableCell>
                       ))}
@@ -334,11 +301,22 @@ const AdminDashboard = (props) => {
                           {post?.COMPANY_STATE}
                         </TableCell>
                         <TableCell size="small">
-                          <Button onClick={(e) => ShowCompDetail(post)}>
-                            {" "}
-                            view
-                          </Button>
+                          <Tooltip title="View Detail">
+                            <PlaylistPlayOutlinedIcon
+                              onClick={(e) => ShowCompDetail(post)}
+                              color="primary"
+                              style={{ cursor: "pointer" }}
+                            />
+                          </Tooltip>
                         </TableCell>
+                        <TableCell size="small">
+                       
+                            <CompanyEdit companyEDit={post} reFetchfun={getCompanyData} />
+                        
+                        </TableCell>
+                        {/* <TableCell size="small">
+                         <CompanyDelete/>
+                        </TableCell> */}
                       </TableRow>
                     </>
                   ))}

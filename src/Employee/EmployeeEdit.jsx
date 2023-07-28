@@ -20,30 +20,49 @@ const style = {
   borderRadius: 4,
 };
 
-export default function AddEmployee(props) {
+export default function EmployeeEdit(props) {
   const [open, setOpen] = React.useState(false);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [createEmployee, setCreateEmployee] = useState({
-    EMPLOYEE_NAME: "",
-    EMPLOYEE_EMAIL: "",
-    EMPLOYEE_STATE: "",
-    EMPLOYEE_CITY: "",
-    EMPLOYEE_PHONE: "",
-    EMPLOYEE_HOURLY_WAGE: "",
-    EMPLOYEE_ROLE: "",
-    EMPLOYEE_EMPLMNTTYPE: "",
-    EMPLOYEE_DOB: "",
-    EMPLOYEE_HIRE_DATE: "",
-    EMPLOYEE_ADD: "",
-    EMPLOYEE_USERNAME: "",
-    EMPLOYEE_PASSWORD: "",
-    EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME,
-    EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID,
-    EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME,
-    EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID,
+
+  const editdata = props?.edit.row
+  console.log("first", editdata)
+
+  const [editEmployee, setEditEmployee] = useState({
+    EMPLOYEE_NAME: editdata.EMPLOYEE_NAME,
+    EMPLOYEE_EMAIL: editdata.EMPLOYEE_EMAIL,
+    EMPLOYEE_STATE: editdata.EMPLOYEE_STATE,
+    EMPLOYEE_CITY: editdata.EMPLOYEE_CITY,
+    EMPLOYEE_PHONE: editdata.EMPLOYEE_PHONE,
+    EMPLOYEE_HOURLY_WAGE: editdata.EMPLOYEE_HOURLY_WAGE,
+    EMPLOYEE_ROLE: editdata.EMPLOYEE_ROLE,
+    EMPLOYEE_EMPLMNTTYPE: editdata.EMPLOYEE_EMPLMNTTYPE,
+    EMPLOYEE_DOB: editdata.EMPLOYEE_DOB,
+    EMPLOYEE_HIRE_DATE: editdata.EMPLOYEE_HIRE_DATE,
+    EMPLOYEE_ADD: editdata.EMPLOYEE_ADD,
+    EMPLOYEE_PASSWORD: editdata.EMPLOYEE_PASSWORD,
+    
   });
+
+  // useEffect(()=>{
+  //   setUpdateEmployees((prev) => ({
+  //     ...prev,
+  //     EMPLOYEE_DETAILS_FOR_UPDATES: editEmployee,
+  //   }))
+  //   },[editEmployee])
+ 
+  
+    // setUpdateEmployees((prev) => {...prev,EMPLOYEE_DETAILS_FOR_UPDATES:editEmployee}))
+
+
+//   const [updateEmployees, setUpdateEmployees] = useState({
+   
+// });
+
+// console.log(updateEmployees,"alll")
+console.log(editEmployee,"edit alll")
+
   const [errorMsg, setErrorMsg] = useState("");
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
 
@@ -57,81 +76,59 @@ export default function AddEmployee(props) {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-   
-
   const handleCreate = (e) => {
-    setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
-    console.log("heello world", createEmployee);
+    setEditEmployee((prev) => {
+     return { ...prev, [e.target.name]: e.target.value }
+    })
+     
   };
 
-  //firbase authentication
-
-
-
+ 
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME ||
-      !createEmployee.EMPLOYEE_EMAIL ||
-      !createEmployee.EMPLOYEE_PASSWORD ||
-      !createEmployee.EMPLOYEE_NAME ||
-      !createEmployee.EMPLOYEE_STATE ||
-      !createEmployee.EMPLOYEE_CITY ||
-      !createEmployee.EMPLOYEE_PHONE ||
-      !createEmployee.EMPLOYEE_HOURLY_WAGE ||
-      !createEmployee.EMPLOYEE_ROLE ||
-      !createEmployee.EMPLOYEE_EMPLMNTTYPE ||
-      !createEmployee.EMPLOYEE_DOB ||
-      !createEmployee.EMPLOYEE_HIRE_DATE ||
-      !createEmployee.EMPLOYEE_ADD ||
-      !createEmployee.EMPLOYEE_USERNAME
-    ) {
-      setErrorMsg("Fill all fields");
-      return;
-    }
-    setErrorMsg("");
-
-      axios
-        .post("http://3.84.137.243:5001/create_employee", createEmployee, {
-          headers,
-        })
-        .then((response) => {
-          if (response.data.operation == "failed") {
-            setErrorMsg(response.data.errorMsg);
-          } else if (response.data.operation == "successfull") {
-            setIsSubmitted(true); // Set the submission status to true after successful submission
-            toast.success("Form submitted successfully!", {
-              position: toast.POSITION.TOP_CENTER,
-            });
-            props.update(true);
-            setOpen(false);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    axios
+      .put("http://3.84.137.243:5001/update_employee",  
+      {EMPLOYEE_MEMBER_PARENT_USERNAME: editdata.EMPLOYEE_MEMBER_PARENT_USERNAME,
+      EMPLOYEE_PARENT_ID: editdata.EMPLOYEE_PARENT_ID,
+      EMPLOYEE_PARENT_USERNAME: editdata.EMPLOYEE_PARENT_USERNAME,
+      EMPLOYEE_MEMBER_PARENT_ID: editdata.EMPLOYEE_MEMBER_PARENT_ID,
+      EMPLOYEE_ID: editdata.EMPLOYEE_ID,
+      EMPLOYEE_USERNAME: editdata.EMPLOYEE_USERNAME,
+      EMPLOYEE_DETAILS_FOR_UPDATES: {...editEmployee} }
+      , {
+        headers,
+      })
+      .then((response) => {
+        if (response.data.operation === "failed") {
+          setErrorMsg(response.data.errorMsg);
+        } else if (response.data.operation === "successfull") {
+          setIsSubmitted(true); 
+          props.refetch()
+          toast.success("Fields are updated successfully!", {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          props.update(true);
+          setOpen(true);
+         
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
 
   return (
     < >
       <Button
-          size="small"
-          className="btn button border-bottom-0 bg-white" 
-          variant="outlined"
-      >
-        Employee
-      </Button>
-      <Button
         onClick={handleOpen}
-        sx={{ color: "#277099" }}
-        className="btn rounded-0 border-0  rounded-0 text-light"
-        variant="contained"
-        size="small"
+        variant="rounded"
+        className="view-btn border border-info text-success "
+        style={{ padding: "2px 2px" }}
       >
-        + Add New Employee
+        Edit
       </Button>
       <Modal
         open={open}
@@ -152,17 +149,17 @@ export default function AddEmployee(props) {
                   <input
                     type="text"
                     className="form-control rounded-0"
-                    placeholder="Enter Employee Username"
+                    placeholder={editdata.EMPLOYEE_USERNAME}
                     id="inputZip"
-                    value={createEmployee.EMPLOYEE_USERNAME}
+                    value={editEmployee.EMPLOYEE_USERNAME}
                     name="EMPLOYEE_USERNAME"
                     onChange={handleCreate}
                     required
                   />
                   {errors.EMPLOYEE_USERNAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_USERNAME}
-                  </p>
+                    <p className="error text-danger fw-light">
+                      {errors.EMPLOYEE_USERNAME}
+                    </p>
                   )}
                 </div>
                 <div className="form-group col-xl-6">
@@ -171,10 +168,16 @@ export default function AddEmployee(props) {
                     type="text"
                     className="form-control rounded-0"
                     id="empName"
-                    placeholder="Enter Employee name"
-                    value={createEmployee.EMPLOYEE_NAME}
+                    placeholder={editdata.EMPLOYEE_NAME}
+                    value={editEmployee.EMPLOYEE_NAME}
                     name="EMPLOYEE_NAME"
-                    onChange={handleCreate}
+                    // onChange={handleCreate}
+                    onChange={(event) =>
+                      setEditEmployee((prev) => ({
+                        ...prev,
+                        EMPLOYEE_NAME: event.target.value,
+                      }))
+                    }
                     required
                   />
                 </div>
@@ -187,7 +190,7 @@ export default function AddEmployee(props) {
                     className="form-control rounded-0"
                     id="email"
                     placeholder="Enter Email add..."
-                    value={createEmployee.EMPLOYEE_EMAIL}
+                    value={editEmployee.EMPLOYEE_EMAIL}
                     name="EMPLOYEE_EMAIL"
                     onChange={handleCreate}
                     required
@@ -200,7 +203,7 @@ export default function AddEmployee(props) {
                     className="form-control rounded-0"
                     id="phone"
                     placeholder="Enter Your state.."
-                    value={createEmployee.EMPLOYEE_STATE}
+                    value={editEmployee.EMPLOYEE_STATE}
                     name="EMPLOYEE_STATE"
                     onChange={handleCreate}
                     required
@@ -213,7 +216,7 @@ export default function AddEmployee(props) {
                     className="form-control rounded-0"
                     id="phone"
                     placeholder="Enter Your Number"
-                    value={createEmployee.EMPLOYEE_PHONE}
+                    value={editEmployee.EMPLOYEE_PHONE}
                     name="EMPLOYEE_PHONE"
                     onChange={handleCreate}
                     required
@@ -225,7 +228,7 @@ export default function AddEmployee(props) {
                     type="text"
                     className="form-control rounded-0"
                     placeholder="Enter Employee password"
-                    value={createEmployee.EMPLOYEE_PASSWORD}
+                    value={editEmployee.EMPLOYEE_PASSWORD}
                     name="EMPLOYEE_PASSWORD"
                     onChange={handleCreate}
                     required
@@ -238,7 +241,7 @@ export default function AddEmployee(props) {
                     className="form-control rounded-0"
                     id="inputPassword4"
                     placeholder="Enter Date of birth"
-                    value={createEmployee.EMPLOYEE_DOB}
+                    value={editEmployee.EMPLOYEE_DOB}
                     name="EMPLOYEE_DOB"
                     onChange={handleCreate}
                     required
@@ -255,7 +258,7 @@ export default function AddEmployee(props) {
                       className="form-control rounded-0"
                       id="inputAddress"
                       placeholder="Enter Address"
-                      value={createEmployee.EMPLOYEE_ADD}
+                      value={editEmployee.EMPLOYEE_ADD}
                       name="EMPLOYEE_ADD"
                       onChange={handleCreate}
                       required
@@ -269,7 +272,7 @@ export default function AddEmployee(props) {
                     className="form-control rounded-0"
                     id="city"
                     placeholder="Enter Your city.."
-                    value={createEmployee.EMPLOYEE_CITY}
+                    value={editEmployee.EMPLOYEE_CITY}
                     name="EMPLOYEE_CITY"
                     onChange={handleCreate}
                     required
@@ -282,7 +285,7 @@ export default function AddEmployee(props) {
                     className="form-control rounded-0"
                     id="hourlywage"
                     placeholder="Enter your Hourly wages"
-                    value={createEmployee.EMPLOYEE_HOURLY_WAGE}
+                    value={editEmployee.EMPLOYEE_HOURLY_WAGE}
                     name="EMPLOYEE_HOURLY_WAGE"
                     onChange={handleCreate}
                     required
@@ -293,7 +296,7 @@ export default function AddEmployee(props) {
                   <select
                     id="inputqual"
                     className="form-control rounded-0 border"
-                    value={createEmployee.EMPLOYEE_ROLE}
+                    value={editEmployee.EMPLOYEE_ROLE}
                     name="EMPLOYEE_ROLE"
                     onChange={handleCreate}
                     required
@@ -315,7 +318,7 @@ export default function AddEmployee(props) {
                   <select
                     id="inputqual"
                     className="form-control rounded-0 border"
-                    value={createEmployee.EMPLOYEE_EMPLMNTTYPE}
+                    value={editEmployee.EMPLOYEE_EMPLMNTTYPE}
                     name="EMPLOYEE_EMPLMNTTYPE"
                     onChange={handleCreate}
                     required
@@ -335,7 +338,7 @@ export default function AddEmployee(props) {
                     className="form-control rounded-0"
                     id="inputPassword4"
                     placeholder="Enter hire date"
-                    value={createEmployee.EMPLOYEE_HIRE_DATE}
+                    value={editEmployee.EMPLOYEE_HIRE_DATE}
                     name="EMPLOYEE_HIRE_DATE"
                     onChange={handleCreate}
                     required
@@ -343,18 +346,18 @@ export default function AddEmployee(props) {
                 </div>
               </div>
               <div className="row pt-2">
-              <center>
-              {errorMsg && (
-                <p className=" text-danger fw-light mb-0">{errorMsg}</p>
-              )}
-               </center>
+                <center>
+                  {errorMsg && (
+                    <p className=" text-danger fw-light mb-0">{errorMsg}</p>
+                  )}
+                </center>
                 <div className="col-12">
                   <button
                     type="submit"
                     className="btn btn-info text-white "
                     onClick={handleSubmit}
                   >
-                    Submit
+                    Update
                   </button>{" "}
                   <button
                     onClick={handleClose}
