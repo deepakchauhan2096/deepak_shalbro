@@ -63,7 +63,7 @@ export default function ProjectCreate(props) {
     (c) => c.name === createProject.PROJECT_COUNTRY
   );
 
-  console.log("all states : ===> ", availableState);
+  console.log("all states : ===> ", availableState,"country=>",country);
   const availableCities = availableState?.states?.find(
     (s) => s.name === createProject.PROJECT_STATE
   );
@@ -300,8 +300,9 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_STATE}
                   onChange={handleCreate}
                   //required
+                  
                 >
-                  <option>--Choose State--</option>
+                  <option selected>--Choose State--</option>
                   {availableState?.states?.map((e, key) => {
                     return (
                       <option value={e.name} key={key}>

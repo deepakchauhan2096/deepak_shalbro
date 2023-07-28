@@ -25,6 +25,7 @@ import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
+import EmployeeEdit from "./EmployeeEdit";
 
 const EmployeeSrc = (props) => {
   //isLoading this is for the Skeleton
@@ -220,6 +221,22 @@ const EmployeeSrc = (props) => {
         );
       },
     },
+    {
+      field: "edit",
+      headerName: "Edit",
+      width: 80,
+      renderCell: (cellValues) => {
+        return (
+          <Button
+            // onClick={(event) => {
+            //   handleEdit(cellValues);
+            // }}
+          >
+            <EmployeeEdit edit={cellValues}/>
+          </Button>
+        );
+      },
+    },
   ];
 
   function downloadPDF(pdf) {
@@ -235,6 +252,13 @@ const EmployeeSrc = (props) => {
     setFilteredData(event);
     handleOpen();
   };
+  // for edit 
+  // const handleEdit  = (e) =>{
+  //   console.log("first",e)
+  //   return(
+      
+  //   )
+  // }
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",

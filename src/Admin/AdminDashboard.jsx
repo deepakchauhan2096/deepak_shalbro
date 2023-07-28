@@ -29,8 +29,11 @@ import Modal from "@mui/material/Modal";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useDispatch,useSelector } from "react-redux";
+import CompanyEdit from "../Admin/CompanyEdit";
+import PlaylistPlayOutlinedIcon from '@mui/icons-material/PlaylistPlayOutlined';
 
 import { initAdmin_fun ,initCompany_fun, selectedCompany_fun} from "../redux/action";
+import CompanyDelete from "./CompanyDelete";
 
 const style = {
   position: "absolute",
@@ -69,6 +72,10 @@ const AdminDashboard = (props) => {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
+  useEffect(() => {
+    getCompanyData();
+  }, [tableRows, update]);
+
   const getCompanyData = async () => {
     try {
       const response = await axios.put(
@@ -90,10 +97,6 @@ const AdminDashboard = (props) => {
       console.log("Error fetching data:", error);
     }
   };
-
-  useEffect(() => {
-    getCompanyData();
-  }, [tableRows, update]);
 
   const MyScreen = styled(Paper)((props) => ({
     height: "100vh",
@@ -252,7 +255,7 @@ const AdminDashboard = (props) => {
           ) : (
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                {Rows?.length != 0 ? (
+                {Rows?.length !== 0 ? (
                   <TableHead>
                     <TableRow>
                       {[
@@ -264,6 +267,8 @@ const AdminDashboard = (props) => {
                         "Address",
                         "State",
                         "Detail",
+                       "Edit",
+                       "Delete"
                       ].map((item) => (
                         <TableCell size="large">{item}</TableCell>
                       ))}
@@ -296,10 +301,18 @@ const AdminDashboard = (props) => {
                           {post?.COMPANY_STATE}
                         </TableCell>
                         <TableCell size="small">
-                          <Button onClick={(e) => ShowCompDetail(post)}>
-                            {" "}
-                            view
-                          </Button>
+                       
+                          <PlaylistPlayOutlinedIcon
+                          onClick={(e) => ShowCompDetail(post)}
+                          color="primary"
+                          style={{cursor:"pointer"}}
+                          />
+                        </TableCell>
+                        <TableCell size="small">
+                           <CompanyEdit/>
+                        </TableCell>
+                        <TableCell size="small">
+                         <CompanyDelete/>
                         </TableCell>
                       </TableRow>
                     </>

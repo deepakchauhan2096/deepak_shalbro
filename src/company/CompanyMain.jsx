@@ -16,11 +16,11 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ProjectUpload from "./ProjectUpload";
-import EmployeeSrc from "../employee/EmployeeSrc";
+import EmployeeSrc from "../Employee/EmployeeSrc";
 import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
-import AttendanceReport from "../attendance/AttendanceReport";
-
+import AttendanceReport from "../Attendance/AttendanceReport";
+import DeleteDoc from "../company/DeleteDoc"
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
   const [navIndex, setNavIndex] = useState(0);
@@ -87,6 +87,7 @@ const CompanyMain = () => {
     {
       listname: "Attendance Report",
     }
+   
   ];
 
   console.log(navIndex, "navindex");
@@ -225,6 +226,8 @@ const CompanyMain = () => {
       <NavScreen screenIndex={navIndex === 4}>
         <AttendanceReport />
       </NavScreen>
+
+
     </>
   );
 };
