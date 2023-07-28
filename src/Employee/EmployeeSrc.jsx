@@ -192,7 +192,7 @@ const EmployeeSrc = (props) => {
     {
       field: "EMPLOYEE_HOURLY_WAGE",
       headerName: "Hourly Wages",
-      width: 120,
+      width: 110,
       // editable: true,
     },
 
@@ -232,7 +232,7 @@ const EmployeeSrc = (props) => {
             //   handleEdit(cellValues);
             // }}
           >
-            <EmployeeEdit edit={cellValues}/>
+            <EmployeeEdit edit={cellValues} refetch={fetchAllEmployee}/>
           </Button>
         );
       },

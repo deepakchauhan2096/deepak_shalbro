@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const DocumentDeleter = () => {
+const Delete_document = () => {
   const [documentId, setDocumentId] = useState('');
   const [responseMessage, setResponseMessage] = useState('');
 
@@ -34,4 +34,4 @@ const DocumentDeleter = () => {
   );
 };
 
-export default DocumentDeleter;
+export default Delete_document;

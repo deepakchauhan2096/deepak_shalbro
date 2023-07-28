@@ -30,7 +30,7 @@ export default function EmployeeEdit(props) {
   console.log("first", editdata)
 
   const [editEmployee, setEditEmployee] = useState({
-    EMPLOYEE_NAME: "",
+    EMPLOYEE_NAME: editdata.EMPLOYEE_NAME,
     EMPLOYEE_EMAIL: editdata.EMPLOYEE_EMAIL,
     EMPLOYEE_STATE: editdata.EMPLOYEE_STATE,
     EMPLOYEE_CITY: editdata.EMPLOYEE_CITY,
@@ -41,36 +41,26 @@ export default function EmployeeEdit(props) {
     EMPLOYEE_DOB: editdata.EMPLOYEE_DOB,
     EMPLOYEE_HIRE_DATE: editdata.EMPLOYEE_HIRE_DATE,
     EMPLOYEE_ADD: editdata.EMPLOYEE_ADD,
-    EMPLOYEE_USERNAME: editdata.EMPLOYEE_USERNAME,
     EMPLOYEE_PASSWORD: editdata.EMPLOYEE_PASSWORD,
-    EMPLOYEE_MEMBER_PARENT_USERNAME: editdata.EMPLOYEE_MEMBER_PARENT_USERNAME,
-    EMPLOYEE_PARENT_ID: editdata.EMPLOYEE_PARENT_ID,
-    EMPLOYEE_PARENT_USERNAME: editdata.EMPLOYEE_PARENT_USERNAME,
-    EMPLOYEE_MEMBER_PARENT_ID: editdata.EMPLOYEE_MEMBER_PARENT_ID,
-    EMPLOYEE_ID: editdata.EMPLOYEE_ID,
+    
   });
 
-  useEffect(()=>{
-    setEmployees((prev) => ({
-      ...prev,
-      EMPLOYEE_DETAILS_FOR_UPDATES: editEmployee,
-    }))
-    },[editEmployee])
+  // useEffect(()=>{
+  //   setUpdateEmployees((prev) => ({
+  //     ...prev,
+  //     EMPLOYEE_DETAILS_FOR_UPDATES: editEmployee,
+  //   }))
+  //   },[editEmployee])
  
   
-    // setEmployees((prev) => {...prev,EMPLOYEE_DETAILS_FOR_UPDATES:editEmployee}))
+    // setUpdateEmployees((prev) => {...prev,EMPLOYEE_DETAILS_FOR_UPDATES:editEmployee}))
 
 
-  const [employees, setEmployees] = useState({
-    EMPLOYEE_ID: 1889,
-    EMPLOYEE_PARENT_ID: 499,
-    EMPLOYEE_PARENT_USERNAME: "vervebot12345",
-    EMPLOYEE_MEMBER_PARENT_ID: 493,
-    EMPLOYEE_MEMBER_PARENT_USERNAME: "deepak2096",
-    EMPLOYEE_DETAILS_FOR_UPDATES: {...editEmployee} 
-});
+//   const [updateEmployees, setUpdateEmployees] = useState({
+   
+// });
 
-console.log(employees,"alll")
+// console.log(updateEmployees,"alll")
 console.log(editEmployee,"edit alll")
 
   const [errorMsg, setErrorMsg] = useState("");
@@ -86,31 +76,42 @@ console.log(editEmployee,"edit alll")
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-
-
   const handleCreate = (e) => {
-    setEditEmployee({ ...editEmployee, [e.target.name]: e.target.value });
-    console.log("heello world", editEmployee);
+    setEditEmployee((prev) => {
+     return { ...prev, [e.target.name]: e.target.value }
+    })
+     
   };
+
+ 
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put("http://3.84.137.243:5001/update_employee", { employees }, {
+      .put("http://3.84.137.243:5001/update_employee",  
+      {EMPLOYEE_MEMBER_PARENT_USERNAME: editdata.EMPLOYEE_MEMBER_PARENT_USERNAME,
+      EMPLOYEE_PARENT_ID: editdata.EMPLOYEE_PARENT_ID,
+      EMPLOYEE_PARENT_USERNAME: editdata.EMPLOYEE_PARENT_USERNAME,
+      EMPLOYEE_MEMBER_PARENT_ID: editdata.EMPLOYEE_MEMBER_PARENT_ID,
+      EMPLOYEE_ID: editdata.EMPLOYEE_ID,
+      EMPLOYEE_USERNAME: editdata.EMPLOYEE_USERNAME,
+      EMPLOYEE_DETAILS_FOR_UPDATES: {...editEmployee} }
+      , {
         headers,
       })
       .then((response) => {
-        console.log("responses:",response)
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
         } else if (response.data.operation === "successfull") {
-          setIsSubmitted(true); // Set the submission status to true after successful submission
-          toast.success("Form submitted successfully!", {
+          setIsSubmitted(true); 
+          props.refetch()
+          toast.success("Fields are updated successfully!", {
             position: toast.POSITION.TOP_CENTER,
           });
           props.update(true);
-          setOpen(false);
+          setOpen(true);
+         
         }
       })
       .catch((error) => {

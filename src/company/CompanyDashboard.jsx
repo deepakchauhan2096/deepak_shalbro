@@ -115,7 +115,7 @@ const CompanyDashboard = () => {
                 sx={{ mb: 1, display: "inline-block" }}
                 color="primary"
               >
-                Panding{" "}
+                Pending{" "}
                 <Typography
                   sx={{
                     display: "inline-block",
