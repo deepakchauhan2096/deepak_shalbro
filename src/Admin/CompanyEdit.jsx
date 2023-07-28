@@ -28,7 +28,6 @@ const style = {
 export default function CompanyEdit(props) {
   const [open, setOpen] = React.useState(false);
   const companyData = props?.companyEDit
-  // console.log("companyData:", companyData)
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState("");
