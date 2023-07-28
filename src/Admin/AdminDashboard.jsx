@@ -28,11 +28,10 @@ import ProjectCreate from "../company/ProjectCreate";
 import Modal from "@mui/material/Modal";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CompanyEdit from "../Admin/CompanyEdit";
 import PlaylistPlayOutlinedIcon from '@mui/icons-material/PlaylistPlayOutlined';
-
-import { initAdmin_fun ,initCompany_fun, selectedCompany_fun} from "../redux/action";
+import { initAdmin_fun, initCompany_fun, selectedCompany_fun } from "../redux/action";
 import CompanyDelete from "./CompanyDelete";
 
 const style = {
@@ -87,7 +86,7 @@ const AdminDashboard = (props) => {
         { headers }
       );
       setTimeout(() => {
-        console.log("response.data : ", response.data);
+        // console.log("response.data : ", response.data);
         const data = response.data;
         setRows(data.result);
         dispatch(initCompany_fun(data.result))
@@ -131,6 +130,7 @@ const AdminDashboard = (props) => {
 
   //send data to company dashboard
   const navigate = useNavigate();
+
   const ShowCompDetail = (props) => {
     return navigate("/company", { state: { props } });
   };
@@ -267,8 +267,8 @@ const AdminDashboard = (props) => {
                         "Address",
                         "State",
                         "Detail",
-                       "Edit",
-                       "Delete"
+                        "Edit",
+                        //  "Delete"
                       ].map((item) => (
                         <TableCell size="large">{item}</TableCell>
                       ))}
@@ -301,19 +301,22 @@ const AdminDashboard = (props) => {
                           {post?.COMPANY_STATE}
                         </TableCell>
                         <TableCell size="small">
+                          <Tooltip title="View Detail">
+                            <PlaylistPlayOutlinedIcon
+                              onClick={(e) => ShowCompDetail(post)}
+                              color="primary"
+                              style={{ cursor: "pointer" }}
+                            />
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell size="small">
                        
-                          <PlaylistPlayOutlinedIcon
-                          onClick={(e) => ShowCompDetail(post)}
-                          color="primary"
-                          style={{cursor:"pointer"}}
-                          />
+                            <CompanyEdit companyEDit={post} reFetchfun={getCompanyData} />
+                        
                         </TableCell>
-                        <TableCell size="small">
-                           <CompanyEdit/>
-                        </TableCell>
-                        <TableCell size="small">
+                        {/* <TableCell size="small">
                          <CompanyDelete/>
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     </>
                   ))}

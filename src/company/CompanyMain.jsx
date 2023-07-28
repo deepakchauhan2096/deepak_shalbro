@@ -20,10 +20,10 @@ import EmployeeSrc from "../Employee/EmployeeSrc";
 import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
 
-import AttendanceReport from "../attendance/AttendanceAcknowledge";
+import AttendanceReport from "../Attendance/AttendanceAcknowledge";
 
 
-import DeleteDoc from "../company/DeleteDoc"
+// import DeleteDoc from "../company/DeleteDoc"
 
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);

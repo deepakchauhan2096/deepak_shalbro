@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
@@ -7,6 +7,10 @@ import { Button, Container, Hidden } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Fab, Paper, styled } from "@mui/material";
 import country from "../Api/countriess.json"
+import { ToastContainer, toast } from "react-toastify";
+import Tooltip from "@mui/material/Tooltip";
+
+
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 const style = {
   position: "absolute",
@@ -23,27 +27,41 @@ const style = {
 
 export default function CompanyEdit(props) {
   const [open, setOpen] = React.useState(false);
-  const [edit_company, setedit_company] = useState({
-    COMPANY_PARENT_ID: props.ID,
-    COMPANY_PARENT_USERNAME: props.Username,
-    COMPANY_NAME: "",
-    COMPANY_USERNAME: "",
-    COMPANY_PHONE: "",
-    COMPANY_EMAIL: "",
-    COMPANY_ADD2: "",
-    COMPANY_STATE: "",
-    COMPANY_CITY: "",
-    COMPANY_COUNTRY: "",
+  const companyData = props?.companyEDit
+  // console.log("companyData:", companyData)
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const [edit_company, setEdit_company] = useState({
+    COMPANY_PARENT_ID: companyData.COMPANY_PARENT_ID,
+    COMPANY_PARENT_USERNAME: companyData.COMPANY_PARENT_USERNAME,
+    COMPANY_NAME: companyData.COMPANY_NAME,
+    COMPANY_PHONE: companyData.COMPANY_PHONE,
+    COMPANY_EMAIL: companyData.COMPANY_EMAIL,
+    COMPANY_ADD2: companyData.COMPANY_ADD2,
+    COMPANY_STATE: companyData.COMPANY_STATE,
+    COMPANY_CITY: companyData.COMPANY_CITY,
+    COMPANY_COUNTRY: companyData.COMPANY_COUNTRY,
+    COMPANY_USERNAME: companyData.COMPANY_USERNAME,
   });
 
-  const handleCreate = (e) => {
-    setedit_company({ ...edit_company, [e.target.name]: e.target.value });
-  };
+  // console.log("first", edit_company)
+
+  // console.log("Edit Company:", edit_company)
+
 
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
+
+  const handleCreate = (e) => {
+    setEdit_company((prev) => {
+      return { ...prev, [e.target.name]: e.target.value }
+    });
+  };
+
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -53,27 +71,42 @@ export default function CompanyEdit(props) {
   const availableState = country?.find(
     (c) => c.name === edit_company.COMPANY_COUNTRY
   );
- 
+
 
   const availableCities = availableState?.states?.find(
 
     (s) => {
-     
+
       return s.name === edit_company.COMPANY_STATE
     }
   );
 
   const handleSubmit = (e) => {
-
     e.preventDefault();
+
     axios
-      .put("http://3.84.137.243:5001/update_company", edit_company, {
+      .put("http://3.84.137.243:5001/update_company", {
+        COMPANY_ID: companyData.COMPANY_ID,
+        COMPANY_USERNAME: companyData.COMPANY_USERNAME,
+        COMPANY_ADMIN_USERNAME: companyData.COMPANY_PARENT_USERNAME,
+        COMPANY_DETAILS_FOR_UPDATE: { ...edit_company }
+      }, {
         headers,
       })
       .then((response) => {
-        props.Update(() => response.data.result);
-        if (response) {
-          handleClose();
+      
+        if (response.data.operation === "failed") {
+          setErrorMsg(response.data.errorMsg);
+        } else if (response.data.operation === "successfull") {
+          setIsSubmitted(true);
+          props.reFetchfun()
+          toast.success("Fields are updated successfully!", {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          props.companyEDit.update(true);
+          setOpen(true);
+
+
         }
       })
       .catch((error) => {
@@ -91,14 +124,14 @@ export default function CompanyEdit(props) {
   return (
     <>
 
+      <Tooltip title="Edit Details">
+        <EditNoteOutlinedIcon
+          onClick={handleOpen}
+          color="success"
+          style={{ cursor: "pointer" }}
 
-      <EditNoteOutlinedIcon
-        onClick={handleOpen}
-        color="success"
-        style={{ cursor: "pointer" }}
-
-      />
-
+        />
+      </Tooltip>
       <Modal
         open={open}
         onClose={handleClose}
@@ -122,7 +155,7 @@ export default function CompanyEdit(props) {
                     value={edit_company.COMPANY_NAME}
                     name="COMPANY_NAME"
                     onChange={handleCreate}
-                    label=""
+                    label="Company name"
                   />
                 </div>
                 <div className="form-group py-2 col-xl-6">
@@ -174,11 +207,11 @@ export default function CompanyEdit(props) {
                     value={edit_company.COMPANY_COUNTRY}
                     onChange={handleCreate}
                   >
-                    <option selected>Choose...</option>
+                    <option>Choose...</option>
 
                     {country.map((e, key) => {
                       return (
-                        <option value={e.name} key={key}>{e.name}</option>
+                        <option value={e.name} key={key} selected>{e.name}</option>
                       )
                     })}
 
@@ -195,7 +228,6 @@ export default function CompanyEdit(props) {
                   >
                     <option selected >Choose... States</option>
                     {availableState?.states?.map((state, key) => {
-                      console.log("availablestate", availableState)
                       return (
                         <option value={state.name} key={key} >{state.name}</option>
                       )
