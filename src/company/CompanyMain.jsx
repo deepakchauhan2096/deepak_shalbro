@@ -19,12 +19,17 @@ import ProjectUpload from "./ProjectUpload";
 import EmployeeSrc from "../Employee/EmployeeSrc";
 import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
-import AttendanceReport from "../Attendance/AttendanceReport";
+
+import AttendanceReport from "../attendance/AttendanceAcknowledge";
+
+
 import DeleteDoc from "../company/DeleteDoc"
+
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
   const [navIndex, setNavIndex] = useState(0);
   const [projectData, setProjectData] =useState([])
+  const [allempData, setAllempData] = useState([]);
 
   // modal
   const handleOpen = () => setOpen(true);
@@ -85,7 +90,7 @@ const CompanyMain = () => {
       listname: "Employees",
     },
     {
-      listname: "Attendance Report",
+      listname: "Attendance",
     }
    
   ];
@@ -97,14 +102,14 @@ const CompanyMain = () => {
   const Lists = (props) => {
     return (
       <Box role="presentation" sx={{ width: 250 }}>
-        <List sx={{ py: 0 }} onClick={() => setNavIndex(props.value)}>
+        <List sx={{ py: 0}} onClick={() => setNavIndex(props.value)} >
           <ListItem
             sx={{
               background: props.value === navIndex ? "#3596d9" : "",
             }}
             disablePadding
           >
-            <ListItemButton sx={{ color: "#fff" }}>
+            <ListItemButton sx={{ color: "#fff" }} >
               {props.listname}
             </ListItemButton>
           </ListItem>
@@ -145,6 +150,39 @@ const CompanyMain = () => {
 
   useEffect(() => {
     fetchProjects();
+  }, []);
+
+
+  /// fatch employees
+
+  const fetchAllEmployee = async () => {
+    try {
+      const response = await axios.put(
+        "http://3.84.137.243:5001/get_employee",
+        {
+          EMPLOYEE_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
+          EMPLOYEE_MEMBER_PARENT_USERNAME:
+          filterallprojectData?.COMPANY_PARENT_USERNAME,
+          EMPLOYEE_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
+          EMPLOYEE_PARENT_ID: filterallprojectData?.COMPANY_ID,
+        },
+        { headers }
+      );
+      setTimeout(() => {
+        console.log("ALL EMPLOYEE data ", response);
+        const data = response.data;
+        setAllempData(data.result);
+        // setIsLoading(false);
+        console.log("all main project", data)
+      }, 1000);
+    } catch (err) {
+      console.log("something Went wrong: =>", err);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchAllEmployee();
   }, []);
 
 
@@ -193,7 +231,7 @@ const CompanyMain = () => {
         >
           <div className="logout_icon">
             <div className="logout_icon d-inline">
-              <Button className="text-white" onClick={() => navigate(-1)}>
+              <Button className="text-white text-uppercase" onClick={() => navigate(-1)}>
                 <LogoutIcon style={{ display: "inline" }} /> Exit
               </Button>
             </div>
@@ -220,11 +258,11 @@ const CompanyMain = () => {
       </NavScreen>
 
       <NavScreen screenIndex={navIndex === 3}>
-        <EmployeeSrc empData={location.state.props} AssignProjectData={projectData}/>
+        <EmployeeSrc  empData={location.state.props} AssignProjectData={projectData}/>
       </NavScreen>
 
       <NavScreen screenIndex={navIndex === 4}>
-        <AttendanceReport />
+        <AttendanceReport mainData={allempData} />
       </NavScreen>
 
 

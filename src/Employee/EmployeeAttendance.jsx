@@ -10,11 +10,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import Snippet from "./Snippet";
-import EmployeePDF from "../Invoices/EmployeePDF";
-import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
-import CloseIcon from "@mui/icons-material/Close";
-import { right } from "@popperjs/core";
+
 
 const EmployeeAttendance = (props) => {
   const [indone, setIndone] = useState("");

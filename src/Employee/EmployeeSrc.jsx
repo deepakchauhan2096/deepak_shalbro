@@ -339,21 +339,22 @@ const EmployeeSrc = (props) => {
           >
             <ArrowBackIcon style={{ fontSize: "22.5px" }} />
           </Button>
-          {[
-            "Employee Details",
-            "Timesheet",
-            "Worksheet",
-            "Acknowledge",
-          ].map((item, value) => (
-            <Button
-              onClick={(e, index) => setIndex(value)}
-              variant={index === value ? "outlined" : "contained"}
-              className="btn rounded-0 border-0  rounded-0 text-light"
-              size="small"
-            >
-              {item}
-            </Button>
-          ))}
+          {["Employee Details", "Timesheet", "Worksheet", "Acknowledge"].map(
+            (item, value) => (
+              <Button
+                onClick={(e, index) => setIndex(value)}
+                variant={index === value ? "outlined" : "outlined"}
+                className={
+                  index === value
+                    ? "btn button border-bottom-0 bg-white"
+                    : "btn rounded-0 border-bottom-0  rounded-0 text-light"
+                }
+                size="small"
+              >
+                {item}
+              </Button>
+            )
+          )}
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
@@ -612,7 +613,10 @@ const EmployeeSrc = (props) => {
           <EmployeeTimeSheet mainData={filterData.row} />
         </MyScreen>
 
-        <MyScreen screenIndex={index === 2} sx={{ padding: 3 }} className="rounded-0"
+        <MyScreen
+          screenIndex={index === 2}
+          sx={{ padding: 3 }}
+          className="rounded-0"
         >
           <Snippet />
         </MyScreen>

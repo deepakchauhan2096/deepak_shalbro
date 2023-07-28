@@ -117,7 +117,11 @@ export default function AddEmployee(props) {
 
   return (
     < >
-      <Button size="small" className="btn button btn-blue" variant="contained">
+      <Button
+          size="small"
+          className="btn button border-bottom-0 bg-white" 
+          variant="outlined"
+      >
         Employee
       </Button>
       <Button

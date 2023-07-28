@@ -226,13 +226,14 @@ const Project = (props) => {
             variant="contained"
             className="btn rounded-0"
             size="small"
+            
           >
-            <ArrowBackIcon style={{ fontSize: "22px" }} />
+            <ArrowBackIcon style={{ fontSize: "20px" }} />
           </Button>
           <Button
             onClick={(e) => setIndex(1)}
-            variant={index === 1 ? "outlined" : "contained"}
-            className="btn rounded-0 border-0  rounded-0 text-light"
+            variant={index === 1 ? "outlined" : "outlined"}
+            className={index === 1 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-bottom-0  rounded-0 text-light" }            
             size="small"
           >
             Detail
@@ -262,8 +263,8 @@ const Project = (props) => {
 
           <Button
             onClick={(e) => setIndex(2)}
-            variant={index === 2 ? "outlined" : "contained"}
-            className="btn rounded-0 border-0  rounded-0 text-light"
+            variant={index === 2 ? "outlined" : "outlined"}
+            className={index === 2 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-0  rounded-0 text-light" } 
             size="small"
           >
             Payment
