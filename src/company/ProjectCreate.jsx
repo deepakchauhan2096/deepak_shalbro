@@ -131,7 +131,7 @@ export default function ProjectCreate(props) {
 
   return (
     <>
-    <Button size="small" className="btn button border-bottom-0 bg-white" variant="outlined">
+      <Button size="small" className="btn button border-bottom-0 bg-white"  variant="outlined">
         Project
       </Button>
       <Button
