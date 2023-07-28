@@ -6,8 +6,8 @@ import axios from "axios";
 import { Button, Container, Hidden } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Fab, Paper, styled } from "@mui/material";
-import country from "../Api/countriess.json";
-
+import country from "../Api/countriess.json"
+import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
 const style = {
   position: "absolute",
   top: "50%",
@@ -21,10 +21,9 @@ const style = {
   overflow: "hidden",
 };
 
-export default function CompanyCreate(props) {
+export default function CompanyDelete(props) {
   const [open, setOpen] = React.useState(false);
-
-  const [create_company, setCreate_company] = useState({
+  const [edit_company, setedit_company] = useState({
     COMPANY_PARENT_ID: props.ID,
     COMPANY_PARENT_USERNAME: props.Username,
     COMPANY_NAME: "",
@@ -38,7 +37,7 @@ export default function CompanyCreate(props) {
   });
 
   const handleCreate = (e) => {
-    setCreate_company({ ...create_company, [e.target.name]: e.target.value });
+    setedit_company({ ...edit_company, [e.target.name]: e.target.value });
   };
 
   const headers = {
@@ -51,36 +50,32 @@ export default function CompanyCreate(props) {
 
 
   // Finding the states and cities of the individaul country 
+  const availableState = country?.find((c) => c.name === edit_company.PROJECT_COUNTRY);
 
-  const availableState = country?.find(
-    (c) => c.name === create_company.COMPANY_COUNTRY
-  );
- 
-
+  console.log("all states : ===> ", availableState)
   const availableCities = availableState?.states?.find(
-
-    (s) => {
-     
-      return s.name === create_company.COMPANY_STATE
-    }
+    (s) => s.name === edit_company.PROJECT_STATE
   );
+
+  console.log("states data : ========>",availableState);
 
   const handleSubmit = (e) => {
+    console.log("on btn submit");
     e.preventDefault();
     axios
-      .post("http://3.84.137.243:5001/create_company", create_company, {
+      .post("http://3.84.137.243:5001/update_company", edit_company, {
         headers,
       })
       .then((response) => {
-        props.Update(() => response.data.result);
-        if (response) {
+        props.Update(()=> response.data.result);
+        if(response){
           handleClose();
         }
       })
       .catch((error) => {
         console.error(error);
       });
-
+    
   };
 
   const StyledFab = styled(Fab)({
@@ -88,16 +83,18 @@ export default function CompanyCreate(props) {
     position: "fixed",
     top: "80px",
     right: "80px",
-
-
   });
+
 
   return (
     <>
-      <StyledFab onClick={handleOpen} size="medium" color="secondary" aria-label="add">
-        <AddIcon />
-      </StyledFab>
-
+       <DeleteSweepOutlinedIcon 
+       color="error"
+       onClick={handleOpen}
+       style={{cursor:"pointer"}}
+       
+       />
+  
       <Modal
         open={open}
         onClose={handleClose}
@@ -118,7 +115,7 @@ export default function CompanyCreate(props) {
                     type="text"
                     className="form-control rounded-0"
                     placeholder="Enter company name"
-                    value={create_company.COMPANY_NAME}
+                    value={edit_company.COMPANY_NAME}
                     name="COMPANY_NAME"
                     onChange={handleCreate}
                     label=""
@@ -130,7 +127,7 @@ export default function CompanyCreate(props) {
                     type="text"
                     className="form-control rounded-0"
                     placeholder="Username"
-                    value={create_company.COMPANY_USERNAME}
+                    value={edit_company.COMPANY_USERNAME}
                     name="COMPANY_USERNAME"
                     onChange={handleCreate}
                     label="Company username"
@@ -139,48 +136,48 @@ export default function CompanyCreate(props) {
               </div>
 
               <div className="row">
-                <div className="form-group py-2 col-xl-6">
+              <div className="form-group py-2 col-xl-6">
                   <label>Phone Number</label>
-                  <input
-                    type="number"
-                    className="form-control rounded-0"
-                    placeholder="Enter Number"
-                    value={create_company.COMPANY_PHONE}
-                    name="COMPANY_PHONE"
-                    onChange={handleCreate}
-                    label="Phone Number"
-                  />
+                <input
+                  type="number"
+                  className="form-control rounded-0"
+                  placeholder="Enter Number"
+                  value={edit_company.COMPANY_PHONE}
+                  name="COMPANY_PHONE"
+                  onChange={handleCreate}
+                  label="Phone Number"
+                />
                 </div>
                 <div className="form-group py-2 col-xl-6">
                   <label>Company Email</label>
-                  <input
-                    type="text"
-                    className="form-control rounded-0"
-                    placeholder="Enter company email"
-                    name="COMPANY_EMAIL"
-                    value={create_company.COMPANY_EMAIL}
-                    onChange={handleCreate}
-                    label="Company Email"
-                  />
+                <input
+                  type="text"
+                  className="form-control rounded-0"
+                  placeholder="Enter company email"
+                  name="COMPANY_EMAIL"
+                  value={edit_company.COMPANY_EMAIL}
+                  onChange={handleCreate}
+                  label="Company Email"
+                />
                 </div>
               </div>
               <div className="row py-2">
-                <div className="form-group col-xl-4">
+              <div className="form-group col-xl-4">
                   <label>Country</label>
                   <select
                     className="form-control border  rounded-0"
-                    name="COMPANY_COUNTRY"
-                    value={create_company.COMPANY_COUNTRY}
+                    name="COMPANY_STATE"
+                    value={edit_company.COMPANY_COUNTRY}
                     onChange={handleCreate}
                   >
                     <option selected>Choose...</option>
-
-                    {country.map((e, key) => {
-                      return (
-                        <option value={e.name} key={key}>{e.name}</option>
-                      )
-                    })}
-
+                   
+                   {country.map((e,key)=>{
+                    return(
+                          <option value={e.name} key={key}>{e.name}</option>
+                    )
+                   })} 
+                    
                   </select>
                 </div>
 
@@ -189,19 +186,16 @@ export default function CompanyCreate(props) {
                   <select
                     className="form-control border  rounded-0"
                     name="COMPANY_STATE"
-                    value={create_company.COMPANY_STATE}
+                    value={edit_company.COMPANY_STATE}
                     onChange={handleCreate}
                   >
-
-                    <option>--Choose State--</option>
-                    {availableState?.states?.map((e, key) => {
-                      return (
-                        <option value={e.name} key={key}>
-                          {e.name}
-                        </option>
-                      );
-                    })}
-
+                    <option selected >Choose... States</option>
+                  {availableState?.states?.map((state,key) => {
+                    return(
+                      <option value={state.name} key={key} >{state.name}</option>
+                    )
+                  })} 
+                    
                   </select>
                 </div>
 
@@ -210,21 +204,21 @@ export default function CompanyCreate(props) {
                   <select
                     className="form-control border rounded-0"
                     name="COMPANY_CITY"
-                    value={create_company.COMPANY_CITY}
+                    value={edit_company.COMPANY_CITY}
                     onChange={handleCreate}
                   >
                     <option selected>Choose City...</option>
-                    {availableCities?.cities?.map((e, key) => {
-                      return (
-                        <option value={e.name} key={key}>{e.name}</option>
-                      )
-                    })}
-
+                  {availableCities?.cities?.map((e,key)=> {
+                    return(
+                      <option value={e.name} key={key}>{e.name}</option>
+                    )
+                  })} 
+                     
                   </select>
                 </div>
+               
 
-
-
+              
               </div>
               <div className="form-group col-xl-12">
                 <label>Address</label>
@@ -233,10 +227,10 @@ export default function CompanyCreate(props) {
                   className="form-control rounded-0"
                   placeholder="Apartment, studio, or floor"
                   name="COMPANY_ADD2"
-                  value={create_company.COMPANY_ADD2}
+                  value={edit_company.COMPANY_ADD2}
                   onChange={handleCreate}
-                // rows="4"
-                // cols="50"
+                  // rows="4"
+                  // cols="50"
                 />
               </div>
               <Button

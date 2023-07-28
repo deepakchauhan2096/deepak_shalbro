@@ -16,10 +16,14 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ProjectUpload from "./ProjectUpload";
-import EmployeeSrc from "../employee/EmployeeSrc";
+import EmployeeSrc from "../Employee/EmployeeSrc";
 import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
+
 import AttendanceReport from "../attendance/AttendanceAcknowledge";
+
+
+import DeleteDoc from "../company/DeleteDoc"
 
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
@@ -41,6 +45,7 @@ const CompanyMain = () => {
   console.log(location, "companies")
 
 
+    
   const NavScreen = styled(Paper)((props) => ({
     height: "calc(100vh)",
     padding: 0,
@@ -87,6 +92,7 @@ const CompanyMain = () => {
     {
       listname: "Attendance",
     }
+   
   ];
 
   console.log(navIndex, "navindex");
@@ -258,6 +264,8 @@ const CompanyMain = () => {
       <NavScreen screenIndex={navIndex === 4}>
         <AttendanceReport mainData={allempData} />
       </NavScreen>
+
+
     </>
   );
 };

@@ -208,7 +208,7 @@ const EmployeeTimeSheet = (props) => {
         </tbody>
       </table>
       </div>
-      <div className="container" style={{position:"",bottom:"0"}}>
+      <div className="container-fluid" style={{position:"",bottom:"0"}}>
         <div className="row border" >
           <div className="col-6  pt-5 ">
             <p className="fw-semibold text-dark">

@@ -156,11 +156,6 @@ const Project = (props) => {
     display: props.screenIndex ? "block" : "none",
   }));
 
-
-
-
-
-
   const Animations = () => {
     return (
       <Box sx={{ width: "100%" }}>
@@ -175,6 +170,9 @@ const Project = (props) => {
       </Box>
     );
   };
+
+
+
 
 
 
@@ -372,6 +370,34 @@ const Project = (props) => {
                 </div>
               </div>
               <hr />
+             
+             
+              <div className="row">
+                <div className="col-4">
+                  <b>Assigned Employees to this project</b>
+                  <div className="p-2 rounded-3 bg-light">
+                  <ul>
+                 {filterData.PROJECT_ASSIGN?.map((assignproject,key) => {
+                      console.log("assignproject",assignproject)
+                      return(
+                       <>
+                       <b>Employee ID</b> <span>{assignproject.EMPLOYEE_ID}</span>
+                       <br />
+                       <b>Company Username </b> <span> {assignproject.EMPLOYEE_PARENT_USERNAME}</span> <br />
+                       <b>Admin Username </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_USERNAME}</span> <br />
+                       <b>Company ID </b> <span> {assignproject.EMPLOYEE_PARENT_ID}</span> <br />
+                       <b>Admin ID </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_ID}</span> 
+                       </>
+                    
+                      )
+                  
+                   
+                    
+                 })}
+                   </ul>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         ) : index === 2 ? (

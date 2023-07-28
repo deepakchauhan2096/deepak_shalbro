@@ -63,7 +63,7 @@ export default function ProjectCreate(props) {
     (c) => c.name === createProject.PROJECT_COUNTRY
   );
 
-  console.log("all states : ===> ", availableState);
+  console.log("all states : ===> ", availableState,"country=>",country);
   const availableCities = availableState?.states?.find(
     (s) => s.name === createProject.PROJECT_STATE
   );
@@ -157,7 +157,7 @@ export default function ProjectCreate(props) {
                 <label> Project Username</label>
                 <input
                   type="text"
-                  className="form-control "
+                  className="form-control rounded-0"
                   placeholder="Username"
                   value={createProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
@@ -174,7 +174,7 @@ export default function ProjectCreate(props) {
                 <label>Project Name</label>
                 <input
                   type="text"
-                  className="form-control "
+                  className="form-control rounded-0"
                   id="inputname"
                   placeholder="Project Name"
                   value={createProject.PROJECT_NAME}
@@ -187,7 +187,7 @@ export default function ProjectCreate(props) {
                 <label>Contact</label>
                 <input
                   type="number"
-                  className="form-control"
+                  className="form-control rounded-0"
                   id="inputPassword4"
                   placeholder="Enter Phone Number"
                   name="PROJECT_PHONE"
@@ -205,8 +205,8 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_START_DATE}
                   name="PROJECT_START_DATE"
                   onChange={handleCreate}
-                  className="form-control"
-                  //required
+                  className="form-control rounded-0"
+                //required
                 />
               </div>
               <div className="form-group col-xl-6">
@@ -216,8 +216,8 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_END_DATE}
                   name="PROJECT_END_DATE"
                   onChange={handleCreate}
-                  className="form-control"
-                  //required
+                  className="form-control rounded-0"
+                //required
                 />
               </div>
             </div>
@@ -226,7 +226,7 @@ export default function ProjectCreate(props) {
                 <label>Enrollment</label>
                 <select
                   id="inputEnroll"
-                  className="form-control border"
+                  className="form-control border rounded-0"
                   onChange={handleCreate}
                   name="PROJECT_EMROLMNT_TYPE"
                   value={createProject.PROJECT_EMROLMNT_TYPE}
@@ -244,7 +244,7 @@ export default function ProjectCreate(props) {
                 <label>Supervisor</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control rounded-0 "
                   id="inputsupervisor"
                   name="PROJECT_SUPERVISOR"
                   value={createProject.PROJECT_SUPERVISOR}
@@ -258,7 +258,7 @@ export default function ProjectCreate(props) {
                 <label>Address</label>
                 <textarea
                   type="text"
-                  className="form-control"
+                  className="form-control rounded-0"
                   id="inputAddress2"
                   placeholder="Apartment, studio, or floor"
                   name="PROJECT_ADD"
@@ -272,14 +272,14 @@ export default function ProjectCreate(props) {
               <div className="form-group col-xl-4">
                 <label>Country</label>
                 <select
-                  className="form-control border"
+                  className="form-control border rounded-0"
                   placeholder="Country"
                   name="PROJECT_COUNTRY"
                   value={createProject.PROJECT_COUNTRY}
                   onChange={handleCreate}
                   //required
                 >
-                  <option>--Choose Country--</option>
+                  <option >--Choose Country--</option>
 
                   {country?.map((value, key) => {
                     return (
@@ -294,14 +294,15 @@ export default function ProjectCreate(props) {
               <div className="form-group col-xl-4">
                 <label>State</label>
                 <select
-                  className="form-control border"
+                  className="form-control border rounded-0"
                   placeholder="State"
                   name="PROJECT_STATE"
                   value={createProject.PROJECT_STATE}
                   onChange={handleCreate}
                   //required
+                  
                 >
-                  <option>--Choose State--</option>
+                  <option selected>--Choose State--</option>
                   {availableState?.states?.map((e, key) => {
                     return (
                       <option value={e.name} key={key}>
@@ -315,7 +316,7 @@ export default function ProjectCreate(props) {
               <div className="form-group col-xl-4">
                 <label>City</label>
                 <select
-                  className="form-control border"
+                  className="form-control border rounded-0"
                   placeholder="City"
                   name="PROJECT_CITY"
                   value={createProject.PROJECT_CITY}
@@ -356,4 +357,4 @@ export default function ProjectCreate(props) {
       </Modal>
     </>
   );
-}
+                }

@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./assests/css/graph.css";
-import CreateEmp from "./employee/EmployeeCreate";
+import CreateEmp from "./Employee/EmployeeCreate";
 import AdminCreate from "./Admin/AdminCreate";
 import AdminDashboard from "./Admin/AdminDashboard";
 import CompanyMain from "./company/CompanyMain";
