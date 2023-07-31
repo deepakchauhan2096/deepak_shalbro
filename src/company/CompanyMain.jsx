@@ -16,11 +16,10 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ProjectUpload from "./ProjectUpload";
-import EmployeeSrc from "../Employee/EmployeeSrc";
+import EmployeeSrc from "../employee/EmployeeSrc";
 import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
-
-import AttendanceReport from "../Attendance/AttendanceAcknowledge";
+import AttendanceReport from "../attendance/AttendanceAcknowledge";
 
 
 // import DeleteDoc from "../company/DeleteDoc"
