@@ -54,7 +54,7 @@ const AllDocument = () => {
         headers,
       })
       .then((response) => {
-        console.log("response data:", response.data);
+        // console.log("response data:", response.data);
       })
       .catch((error) => {
         console.error(error);

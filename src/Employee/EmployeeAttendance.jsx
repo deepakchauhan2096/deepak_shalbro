@@ -49,10 +49,9 @@ const EmployeeAttendance = (props) => {
   const OutDataSuccess = { ...inData, ATTENDANCE_OUT: new Date() };
   const inDataSuccess = { ...inData, ATTENDANCE_IN: new Date() };
 
-  console.log(inDataSuccess, "GGGG");
 
   const handleSubmitIn = (event) => {
-    console.log(event, "in");
+    // console.log(event, "in");
     event.preventDefault()
     let config = {
       method: "post",
@@ -68,7 +67,7 @@ const EmployeeAttendance = (props) => {
     axios
       .request(config)
       .then((response) => {
-        console.log(JSON.stringify(response.data));
+        // console.log(JSON.stringify(response.data));
         setIndone(response.data);
       })
       .catch((error) => {
@@ -77,7 +76,6 @@ const EmployeeAttendance = (props) => {
   };
 
   const handleSubmitOut = (event) => {
-    console.log(event, "out");
     event.preventDefault()
     let config = {
       method: "post",
@@ -119,29 +117,12 @@ const EmployeeAttendance = (props) => {
         { headers }
       );
       setTimeout(() => {
-        console.log("ALL EMPLOYEE data ", response);
-      //   const data = response.data;
-      //   // setAllempData(data.result[0].COMPANY_EMPLOYIES);
-      //   setAllempData(data.result);
-      //   console.log("fuck", data);
-      //   setIsLoading(false);
+        // console.log("ALL EMPLOYEE data ", response);
       }, 1000);
     } catch (err) {
       console.log("something Went wrong: =>", err);
     }
   };
-
-
-  console.log(currentTime, "datanew");
-
-  console.log(inDataSuccess, "data s");
-
-  // const MyScreen = styled(Paper)(() => ({
-  //   height: "calc(100vh - 37px)",
-  //   padding: 0,
-  //   paddingBottom: "0",
-  //   overflow: "auto",
-  // }));
 
   const screen = {
     height: "calc(100vh - 37px)",
@@ -155,19 +136,16 @@ const EmployeeAttendance = (props) => {
   const finalData = allempData;
 
   // const Data = ;
-  console.log(finalData, "kumar");
 
   const filtered = (e) => {
     // topFunction()
     const keyword = e.target.value;
 
-    // console.log(keyword.toString(""), "keyword")
 
     if (keyword !== "") {
       const results = finalData.filter((post) => {
         return post.EMPLOYEE_ID == parseInt(keyword);
       });
-      console.log(results, "result");
       setFoundUsers(results);
       setInData((prev) => ({
         ...prev,
@@ -200,7 +178,6 @@ const EmployeeAttendance = (props) => {
     setName(keyword);
   };
 
-  console.log(foundUsers, "found");
 
   return (
     <>

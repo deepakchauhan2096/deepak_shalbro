@@ -31,28 +31,28 @@ const style = {
   borderRadius: 4,
 };
 
-export default function ProjectCreate(props) {
+export default function CreateSubcontract(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [index, setIndex] = React.useState([]);
 
 
-  const [createProject, setCreateProject] = useState({
-    PROJECT_PARENT_ID: props.companyData?.COMPANY_ID,
-    PROJECT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME,
-    PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID,
-    PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME,
-    PROJECT_NAME: "",
-    PROJECT_USERNAME: "",
-    PROJECT_ADD: "",
-    PROJECT_CITY: "",
-    PROJECT_START_DATE: "",
-    PROJECT_END_DATE: "",
-    PROJECT_SUPERVISOR: "",
-    PROJECT_COUNTRY: "",
-    PROJECT_STATE: "",
-    PROJECT_PHONE: "",
+  const [createSubcontract, SetSubcontract] = useState({
+    SUBCONTRACT_PARENT_ID: props.companyData?.COMPANY_ID,
+    SUBCONTRACT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME,
+    SUBCONTRACT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID,
+    SUBCONTRACT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME,
+    SUBCONTRACT_NAME: "",
+    SUBCONTRACT_USERNAME: "",
+    SUBCONTRACT_ADD: "",
+    SUBCONTRACT_CITY: "",
+    SUBCONTRACT_START_DATE: "",
+    SUBCONTRACT_END_DATE: "",
+    SUBCONTRACT_SUPERVISOR: "",
+    SUBCONTRACT_COUNTRY: "",
+    SUBCONTRACT_STATE: "",
+    SUBCONTRACT_PHONE: "",
   });
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -60,12 +60,11 @@ export default function ProjectCreate(props) {
  // city-country-logic
 
   const availableState = country?.find(
-    (c) => c.name === createProject.PROJECT_COUNTRY
+    (c) => c.name === createSubcontract.SUBCONTRACT_COUNTRY
   );
 
-  // console.log("all states : ===> ", availableState,"country=>",country);
   const availableCities = availableState?.states?.find(
-    (s) => s.name === createProject.PROJECT_STATE
+    (s) => s.name === createSubcontract.SUBCONTRACT_STATE
   );
 
   //api header
@@ -77,8 +76,8 @@ export default function ProjectCreate(props) {
   };
 
   const handleCreate = (e) => {
-    setCreateProject({ ...createProject, [e.target.name]: e.target.value });
-    console.log("heello world", createProject);
+    SetSubcontract({ ...createSubcontract, [e.target.name]: e.target.value });
+    // console.log("heello world", createSubcontract);
   };
 
 
@@ -86,20 +85,20 @@ export default function ProjectCreate(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
-      !createProject.PROJECT_USERNAME ||
-      !createProject.PROJECT_NAME ||
-      !createProject.PROJECT_PHONE ||
-      !createProject.PROJECT_PARENT_ID ||
-      !createProject.PROJECT_PARENT_USERNAME ||
-      !createProject.PROJECT_MEMBER_PARENT_ID ||
-      !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
-      !createProject.PROJECT_ADD ||
-      !createProject.PROJECT_START_DATE ||
-      !createProject.PROJECT_END_DATE ||
-      !createProject.PROJECT_SUPERVISOR ||
-      !createProject.PROJECT_COUNTRY ||
-      !createProject.PROJECT_CITY ||
-      !createProject.PROJECT_STATE
+      !createSubcontract.SUBCONTRACT_USERNAME ||
+      !createSubcontract.SUBCONTRACT_NAME ||
+      !createSubcontract.SUBCONTRACT_PHONE ||
+      !createSubcontract.SUBCONTRACT_PARENT_ID ||
+      !createSubcontract.SUBCONTRACT_PARENT_USERNAME ||
+      !createSubcontract.SUBCONTRACT_MEMBER_PARENT_ID ||
+      !createSubcontract.SUBCONTRACT_MEMBER_PARENT_USERNAME ||
+      !createSubcontract.SUBCONTRACT_ADD ||
+      !createSubcontract.SUBCONTRACT_START_DATE ||
+      !createSubcontract.SUBCONTRACT_END_DATE ||
+      !createSubcontract.SUBCONTRACT_SUPERVISOR ||
+      !createSubcontract.SUBCONTRACT_COUNTRY ||
+      !createSubcontract.SUBCONTRACT_CITY ||
+      !createSubcontract.SUBCONTRACT_STATE
     ) {
       setErrorMsg("Fill all fields");
       return;
@@ -107,7 +106,7 @@ export default function ProjectCreate(props) {
     setErrorMsg("");
 
     axios
-      .post("http://3.84.137.243:5001/create_project", createProject, {
+      .post("http://3.84.137.243:5001/create_subcontract", createSubcontract, {
         headers,
       })
       .then((response) => {
@@ -131,7 +130,7 @@ export default function ProjectCreate(props) {
   return (
     <>
       <Button size="small" className="btn button border-bottom-0 bg-white"  variant="outlined">
-        Project
+       Sub Contractor
       </Button>
       <Button
         onClick={handleOpen}
@@ -140,7 +139,7 @@ export default function ProjectCreate(props) {
         variant="contained"
         size="small"
       >
-       + Add New Project
+       + Add Sub Contract
       </Button>
 
       <Modal
@@ -153,31 +152,31 @@ export default function ProjectCreate(props) {
           <form onSubmit={handleSubmit}>
             <div className="row py-2">
               <div className="form-group col-xl-4">
-                <label> Project Username</label>
+                <label> Subcontract Username</label>
                 <input
                   type="text"
                   className="form-control rounded-0"
                   placeholder="Username"
-                  value={createProject.PROJECT_USERNAME}
-                  name="PROJECT_USERNAME"
+                  value={createSubcontract.SUBCONTRACT_USERNAME}
+                  name="SUBCONTRACT_USERNAME"
                   onChange={handleCreate}
                   //required
                 />
-                {/* {errors.PROJECT_USERNAME && (
+                {/* {errors.SUBCONTRACT_USERNAME && (
                   <p className="error text-danger fw-light">
-                    {errors.PROJECT_USERNAME}
+                    {errors.SUBCONTRACT_USERNAME}
                   </p>
                 )} */}
               </div>
               <div className="form-group col-xl-4">
-                <label>Project Name</label>
+                <label>Sub Contract Name</label>
                 <input
                   type="text"
                   className="form-control rounded-0"
                   id="inputname"
                   placeholder="Project Name"
-                  value={createProject.PROJECT_NAME}
-                  name="PROJECT_NAME"
+                  value={createSubcontract.SUBCONTRACT_NAME}
+                  name="SUBCONTRACT_NAME"
                   onChange={handleCreate}
                   required
                 />
@@ -189,8 +188,8 @@ export default function ProjectCreate(props) {
                   className="form-control rounded-0"
                   id="inputPassword4"
                   placeholder="Enter Phone Number"
-                  name="PROJECT_PHONE"
-                  value={createProject.PROJECT_PHONE}
+                  name="SUBCONTRACT_PHONE"
+                  value={createSubcontract.SUBCONTRACT_PHONE}
                   onChange={handleCreate}
                   required
                 />
@@ -198,11 +197,11 @@ export default function ProjectCreate(props) {
             </div>
             <div className="row py-2">
               <div className="form-group col-xl-6">
-                <label>Project start date</label>
+                <label> start date</label>
                 <input
                   type="date"
-                  value={createProject.PROJECT_START_DATE}
-                  name="PROJECT_START_DATE"
+                  value={createSubcontract.SUBCONTRACT_START_DATE}
+                  name="SUBCONTRACT_START_DATE"
                   onChange={handleCreate}
                   className="form-control rounded-0"
                 //required
@@ -212,8 +211,8 @@ export default function ProjectCreate(props) {
                 <label>Project End date</label>
                 <input
                   type="date"
-                  value={createProject.PROJECT_END_DATE}
-                  name="PROJECT_END_DATE"
+                  value={createSubcontract.SUBCONTRACT_END_DATE}
+                  name="SUBCONTRACT_END_DATE"
                   onChange={handleCreate}
                   className="form-control rounded-0"
                 //required
@@ -227,8 +226,8 @@ export default function ProjectCreate(props) {
                   id="inputEnroll"
                   className="form-control border rounded-0"
                   onChange={handleCreate}
-                  name="PROJECT_EMROLMNT_TYPE"
-                  value={createProject.PROJECT_EMROLMNT_TYPE}
+                  name="SUBCONTRACT_EMROLMNT_TYPE"
+                  value={createSubcontract.SUBCONTRACT_EMROLMNT_TYPE}
                   //required
                 >
                   <option selected>Choose...</option>
@@ -245,8 +244,8 @@ export default function ProjectCreate(props) {
                   type="text"
                   className="form-control rounded-0 "
                   id="inputsupervisor"
-                  name="PROJECT_SUPERVISOR"
-                  value={createProject.PROJECT_SUPERVISOR}
+                  name="SUBCONTRACT_SUPERVISOR"
+                  value={createSubcontract.SUBCONTRACT_SUPERVISOR}
                   onChange={handleCreate}
                   //required
                 />
@@ -260,8 +259,8 @@ export default function ProjectCreate(props) {
                   className="form-control rounded-0"
                   id="inputAddress2"
                   placeholder="Apartment, studio, or floor"
-                  name="PROJECT_ADD"
-                  value={createProject.PROJECT_ADD}
+                  name="SUBCONTRACT_ADD"
+                  value={createSubcontract.SUBCONTRACT_ADD}
                   onChange={handleCreate}
                   //required
                 />
@@ -273,8 +272,8 @@ export default function ProjectCreate(props) {
                 <select
                   className="form-control border rounded-0"
                   placeholder="Country"
-                  name="PROJECT_COUNTRY"
-                  value={createProject.PROJECT_COUNTRY}
+                  name="SUBCONTRACT_COUNTRY"
+                  value={createSubcontract.SUBCONTRACT_COUNTRY}
                   onChange={handleCreate}
                   //required
                 >
@@ -295,8 +294,8 @@ export default function ProjectCreate(props) {
                 <select
                   className="form-control border rounded-0"
                   placeholder="State"
-                  name="PROJECT_STATE"
-                  value={createProject.PROJECT_STATE}
+                  name="SUBCONTRACT_STATE"
+                  value={createSubcontract.SUBCONTRACT_STATE}
                   onChange={handleCreate}
                   //required
                   
@@ -317,8 +316,8 @@ export default function ProjectCreate(props) {
                 <select
                   className="form-control border rounded-0"
                   placeholder="City"
-                  name="PROJECT_CITY"
-                  value={createProject.PROJECT_CITY}
+                  name="SUBCONTRACT_CITY"
+                  value={createSubcontract.SUBCONTRACT_CITY}
                   onChange={handleCreate}
                   //required
                 >

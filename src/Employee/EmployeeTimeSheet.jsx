@@ -4,6 +4,9 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import moment from "moment/moment";
 
+import PrintIcon from "@mui/icons-material/Print"; // Import the print icon
+import "../assests/css/document.css" // Import the CSS file
+
 
 let MyDateCurrent = new Date();
 let MyDateStringCurrent;
@@ -15,7 +18,6 @@ MyDateCurrent.getFullYear() +
 "-" +
 ("0" + MyDateCurrent.getDate()).slice(-2);
 
-console.log(MyDateStringCurrent,"Mydate")
 
 
 //Day after seven
@@ -32,11 +34,9 @@ MyDateAfter.getFullYear() +
 "-" +
 ("0" + MyDateAfter.getDate()).slice(-2);
 
-console.log(MyDateStringAfter,"Mydate")
 
 
 const EmployeeTimeSheet = (props) => {
-  console.log(props, "props data in timesheet");
 
   const [workvalue, setWorkvalue] = useState([]);
   const [timeResultIN, settimeResultIN] = useState([]);
@@ -50,7 +50,6 @@ const EmployeeTimeSheet = (props) => {
     gettimesheet();
   },[props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME]);
 
-  console.log(dateValue, "datevalue");
 
   // get employee report
 
@@ -73,7 +72,6 @@ const EmployeeTimeSheet = (props) => {
         { headers }
       );
       setTimeout(() => {
-        console.log("ALL EMPLOYEE TIMESHEET ", response);
         setWorkvalue(response.data.result);
       }, 1000);
     } catch (err) {
@@ -120,12 +118,13 @@ const EmployeeTimeSheet = (props) => {
     endTime.diff(startTime, "minutes") +
     " Mns";
 
-  console.log(result, "hhh");
 
 
 
   //gate cuurent and addition seven days
- 
+  const handlePrint = () => {
+    window.print();
+  };
 
  
   
@@ -139,6 +138,9 @@ const EmployeeTimeSheet = (props) => {
         <b style={{ fontWeight: "600", color: "black" }}>Employee Name : </b>
         {props.mainData.EMPLOYEE_NAME}
       </p>
+      <div className="print-icon" onClick={handlePrint}>
+          <PrintIcon />
+        </div>
       <div style={{ display: "flex", gap: 10, padding: "5px 0" }}>
         <div className="form-group col-xl-1">
           <label>Date From: </label>
@@ -220,9 +222,6 @@ const EmployeeTimeSheet = (props) => {
                 }}
               ></span>
             </p>
-            {/* <p className="fw-semibold text-dark  mt-2">
-              Manager Signature: <span></span>
-            </p> */}
           </div>
 
           <div className="col-5" >

@@ -27,7 +27,7 @@ export default function EmployeeEdit(props) {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const editdata = props?.edit.row
-  console.log("first", editdata)
+  // console.log("first", editdata)
 
   const [editEmployee, setEditEmployee] = useState({
     EMPLOYEE_NAME: editdata.EMPLOYEE_NAME,

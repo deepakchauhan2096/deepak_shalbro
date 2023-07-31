@@ -4,26 +4,26 @@ import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {Button,Skeleton,Paper} from "@mui/material";
-import ProjectCreate from "./ProjectCreate";
+import ProjectCreate from "./CreateSubcontract";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
 
-const Project = (props) => {
+const SubContract = (props) => {
   const [data, setData] = useState({
     row: {
-      PROJECT_ID: "",
-      PROJECT_PARENT_ID: "",
-      PROJECT_PARENT_USERNAME: "",
-      PROJECT_MEMBER_PARENT_ID: "",
-      PROJECT_MEMBER_PARENT_USERNAME: "",
-      PROJECT_ROLE: "",
-      PROJECT_NAME: "",
-      PROJECT_PHONE: "",
-      PROJECT_USERNAME: "",
-      PROJECT_START_DATE: "",
-      PROJECT_END_DATE: "",
-      PROJECT_SUPERVISOR: "",
-      PROJECT_PROGRESS: "",
+      SUBCONTRACT_ID: "",
+      SUBCONTRACT_PARENT_ID: "",
+      SUBCONTRACT_PARENT_USERNAME: "",
+      SUBCONTRACT_MEMBER_PARENT_ID: "",
+      SUBCONTRACT_MEMBER_PARENT_USERNAME: "",
+      SUBCONTRACT_ROLE: "",
+      SUBCONTRACT_NAME: "",
+      SUBCONTRACT_PHONE: "",
+      SUBCONTRACT_USERNAME: "",
+      SUBCONTRACT_START_DATE: "",
+      SUBCONTRACT_END_DATE: "",
+      SUBCONTRACT_SUPERVISOR: "",
+      SUBCONTRACT_PROGRESS: "",
     },
   });
 
@@ -60,10 +60,10 @@ const Project = (props) => {
       const response = await axios.put(
         "http://3.84.137.243:5001/get_projects",
         {
-          PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
-          PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
-          PROJECT_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
-          PROJECT_MEMBER_PARENT_USERNAME:filterallprojectData?.COMPANY_PARENT_USERNAME,
+          SUBCONTRACT_PARENT_ID: filterallprojectData?.COMPANY_ID,
+          SUBCONTRACT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
+          SUBCONTRACT_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
+          SUBCONTRACT_MEMBER_PARENT_USERNAME:filterallprojectData?.COMPANY_PARENT_USERNAME,
         },
         { headers }
       );
@@ -71,46 +71,46 @@ const Project = (props) => {
         const data = response.data;
         setProjectData(data?.result);
         setIsLoading(false);
-        // console.log("contracts Data : =>", data);
+        console.log("contracts Data : =>", data);
       }, 1000);
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
   };
 
-  // console.log(ProjectData, "projectdata");
+  console.log(ProjectData, "projectdata");
 
   const columns = [
-    { field: "PROJECT_ID", headerName: "ID", width: 90 },
+    { field: "SUBCONTRACT_ID", headerName: "ID", width: 90 },
     {
-      field: "PROJECT_USERNAME",
+      field: "SUBCONTRACT_USERNAME",
       headerName: "USername",
       width: 150,
     },
     {
-      field: "PROJECT_NAME",
+      field: "SUBCONTRACT_NAME",
       headerName: "Name",
       width: 150,
     },
     {
-      field: "PROJECT_PHONE",
+      field: "SUBCONTRACT_PHONE",
       headerName: "Phone",
       width: 150,
     },
     {
-      field: "PROJECT_START_DATE",
+      field: "SUBCONTRACT_START_DATE",
       headerName: "Start Date",
       width: 150,
     },
     {
-      field: "PROJECT_END_DATE",
+      field: "SUBCONTRACT_END_DATE",
       headerName: "End Date",
       type: "number",
       width: 100,
     },
 
     {
-      field: "PROJECT_SUPERVISOR",
+      field: "SUBCONTRACT_SUPERVISOR",
       headerName: "Supervisor",
       width: 200,
     },
@@ -137,7 +137,7 @@ const Project = (props) => {
   ];
 
   const rows = ProjectData;
-  // console.log("Project Data : =>", ProjectData);
+  console.log("Project Data : =>", ProjectData);
 
   const handleClick = (event) => {
     setData(event);
@@ -193,7 +193,7 @@ const Project = (props) => {
                 sx={{ border: "none" }}
                 rows={rows}
                 columns={columns}
-                getRowId={(row) => row.PROJECT_ID}
+                getRowId={(row) => row.SUBCONTRACT_ID}
                 initialState={{
                   pagination: {
                     paginationModel: {
@@ -278,37 +278,37 @@ const Project = (props) => {
                 <div className="col-4">
                   <b>Project Name</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_NAME}
+                    {filterData.SUBCONTRACT_NAME}
                   </p>
                 </div>
                 <div className="col-4">
                   <b>Phone</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_PHONE}
+                    {filterData.SUBCONTRACT_PHONE}
                   </p>
                 </div>
                 <div className="col-4">
                   <b>Username</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_USERNAME}
+                    {filterData.SUBCONTRACT_USERNAME}
                   </p>
                 </div>
                 <div className="col-4">
                   <b>Supervisor</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_SUPERVISOR}
+                    {filterData.SUBCONTRACT_SUPERVISOR}
                   </p>
                 </div>
                 <div className="col-4">
                   <b>Employement Type</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_EMROLMNT_TYPE}
+                    {filterData.SUBCONTRACT_EMROLMNT_TYPE}
                   </p>
                 </div>
                 <div className="col-4">
                   <b>Location</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_ADD}
+                    {filterData.SUBCONTRACT_ADD}
                   </p>
                 </div>
               </div>
@@ -319,8 +319,8 @@ const Project = (props) => {
                 <div className="col">
                   <b>Project Role</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_ROLE
-                      ? filterData.PROJECT_ROLE
+                    {filterData.SUBCONTRACT_ROLE
+                      ? filterData.SUBCONTRACT_ROLE
                       : "not mentioned !"}
                   </p>
                 </div>
@@ -333,7 +333,7 @@ const Project = (props) => {
                 <div className="col">
                   <b>Project Start</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_START_DATE}
+                    {filterData.SUBCONTRACT_START_DATE}
                   </p>
                 </div>
                 <div className="col">
@@ -341,12 +341,12 @@ const Project = (props) => {
                   {Edit ? (
                     <input
                       type="date"
-                      value={filterData.PROJECT_END_DATE}
+                      value={filterData.SUBCONTRACT_END_DATE}
                       className="form-control"
                     />
                   ) : (
                     <p className="bg-light text-dark p-2 rounded-2">
-                      {filterData.PROJECT_END_DATE}
+                      {filterData.SUBCONTRACT_END_DATE}
                     </p>
                   )}
                 </div>
@@ -359,11 +359,11 @@ const Project = (props) => {
                     <div
                       className="progress-bar"
                       style={{
-                        background: `radial-gradient(closest-side, white 79%, transparent 80% 100%),conic-gradient(hotpink ${filterData.PROJECT_PROGRESS}%, pink 0)`,
+                        background: `radial-gradient(closest-side, white 79%, transparent 80% 100%),conic-gradient(hotpink ${filterData.SUBCONTRACT_PROGRESS}%, pink 0)`,
                       }}
                     >
                       <div className="counter">
-                        {filterData.PROJECT_PROGRESS}%
+                        {filterData.SUBCONTRACT_PROGRESS}%
                       </div>
                     </div>
                   </div>
@@ -377,8 +377,8 @@ const Project = (props) => {
                   <b>Assigned Employees to this project</b>
                   <div className="p-2 rounded-3 bg-light">
                   <ul>
-                 {filterData.PROJECT_ASSIGN?.map((assignproject,key) => {
-                      // console.log("assignproject",assignproject)
+                 {filterData.SUBCONTRACT_ASSIGN?.map((assignproject,key) => {
+                      console.log("assignproject",assignproject)
                       return(
                        <>
                        <b>Employee ID</b> <span>{assignproject.EMPLOYEE_ID}</span>
@@ -840,4 +840,4 @@ const Project = (props) => {
   );
 };
 
-export default Project;
+export default SubContract;

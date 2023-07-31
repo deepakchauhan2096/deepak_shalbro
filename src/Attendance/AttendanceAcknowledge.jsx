@@ -28,8 +28,6 @@ MyDateStringCurrent =
   "-" +
   ("0" + MyDateCurrent.getDate()).slice(-2);
 
-console.log(MyDateStringCurrent, "Mydate");
-
 //current Date
 
 let MyDateAfter = new Date();
@@ -43,11 +41,6 @@ MyDateStringAfter =
   ("0" + (MyDateAfter.getMonth() + 1)).slice(-2) +
   "-" +
   ("0" + MyDateAfter.getDate()).slice(-2);
-
-console.log(MyDateStringAfter, "Mydate");
-
-/////////////////////
-
 
 //date array previous 30
 
@@ -96,22 +89,10 @@ function getDatesBetween(startDate, endDate) {
   return dates;
 }
 
-// Example usage:
-// const startDateString = "2023-07-28";
-// const endDateString = "2023-09-23";
-
-
-
-
-
-
 
 const AttendanceReport = (props) => {
-  // console.log(props, "props data in timesheet");
   const [showPunch, setPunch] = useState(true);
   const [workvalue, setWorkvalue] = useState([]);
-  // const [timeResultIN, settimeResultIN] = useState([]);
-  // const [timeResultOUT, settimeResultOUT] = useState([]);
   const [keyword, setKeyword] = useState(MyDateStringCurrent)
   const [filterMethod, setFilterMethod] = useState('Date wise')
   const [foundUsers, setFoundUsers] = useState(employees);
@@ -129,8 +110,6 @@ const AttendanceReport = (props) => {
   useEffect(() => {
     gettimesheet();
   }, [props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME]);
-
-  // console.log(dateValue, "datevalue");
 
   // get employee report
 
@@ -153,7 +132,7 @@ const AttendanceReport = (props) => {
         { headers }
       );
       setTimeout(() => {
-        console.log("ALL WEB", response);
+        // console.log("ALL WEB", response);
         setWorkvalue(response.data.result);
       }, 1000);
     } catch (err) {
@@ -161,48 +140,8 @@ const AttendanceReport = (props) => {
     }
   };
 
-  // time calculation
-
-  // const timeValueHours = (x, y) => {
-  //   return new Date(x).getUTCHours() - new Date(y).getUTCHours();
-  // };
-
-  // const timeValueMinutes = (x, y) => {
-  //   return new Date(x).getUTCMinutes() - new Date(y).getUTCMinutes();
-  // };
-
-  // const allHours = workvalue.map((e) => {
-  //   return (
-  //     new Date(e.ATTENDANCE_OUT).getUTCHours() -
-  //     new Date(e.ATTENDANCE_IN).getUTCHours() +
-  //     ":" +
-  //     (new Date(e.ATTENDANCE_OUT).getUTCMinutes() -
-  //       new Date(e.ATTENDANCE_IN).getUTCMinutes())
-  //   );
-  // });
-
-  // const sum = allHours.reduce(
-  //   (time1, time2) => time1.add(moment.duration(time2)),
-  //   moment.duration()
-  // );
-
-  // var startTime = moment("12:16:59 am", "hh:mm:ss a");
-  // var endTime = moment("06:12:07 pm", "hh:mm:ss a");
-
-  // var result =
-  //   endTime.diff(startTime, "hours") +
-  //   " Hrs and " +
-  //   endTime.diff(startTime, "minutes") +
-  //   " Mns";
-
-  // console.log(result, "hhh");
 
   //gate cuurent and addition seven days
-
- 
-
-
-
 
   const total = (event) => {
     const e = event.map((post) => {
@@ -222,53 +161,6 @@ const AttendanceReport = (props) => {
     return (sum._data.hours)+":"+(sum._data.minutes);
   };
 
-//  const result = total(
-//   {EMPLOYEE_ATTENDANCE:
-//         [
-//             {               
-//               "ATTENDANCE_DATE_ID":"2023-07-25",
-//               "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-//               "ATTENDANCE_OUT":"2023-07-25T13:34:36.717Z"
-//             },
-//             {               
-//               "ATTENDANCE_DATE_ID":"2023-08-25",
-//               "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-//               "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-//             },
-//             {               
-//               "ATTENDANCE_DATE_ID":"2023-09-25",
-//               "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-//               "ATTENDANCE_OUT":"2023-09-25T12:34:36.717Z"
-//             },
-//             {               
-//               "ATTENDANCE_DATE_ID":"2023-10-25",
-//               "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-//               "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-//             },
-//             {               
-//               "ATTENDANCE_DATE_ID":"2023-11-25",
-//               "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-//               "ATTENDANCE_OUT":"2023-11-25T14:14:36.717Z"
-//             }
-//     ]
-//   }
-//  )
-
-//  const timelist = result
-
-//  const sum = timelist.reduce(
-//   (time1, time2) => time1.add(moment.duration(time2)),
-//   moment.duration()
-// );
-
-
-//  console.log(sum,"results")
-
-
-
-
-
-
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
@@ -279,8 +171,6 @@ const AttendanceReport = (props) => {
     Border: 0,
     display: props.screenIndex ? "block" : "none",
   }));
-
-  console.table(employees, "all employee");
 
   const PunchReport = () => {
     return (
@@ -456,17 +346,6 @@ const AttendanceReport = (props) => {
     );
   };
 
-  
-  // const filter =  employees.map((item)=>item.EMPLOYEE_ATTENDANCE)
-  // console.log(filter, "filterbydate")
-  // const filterByDate = employees.map((item)=>item.EMPLOYEE_ATTENDANCE.find(e => e.ATTENDANCE_DATE_ID === "2023-07-25"))
-  // console.log(filterByDate, "filterbydate")
-
- 
-
-
-
-
 
 //filter by different param
 
@@ -498,15 +377,6 @@ const startDate = new Date(startDateString);
 const endDate = new Date(endDateString);
 
 const dateArray = getDatesBetween(startDate, endDate);
-
-// Output the array of dates
-console.log(dateArray, "array of dates");
- 
-
-
-
-
-
 
   return (
     <>
@@ -562,21 +432,12 @@ console.log(dateArray, "array of dates");
                             <label>Period</label>
                           </TableCell>
                           <TableCell size="small">
-                            {/* <select className="form-control border">
-                              <option>Start Date</option>
-                            </select> */}
                             <div style={{display:"flex",flexDirection:"row",gap:2}}>
                             <input type="date" className="form-control" value={startDateString} onChange={(e)=> setstartDateString(e.target.value)}/>
                             <input type="date" className="form-control" value={endDateString} onChange={(e)=> setendDateString(e.target.value)}/>
                             </div>
                             
                           </TableCell>
-                          {/* <TableCell size="small"> */}
-                            {/* <select className="form-control border">
-                              <option>End Date</option>
-                            </select> */}
-                            {/* <input type="date" className="form-control" value={endDateString} onChange={(e)=> setendDateString(e.target.value)}/> */}
-                          {/* </TableCell> */}
                         </TableRow>}
                        {filterMethod === "Date wise" && <>
                         <TableCell size="small">
@@ -700,7 +561,7 @@ console.log(dateArray, "array of dates");
                     // });
 
                     filterByDate = post.EMPLOYEE_ATTENDANCE.filter((item) => {
-                      return (filterMethod == "By Pay Period" ? dateArray : arrayDate).includes(item.ATTENDANCE_DATE_ID);
+                      return (filterMethod === "By Pay Period" ? dateArray : arrayDate).includes(item.ATTENDANCE_DATE_ID);
                     });
 
                   console.log(filterByDate,arrayDate,"filter")
