@@ -164,3 +164,20 @@ align-items:center;
 }
 
 /* ... (existing CSS) */
+
+
+/* Delete Document  */
+
+/* Add this CSS to your existing document.css or create a new CSS file */
+.Doc_li {
+  position: relative; /* Parent container of the document item */
+}
+
+.delete-icon {
+  position: absolute;
+  top: -0.2rem; /* Adjust the top distance as needed */
+  right: 0.2rem; /* Adjust the right distance as needed */
+  cursor: pointer;
+  color: crimson; /* Change the color of the delete icon as needed */
+  font-size: 1.2rem; /* Adjust the font size as needed */
+}

@@ -31,7 +31,7 @@ const CompanyNavbar = (props) => {
 
   // console.log(props,"myprops")
   const location = useLocation();
-  console.log(location.pathname, "loc");
+  // console.log(location.pathname, "loc");
 
   const sendData = props.data 
 

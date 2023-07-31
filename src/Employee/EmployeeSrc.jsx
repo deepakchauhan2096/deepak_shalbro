@@ -79,11 +79,6 @@ const EmployeeSrc = (props) => {
     (e) => e.PROJECT_NAME === selectedProject
   );
 
-  console.log(getallparam, "buildings");
-
-  // console.log(props, "empdtat")
-
-  // console.table("Project Data for Assign", allProjectData)
   useEffect(() => {
     fetchAllEmployee();
   }, [updatedata]);
@@ -113,7 +108,6 @@ const EmployeeSrc = (props) => {
         headers,
       })
       .then((response) => {
-        console.log("response of create project", response.data);
         setSelectedProject(response.data.result);
         setIsSuccessMessageVisible(true);
       })
@@ -141,7 +135,6 @@ const EmployeeSrc = (props) => {
         { headers }
       );
       setTimeout(() => {
-        console.log("ALL EMPLOYEE data ", response);
         const data = response.data;
         setAllempData(data.result);
         setIsLoading(false);
@@ -252,13 +245,7 @@ const EmployeeSrc = (props) => {
     setFilteredData(event);
     handleOpen();
   };
-  // for edit 
-  // const handleEdit  = (e) =>{
-  //   console.log("first",e)
-  //   return(
-      
-  //   )
-  // }
+
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
