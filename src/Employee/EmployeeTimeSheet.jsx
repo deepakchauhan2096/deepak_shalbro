@@ -21,12 +21,12 @@ console.log(MyDateStringCurrent, "Mydate");
 let MyDateAfter = new Date();
 let MyDateStringAfter;
 
-MyDateAfter.setDate(MyDateAfter.getDate());
+MyDateAfter.setDate(MyDateAfter.getDate()-7);
 
 MyDateStringAfter =
   MyDateAfter.getFullYear() +
   "-" +
-  ("0" + (MyDateAfter.getMonth() + 7)).slice(-2) +
+  ("0" + (MyDateAfter.getMonth()+1)).slice(-2) +
   "-" +
   ("0" + MyDateAfter.getDate()).slice(-2);
 
@@ -39,8 +39,8 @@ const EmployeeTimeSheet = (props) => {
   const [timeResultIN, settimeResultIN] = useState([]);
   const [timeResultOUT, settimeResultOUT] = useState([]);
   const [dateValue, setDate] = useState({
-    ATTENDANCE_START_DATE: MyDateStringCurrent,
-    ATTENDANCE_END_DATE: MyDateAfter,
+    ATTENDANCE_START_DATE: MyDateAfter,
+    ATTENDANCE_END_DATE: MyDateStringCurrent,
   });
 
   useEffect(() => {
@@ -61,8 +61,7 @@ const EmployeeTimeSheet = (props) => {
       const response = await axios.put(
         "http://3.84.137.243:5001/get_employee_all_for_attendence",
         {
-          ATTENDANCE_ADMIN_USERNAME:
-            props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+          ATTENDANCE_ADMIN_USERNAME:props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME,
           ATTENDANCE_EMPLOYEE_USERNAME: props.mainData?.EMPLOYEE_USERNAME,
           ATTENDANCE_START_DATE: dateValue.ATTENDANCE_START_DATE,
           ATTENDANCE_END_DATE: dateValue.ATTENDANCE_END_DATE,
@@ -81,19 +80,19 @@ const EmployeeTimeSheet = (props) => {
   // time calculation
 
   const timeValueHours = (x, y) => {
-    return new Date(x).getUTCHours() - new Date(y).getUTCHours();
+    return Math.abs(new Date(x).getUTCHours() - new Date(y).getUTCHours());
   };
 
   const timeValueMinutes = (x, y) => {
-    return new Date(x).getUTCMinutes() - new Date(y).getUTCMinutes();
+    return Math.abs(new Date(x).getUTCMinutes() - new Date(y).getUTCMinutes());
   };
 
   const allHours = workvalue.map((e) => {
     return (
-      new Date(e.ATTENDANCE_OUT).getUTCHours() -
-      new Date(e.ATTENDANCE_IN).getUTCHours() +
+      Math.abs(new Date(e.ATTENDANCE_OUT).getUTCHours() -
+      new Date(e.ATTENDANCE_IN).getUTCHours()) +
       ":" +
-      (new Date(e.ATTENDANCE_OUT).getUTCMinutes() -
+      Math.abs(new Date(e.ATTENDANCE_OUT).getUTCMinutes() -
         new Date(e.ATTENDANCE_IN).getUTCMinutes())
     );
   });
@@ -116,8 +115,16 @@ const EmployeeTimeSheet = (props) => {
 
   //gate cuurent and addition seven days
 
-  // total
-  const total = Math.floor(sum.hours()) * props.mainData.EMPLOYEE_HOURLY_WAGE;
+  // total Income
+  const totalIncome = Math.floor(sum.hours()) * props.mainData.EMPLOYEE_HOURLY_WAGE;
+
+  // total Hours
+
+  const workingHours = Math.floor(sum.hours()) +
+    "hours" +
+    " " +
+    sum.minutes() +
+    "mins"
 
   return (
     <>
@@ -133,6 +140,7 @@ const EmployeeTimeSheet = (props) => {
             <input
               type="date"
               className="form-control"
+              value={MyDateStringAfter}
               onChange={(event) =>
                 setDate((prev) => ({
                   ...prev,
@@ -146,6 +154,7 @@ const EmployeeTimeSheet = (props) => {
             <input
               type="date"
               className="form-control"
+              value={MyDateStringCurrent}
               onChange={(event) =>
                 setDate((prev) => ({
                   ...prev,
@@ -170,8 +179,11 @@ const EmployeeTimeSheet = (props) => {
                   name={props.mainData.EMPLOYEE_NAME}
                   email={props.mainData.EMPLOYEE_EMAIL}
                   phone={props.mainData.EMPLOYEE_PHONE}
+                  address={props.mainData.EMPLOYEE_ADD}
+                  
                   // wages={props.mainData.EMPLOYEE_HOURLY_WAGE}
-                  // total={total}
+                  totalIncome={totalIncome}
+                  workingHours={workingHours}
                   mapvalue={workvalue}
                 />
               }
@@ -188,6 +200,7 @@ const EmployeeTimeSheet = (props) => {
               <th scope="col">In</th>
               <th scope="col">Out</th>
               <th scope="col">Working hours</th>
+              <th scope="col">Overtime</th>
               <th scope="col">Status</th>
             </tr>
           </thead>
@@ -203,6 +216,11 @@ const EmployeeTimeSheet = (props) => {
                   {timeValueMinutes(item.ATTENDANCE_OUT, item.ATTENDANCE_IN)}{" "}
                   mins
                 </td>
+                <td>{(Math.abs(Math.floor(sum.hours()) +
+                    "hours" +
+                    " " +
+                    sum.minutes() +
+                    "mins"))}</td>
                 <td>
                   {item.ATTENDANCE_IN && item.ATTENDANCE_OUT
                     ? "present"
@@ -250,7 +268,7 @@ const EmployeeTimeSheet = (props) => {
                   {props.mainData.EMPLOYEE_HOURLY_WAGE}
                 </p>
                 <p className="bg-success text-center fs-6 text-light">
-                  {total} $
+                  $ {totalIncome} 
                 </p>
               </div>
             </div>

@@ -24,7 +24,7 @@ const SalaryPDF = (props) => {
       flexWrap: 'wrap',
       marginTop: 24,
       borderWidth: 1,
-      borderColor: '#bff0fd',
+      borderColor: '#f9f9f9',
       // marginLeft:"20px",
       // marginRight:"20px"
     },
@@ -33,13 +33,13 @@ const SalaryPDF = (props) => {
   // Table Header
   const TableHeader = () => {
 
-    const borderColor = '#90e5fc'
+    const borderColor = '#f9f9f9'
 
     const styles = StyleSheet.create({
       container: {
         flexDirection: 'row',
-        borderBottomColor: '#bff0fd',
-        backgroundColor: '#bff0fd',
+        borderBottomColor: '#f9f9f9',
+        backgroundColor: '#f9f9f9',
         borderBottomWidth: 1,
         alignItems: 'center',
         height: 24,
@@ -90,11 +90,11 @@ const SalaryPDF = (props) => {
 
   const TableRow = ({ items }) => {
 
-    const borderColor = '#90e5fc'
+    const borderColor = '#f9f9f9'
     const styles = StyleSheet.create({
       row: {
         flexDirection: 'row',
-        borderBottomColor: '#bff0fd',
+        borderBottomColor: '#f9f9f9',
         borderBottomWidth: 1,
         alignItems: 'center',
         height: 20,
@@ -137,11 +137,11 @@ const SalaryPDF = (props) => {
      // time calculation
 
   const timeValueHours = (x, y) => {
-    return new Date(x).getUTCHours() - new Date(y).getUTCHours();
+    return Math.abs(new Date(x).getUTCHours() - new Date(y).getUTCHours());
   };
 
   const timeValueMinutes = (x, y) => {
-    return new Date(x).getUTCMinutes() - new Date(y).getUTCMinutes();
+    return Math.abs(new Date(x).getUTCMinutes() - new Date(y).getUTCMinutes());
   };
 
     const rows = items.map(item =>
@@ -168,15 +168,82 @@ const SalaryPDF = (props) => {
     )
   }
 
+
+  //Table Bottm
+
+  const TableBottom = () => {
+
+    const borderColor = '#f9f9f9'
+    const styles = StyleSheet.create({
+      row: {
+        flexDirection: 'row',
+        borderBottomColor: '#f9f9f9',
+        borderBottomWidth: 1,
+        alignItems: 'center',
+        height: 20,
+        fontStyle: 'bold',
+        fontSize:"12px"
+      },
+      description: {
+        width: '20%',
+        textAlign: 'center',
+        // borderRightColor: borderColor,
+        // borderRightWidth: 1,
+        fontSize:"12px"
+      },
+      qty: {
+        width: '20%',
+        // borderRightColor: borderColor,
+        // borderRightWidth: 1,
+        textAlign: 'center',
+        fontSize:"12px"
+      },
+      rate: {
+        width: '20%',
+        // borderRightColor: borderColor,
+        // borderRightWidth: 1,
+        textAlign: 'center',
+        fontSize:"12px"
+      },
+      amount: {
+        width: '20%',
+        textAlign: 'center',
+        fontSize:"12px"
+      },
+      status: {
+        width: '20%',
+        textAlign: 'center',
+        fontSize:"12px"
+      },
+       });
+
+
+
+
+    const rows = 
+      <View style={styles.row} >
+        <Text style={styles.description}>{"Total Hours -"}</Text>
+        <Text style={styles.qty}>{props.workingHours}</Text>
+        <Text style={styles.rate}>{""}</Text>
+        <Text style={styles.amount}>{"Total Income -"}</Text>
+        <Text style={styles.status}>$ {props.totalIncome}/-</Text>
+      </View>
+    
+
+    return (
+      <>{rows}</>
+    )
+  }
+
   //Table Column 
 
   const TableCol = ({ rowsCount }) => {
 
-    const borderColor = '#90e5fc'
+    const borderColor = '#f9f9f9'
     const styles = StyleSheet.create({
       row: {
         flexDirection: 'row',
-        borderBottomColor: '#bff0fd',
+        borderBottomColor: '#f9f9f9',
         borderBottomWidth: 1,
         alignItems: 'center',
         height: 24,
@@ -229,20 +296,19 @@ const SalaryPDF = (props) => {
 
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
-          <Text style={styles.text}>{props.name}</Text>
-          <Text style={styles.text}>{props.address}</Text>
-          <Text style={styles.text}>{props.email}</Text>
-          <Text style={styles.text}>{props.phone}</Text>
-          <Text style={styles.text}>Invoice Date {day}-{month}-{year}</Text>
+          <Text style={styles.text}>Name: <Text style={{textDecoration:"underline"}}>{props.name}</Text></Text>
+          <Text style={styles.text}>Address: {props.address}</Text>
+          <Text style={styles.text}>Email: {props.email}</Text>
+          <Text style={styles.text}>Phone No: {props.phone}</Text>
+          <Text style={styles.text}>Salary Date {day}-{month}-{year}</Text>
           
 
           <View style={Table.tableContainer}>
           <TableHeader />
           <TableRow items={props.mapvalue} />
-          <TableRow items={props.mapvalue} />
+          <TableBottom />
         </View>
         </View>
-        
       </Page>
     </Document>
   );
