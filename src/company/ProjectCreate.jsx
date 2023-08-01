@@ -7,6 +7,7 @@ import country from "../Api/countriess.json";
 // import states from "../Api/states.json"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import env from "react-dotenv";
 
 import {
   Button,
@@ -107,7 +108,7 @@ export default function ProjectCreate(props) {
     setErrorMsg("");
 
     axios
-      .post("http://3.84.137.243:5001/create_project", createProject, {
+      .post(`${env.API_URL}/create_project`, createProject, {
         headers,
       })
       .then((response) => {

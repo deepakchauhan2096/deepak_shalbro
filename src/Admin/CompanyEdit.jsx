@@ -9,9 +9,9 @@ import { Fab, Paper, styled } from "@mui/material";
 import country from "../Api/countriess.json"
 import { ToastContainer, toast } from "react-toastify";
 import Tooltip from "@mui/material/Tooltip";
-
-
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
+import env from "react-dotenv";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -84,7 +84,7 @@ export default function CompanyEdit(props) {
     e.preventDefault();
 
     axios
-      .put("http://3.84.137.243:5001/update_company", {
+      .put(`${env.API_URL}/update_company`, {
         COMPANY_ID: companyData.COMPANY_ID,
         COMPANY_USERNAME: companyData.COMPANY_USERNAME,
         COMPANY_ADMIN_USERNAME: companyData.COMPANY_PARENT_USERNAME,

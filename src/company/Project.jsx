@@ -7,6 +7,7 @@ import {Button,Skeleton,Paper} from "@mui/material";
 import ProjectCreate from "./ProjectCreate";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
+import env from "react-dotenv";
 
 const Project = (props) => {
   const [data, setData] = useState({
@@ -58,7 +59,7 @@ const Project = (props) => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        "http://3.84.137.243:5001/get_projects",
+        `${env.API_URL}/get_projects`,
         {
           PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
           PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,

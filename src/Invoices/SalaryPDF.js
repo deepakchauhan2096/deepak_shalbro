@@ -1,5 +1,6 @@
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 import moment from "moment/moment";
+import env from "react-dotenv";
 
 const SalaryPDF = (props) => {
   const styles = StyleSheet.create({

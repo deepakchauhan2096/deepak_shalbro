@@ -21,6 +21,7 @@ import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
 import AttendanceReport from "../Attendance/AttendanceAcknowledge";
 import SubContract from "../subcontract/SubContract";
+import env from "react-dotenv";
 
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
@@ -119,7 +120,7 @@ const CompanyMain = () => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        "http://3.84.137.243:5001/get_projects",
+        `${env.API_URL}/get_projects`,
         {
           PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
           PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,

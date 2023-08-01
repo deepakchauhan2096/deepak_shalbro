@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import { Button, Grid, Paper, Typography } from "@mui/material";
 import EmployeeNavbar from "./EmployeeNavbar";
 import { useLocation } from "react-router";
+import env from "react-dotenv";
 
 const EmployeeAttendance = () => {
   const [indone, setIndone] = useState("");
@@ -45,7 +46,7 @@ const EmployeeAttendance = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://3.84.137.243:5001/create_emp_attendence",
+      url: `${env.API_URL}/create_emp_attendence`,
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
@@ -80,7 +81,7 @@ const EmployeeAttendance = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://3.84.137.243:5001/create_emp_attendence",
+      url: `${env.API_URL}/create_emp_attendence`,
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",

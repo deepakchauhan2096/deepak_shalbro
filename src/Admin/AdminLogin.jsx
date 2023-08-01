@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import axios from "axios";
-
 import InputControl from "../components/InputControl";
 import { auth } from "../firebase";
-
 import styles from "../assests/css/Login.module.css";
+import env from "react-dotenv";
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -24,12 +23,14 @@ function AdminLogin() {
     }
     setErrorMsg("");
 
+    
     // setSubmitButtonDisabled(true);
+    console.log("My IP", env.PORT);
 
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://3.84.137.243:5001/login",
+      url: `${env.API_URL}/login`,
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
@@ -54,7 +55,6 @@ function AdminLogin() {
   };
 
   // console.log(errorMsg,"my")
-
 
   return (
     <div className={styles.container}>

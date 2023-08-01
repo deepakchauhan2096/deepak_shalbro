@@ -7,6 +7,7 @@ import {Button,Skeleton,Paper} from "@mui/material";
 import ProjectCreate from "./CreateSubcontract";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
+import env from "react-dotenv";
 
 const SubContract = (props) => {
   const [data, setData] = useState({
@@ -57,7 +58,7 @@ const SubContract = (props) => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        "http://3.84.137.243:5001/get_projects",
+        `${env.API_URL}/get_projects`,
         {
           SUBCONTRACT_PARENT_ID: filterallprojectData?.COMPANY_ID,
           SUBCONTRACT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,

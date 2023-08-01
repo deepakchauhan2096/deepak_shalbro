@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
+import env from "react-dotenv";
 
 const style = {
   position: "absolute",
@@ -67,13 +68,10 @@ export default function EmployeeEdit(props) {
      
   };
 
- 
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put("http://3.84.137.243:5001/update_employee",  
+      .put(`${env.API_URL}/update_employee`,  
       {EMPLOYEE_MEMBER_PARENT_USERNAME: editdata.EMPLOYEE_MEMBER_PARENT_USERNAME,
       EMPLOYEE_PARENT_ID: editdata.EMPLOYEE_PARENT_ID,
       EMPLOYEE_PARENT_USERNAME: editdata.EMPLOYEE_PARENT_USERNAME,

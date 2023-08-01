@@ -5,6 +5,7 @@ import axios from "axios";
 import InputControl from "../components/InputControl";
 import { auth } from "../firebase";
 import styles from "../assests/css/Signup.module.css";
+import env from "react-dotenv";
 
 function AdminCreate() {
   const [values, setValues] = useState({
@@ -37,7 +38,7 @@ function AdminCreate() {
     }
     setErrorMsg("");
     axios
-      .post("http://3.84.137.243:5001/create_admin", values, {
+      .post(`${env.API_URL}/create_admin`, values, {
         headers,
       })
       .then((response) => {

@@ -1,4 +1,5 @@
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import env from "react-dotenv";
 
 const EmployeePDF = (props) => {
   const styles = StyleSheet.create({

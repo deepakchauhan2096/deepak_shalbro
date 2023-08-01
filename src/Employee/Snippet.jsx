@@ -1,5 +1,6 @@
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
+import env from "react-dotenv";
 
 const Snippet = () => {
   const drag = (ev) => {

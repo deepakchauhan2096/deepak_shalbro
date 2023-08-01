@@ -10,8 +10,8 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import DeleteIcon from "@mui/icons-material/Delete";
-
 import "../assests/css/document.css" // Import the CSS file
+import env from "react-dotenv";
 
 export default function ProjectUpload(props) {
   const [postImage, setPostImage] = useState({
@@ -59,7 +59,7 @@ export default function ProjectUpload(props) {
     e.preventDefault();
 
     const response = await axios
-      .post("http://3.84.137.243:5001/create_document", postImage.myFile, {
+      .post(`${env.API_URL}/create_document`, postImage.myFile, {
         headers,
       })
       .then((response) => {

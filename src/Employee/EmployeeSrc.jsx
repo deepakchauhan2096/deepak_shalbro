@@ -26,6 +26,7 @@ import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
+import env from "react-dotenv";
 
 const EmployeeSrc = (props) => {
   //isLoading this is for the Skeleton
@@ -104,7 +105,7 @@ const EmployeeSrc = (props) => {
     // Validate the form data before submission
 
     axios
-      .post("http://3.84.137.243:5001/assign_project", mergedData, {
+      .post(`${env.API_URL}/assign_project`, mergedData, {
         headers,
       })
       .then((response) => {
@@ -124,7 +125,7 @@ const EmployeeSrc = (props) => {
   const fetchAllEmployee = async () => {
     try {
       const response = await axios.put(
-        "http://3.84.137.243:5001/get_employee",
+        `${env.API_URL}/get_employee`,
         {
           EMPLOYEE_MEMBER_PARENT_ID: filterallempData?.COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME:

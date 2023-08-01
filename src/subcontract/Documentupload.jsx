@@ -10,6 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import DeleteIcon from "@mui/icons-material/Delete";
+import env from "react-dotenv";
 
 import "../assests/css/document.css" // Import the CSS file
 
@@ -59,7 +60,7 @@ export default function ProjectUpload(props) {
     e.preventDefault();
 
     const response = await axios
-      .post("http://3.84.137.243:5001/create_document", postImage.myFile, {
+      .post(`${env.API_URL}/create_document`, postImage.myFile, {
         headers,
       })
       .then((response) => {
@@ -113,7 +114,7 @@ export default function ProjectUpload(props) {
         redirect: "follow",
       };
 
-      fetch("http://3.84.137.243:5001/get_all_document", requestOptions)
+      fetch(`${env.API_URL}/get_all_document`, requestOptions)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -148,7 +149,7 @@ export default function ProjectUpload(props) {
       const config = {
         method: "put",
         maxBodyLength: Infinity,
-        url: "http://3.84.137.243:5001/download_document",
+        url: `http://3.84.137.243:5001/download_document`,
         headers: {
           authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
           "Content-Type": "application/json",
@@ -170,7 +171,7 @@ export default function ProjectUpload(props) {
       console.log("HElloo")
       // Send a DELETE request to the backend API to delete the document with the given ID.
 
-      axios.delete(`http://3.84.137.243:5001/delete_document/${documentId}`, {
+      axios.delete(`${env.API_URL}/delete_document/${documentId}`, {
         headers: {
           authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
           "Content-Type": "application/json",

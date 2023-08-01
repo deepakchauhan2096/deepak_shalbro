@@ -7,6 +7,7 @@ import country from "../Api/countriess.json";
 // import states from "../Api/states.json"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import env from "react-dotenv";
 
 import {
   Button,
@@ -106,7 +107,7 @@ export default function CreateSubcontract(props) {
     setErrorMsg("");
 
     axios
-      .post("http://3.84.137.243:5001/create_subcontract", createSubcontract, {
+      .post(`${env.API_URL}/create_subcontract`, createSubcontract, {
         headers,
       })
       .then((response) => {

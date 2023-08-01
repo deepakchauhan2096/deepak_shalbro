@@ -8,6 +8,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { Fab, Paper, styled } from "@mui/material";
 import country from "../Api/countriess.json"
 import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
+import env from "react-dotenv";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -63,7 +65,7 @@ export default function CompanyDelete(props) {
     console.log("on btn submit");
     e.preventDefault();
     axios
-      .post("http://3.84.137.243:5001/update_company", edit_company, {
+      .post(`${env.API_URL}/update_company`, edit_company, {
         headers,
       })
       .then((response) => {
