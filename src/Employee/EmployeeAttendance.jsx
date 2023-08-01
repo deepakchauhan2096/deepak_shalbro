@@ -30,11 +30,6 @@ const EmployeeAttendance = (props) => {
     ATTENDANCE_DATE_ID: new Date(),
   });
   
-    
-    // useEffect(() => {
-    //     fetchAllEmployee();
-    // }, []); 
-
   const filterallempData = props.empData;
 
   const Time = new Date();

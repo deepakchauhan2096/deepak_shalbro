@@ -48,7 +48,6 @@ const SubContract = (props) => {
 
   const filterallprojectData =  props.recieveData;
 
-  // console.log(filterallprojectData, "my project");
 
   const headers = {
     "Content-Type": "application/json",
@@ -71,14 +70,12 @@ const SubContract = (props) => {
         const data = response.data;
         setProjectData(data?.result);
         setIsLoading(false);
-        console.log("contracts Data : =>", data);
       }, 1000);
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
   };
 
-  console.log(ProjectData, "projectdata");
 
   const columns = [
     { field: "SUBCONTRACT_ID", headerName: "ID", width: 90 },
@@ -137,7 +134,6 @@ const SubContract = (props) => {
   ];
 
   const rows = ProjectData;
-  console.log("Project Data : =>", ProjectData);
 
   const handleClick = (event) => {
     setData(event);
@@ -378,7 +374,6 @@ const SubContract = (props) => {
                   <div className="p-2 rounded-3 bg-light">
                   <ul>
                  {filterData.SUBCONTRACT_ASSIGN?.map((assignproject,key) => {
-                      console.log("assignproject",assignproject)
                       return(
                        <>
                        <b>Employee ID</b> <span>{assignproject.EMPLOYEE_ID}</span>

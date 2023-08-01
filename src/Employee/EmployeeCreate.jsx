@@ -61,7 +61,7 @@ export default function AddEmployee(props) {
 
   const handleCreate = (e) => {
     setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
-    console.log("heello world", createEmployee);
+    // console.log("heello world", createEmployee);
   };
 
   //firbase authentication
