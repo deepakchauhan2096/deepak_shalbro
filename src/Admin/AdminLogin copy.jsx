@@ -3,9 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import axios from "axios";
 import InputControl from "../components/InputControl";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import { auth } from "../firebase";
 import styles from "../assests/css/Login.module.css";
 import env from "react-dotenv";
+
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -14,8 +17,14 @@ function AdminLogin() {
     ADMIN_PASSWORD: "",
   });
   const [errorMsg, setErrorMsg] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   const handleSubmission = () => {
     if (!values.ADMIN_USERNAME || !values.ADMIN_PASSWORD) {
@@ -23,7 +32,10 @@ function AdminLogin() {
       return;
     }
     setErrorMsg("");
-    setIsSubmitting(true);
+
+    
+    // setSubmitButtonDisabled(true);
+    console.log("My IP", env.PORT);
 
     let config = {
       method: "post",
@@ -40,18 +52,18 @@ function AdminLogin() {
       .request(config)
       .then((response) => {
         console.log(response.data, "mylogin");
-        setIsSubmitting(false);
-        setLoginSuccess(true);
-        const data = response.data;
-        if (data.operation === "successfull") {
-          navigate("/admin", { state: { data } });
+        // setSubmitButtonDisabled(false);
+        const data = response.data
+        if(data.operation === "successfull"){
+        navigate("/admin",  { state: { data } });
         }
       })
       .catch((error) => {
-        setErrorMsg(error.response.data.error);
-        setIsSubmitting(false);
+        setErrorMsg("something Went Wrong");
       });
   };
+
+  // console.log(errorMsg,"my")
 
   return (
     <div className={styles.container}>
@@ -83,11 +95,10 @@ function AdminLogin() {
 
         <div className={styles.footer}>
           <center>
-            <p className="text-danger fw-light mb-0">{errorMsg}</p>
-            {loginSuccess && <p className="text-success fw-light mb-0">Login successful!</p>}
-            {isSubmitting && <p>Loading...</p>}
+            <p className=" text-danger fw-light mb-0">{errorMsg}</p>
+            
           </center>
-          <button disabled={isSubmitting} onClick={handleSubmission}>
+          <button disabled={submitButtonDisabled} onClick={handleSubmission}>
             Login
           </button>
           <p>
