@@ -45,23 +45,7 @@ export default function EmployeeEdit(props) {
     
   });
 
-  // useEffect(()=>{
-  //   setUpdateEmployees((prev) => ({
-  //     ...prev,
-  //     EMPLOYEE_DETAILS_FOR_UPDATES: editEmployee,
-  //   }))
-  //   },[editEmployee])
- 
-  
-    // setUpdateEmployees((prev) => {...prev,EMPLOYEE_DETAILS_FOR_UPDATES:editEmployee}))
-
-
-//   const [updateEmployees, setUpdateEmployees] = useState({
-   
-// });
-
-// console.log(updateEmployees,"alll")
-console.log(editEmployee,"edit alll")
+// console.log(editEmployee,"edit alll")
 
   const [errorMsg, setErrorMsg] = useState("");
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);

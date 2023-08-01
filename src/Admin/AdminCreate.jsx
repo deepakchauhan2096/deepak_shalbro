@@ -36,14 +36,12 @@ function AdminCreate() {
       return;
     }
     setErrorMsg("");
-    console.log("on btn submit");
     axios
       .post("http://3.84.137.243:5001/create_admin", values, {
         headers,
       })
       .then((response) => {
         setErrorMsg(response.errorMsg);
-        console.log(response, "myresponse");
 
         if (response.data.operation == "failed") {
           setErrorMsg(response.data.errorMsg);

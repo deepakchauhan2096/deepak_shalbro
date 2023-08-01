@@ -30,10 +30,10 @@ export default function ProjectUpload(props) {
 
   // New state to manage visibility of the documents list
   const [showDocuments, setShowDocuments] = useState(false);
-  console.log("Images data is here:=>", imagesData.result);
+  // console.log("Images data is here:=>", imagesData.result);
   // this is data of company for fetch the company username
   const DocData = props.empData;
-  console.table(DocData, "<<=====================company data");
+  // console.table(DocData, "<<=====================company data");
 
   useEffect(() => {
     getalldocument();
@@ -63,7 +63,7 @@ export default function ProjectUpload(props) {
         headers,
       })
       .then((response) => {
-        console.log("response data  anurag pal:", response.data);
+        // console.log("response data  anurag pal:", response.data);
         getalldocument();
         setSuccessMessage("Document uploaded successfully!");
         setSelectedFileName("");
@@ -155,10 +155,10 @@ export default function ProjectUpload(props) {
           return response.json();
         })
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           // Assuming setImagesData is a state-setting function for a React component
           setImagesData(data);
-          console.log("setimages:======", data[0]);
+          // console.log("setimages:======", data[0]);
           setTotalDocuments(data.result?.length || 0)
         })
         .catch((error) => {
@@ -204,7 +204,7 @@ export default function ProjectUpload(props) {
   const handleDelete = (documentId, fileName) => {
     // .preventDefault();
     try {
-      console.log("HElloo")
+      // console.log("HElloo")
       // Send a DELETE request to the backend API to delete the document with the given ID.
 
       axios.delete(`http://3.84.137.243:5001/delete_document/${documentId}`, {

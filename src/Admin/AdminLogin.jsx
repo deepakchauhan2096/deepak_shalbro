@@ -48,7 +48,6 @@ function AdminLogin() {
         }
       })
       .catch((error) => {
-        console.log(error, "errors");
         setErrorMsg(error.response.data.error);
         // setSubmitButtonDisabled(true);
       });
