@@ -1,53 +1,47 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
-import {
-  Backdrop,
-  Button,
-  CircularProgress,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, Paper, Typography } from "@mui/material";
+import EmployeeNavbar from "./EmployeeNavbar";
+import { useLocation } from "react-router";
 
-
-const EmployeeAttendance = (props) => {
+const EmployeeAttendance = () => {
   const [indone, setIndone] = useState("");
   const [outdone, setOutdone] = useState("");
-  const [name, setName] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-
   const [allempData, setAllempData] = useState({});
-  const [foundUsers, setFoundUsers] = useState(allempData);
-  const [inData, setInData] = useState({
-    ATTENDANCE_ADMIN_ID: 18,
-    ATTENDANCE_ADMIN_USERNAME: "deepanshu1",
-    ATTENDANCE_COMPANY_ID: 45,
-    ATTENDANCE_COMPANY_USERNAME: "company21",
-    ATTENDANCE_EMPLOYEE_ID: 47,
-    ATTENDANCE_EMPLOYEE_USERNAME: "EMP0123",
-    ATTENDANCE_DATE_ID: new Date(),
-  });
-  
-  const filterallempData = props.empData;
 
+  //employe data using route
+  const location = useLocation();
+  const employeeData = location.state.data.result;
+
+  // current date and time
   const Time = new Date();
   const currentTime = Time.toString().split(" ")[4];
-
   const date = new Date();
+
+  // day year month
   let day = date.getDate();
   let month = date.getMonth() + 1;
   let year = date.getFullYear();
+  // console.log(year, month, day);
 
+  // current date in 2023-07-23 formet
+  var MyDate = new Date();
+  var MyDateString;
+  MyDate.setDate(MyDate.getDate());
+  MyDateString =
+    MyDate.getFullYear() +
+    "-" +
+    ("0" + (MyDate.getMonth() + 1)).slice(-2) +
+    "-" +
+    ("0" + MyDate.getDate()).slice(-2);
 
-  const OutDataSuccess = { ...inData, ATTENDANCE_OUT: new Date() };
-  const inDataSuccess = { ...inData, ATTENDANCE_IN: new Date() };
+  
 
-
+  // post attendance IN
   const handleSubmitIn = (event) => {
     // console.log(event, "in");
-    event.preventDefault()
+    event.preventDefault();
     let config = {
       method: "post",
       maxBodyLength: Infinity,
@@ -56,13 +50,22 @@ const EmployeeAttendance = (props) => {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
       },
-      data: inDataSuccess,
+      data: {
+        ATTENDANCE_ADMIN_ID: employeeData?.EMPLOYEE_MEMBER_PARENT_ID,
+        ATTENDANCE_ADMIN_USERNAME: employeeData?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+        ATTENDANCE_COMPANY_ID: employeeData?.EMPLOYEE_PARENT_ID,
+        ATTENDANCE_COMPANY_USERNAME: employeeData?.EMPLOYEE_PARENT_USERNAME,
+        ATTENDANCE_EMPLOYEE_ID: employeeData?.EMPLOYEE_ID,
+        ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
+        ATTENDANCE_DATE_ID: MyDateString,
+        ATTENDANCE_IN: new Date(),
+      },
     };
 
     axios
       .request(config)
       .then((response) => {
-        // console.log(JSON.stringify(response.data));
+        // console.log(JSON.stringify(response.data), "IN ATTENDANCE");
         setIndone(response.data);
       })
       .catch((error) => {
@@ -70,8 +73,10 @@ const EmployeeAttendance = (props) => {
       });
   };
 
+  // post attendance OUT
   const handleSubmitOut = (event) => {
-    event.preventDefault()
+    // console.log(event, "out");
+    event.preventDefault();
     let config = {
       method: "post",
       maxBodyLength: Infinity,
@@ -80,43 +85,27 @@ const EmployeeAttendance = (props) => {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
       },
-      data: OutDataSuccess,
+      data: {
+        ATTENDANCE_ADMIN_ID: employeeData?.EMPLOYEE_MEMBER_PARENT_ID,
+        ATTENDANCE_ADMIN_USERNAME: employeeData?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+        ATTENDANCE_COMPANY_ID: employeeData?.EMPLOYEE_PARENT_ID,
+        ATTENDANCE_COMPANY_USERNAME: employeeData?.EMPLOYEE_PARENT_USERNAME,
+        ATTENDANCE_EMPLOYEE_ID: employeeData?.EMPLOYEE_ID,
+        ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
+        ATTENDANCE_DATE_ID: MyDateString,
+        ATTENDANCE_OUT: new Date(),
+      },
     };
 
     axios
       .request(config)
       .then((response) => {
+        console.log(JSON.stringify(response.data), "OUT ATTENDANCE");
         setOutdone(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  };
-
-  const fetchAllEmployee = async () => {
-    try {
-      const response = await axios.put(
-        "http://3.84.137.243:5001/get_employee",
-        {
-          EMPLOYEE_MEMBER_PARENT_ID: filterallempData.COMPANY_PARENT_ID,
-          EMPLOYEE_MEMBER_PARENT_USERNAME:
-            filterallempData.COMPANY_PARENT_USERNAME,
-          EMPLOYEE_PARENT_USERNAME: filterallempData.COMPANY_USERNAME,
-          EMPLOYEE_PARENT_ID: filterallempData.COMPANY_ID,
-        },
-        { headers }
-      );
-      setTimeout(() => {
-        // console.log("ALL EMPLOYEE data ", response);
-      }, 1000);
-    } catch (err) {
-      console.log("something Went wrong: =>", err);
-    }
   };
 
   const screen = {
@@ -128,61 +117,19 @@ const EmployeeAttendance = (props) => {
     background: "blue",
   };
 
-  const finalData = allempData;
-
-  // const Data = ;
-
-  const filtered = (e) => {
-    // topFunction()
-    const keyword = e.target.value;
-
-
-    if (keyword !== "") {
-      const results = finalData.filter((post) => {
-        return post.EMPLOYEE_ID == parseInt(keyword);
-      });
-      setFoundUsers(results);
-      setInData((prev) => ({
-        ...prev,
-        ATTENDANCE_ADMIN_ID: results[0]?.EMPLOYEE_MEMBER_PARENT_ID,
-      }));
-      setInData((prev) => ({
-        ...prev,
-        ATTENDANCE_ADMIN_USERNAME: results[0]?.EMPLOYEE_MEMBER_PARENT_USERNAME,
-      }));
-      setInData((prev) => ({
-        ...prev,
-        ATTENDANCE_COMPANY_ID: results[0]?.EMPLOYEE_PARENT_ID,
-      }));
-      setInData((prev) => ({
-        ...prev,
-        ATTENDANCE_COMPANY_USERNAME: results[0]?.EMPLOYEE_PARENT_USERNAME,
-      }));
-      setInData((prev) => ({
-        ...prev,
-        ATTENDANCE_EMPLOYEE_ID: results[0]?.EMPLOYEE_ID,
-      }));
-      setInData((prev) => ({
-        ...prev,
-        ATTENDANCE_EMPLOYEE_USERNAME: results[0]?.EMPLOYEE_USERNAME,
-      }));
-    } else {
-      // setFoundUsers(finalData);
-    }
-
-    setName(keyword);
-  };
-
-
   return (
     <>
+      <EmployeeNavbar />
       <Box className="box">
-        <div className="container-fluid d-flex pb-0 g-0 flex-column">
+        <div
+          className="container-fluid d-flex pb-0 g-0 flex-column"
+          style={{ background: "#277099" }}
+        >
           <div style={{ height: "20%" }}>
             <Button
               size="small"
-              className="btn button btn-blue"
-              variant="contained"
+              className="btn button btn-blue bg-white border-0"
+              variant="outlined"
             >
               Employee Attendance
             </Button>
@@ -193,7 +140,7 @@ const EmployeeAttendance = (props) => {
               container
               sx={{
                 height: "100%",
-                bgcolor: "#f9f9f9",
+                bgcolor: "#fff",
                 position: "relative",
               }}
               xl={12}
@@ -209,14 +156,6 @@ const EmployeeAttendance = (props) => {
                   position: "absolute",
                 }}
               >
-                <input
-                  className="form-control rounded-0"
-                  value={name}
-                  onChange={filtered}
-                  type="number"
-                  placeholder="Search Detail By ID"
-                  aria-label="Search"
-                />
                 <Typography>
                   Date : {day}-{month}-{year} Time : {currentTime}
                 </Typography>
@@ -226,39 +165,46 @@ const EmployeeAttendance = (props) => {
                       type="hidden"
                       className="form-control rounded-0"
                       placeholder="Company Name"
-                      value={foundUsers[0]?.EMPLOYEE_ID}
+                      value={employeeData?.EMPLOYEE_ID}
                     />
 
-                    {foundUsers[0]?.EMPLOYEE_USERNAME ? (
-                      <><div>
-                      <b>Employee ID : </b>&nbsp;
-                      {foundUsers[0]?.EMPLOYEE_ID}
-                    </div>
-                        <div>
-                          <b>Employee Username : </b>&nbsp;
-                          {foundUsers[0]?.EMPLOYEE_USERNAME}
-                        </div>
-                        <div>
-                          <b>Employee Name : </b>&nbsp;
-                          {foundUsers[0]?.EMPLOYEE_NAME}
-                        </div>
-                        <div>
-                          <b>Phone Number : </b>&nbsp;
-                          {foundUsers[0]?.EMPLOYEE_PHONE}
-                        </div>
-                      </>
-                    ) : (
-                      ""
-                    )}
+                    <>
+                      <div>
+                        <b>Employee ID : </b>&nbsp;
+                        {employeeData?.EMPLOYEE_ID}
+                      </div>
+                      <div>
+                        <b>Employee Username : </b>&nbsp;
+                        {employeeData?.EMPLOYEE_USERNAME}
+                      </div>
+                      <div>
+                        <b>Employee Name : </b>&nbsp;
+                        {employeeData?.EMPLOYEE_NAME}
+                      </div>
+                      <div>
+                        <b>Phone Number : </b>&nbsp;
+                        {employeeData?.EMPLOYEE_PHONE}
+                      </div>
+                    </>
                   </div>
+                  {indone && outdone ? (
+                    <p className="color-success">
+                      your attendance is submitted{" "}
+                    </p>
+                  ) : (
+                    ""
+                  )}
 
-                  <div className="form-group py-2 col-xl-12" style={{position:"absolute", right:"-10px",bottom:0}}>
+                  <div
+                    className="form-group py-2 col-xl-12"
+                    style={{ position: "absolute", right: "-10px", bottom: 0 }}
+                  >
                     {indone ? (
                       <Button
                         disabled
                         name="in_btn"
                         variant="contained"
-                        color="success"
+                        className="btn btn-block"
                         px={2}
                       >
                         ATTENDANCE IN
@@ -269,18 +215,14 @@ const EmployeeAttendance = (props) => {
                         name="in_btn"
                         variant="contained"
                         color="success"
+                        className="btn btn-block"
                         px={2}
                       >
                         ATTENDANCE IN
                       </Button>
                     )}{" "}
                     {outdone ? (
-                      <Button
-                        disabled
-                        name="in_btn"
-                        variant="contained"
-                        color="error"
-                      >
+                      <Button disabled name="in_btn" variant="contained">
                         ATTENDANCE OUT
                       </Button>
                     ) : (
