@@ -4,8 +4,8 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import axios from "axios";
 import InputControl from "../components/InputControl";
 import { auth } from "../firebase";
-
 import styles from "../assests/css/Signup.module.css";
+import env from "react-dotenv";
 
 function AdminCreate() {
   const navigate = useNavigate();
@@ -50,7 +50,6 @@ function AdminCreate() {
   };
 
   const handleSubmit = (e) => {
-    console.log("on btn submit");
     // e.preventDefault();
     axios
       .post("http://3.84.137.243:5001/create_admin", values, {
@@ -59,9 +58,6 @@ function AdminCreate() {
       .then((response) => {
         // navigate("/dashboard");
         alert("successfully sign up")
-        console.log("response1 : ", response);
-        // props.update(response.data);
-        console.log("response", response.data);
       })
       .catch((error) => {
         console.error(error);

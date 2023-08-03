@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import env from "react-dotenv";
 
-const CompanyNavbar = (props) => {
+const EmployeeNavbar = (props) => {
   const [userName, setUserName] = useState("U");
 
   const [showProfile, setShowProfile] = useState(false);
@@ -29,17 +29,22 @@ const CompanyNavbar = (props) => {
     setShowProfile(true)
   }
 
-  // console.log(props,"myprops")
-  const location = useLocation();
-  // console.log(location.pathname, "loc");
 
-  const sendData = props.data 
+  const location = useLocation();
+  console.log(location.pathname, "loc");
 
   const navigate = useNavigate();
-  const ShowCompDetail = (props) => {
-    return navigate("/company", { state: { sendData } });
-  };
 
+  const Logout = () => {
+    setShowProfile(false);
+    signOut(auth)
+      .then(() => {
+        navigate("/employee/login");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -51,59 +56,47 @@ const CompanyNavbar = (props) => {
 
   const urls = [
     {
-      listname: "Dashboard",
-      listlink: "/company/dashboard",
+      listname: "Attendence",
+      listlink: "/dashboard",
     },
     {
-      listname: "Company",
-      listlink: "/company",
-    },
-    {
-      listname: "Project",
+      listname: "My Project",
       listlink: "/project",
-    },
-    {
-      listname: "Sub Contract",
-      listlink: "/subcontract",
-    },
-    {
-
-      listname: "Employee",
-      listlink: "/employee",
-    },
-    {
-
-      listname: "Attendance",
-      listlink: "/attendance",
-    },
+    }
   ];
 
 
 
   const Lists = (props) => {
     return (
+      
       <Box role="presentation" sx={{width:250}}>
-        <Link to={props.listlink}>
+        
           <List sx={{ py: 0 }}>
             <ListItem
               sx={{
                 background:
-                  location.pathname === props.listlink ? "#3596d9" : "",
+                  location.pathname === props?.listlink ? "#3596d9" : "",
               }}
               disablePadding
             >
-              <ListItemButton sx={{ color: "#fff" }}  onClick={(e) => ShowCompDetail(props.listlink)}>
+              <ListItemButton sx={{ color: "#fff" }}>
                 {props.listname}
               </ListItemButton>
             </ListItem>
           </List>
-        </Link>
       </Box>
     );
   };
 
+
+  const post = props.empData
+  
+ console.log(props.empData, "empdata")
+ 
   return (
     <>
+    
       <Drawer
         open={showProfile}
         onClose={handleClose}
@@ -121,9 +114,10 @@ const CompanyNavbar = (props) => {
           className="sidebar-header d-flex"
           style={{ justifyContent: "space-between" }}
         >
-          <h3>{props.companyName}</h3>
-          <Tooltip title={userName}>
-            <Avatar>{"d"}</Avatar>
+         
+          <h3 className="text-light border border-danger">{post?.EMPLOYEE_NAME}</h3>
+          <Tooltip title={post?.EMPLOYEE_NAME}>
+            <Avatar>{post?.EMPLOYEE_NAME?.charAt(0).toUpperCase()}</Avatar>
           </Tooltip>
         </div>
 
@@ -139,8 +133,8 @@ const CompanyNavbar = (props) => {
         >
           <div className="logout_icon">
             <LogoutIcon style={{ display: "inline" }} />{" "}
-            <div className="logout_icon d-inline" >
-              Logout
+            <div className="logout_icon d-inline" onClick={Logout}>
+              Exit
             </div>
           </div>
         </div>
@@ -149,4 +143,4 @@ const CompanyNavbar = (props) => {
   );
 };
 
-export default CompanyNavbar;
+export default EmployeeNavbar;

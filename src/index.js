@@ -13,6 +13,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 // reducers
 import { accountReducer } from './redux/reducer/account';
+import env from "react-dotenv";
 
 const middleware = [thunk, logger];
 

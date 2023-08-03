@@ -4,26 +4,29 @@ import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {Button,Skeleton,Paper} from "@mui/material";
-import ProjectCreate from "./ProjectCreate";
+import CreateSubcontract from "./CreateSubcontract";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
+// import env from "react-dotenv";
 
-const Project = (props) => {
+const SubContract = (props) => {
   const [data, setData] = useState({
     row: {
-      PROJECT_ID: "",
-      PROJECT_PARENT_ID: "",
-      PROJECT_PARENT_USERNAME: "",
-      PROJECT_MEMBER_PARENT_ID: "",
-      PROJECT_MEMBER_PARENT_USERNAME: "",
-      PROJECT_ROLE: "",
-      PROJECT_NAME: "",
-      PROJECT_PHONE: "",
-      PROJECT_USERNAME: "",
-      PROJECT_START_DATE: "",
-      PROJECT_END_DATE: "",
-      PROJECT_SUPERVISOR: "",
-      PROJECT_PROGRESS: "",
+      SUBCONTRACTOR_PARENT_ID: "",
+      SUBCONTRACTOR_PARENT_USERNAME: "",
+      SUBCONTRACTOR_MEMBER_PARENT_ID: "",
+      SUBCONTRACTOR_MEMBER_PARENT_USERNAME: "",
+      SUBCONTRACTOR_ROLE: "",
+      SUBCONTRACTOR_NAME: "",
+      SUBCONTRACTOR_PHONE: "",
+      SUBCONTRACTOR_USERNAME: "",
+      SUBCONTRACTOR_START_DATE: "",
+      SUBCONTRACTOR_END_DATE: "",
+      SUBCONTRACTOR_SUPERVISOR: "",
+      SUBCONTRACTOR_COUNTRY: "",
+      SUBCONTRACTOR_STATE: "",
+      SUBCONTRACTOR_ADD: "",
+      SUBCONTRACTOR_CITY: "",
     },
   });
 
@@ -43,27 +46,27 @@ const Project = (props) => {
  //update data
 
   useEffect(() => {
-    fetchProjects();
+    fetchsubcontracts();
   }, [projectcreatedata]);
 
-  const filterallprojectData =  props.recieveData;
+  const subcontractData =  props.recieveData;
+  console.log("filterallprojectData",subcontractData)
 
-  // console.log(filterallprojectData, "my project");
 
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const fetchProjects = async (e) => {
+  const fetchsubcontracts = async (e) => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_projects",
+       "http://18.211.130.168:5001/get_subcontractor",
         {
-          PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
-          PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
-          PROJECT_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
-          PROJECT_MEMBER_PARENT_USERNAME:filterallprojectData?.COMPANY_PARENT_USERNAME,
+          SUBCONTRACTOR_PARENT_ID: subcontractData?.COMPANY_ID,
+          SUBCONTRACTOR_PARENT_USERNAME: subcontractData?.COMPANY_USERNAME,
+          SUBCONTRACTOR_MEMBER_PARENT_ID: subcontractData?.COMPANY_PARENT_ID,
+          SUBCONTRACTOR_MEMBER_PARENT_USERNAME:subcontractData?.COMPANY_PARENT_USERNAME,
         },
         { headers }
       );
@@ -71,46 +74,44 @@ const Project = (props) => {
         const data = response.data;
         setProjectData(data?.result);
         setIsLoading(false);
-        // console.log("contracts Data : =>", data);
       }, 1000);
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
   };
 
-  // console.log(ProjectData, "projectdata");
 
   const columns = [
-    { field: "PROJECT_ID", headerName: "ID", width: 90 },
+    { field: "SUBCONTRACTOR_ID", headerName: "ID", width: 90 },
     {
-      field: "PROJECT_USERNAME",
+      field: "SUBCONTRACTOR_USERNAME",
       headerName: "USername",
       width: 150,
     },
     {
-      field: "PROJECT_NAME",
+      field: "SUBCONTRACTOR_NAME",
       headerName: "Name",
       width: 150,
     },
     {
-      field: "PROJECT_PHONE",
+      field: "SUBCONTRACTOR_PHONE",
       headerName: "Phone",
       width: 150,
     },
     {
-      field: "PROJECT_START_DATE",
+      field: "SUBCONTRACTOR_START_DATE",
       headerName: "Start Date",
       width: 150,
     },
     {
-      field: "PROJECT_END_DATE",
+      field: "SUBCONTRACTOR_END_DATE",
       headerName: "End Date",
       type: "number",
       width: 100,
     },
 
     {
-      field: "PROJECT_SUPERVISOR",
+      field: "SUBCONTRACTOR_SUPERVISOR",
       headerName: "Supervisor",
       width: 200,
     },
@@ -137,7 +138,6 @@ const Project = (props) => {
   ];
 
   const rows = ProjectData;
-  // console.log("Project Data : =>", ProjectData);
 
   const handleClick = (event) => {
     setData(event);
@@ -179,8 +179,8 @@ const Project = (props) => {
   return (
     <>
       <Box className="box" style={{ background: "#277099" }}>
-      <ProjectCreate
-          companyData={filterallprojectData}
+      <CreateSubcontract
+          companyData={subcontractData}
           update={(event) => setUpdateData(event)}
           name={"Project"}
         />
@@ -193,7 +193,7 @@ const Project = (props) => {
                 sx={{ border: "none" }}
                 rows={rows}
                 columns={columns}
-                getRowId={(row) => row.PROJECT_ID}
+                getRowId={(row) => row.SUBCONTRACTOR_ID}
                 initialState={{
                   pagination: {
                     paginationModel: {
@@ -278,37 +278,37 @@ const Project = (props) => {
                 <div className="col-4">
                   <b>Project Name</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_NAME}
+                    {filterData.SUBCONTRACTOR_NAME}
                   </p>
                 </div>
                 <div className="col-4">
                   <b>Phone</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_PHONE}
+                    {filterData.SUBCONTRACTOR_PHONE}
                   </p>
                 </div>
                 <div className="col-4">
-                  <b>Username</b>
+                  <b>Subcontract Username</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_USERNAME}
+                    {filterData.SUBCONTRACTOR_USERNAME}
                   </p>
                 </div>
                 <div className="col-4">
-                  <b>Supervisor</b>
+                  <b>Subcontract Supervisor</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_SUPERVISOR}
+                    {filterData.SUBCONTRACTOR_SUPERVISOR}
                   </p>
                 </div>
-                <div className="col-4">
+                {/* <div className="col-4">
                   <b>Employement Type</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_EMROLMNT_TYPE}
+                    {filterData.SUBCONTRACTOR_EMROLMNT_TYPE}
                   </p>
-                </div>
+                </div> */}
                 <div className="col-4">
                   <b>Location</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_ADD}
+                    {filterData.SUBCONTRACTOR_ADD}
                   </p>
                 </div>
               </div>
@@ -319,8 +319,8 @@ const Project = (props) => {
                 <div className="col">
                   <b>Project Role</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_ROLE
-                      ? filterData.PROJECT_ROLE
+                    {filterData.SUBCONTRACTOR_ROLE
+                      ? filterData.SUBCONTRACTOR_ROLE
                       : "not mentioned !"}
                   </p>
                 </div>
@@ -333,7 +333,7 @@ const Project = (props) => {
                 <div className="col">
                   <b>Project Start</b>
                   <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_START_DATE}
+                    {filterData.SUBCONTRACTOR_START_DATE}
                   </p>
                 </div>
                 <div className="col">
@@ -341,12 +341,12 @@ const Project = (props) => {
                   {Edit ? (
                     <input
                       type="date"
-                      value={filterData.PROJECT_END_DATE}
+                      value={filterData.SUBCONTRACTOR_END_DATE}
                       className="form-control"
                     />
                   ) : (
                     <p className="bg-light text-dark p-2 rounded-2">
-                      {filterData.PROJECT_END_DATE}
+                      {filterData.SUBCONTRACTOR_END_DATE}
                     </p>
                   )}
                 </div>
@@ -359,26 +359,25 @@ const Project = (props) => {
                     <div
                       className="progress-bar"
                       style={{
-                        background: `radial-gradient(closest-side, white 79%, transparent 80% 100%),conic-gradient(hotpink ${filterData.PROJECT_PROGRESS}%, pink 0)`,
+                        background: `radial-gradient(closest-side, white 79%, transparent 80% 100%),conic-gradient(hotpink ${filterData.SUBCONTRACTOR_PROGRESS}%, pink 0)`,
                       }}
                     >
                       <div className="counter">
-                        {filterData.PROJECT_PROGRESS}%
+                        {filterData.SUBCONTRACTOR_PROGRESS}%
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <hr />
-             
-             
+             {/* Assigining project to the subcontractor  */}
+{/*              
               <div className="row">
                 <div className="col-4">
                   <b>Assigned Employees to this project</b>
                   <div className="p-2 rounded-3 bg-light">
                   <ul>
-                 {filterData.PROJECT_ASSIGN?.map((assignproject,key) => {
-                      // console.log("assignproject",assignproject)
+                 {filterData.SUBCONTRACTOR_ASSIGN?.map((assignproject,key) => {
                       return(
                        <>
                        <b>Employee ID</b> <span>{assignproject.EMPLOYEE_ID}</span>
@@ -389,15 +388,13 @@ const Project = (props) => {
                        <b>Admin ID </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_ID}</span> 
                        </>
                     
-                      )
-                  
-                   
+                      ) 
                     
                  })}
                    </ul>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         ) : index === 2 ? (
@@ -840,4 +837,4 @@ const Project = (props) => {
   );
 };
 
-export default Project;
+export default SubContract;

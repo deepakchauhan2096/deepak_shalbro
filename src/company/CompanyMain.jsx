@@ -15,15 +15,13 @@ import {
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
-import ProjectUpload from "./ProjectUpload";
-import EmployeeSrc from "../Employee/EmployeeSrc";
+import DocumentUpload from "./Documentupload";
+import EmployeeSrc from "../employee/EmployeeSrc";
 import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
-
 import AttendanceReport from "../Attendance/AttendanceAcknowledge";
-
-
-// import DeleteDoc from "../company/DeleteDoc"
+import SubContract from "../subcontract/SubContract";
+import env from "react-dotenv";
 
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
@@ -34,18 +32,10 @@ const CompanyMain = () => {
   // modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-
   // get Company data
-  const navigate = useNavigate();
+  
   const location = useLocation();
-
   const filterallprojectData = location.state.props
-
-  console.log(location, "companies")
-
-
-    
   const NavScreen = styled(Paper)((props) => ({
     height: "calc(100vh)",
     padding: 0,
@@ -81,8 +71,11 @@ const CompanyMain = () => {
       listname: "Project",
     },
     {
-      listname: "Dashboard",
+      listname: "Sub contractor",
     },
+    // {
+    //   listname: "Dashboard",
+    // },
     {
       listname: "Document",
     },
@@ -95,9 +88,11 @@ const CompanyMain = () => {
    
   ];
 
-  console.log(navIndex, "navindex");
+  // console.log(navIndex, "navindex");
 
   // navigation list
+
+  const navigate = useNavigate();
 
   const Lists = (props) => {
     return (
@@ -127,7 +122,7 @@ const CompanyMain = () => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        "http://3.84.137.243:5001/get_projects",
+        "http://18.211.130.168:5001/get_projects",
         {
           PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
           PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
@@ -140,18 +135,16 @@ const CompanyMain = () => {
         const data = response.data;
         setProjectData(data?.result);
         // setIsLoading(false);
-        console.log("contracts Data : =>", data);
+        // console.log("contracts Data : =>", data);
       }, 1000);
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
   };
 
-
   useEffect(() => {
     fetchProjects();
   }, []);
-
 
   /// fatch employees
 
@@ -169,26 +162,20 @@ const CompanyMain = () => {
         { headers }
       );
       setTimeout(() => {
-        console.log("ALL EMPLOYEE data ", response);
+        // console.log("ALL EMPLOYEE data ", response);
         const data = response.data;
         setAllempData(data.result);
         // setIsLoading(false);
-        console.log("all main project", data)
+        // console.log("all main project", data)
       }, 1000);
     } catch (err) {
       console.log("something Went wrong: =>", err);
     }
   };
 
-
   useEffect(() => {
     fetchAllEmployee();
   }, []);
-
-
-
-
-
 
   return (
     <>
@@ -229,10 +216,10 @@ const CompanyMain = () => {
           className="login sidebar_footer position-absolute"
           style={{ bottom: "0" }}
         >
-          <div className="logout_icon">
+          <div className="logout_icon" role="button">
             <div className="logout_icon d-inline">
               <Button className="text-white text-uppercase" onClick={() => navigate(-1)}>
-                <LogoutIcon style={{ display: "inline" }} /> Exit
+                Exit
               </Button>
             </div>
           </div>
@@ -244,14 +231,18 @@ const CompanyMain = () => {
       </NavScreen>
 
       <NavScreen screenIndex={navIndex === 1}>
-        <CompanyDashboard />
+        <SubContract recieveData={location.state.props} />
       </NavScreen>
+
+      {/* <NavScreen screenIndex={navIndex === 2}>
+        <CompanyDashboard />
+      </NavScreen> */}
 
       <NavScreen screenIndex={navIndex === 2}>
         <Box className="box">
           <MyScreen screenIndex={true}>
             <MyScreenbox sx={{ m: 3 }}>
-              <ProjectUpload empData={location.state.props} />
+              <DocumentUpload empData={location.state.props} />
             </MyScreenbox>
           </MyScreen>
         </Box>

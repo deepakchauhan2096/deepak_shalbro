@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import axios from "axios";
-
 import InputControl from "../components/InputControl";
-import { auth } from "../firebase";
-
 import styles from "../assests/css/Login.module.css";
+import SimpleBackdrop from "../components/Backdrop"; 
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -15,7 +12,8 @@ function AdminLogin() {
     ADMIN_PASSWORD: "",
   });
   const [errorMsg, setErrorMsg] = useState("");
-  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   const handleSubmission = () => {
     if (!values.ADMIN_USERNAME || !values.ADMIN_PASSWORD) {
@@ -23,13 +21,12 @@ function AdminLogin() {
       return;
     }
     setErrorMsg("");
-
-    // setSubmitButtonDisabled(true);
+    setIsSubmitting(true);
 
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://3.84.137.243:5001/login",
+      url: "http://18.211.130.168:5001/login",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
@@ -41,21 +38,18 @@ function AdminLogin() {
       .request(config)
       .then((response) => {
         console.log(response.data, "mylogin");
-        // setSubmitButtonDisabled(false);
-        const data = response.data
-        if(data.operation === "successfull"){
-        navigate("/admin",  { state: { data } });
+        setIsSubmitting(false);
+        setLoginSuccess(true);
+        const data = response.data;
+        if (data.operation === "successfull") {
+          navigate("/admin", { state: { data } });
         }
       })
       .catch((error) => {
-        console.log(error, "errors");
         setErrorMsg(error.response.data.error);
-        // setSubmitButtonDisabled(true);
+        setIsSubmitting(false);
       });
   };
-
-  // console.log(errorMsg,"my")
-
 
   return (
     <div className={styles.container}>
@@ -87,10 +81,12 @@ function AdminLogin() {
 
         <div className={styles.footer}>
           <center>
-            <p className=" text-danger fw-light mb-0">{errorMsg}</p>
-            
+            <p className="text-danger fw-light mb-0">{errorMsg}</p>
+            {loginSuccess && (
+              <p className="text-success fw-light mb-0">Login successful!</p>
+            )}
           </center>
-          <button disabled={submitButtonDisabled} onClick={handleSubmission}>
+          <button disabled={isSubmitting} onClick={handleSubmission}>
             Login
           </button>
           <p>
@@ -101,6 +97,9 @@ function AdminLogin() {
           </p>
         </div>
       </div>
+
+      {/* Add the MUI backdrop component here */}
+      <SimpleBackdrop open={isSubmitting} />
     </div>
   );
 }

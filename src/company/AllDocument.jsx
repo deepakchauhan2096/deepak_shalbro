@@ -6,11 +6,11 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
-
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
+import env from "react-dotenv";
 
 import {
   Button,
@@ -46,7 +46,7 @@ const AllDocument = () => {
  
 
     const response = await axios
-      .put("http://3.84.137.243:5001/get_all_document",
+      .put("http://18.211.130.168:5001/get_all_document",
        {
         "DOCUMENT_REF_ID": 12,
         "DOCUMENT_ADMIN_USERNAME": "deepanshu1"
@@ -54,7 +54,7 @@ const AllDocument = () => {
         headers,
       })
       .then((response) => {
-        console.log("response data:", response.data);
+        // console.log("response data:", response.data);
       })
       .catch((error) => {
         console.error(error);

@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
+import env from "react-dotenv";
 
 const style = {
   position: "absolute",
@@ -27,7 +28,7 @@ export default function EmployeeEdit(props) {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const editdata = props?.edit.row
-  console.log("first", editdata)
+  // console.log("first", editdata)
 
   const [editEmployee, setEditEmployee] = useState({
     EMPLOYEE_NAME: editdata.EMPLOYEE_NAME,
@@ -45,23 +46,7 @@ export default function EmployeeEdit(props) {
     
   });
 
-  // useEffect(()=>{
-  //   setUpdateEmployees((prev) => ({
-  //     ...prev,
-  //     EMPLOYEE_DETAILS_FOR_UPDATES: editEmployee,
-  //   }))
-  //   },[editEmployee])
- 
-  
-    // setUpdateEmployees((prev) => {...prev,EMPLOYEE_DETAILS_FOR_UPDATES:editEmployee}))
-
-
-//   const [updateEmployees, setUpdateEmployees] = useState({
-   
-// });
-
-// console.log(updateEmployees,"alll")
-console.log(editEmployee,"edit alll")
+// console.log(editEmployee,"edit alll")
 
   const [errorMsg, setErrorMsg] = useState("");
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
@@ -83,13 +68,10 @@ console.log(editEmployee,"edit alll")
      
   };
 
- 
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put("http://3.84.137.243:5001/update_employee",  
+      .put("http://18.211.130.168:5001/update_employee",  
       {EMPLOYEE_MEMBER_PARENT_USERNAME: editdata.EMPLOYEE_MEMBER_PARENT_USERNAME,
       EMPLOYEE_PARENT_ID: editdata.EMPLOYEE_PARENT_ID,
       EMPLOYEE_PARENT_USERNAME: editdata.EMPLOYEE_PARENT_USERNAME,

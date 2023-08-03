@@ -26,6 +26,7 @@ import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
+import env from "react-dotenv";
 
 const EmployeeSrc = (props) => {
   //isLoading this is for the Skeleton
@@ -79,11 +80,6 @@ const EmployeeSrc = (props) => {
     (e) => e.PROJECT_NAME === selectedProject
   );
 
-  console.log(getallparam, "buildings");
-
-  // console.log(props, "empdtat")
-
-  // console.table("Project Data for Assign", allProjectData)
   useEffect(() => {
     fetchAllEmployee();
   }, [updatedata]);
@@ -109,11 +105,10 @@ const EmployeeSrc = (props) => {
     // Validate the form data before submission
 
     axios
-      .post("http://3.84.137.243:5001/assign_project", mergedData, {
+      .post("http://18.211.130.168:5001/assign_project", mergedData, {
         headers,
       })
       .then((response) => {
-        console.log("response of create project", response.data);
         setSelectedProject(response.data.result);
         setIsSuccessMessageVisible(true);
       })
@@ -130,7 +125,7 @@ const EmployeeSrc = (props) => {
   const fetchAllEmployee = async () => {
     try {
       const response = await axios.put(
-        "http://3.84.137.243:5001/get_employee",
+        "http://18.211.130.168:5001/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: filterallempData?.COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME:
@@ -141,7 +136,6 @@ const EmployeeSrc = (props) => {
         { headers }
       );
       setTimeout(() => {
-        console.log("ALL EMPLOYEE data ", response);
         const data = response.data;
         setAllempData(data.result);
         setIsLoading(false);
@@ -252,13 +246,7 @@ const EmployeeSrc = (props) => {
     setFilteredData(event);
     handleOpen();
   };
-  // for edit 
-  // const handleEdit  = (e) =>{
-  //   console.log("first",e)
-  //   return(
-      
-  //   )
-  // }
+
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
@@ -391,6 +379,13 @@ const EmployeeSrc = (props) => {
                       component="div"
                     >
                       Phone : {filterData.row.EMPLOYEE_PHONE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Password : {filterData.row.EMPLOYEE_PASSWORD}
                     </Typography>
                     <Typography
                       variant="subtitle1"

@@ -7,6 +7,7 @@ import { Button, Container, Hidden } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Fab, Paper, styled } from "@mui/material";
 import country from "../Api/countriess.json";
+import env from "react-dotenv";
 
 const style = {
   position: "absolute",
@@ -68,7 +69,7 @@ export default function CompanyCreate(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://3.84.137.243:5001/create_company", create_company, {
+      .post("http://18.211.130.168:5001/create_company", create_company, {
         headers,
       })
       .then((response) => {

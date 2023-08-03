@@ -17,6 +17,7 @@ import {
   styled,
 } from "@mui/material";
 import { TableRows } from "@mui/icons-material";
+import env from "react-dotenv";
 
 let MyDateCurrent = new Date();
 let MyDateStringCurrent;
@@ -28,9 +29,7 @@ MyDateStringCurrent =
   "-" +
   ("0" + MyDateCurrent.getDate()).slice(-2);
 
-console.log(MyDateStringCurrent, "Mydate");
-
-//Day after seven
+//current Date
 
 let MyDateAfter = new Date();
 let MyDateStringAfter;
@@ -40,18 +39,70 @@ MyDateAfter.setDate(MyDateAfter.getDate());
 MyDateStringAfter =
   MyDateAfter.getFullYear() +
   "-" +
-  ("0" + (MyDateAfter.getMonth() + 7)).slice(-2) +
+  ("0" + (MyDateAfter.getMonth() + 1)).slice(-2) +
   "-" +
   ("0" + MyDateAfter.getDate()).slice(-2);
 
-console.log(MyDateStringAfter, "Mydate");
+//date array previous 30
+
+function DateArray() {
+  let array = [];
+  let MyDateAfter = new Date();
+  let MyDateStringAfter;
+
+  for (let i = 0; i < 30; i++) {
+    MyDateAfter.setDate(MyDateAfter.getDate() - 1);
+    MyDateStringAfter =
+      MyDateAfter.getFullYear() +
+      "-" +
+      ("0" + (MyDateAfter.getMonth() + 1)).slice(-2) +
+      "-" +
+      ("0" + MyDateAfter.getDate()).slice(-2);
+    array.push(MyDateStringAfter); // Add the date to the array
+  }
+
+  return array; // Return the generated array of dates
+}
+
+const result = DateArray();
+//////////////////
+
+
+// date range array
+
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getDatesBetween(startDate, endDate) {
+  const dates = [];
+  const currentDate = new Date(startDate);
+  const lastDate = new Date(endDate);
+
+  while (currentDate <= lastDate) {
+    dates.push(formatDate(currentDate));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dates;
+}
+
 
 const AttendanceReport = (props) => {
-  // console.log(props, "props data in timesheet");
   const [showPunch, setPunch] = useState(true);
   const [workvalue, setWorkvalue] = useState([]);
-  // const [timeResultIN, settimeResultIN] = useState([]);
-  // const [timeResultOUT, settimeResultOUT] = useState([]);
+  const [keyword, setKeyword] = useState(MyDateStringCurrent)
+  const [filterMethod, setFilterMethod] = useState('Date wise')
+  const [foundUsers, setFoundUsers] = useState(employees);
+  const [name, setName] = useState("All");
+  const [startDateString, setstartDateString] = useState("--start--")
+  const [endDateString, setendDateString] = useState("--end--")
+
+  
+
   const [dateValue, setDate] = useState({
     ATTENDANCE_START_DATE: MyDateStringCurrent,
     ATTENDANCE_END_DATE: MyDateAfter,
@@ -60,8 +111,6 @@ const AttendanceReport = (props) => {
   useEffect(() => {
     gettimesheet();
   }, [props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME]);
-
-  // console.log(dateValue, "datevalue");
 
   // get employee report
 
@@ -84,7 +133,7 @@ const AttendanceReport = (props) => {
         { headers }
       );
       setTimeout(() => {
-        console.log("ALL WEB", response);
+        // console.log("ALL WEB", response);
         setWorkvalue(response.data.result);
       }, 1000);
     } catch (err) {
@@ -92,51 +141,11 @@ const AttendanceReport = (props) => {
     }
   };
 
-  // time calculation
-
-  // const timeValueHours = (x, y) => {
-  //   return new Date(x).getUTCHours() - new Date(y).getUTCHours();
-  // };
-
-  // const timeValueMinutes = (x, y) => {
-  //   return new Date(x).getUTCMinutes() - new Date(y).getUTCMinutes();
-  // };
-
-  // const allHours = workvalue.map((e) => {
-  //   return (
-  //     new Date(e.ATTENDANCE_OUT).getUTCHours() -
-  //     new Date(e.ATTENDANCE_IN).getUTCHours() +
-  //     ":" +
-  //     (new Date(e.ATTENDANCE_OUT).getUTCMinutes() -
-  //       new Date(e.ATTENDANCE_IN).getUTCMinutes())
-  //   );
-  // });
-
-  // const sum = allHours.reduce(
-  //   (time1, time2) => time1.add(moment.duration(time2)),
-  //   moment.duration()
-  // );
-
-  // var startTime = moment("12:16:59 am", "hh:mm:ss a");
-  // var endTime = moment("06:12:07 pm", "hh:mm:ss a");
-
-  // var result =
-  //   endTime.diff(startTime, "hours") +
-  //   " Hrs and " +
-  //   endTime.diff(startTime, "minutes") +
-  //   " Mns";
-
-  // console.log(result, "hhh");
 
   //gate cuurent and addition seven days
 
- 
-
-
-
-
   const total = (event) => {
-    const e = event.EMPLOYEE_ATTENDANCE.map((post) => {
+    const e = event.map((post) => {
       return (
         Math.abs(new Date(post.ATTENDANCE_OUT).getUTCHours() -
         new Date(post.ATTENDANCE_IN).getUTCHours()) +
@@ -153,53 +162,6 @@ const AttendanceReport = (props) => {
     return (sum._data.hours)+":"+(sum._data.minutes);
   };
 
-//  const result = total(
-//   {EMPLOYEE_ATTENDANCE:
-//         [
-//             {               
-//               "ATTENDANCE_DATE_ID":"2023-07-25",
-//               "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-//               "ATTENDANCE_OUT":"2023-07-25T13:34:36.717Z"
-//             },
-//             {               
-//               "ATTENDANCE_DATE_ID":"2023-08-25",
-//               "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-//               "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-//             },
-//             {               
-//               "ATTENDANCE_DATE_ID":"2023-09-25",
-//               "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-//               "ATTENDANCE_OUT":"2023-09-25T12:34:36.717Z"
-//             },
-//             {               
-//               "ATTENDANCE_DATE_ID":"2023-10-25",
-//               "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-//               "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-//             },
-//             {               
-//               "ATTENDANCE_DATE_ID":"2023-11-25",
-//               "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-//               "ATTENDANCE_OUT":"2023-11-25T14:14:36.717Z"
-//             }
-//     ]
-//   }
-//  )
-
-//  const timelist = result
-
-//  const sum = timelist.reduce(
-//   (time1, time2) => time1.add(moment.duration(time2)),
-//   moment.duration()
-// );
-
-
-//  console.log(sum,"results")
-
-
-
-
-
-
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
@@ -210,8 +172,6 @@ const AttendanceReport = (props) => {
     Border: 0,
     display: props.screenIndex ? "block" : "none",
   }));
-
-  console.table(employees, "all employee");
 
   const PunchReport = () => {
     return (
@@ -387,6 +347,38 @@ const AttendanceReport = (props) => {
     );
   };
 
+
+//filter by different param
+
+const filtered = (e,item) => {
+  // topFunction()
+  const word = e.target.value;
+
+    if (word !== "" && word !== "All") {
+    const results = employees.filter((post) => {
+      return post[item].toLowerCase().includes(word.toLowerCase());
+    });
+    setFoundUsers(results);
+  } else {
+    setFoundUsers(employees);
+  }
+
+  setName(word);
+};
+
+
+ const arrayDate = []
+ arrayDate.push(keyword)
+
+
+ // date array function call
+
+ 
+const startDate = new Date(startDateString);
+const endDate = new Date(endDateString);
+
+const dateArray = getDatesBetween(startDate, endDate);
+
   return (
     <>
       <Box className="box" style={{ background: "#277099" }}>
@@ -426,21 +418,44 @@ const AttendanceReport = (props) => {
                             <label> Date filter by </label>
                           </TableCell>
                           <TableCell size="small">
-                            <select className="form-control border">
+                            <select 
+                            className="form-control border"
+                            onChange={(e) => setFilterMethod(e.target.value)}
+                            value={filterMethod}
+                            >
+                              <option>Date wise</option>
                               <option>By Pay Period</option>
                             </select>
                           </TableCell>
                         </TableRow>
-                        <TableRow>
+                        {filterMethod === "By Pay Period" && <TableRow>
                           <TableCell size="small">
-                            <label> Date </label>
+                            <label>Period</label>
                           </TableCell>
                           <TableCell size="small">
-                            <select className="form-control border">
-                              <option>By Pay Period</option>
-                            </select>
+                            <div style={{display:"flex",flexDirection:"row",gap:2}}>
+                            <input type="date" className="form-control" value={startDateString} onChange={(e)=> setstartDateString(e.target.value)}/>
+                            <input type="date" className="form-control" value={endDateString} onChange={(e)=> setendDateString(e.target.value)}/>
+                            </div>
+                            
                           </TableCell>
-                        </TableRow>
+                        </TableRow>}
+                       {filterMethod === "Date wise" && <>
+                        <TableCell size="small">
+                         <label> Date filter by </label>
+                       </TableCell>
+                       <TableCell size="small">
+                         <select 
+                         value={keyword}
+                         className="form-control border"
+                         onChange={(e) => setKeyword(e.target.value)}
+                         >
+                           <option  selected>{MyDateStringCurrent}</option>
+                           {result.map((item)=><option>{item}</option>)}
+                         </select>
+                       </TableCell>
+                       </>
+                        }
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -455,8 +470,9 @@ const AttendanceReport = (props) => {
                           <label> Employee </label>
                         </TableCell>
                         <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
+                          <select className="form-control border" onChange={(e) => filtered(e, "EMPLOYEE_NAME")} value={name}>
+                            <option selected>All</option>
+                            {employees.map((e)=><option>{e.EMPLOYEE_NAME}</option>)}
                           </select>
                         </TableCell>
                       </TableRow>
@@ -465,8 +481,9 @@ const AttendanceReport = (props) => {
                           <label> Department </label>
                         </TableCell>
                         <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
+                        <select className="form-control border" onChange={(e) => filtered(e, "EMPLOYEE_ROLE")} value={name}>
+                            <option selected>All</option>
+                            {employees.map((e)=><option>{e.EMPLOYEE_ROLE}</option>)}
                           </select>
                         </TableCell>
                       </TableRow>
@@ -535,14 +552,29 @@ const AttendanceReport = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {employees.map((post) => (
+                {foundUsers.map(post =>
+
+                { 
+                  console.log(post.EMPLOYEE_ATTENDANCE, "AAA")
+                  let filterByDate;
+                    // filterByDate = post.EMPLOYEE_ATTENDANCE.filter((post) => {
+                    //   return post.ATTENDANCE_DATE_ID.toLowerCase().includes(keyword.toLowerCase())
+                    // });
+
+                    filterByDate = post.EMPLOYEE_ATTENDANCE.filter((item) => {
+                      return (filterMethod === "By Pay Period" ? dateArray : arrayDate).includes(item.ATTENDANCE_DATE_ID);
+                    });
+
+                  console.log(filterByDate,arrayDate,"filter")
+                
+               return (
                   <tr className="table table-striped">
                     <td>{post.EMPLOYEE_NAME}</td>
-                    <td><span className="bg-success rounded-2 px-1 text-light" style={{width:"content-fit"}}>{total(post)}</span></td>
-                    <td>null</td>
-                    <td>null</td>
-                    <td>null</td>
-                    <td>null</td>
+                    <td><span className="bg-success rounded-2 px-1 text-light" style={{width:"content-fit"}}>{total([...filterByDate])} Total</span></td>
+                    <td><span className="bg-success rounded-2 px-1 text-light" style={{width:"content-fit"}}>{total([...filterByDate])} Total</span></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
                       {" "}
                       <button className="btn btn-secondary btn-sm">
@@ -550,7 +582,7 @@ const AttendanceReport = (props) => {
                       </button>
                     </td>
                   </tr>
-                ))}
+                )})}
               </tbody>
             </table>
           </Box>

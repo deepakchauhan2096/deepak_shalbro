@@ -1,5 +1,6 @@
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
+import env from "react-dotenv";
 
 const Snippet = () => {
   const drag = (ev) => {
@@ -132,24 +133,6 @@ const Snippet = () => {
           ))}
         </Grid>
       </Grid>
-
-      {/* <div
-        className="div1"
-        id=""
-        onDrop={(event) => drop(event)}
-        onDragOver={(event) => allowDrop(event)}
-      >
-      </div> */}
-
-      {/* <br />
-      <img
-        id="drag1"
-        src="img_logo.gif"
-        draggable="true"
-        onDragStart={(event) => drag(event)}
-        width="336"
-        height="69"
-      /> */}
     </>
   );
 };

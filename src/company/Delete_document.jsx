@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import env from "react-dotenv";
 
 const Delete_document = () => {
   const [documentId, setDocumentId] = useState('');
   const [responseMessage, setResponseMessage] = useState('');
 
   const handleDelete = () => {
-    axios.delete(`http://localhost:3000/delete_document/${documentId}`)
+    axios.delete("http://18.211.130.168:5001/delete_document/${documentId}")
       .then(response => {
         if (response.data.operation === "success") {
           setResponseMessage("Document successfully deleted!");

@@ -1,24 +1,14 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useState, useEffect, useContext } from "react";
+import { useState } from "react";
 import axios from "axios";
 import country from "../Api/countriess.json";
-// import states from "../Api/states.json"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import env from "react-dotenv";
 
-import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
-  Paper,
-  Skeleton,
-  Typography,
-} from "@mui/material";
+import { Button, Grid } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -32,90 +22,81 @@ const style = {
   borderRadius: 4,
 };
 
-export default function ProjectCreate(props) {
+export default function SubcontractCreate(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [index, setIndex] = React.useState([]);
   const [errorMsg, setErrorMsg] = useState("");
 
-
-  const [createProject, setCreateProject] = useState({
-    PROJECT_PARENT_ID: props.companyData?.COMPANY_ID,
-    PROJECT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME,
-    PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID,
-    PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME,
-    PROJECT_NAME: "",
-    PROJECT_USERNAME: "",
-    PROJECT_ADD: "",
-    PROJECT_CITY: "",
-    PROJECT_START_DATE: "",
-    PROJECT_END_DATE: "",
-    PROJECT_SUPERVISOR: "",
-    PROJECT_COUNTRY: "",
-    PROJECT_STATE: "",
-    PROJECT_PHONE: "",
-  });
-
-
- // city-country-logic
-
+  const [createSubcontract, setCreatesubcontract] = useState({
+      SUBCONTRACTOR_PARENT_ID: props.companyData?.COMPANY_ID,
+      SUBCONTRACTOR_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME,
+      SUBCONTRACTOR_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID,
+      SUBCONTRACTOR_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME,
+      SUBCONTRACTOR_ROLE: "dcyvdasvc",
+      SUBCONTRACTOR_NAME: "construction",
+      SUBCONTRACTOR_PHONE: 9876590876,
+      SUBCONTRACTOR_USERNAME: "xyvsxsvcx",
+      SUBCONTRACTOR_START_DATE: "2023-06-13",
+      SUBCONTRACTOR_END_DATE: "2023-06-16",
+      SUBCONTRACTOR_SUPERVISOR: "anurag",
+      SUBCONTRACTOR_COUNTRY: "",
+      SUBCONTRACTOR_STATE: "",
+      SUBCONTRACTOR_ADD: "",
+      SUBCONTRACTOR_CITY: "",
+    });
   const availableState = country?.find(
-    (c) => c.name === createProject.PROJECT_COUNTRY
+    (c) => c.name === createSubcontract.SUBCONTRACTOR_COUNTRY
   );
 
-  // console.log("all states : ===> ", availableState,"country=>",country);
   const availableCities = availableState?.states?.find(
-    (s) => s.name === createProject.PROJECT_STATE
+    (s) => s.name === createSubcontract.SUBCONTRACTOR_STATE
   );
-
-  //api header
-
-
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
   const handleCreate = (e) => {
-    setCreateProject({ ...createProject, [e.target.name]: e.target.value });
-    console.log("heello world", createProject);
+    setCreatesubcontract({ ...createSubcontract, [e.target.name]: e.target.value });
+    console.log("first", createSubcontract)
   };
 
-
-  //api create project
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
-      !createProject.PROJECT_USERNAME ||
-      !createProject.PROJECT_NAME ||
-      !createProject.PROJECT_PHONE ||
-      !createProject.PROJECT_PARENT_ID ||
-      !createProject.PROJECT_PARENT_USERNAME ||
-      !createProject.PROJECT_MEMBER_PARENT_ID ||
-      !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
-      !createProject.PROJECT_ADD ||
-      !createProject.PROJECT_START_DATE ||
-      !createProject.PROJECT_END_DATE ||
-      !createProject.PROJECT_SUPERVISOR ||
-      !createProject.PROJECT_COUNTRY ||
-      !createProject.PROJECT_CITY ||
-      !createProject.PROJECT_STATE
+      !createSubcontract.SUBCONTRACTOR_USERNAME ||
+      !createSubcontract.SUBCONTRACTOR_NAME ||
+      !createSubcontract.SUBCONTRACTOR_PHONE ||
+      !createSubcontract.SUBCONTRACTOR_PARENT_ID ||
+      !createSubcontract.SUBCONTRACTOR_PARENT_USERNAME ||
+      !createSubcontract.SUBCONTRACTOR_MEMBER_PARENT_ID ||
+      !createSubcontract.SUBCONTRACTOR_MEMBER_PARENT_USERNAME ||
+      !createSubcontract.SUBCONTRACTOR_ADD ||
+      !createSubcontract.SUBCONTRACTOR_START_DATE ||
+      !createSubcontract.SUBCONTRACTOR_END_DATE ||
+      !createSubcontract.SUBCONTRACTOR_SUPERVISOR ||
+      !createSubcontract.SUBCONTRACTOR_COUNTRY ||
+      !createSubcontract.SUBCONTRACTOR_CITY ||
+      !createSubcontract.SUBCONTRACTOR_STATE
     ) {
       setErrorMsg("Fill all fields");
       return;
     }
     setErrorMsg("");
 
+
     axios
-      .post("http://18.211.130.168:5001/create_project", createProject, {
+      .post("http://18.211.130.168:5001/create_subcontractor",createSubcontract , {
         headers,
       })
       .then((response) => {
         if (response.data.operation === "failed") {
-          setErrorMsg(response.data.errorMsg);
+          toast.error(response.data.errorMsg, {
+            position: toast.POSITION.TOP_CENTER,
+          });
         } else if (response.data.operation === "successfull") {
-          toast.success("Project Created successfully!", {
+          toast.success("Subcontract Created successfully!", {
             position: toast.POSITION.TOP_CENTER,
           });
           setOpen(false);
@@ -127,12 +108,11 @@ export default function ProjectCreate(props) {
   };
 
 
-  //state city api
 
   return (
     <>
-      <Button size="small" className="btn button border-bottom-0 bg-white"  variant="outlined">
-        Project
+      <Button size="small" className="btn button border-bottom-0 bg-white" variant="outlined">
+        Subcontract
       </Button>
       <Button
         onClick={handleOpen}
@@ -141,7 +121,7 @@ export default function ProjectCreate(props) {
         variant="contained"
         size="small"
       >
-       + Add New Project
+        + Add Subcontract
       </Button>
 
       <Modal
@@ -154,33 +134,26 @@ export default function ProjectCreate(props) {
           <form onSubmit={handleSubmit}>
             <div className="row py-2">
               <div className="form-group col-xl-4">
-                <label> Project Username</label>
+                <label>Subcontract Username</label>
                 <input
                   type="text"
                   className="form-control rounded-0"
                   placeholder="Username"
-                  value={createProject.PROJECT_USERNAME}
-                  name="PROJECT_USERNAME"
+                  value={createSubcontract.SUBCONTRACTOR_USERNAME}
+                  name="SUBCONTRACTOR_USERNAME"
                   onChange={handleCreate}
-                  //required
                 />
-                {/* {errors.PROJECT_USERNAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_USERNAME}
-                  </p>
-                )} */}
               </div>
               <div className="form-group col-xl-4">
-                <label>Project Name</label>
+                <label>Subcontract Name</label>
                 <input
                   type="text"
                   className="form-control rounded-0"
                   id="inputname"
                   placeholder="Project Name"
-                  value={createProject.PROJECT_NAME}
-                  name="PROJECT_NAME"
+                  value={createSubcontract.SUBCONTRACTOR_NAME}
+                  name="SUBCONTRACTOR_NAME"
                   onChange={handleCreate}
-                  required
                 />
               </div>
               <div className="form-group col-xl-4">
@@ -190,10 +163,9 @@ export default function ProjectCreate(props) {
                   className="form-control rounded-0"
                   id="inputPassword4"
                   placeholder="Enter Phone Number"
-                  name="PROJECT_PHONE"
-                  value={createProject.PROJECT_PHONE}
+                  name="SUBCONTRACTOR_PHONE"
+                  value={createSubcontract.SUBCONTRACTOR_PHONE}
                   onChange={handleCreate}
-                  required
                 />
               </div>
             </div>
@@ -202,8 +174,8 @@ export default function ProjectCreate(props) {
                 <label>Project start date</label>
                 <input
                   type="date"
-                  value={createProject.PROJECT_START_DATE}
-                  name="PROJECT_START_DATE"
+                  value={createSubcontract.SUBCONTRACTOR_START_DATE}
+                  name="SUBCONTRACTOR_START_DATE"
                   onChange={handleCreate}
                   className="form-control rounded-0"
                 //required
@@ -213,8 +185,8 @@ export default function ProjectCreate(props) {
                 <label>Project End date</label>
                 <input
                   type="date"
-                  value={createProject.PROJECT_END_DATE}
-                  name="PROJECT_END_DATE"
+                  value={createSubcontract.SUBCONTRACTOR_END_DATE}
+                  name="SUBCONTRACTOR_END_DATE"
                   onChange={handleCreate}
                   className="form-control rounded-0"
                 //required
@@ -223,14 +195,13 @@ export default function ProjectCreate(props) {
             </div>
             <div className="row py-2">
               <div className="form-group col-xl-6">
-                <label>Enrollment</label>
+                <label>Subcontract ROLE</label>
                 <select
                   id="inputEnroll"
                   className="form-control border rounded-0"
                   onChange={handleCreate}
-                  name="PROJECT_EMROLMNT_TYPE"
-                  value={createProject.PROJECT_EMROLMNT_TYPE}
-                  //required
+                  name="SUBCONTRACTOR_ROLE"
+                  value={createSubcontract.SUBCONTRACTOR_ROLE}
                 >
                   <option selected>Choose...</option>
                   <option>Painter</option>
@@ -239,17 +210,15 @@ export default function ProjectCreate(props) {
                   <option>Engineer</option>
                 </select>
               </div>
-
               <div className="form-group col-md-6">
-                <label>Supervisor</label>
+                <label>Sub Contractor</label>
                 <input
                   type="text"
                   className="form-control rounded-0 "
                   id="inputsupervisor"
-                  name="PROJECT_SUPERVISOR"
-                  value={createProject.PROJECT_SUPERVISOR}
+                  name="SUBCONTRACTOR_SUPERVISOR"
+                  value={createSubcontract.SUBCONTRACTOR_SUPERVISOR}
                   onChange={handleCreate}
-                  //required
                 />
               </div>
             </div>
@@ -261,10 +230,9 @@ export default function ProjectCreate(props) {
                   className="form-control rounded-0"
                   id="inputAddress2"
                   placeholder="Apartment, studio, or floor"
-                  name="PROJECT_ADD"
-                  value={createProject.PROJECT_ADD}
+                  name="SUBCONTRACTOR_ADD"
+                  value={createSubcontract.SUBCONTRACTOR_ADD}
                   onChange={handleCreate}
-                  //required
                 />
               </div>
             </div>
@@ -274,13 +242,11 @@ export default function ProjectCreate(props) {
                 <select
                   className="form-control border rounded-0"
                   placeholder="Country"
-                  name="PROJECT_COUNTRY"
-                  value={createProject.PROJECT_COUNTRY}
+                  name="SUBCONTRACTOR_COUNTRY"
+                  value={createSubcontract.SUBCONTRACTOR_COUNTRY}
                   onChange={handleCreate}
-                  //required
                 >
-                  <option >--Choose Country--</option>
-
+                  <option>--Choose Country--</option>
                   {country?.map((value, key) => {
                     return (
                       <option value={value.name} key={key}>
@@ -290,17 +256,15 @@ export default function ProjectCreate(props) {
                   })}
                 </select>
               </div>
-
               <div className="form-group col-xl-4">
                 <label>State</label>
                 <select
-                  className="form-control border rounded-0"
+                  className="
+                  form-control border rounded-0"
                   placeholder="State"
-                  name="PROJECT_STATE"
-                  value={createProject.PROJECT_STATE}
+                  name="SUBCONTRACTOR_STATE"
+                  value={createSubcontract.SUBCONTRACTOR_STATE}
                   onChange={handleCreate}
-                  //required
-                  
                 >
                   <option selected>--Choose State--</option>
                   {availableState?.states?.map((e, key) => {
@@ -318,10 +282,9 @@ export default function ProjectCreate(props) {
                 <select
                   className="form-control border rounded-0"
                   placeholder="City"
-                  name="PROJECT_CITY"
-                  value={createProject.PROJECT_CITY}
+                  name="SUBCONTRACTOR_CITY"
+                  value={createSubcontract.SUBCONTRACTOR_CITY}
                   onChange={handleCreate}
-                  //required
                 >
                   <option>--Choose City--</option>
                   {availableCities?.cities?.map((e, key) => {
@@ -335,26 +298,23 @@ export default function ProjectCreate(props) {
               </div>
             </div>
             <center>
-              {errorMsg && (
-                <p className=" text-danger fw-light mb-0">{errorMsg}</p>
-              )}
+              <button
+                type="submit"
+                className="btn btn-info text-white"
+                onClick={handleSubmit}
+              >
+                Submit
+              </button>{" "}
+              <button
+                onClick={handleClose}
+                className="btn btn-danger text-white"
+              >
+                Discard
+              </button>
             </center>
-            <button
-              type="submit"
-              className="btn btn-info text-white "
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>{" "}
-            <button
-              onClick={handleClose}
-              className="btn btn-danger text-white "
-            >
-              Discard
-            </button>
           </form>
         </Box>
       </Modal>
     </>
   );
-                }
+}
