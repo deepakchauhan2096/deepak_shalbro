@@ -10,8 +10,8 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-import "../assests/css/document.css" // Import the CSS file
+import "../assests/css/document.css"; // Import the CSS file
+import env from "react-dotenv";
 
 export default function ProjectUpload(props) {
   const [postImage, setPostImage] = useState({
@@ -25,15 +25,9 @@ export default function ProjectUpload(props) {
   const [errorMessage, setErrorMessage] = useState("");
   const [uploadSuccessMessage, setUploadSuccessMessage] = useState("");
   const [deleteSuccessMessage, setDeleteSuccessMessage] = useState("");
-
   const [fileSelected, setFileSelected] = useState(false);
-
-  // New state to manage visibility of the documents list
-  const [showDocuments, setShowDocuments] = useState(false);
-  // console.log("Images data is here:=>", imagesData.result);
-  // this is data of company for fetch the company username
+  const [showAllDocuments, setShowAllDocuments] = useState(false);
   const DocData = props.empData;
-  // console.table(DocData, "<<=====================company data");
 
   useEffect(() => {
     getalldocument();
@@ -44,7 +38,6 @@ export default function ProjectUpload(props) {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  // Download file
   const downloadFile = (base64Data, fileName) => {
     const link = document.createElement("a");
     link.href = `data:application/octet-stream;base64,${base64Data}`;
@@ -54,20 +47,17 @@ export default function ProjectUpload(props) {
     document.body.removeChild(link);
   };
 
-  //create document
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const response = await axios
-      .post("http://3.84.137.243:5001/create_document", postImage.myFile, {
+      .post("http://18.211.130.168:5001/create_document", postImage.myFile, {
         headers,
       })
       .then((response) => {
-        // console.log("response data  anurag pal:", response.data);
         getalldocument();
         setSuccessMessage("Document uploaded successfully!");
         setSelectedFileName("");
-
         setTimeout(() => setSuccessMessage(""), 1000);
       })
       .catch((error) => {
@@ -75,40 +65,6 @@ export default function ProjectUpload(props) {
         setSuccessMessage("");
       });
   };
-  //upload document throught input
-  // const handleFileUpload = (e) => {
-  //   const file = e.target.files[0];
-  //   const formdata = new FormData();
-  //   formdata.append("file", file);
-  //   formdata.append("DOCUMENT_REF_ID", DocData.COMPANY_ID);
-  //   formdata.append("DOCUMENT_ADMIN_USERNAME", DocData.COMPANY_PARENT_USERNAME);
-  //   setPostImage({ myFile: formdata });
-  //   setSelectedFileName(file.name);
-
-  //   console.table(
-  //     "deepanshu===========Hoooooo=========>",
-  //     DocData.COMPANY_PARENT_USERNAME
-  //   );
-  // };
-
-  // const handleFileUpload = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setFileSelected(true);
-  //     const formdata = new FormData();
-  //     formdata.append("file", file);
-  //     formdata.append("DOCUMENT_REF_ID", DocData.COMPANY_ID);
-  //     formdata.append(
-  //       "DOCUMENT_ADMIN_USERNAME",
-  //       DocData.COMPANY_PARENT_USERNAME
-  //     );
-  //     setPostImage({ myFile: formdata });
-  //     setSelectedFileName(file.name);
-  //   } else {
-  //     setFileSelected(false);
-  //   }
-  // };
-
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -117,10 +73,7 @@ export default function ProjectUpload(props) {
       const formdata = new FormData();
       formdata.append("file", file);
       formdata.append("DOCUMENT_REF_ID", DocData.COMPANY_ID);
-      formdata.append(
-        "DOCUMENT_ADMIN_USERNAME",
-        DocData.COMPANY_PARENT_USERNAME
-      );
+      formdata.append("DOCUMENT_ADMIN_USERNAME", DocData.COMPANY_PARENT_USERNAME);
       setPostImage({ myFile: formdata });
       setSelectedFileName(file.name);
     } else {
@@ -128,7 +81,6 @@ export default function ProjectUpload(props) {
     }
   };
 
-  //get all Document
   const getalldocument = () => {
     try {
       var myHeaders = new Headers();
@@ -147,7 +99,7 @@ export default function ProjectUpload(props) {
         redirect: "follow",
       };
 
-      fetch("http://3.84.137.243:5001/get_all_document", requestOptions)
+      fetch("http://18.211.130.168:5001/get_all_document", requestOptions)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -155,11 +107,8 @@ export default function ProjectUpload(props) {
           return response.json();
         })
         .then((data) => {
-          // console.log(data);
-          // Assuming setImagesData is a state-setting function for a React component
           setImagesData(data);
-          // console.log("setimages:======", data[0]);
-          setTotalDocuments(data.result?.length || 0)
+          setTotalDocuments(data.result?.length || 0);
         })
         .catch((error) => {
           console.log("Error Fetching Data :", error);
@@ -173,7 +122,6 @@ export default function ProjectUpload(props) {
     backgroundColor: theme.palette.background.paper,
   }));
 
-
   const handleDownload = async (documentId, fileName) => {
     try {
       const data = JSON.stringify({
@@ -184,7 +132,7 @@ export default function ProjectUpload(props) {
       const config = {
         method: "put",
         maxBodyLength: Infinity,
-        url: "http://3.84.137.243:5001/download_document",
+        url: "http://18.211.130.168:5001/download_document",
         headers: {
           authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
           "Content-Type": "application/json",
@@ -195,43 +143,61 @@ export default function ProjectUpload(props) {
       const response = await axios.request(config);
       console.log(response.data);
       downloadFile(response.data, fileName);
-      // console.log(FileDownload(response.data))
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleDelete = (documentId, fileName) => {
-    // .preventDefault();
-    try {
-      // console.log("HElloo")
-      // Send a DELETE request to the backend API to delete the document with the given ID.
+  // const handleDelete = async (documentId, fileName) => {
+  //   try {
+  //     await axios.delete(`http://18.211.130.168:5001/delete_document/${documentId}`, {
+  //       headers: {
+  //         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
 
-      axios.delete(`http://3.84.137.243:5001/delete_document/${documentId}`, {
-        headers: {
-          authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-          "Content-Type": "application/json",
-        },
-      });
+  //     getalldocument();
+  //     setDeleteSuccessMessage("Document deleted successfully!");
+  //     setTimeout(() => setDeleteSuccessMessage(""), 1000);
+  //   } catch (error) {
+  //     setErrorMessage("Error deleting document!");
+  //   }
+  // };
 
-      // setDeleteSuccessMessage("Document deleted successfully!");
+
+// ... (Previous code remains the same)
+
+const handleDelete = async (documentId, fileName) => {
+  try {
+    const response = await axios.delete(`http://18.211.130.168:5001/delete_document/${documentId}`, {
+      headers: {
+        authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 200) {
       getalldocument();
-    } catch (error) {
-      // Handle any errors that might occur during the deletion process.
-      console.log("Error deleting document: ", error);
-      // Optionally, you can show an error message to the user.
+      setDeleteSuccessMessage("Document deleted successfully!");
+      setTimeout(() => setDeleteSuccessMessage(""), 1000);
+    } else {
       setErrorMessage("Error deleting document!");
     }
-  };
+  } catch (error) {
+    console.error("Error deleting document:", error);
+    setErrorMessage("Error deleting document!");
+  }
+};
+
+
 
 
 
   return (
     <>
       <div className="ProjectMain">
-
         <Box>
-          {/* Hidden file input */}
           <input
             type="file"
             label="Image"
@@ -241,7 +207,6 @@ export default function ProjectUpload(props) {
             style={{ display: "none" }}
             onChange={(e) => handleFileUpload(e)}
           />
-          {/* Upload document button */}
           <Button
             variant="outlined"
             className="button rounded-2 lowercase"
@@ -251,7 +216,6 @@ export default function ProjectUpload(props) {
             <AddIcon fontSize="small" />
           </Button>
           &nbsp;&nbsp;
-          {/* New document button */}
           <Button
             variant="contained"
             className="button rounded-2 lowercase"
@@ -277,106 +241,114 @@ export default function ProjectUpload(props) {
         <hr />
 
         <div className="documents-section">
-
           <div className="documents-header">
             <h4>Uploaded Documents</h4>
             <div className="total-documents">
               <p>Total Number of Documents: {totalDocuments}</p>
             </div>
-
           </div>
 
           <Button
             variant="outlined"
             className="button rounded-2 lowercase "
-            onClick={() => setShow((s) => !s)}
+            onClick={() => setShowAllDocuments((prevShowAll) => !prevShowAll)}
           >
-            Show All Documents&nbsp;
+            {showAllDocuments ? "Show Less Documents" : "Show All Documents"}&nbsp;
             <ViewListIcon fontSize="small" />
           </Button>
 
           <div className="documents-section">
-
             {errorMessage && (
               <p className="font-monospace" style={{ color: "red" }}>
                 {errorMessage}
               </p>
             )}
             <ul className="Doc_ul">
-              {!show
+              {!showAllDocuments
                 ? imagesData.result?.slice(0, 8).map((docs, index) => {
-                  const fileName = docs.DOCUMENT_FILEDATA.originalname;
-                  const fileType = fileName.split(".").pop().toLowerCase();
-                  const isPDF = fileType === "pdf";
-                  const isJPG = fileType === "jpg" || fileType === "jpeg";
+                    const fileName = docs.DOCUMENT_FILEDATA.originalname;
+                    const fileType = fileName.split(".").pop().toLowerCase();
+                    const isPDF = fileType === "pdf";
+                    const isJPG = fileType === "jpg" || fileType === "jpeg";
 
-                  return (
-                    <li className="Doc_li" key={index}>
-                      <span className="delete-icon" onClick={() => handleDelete(docs.DOCUMENT_ID, fileName)} role="button" type="submit">
-                        <i className="fa fa-trash"></i>
-                      </span>
-                      <span className="Docfile-icon">
-                        {" "}
-                        {isPDF ? (
-                          <img src={pdf} />
-                        ) : isJPG ? (
-                          <img src={jpg} />
-                        ) : (
-                          <img src={png} />
-                        )}
-                      </span>
-                      <span className="Docfile-name font-monospace">
-                        {fileName.length > 15
-                          ? `${fileName.substring(0, 10)}...`
-                          : fileName}
-                      </span>
-                      <button
-                        className="doc_anchor font-monospace"
-                        onClick={() => handleDownload(docs.DOCUMENT_ID, fileName)}
-                      >
-                        Download
-                      </button>
-
-                    </li>
-                  );
-                })
+                    return (
+                      <li className="Doc_li" key={index}>
+                        <span
+                          className="delete-icon"
+                          onClick={() => handleDelete(docs.DOCUMENT_ID, fileName)}
+                          role="button"
+                          type="submit"
+                        >
+                          <DeleteIcon />
+                        </span>
+                        <span className="Docfile-icon">
+                          {" "}
+                          {isPDF ? (
+                            <img src={pdf} alt="pdf" />
+                          ) : isJPG ? (
+                            <img src={jpg} alt="jpg" />
+                          ) : (
+                            <img src={png} alt="png" />
+                          )}
+                        </span>
+                        <span className="Docfile-name font-monospace">
+                          {fileName.length > 15
+                            ? `${fileName.substring(0, 10)}...`
+                            : fileName}
+                        </span>
+                        <button
+                          className="doc_anchor font-monospace"
+                          onClick={() =>
+                            handleDownload(docs.DOCUMENT_ID, fileName)
+                          }
+                        >
+                          Download
+                        </button>
+                      </li>
+                    );
+                  })
                 : imagesData.result?.map((docs, index) => {
-                  const fileName = docs.DOCUMENT_FILEDATA.originalname;
-                  const fileType = fileName.split(".").pop().toLowerCase();
-                  const isPDF = fileType === "pdf";
-                  const isJPG = fileType === "jpg" || fileType === "jpeg";
+                    const fileName = docs.DOCUMENT_FILEDATA.originalname;
+                    const fileType = fileName.split(".").pop().toLowerCase();
+                    const isPDF = fileType === "pdf";
+                    const isJPG = fileType === "jpg" || fileType === "jpeg";
 
-                  return (
-
-                    <li className="Doc_li" key={index}>
-
-                      <span className="delete-icon" onClick={() => handleDelete(docs.DOCUMENT_ID, fileName)} role="button" type="submit">
-                        <i className="fa fa-trash"></i>
-                      </span>
-                      <span className="Docfile-icon">
-                        {" "}
-                        {isPDF ? (
-                          <img src={pdf} />
-                        ) : isJPG ? (
-                          <img src={jpg} />
-                        ) : (
-                          <img src={png} />
-                        )}
-                      </span>
-                      <span className="Docfile-name font-monospace">
-                        {fileName.length > 15
-                          ? `${fileName.substring(0, 10)}...`
-                          : fileName}
-                      </span>
-                      <button
-                        className="doc_anchor font-monospace"
-                        onClick={() => handleDownload(docs.DOCUMENT_ID, fileName)}
-                      >
-                        Download
-                      </button>
-                    </li>
-                  );
-                })}
+                    return (
+                      <li className="Doc_li" key={index}>
+                        <span
+                          className="delete-icon"
+                          onClick={() => handleDelete(docs.DOCUMENT_ID, fileName)}
+                          role="button"
+                          type="submit"
+                        >
+                          <DeleteIcon />
+                        </span>
+                        <span className="Docfile-icon">
+                          {" "}
+                          {isPDF ? (
+                            <img src={pdf} alt="pdf" />
+                          ) : isJPG ? (
+                            <img src={jpg} alt="jpg" />
+                          ) : (
+                            <img src={png} alt="png" />
+                          )}
+                        </span>
+                        <span className="Docfile-name font-monospace">
+                          {fileName.length > 15
+                            ? `${fileName.substring(0, 10)}...`
+                            : fileName}
+                        </span>
+                        <button
+                          className="doc_anchor font-monospace"
+                          onClick={() =>
+                            handleDownload(docs.DOCUMENT_ID, fileName)
+                          }
+                        >
+                          Download
+                        </button>
+                      </li>
+                    );
+                  })}
             </ul>
             <hr />
           </div>

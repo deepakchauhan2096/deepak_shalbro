@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import axios from "axios";
 import InputControl from "../components/InputControl";
-import { auth } from "../firebase";
 import styles from "../assests/css/Signup.module.css";
+import SimpleBackdrop from "../components/Backdrop"; // Replace "../components/Backdrop" with the correct path to the file containing the MUI backdrop component
 
 function AdminCreate() {
   const [values, setValues] = useState({
@@ -16,6 +15,7 @@ function AdminCreate() {
   });
   const [errorMsg, setErrorMsg] = useState("");
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Initialize to false
 
   const navigate = useNavigate();
 
@@ -36,22 +36,26 @@ function AdminCreate() {
       return;
     }
     setErrorMsg("");
+    setIsSubmitting(true); // Show the backdrop when the signup button is clicked
+
     axios
-      .post("http://3.84.137.243:5001/create_admin", values, {
+      .post("http://18.211.130.168:5001/create_admin", values, {
         headers,
       })
       .then((response) => {
         setErrorMsg(response.errorMsg);
 
-        if (response.data.operation == "failed") {
+        if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
-        } else if (response.data.operation == "successfull") {
-          alert("successfully sign up");
+          setIsSubmitting(false); // Hide the backdrop on signup failure
+        } else if (response.data.operation === "successfull") {
           navigate("/login");
+          setIsSubmitting(false); // Hide the backdrop on successful signup
         }
       })
       .catch((error) => {
-        setErrorMsg("something want wrong");
+        setErrorMsg("something went wrong");
+        setIsSubmitting(false); // Hide the backdrop on signup failure
       });
   };
 
@@ -91,7 +95,6 @@ function AdminCreate() {
         />
         <InputControl
           label="Phone"
-          // type="number"
           className="form-control"
           placeholder="Enter phone"
           onChange={(event) =>
@@ -126,6 +129,9 @@ function AdminCreate() {
           </p>
         </div>
       </div>
+
+      {/* Add the backdrop component here */}
+      <SimpleBackdrop open={isSubmitting} />
     </div>
   );
 }

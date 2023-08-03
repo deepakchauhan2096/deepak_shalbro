@@ -21,6 +21,7 @@ import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
 import AttendanceReport from "../Attendance/AttendanceAcknowledge";
 import SubContract from "../subcontract/SubContract";
+import env from "react-dotenv";
 
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
@@ -32,7 +33,7 @@ const CompanyMain = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   // get Company data
-  const navigate = useNavigate();
+  
   const location = useLocation();
   const filterallprojectData = location.state.props
   const NavScreen = styled(Paper)((props) => ({
@@ -91,6 +92,8 @@ const CompanyMain = () => {
 
   // navigation list
 
+  const navigate = useNavigate();
+
   const Lists = (props) => {
     return (
       <Box role="presentation" sx={{ width: 250 }}>
@@ -119,7 +122,7 @@ const CompanyMain = () => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        "http://3.84.137.243:5001/get_projects",
+        "http://18.211.130.168:5001/get_projects",
         {
           PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
           PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
@@ -213,10 +216,10 @@ const CompanyMain = () => {
           className="login sidebar_footer position-absolute"
           style={{ bottom: "0" }}
         >
-          <div className="logout_icon">
+          <div className="logout_icon" role="button">
             <div className="logout_icon d-inline">
               <Button className="text-white text-uppercase" onClick={() => navigate(-1)}>
-                <LogoutIcon style={{ display: "inline" }} /> Exit
+                Exit
               </Button>
             </div>
           </div>

@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
+import env from "react-dotenv";
 
 const style = {
   position: "absolute",
@@ -94,7 +95,7 @@ export default function AddEmployee(props) {
     setErrorMsg("");
 
       axios
-        .post("http://3.84.137.243:5001/create_employee", createEmployee, {
+        .post("http://18.211.130.168:5001/create_employee", createEmployee, {
           headers,
         })
         .then((response) => {

@@ -4,8 +4,8 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import axios from "axios";
 import InputControl from "../components/InputControl";
 import { auth } from "../firebase";
-
 import styles from "../assests/css/Signup.module.css";
+import env from "react-dotenv";
 
 function AdminCreate() {
   const navigate = useNavigate();

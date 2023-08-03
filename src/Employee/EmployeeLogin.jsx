@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios"
 import InputControl from "../components/InputControl";
 import styles from "../assests/css/Login.module.css";
+import env from "react-dotenv";
 
 function EmployeeLogin() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function EmployeeLogin() {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://3.84.137.243:5001/emplogin",
+      url: "http://18.211.130.168:5001/emplogin",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
