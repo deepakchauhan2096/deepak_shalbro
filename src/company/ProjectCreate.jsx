@@ -37,6 +37,7 @@ export default function ProjectCreate(props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [index, setIndex] = React.useState([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
 
   const [createProject, setCreateProject] = useState({
@@ -108,13 +109,15 @@ export default function ProjectCreate(props) {
     setErrorMsg("");
 
     axios
-      .post(`${env.API_URL}/create_project`, createProject, {
+      .post(`http://18.211.130.168:5001/create_project`, createProject, {
         headers,
       })
       .then((response) => {
+        console.log(response,"responsive")
         if (response.data.operation == "failed") {
           setErrorMsg(response.data.errorMsg);
         } else if (response.data.operation == "successfull") {
+          setIsSubmitted(true); // Set the submission status to true after successful submission
           toast.success("Form submitted successfully!", {
             position: toast.POSITION.TOP_CENTER,
           });

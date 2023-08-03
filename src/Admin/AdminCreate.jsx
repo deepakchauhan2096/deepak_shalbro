@@ -38,7 +38,7 @@ function AdminCreate() {
     }
     setErrorMsg("");
     axios
-      .post(`${env.API_URL}/create_admin`, values, {
+      .post(`http://18.211.130.168:5001/create_admin`, values, {
         headers,
       })
       .then((response) => {
