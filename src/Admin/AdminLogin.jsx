@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import axios from "axios";
 import InputControl from "../components/InputControl";
-import { auth } from "../firebase";
 import styles from "../assests/css/Login.module.css";
-import env from "react-dotenv";
+import SimpleBackdrop from "../components/Backdrop"; // Replace "./SimpleBackdrop" with the correct path to the file containing the MUI backdrop component
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -28,7 +26,7 @@ function AdminLogin() {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `${env.API_URL}/login`,
+      url: "http://18.211.130.168:5001/login",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
@@ -84,8 +82,9 @@ function AdminLogin() {
         <div className={styles.footer}>
           <center>
             <p className="text-danger fw-light mb-0">{errorMsg}</p>
-            {loginSuccess && <p className="text-success fw-light mb-0">Login successful!</p>}
-            {isSubmitting && <p>Loading...</p>}
+            {loginSuccess && (
+              <p className="text-success fw-light mb-0">Login successful!</p>
+            )}
           </center>
           <button disabled={isSubmitting} onClick={handleSubmission}>
             Login
@@ -98,6 +97,9 @@ function AdminLogin() {
           </p>
         </div>
       </div>
+
+      {/* Add the MUI backdrop component here */}
+      <SimpleBackdrop open={isSubmitting} />
     </div>
   );
 }

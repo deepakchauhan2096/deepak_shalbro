@@ -1,72 +1,92 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import InputControl from "./InputControl";
-import { auth } from "../firebase";
+import axios from "axios";
+import InputControl from "../components/InputControl";
 import styles from "../assests/css/Login.module.css";
-import env from "react-dotenv";
+import SimpleBackdrop from "../components/Backdrop"; // Replace "./SimpleBackdrop" with the correct path to the file containing the MUI backdrop component
 
 function AdminLogin() {
   const navigate = useNavigate();
   const [values, setValues] = useState({
-    email: "",
-    pass: "",
+    ADMIN_USERNAME: "",
+    ADMIN_PASSWORD: "",
   });
-
   const [errorMsg, setErrorMsg] = useState("");
-  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
-
-  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   const handleSubmission = () => {
-    if (!values.email || !values.pass) {
+    if (!values.ADMIN_USERNAME || !values.ADMIN_PASSWORD) {
       setErrorMsg("Fill all fields");
       return;
     }
     setErrorMsg("");
+    setIsSubmitting(true);
 
-    setSubmitButtonDisabled(true);
-    signInWithEmailAndPassword(auth, values.email, values.pass)
-      .then(async (res) => {
-        setSubmitButtonDisabled(false);
-        
-        navigate("/");
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://18.211.130.168:5001/login",
+      headers: {
+        authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+        "Content-Type": "application/json",
+      },
+      data: values,
+    };
 
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(response.data, "mylogin");
+        setIsSubmitting(false);
+        setLoginSuccess(true);
+        const data = response.data;
+        if (data.operation === "successfull") {
+          navigate("/admin", { state: { data } });
+        }
       })
-      .catch((err) => {
-        setSubmitButtonDisabled(false);
-        setErrorMsg(err.message);
+      .catch((error) => {
+        setErrorMsg(error.response.data.error);
+        setIsSubmitting(false);
       });
   };
-
-
-
-
-
 
   return (
     <div className={styles.container}>
       <div className={styles.innerBox}>
-        <h1 className={styles.heading}>Login</h1>
+        <h1 className={styles.heading}>
+          Login<sup style={{ fontSize: "20px", color: "tomato" }}>Admin</sup>
+        </h1>
 
         <InputControl
-          label="Email"
+          label="Username"
           onChange={(event) =>
-            setValues((prev) => ({ ...prev, email: event.target.value }))
+            setValues((prev) => ({
+              ...prev,
+              ADMIN_USERNAME: event.target.value,
+            }))
           }
           placeholder="Enter email address"
         />
         <InputControl
           label="Password"
           onChange={(event) =>
-            setValues((prev) => ({ ...prev, pass: event.target.value }))
+            setValues((prev) => ({
+              ...prev,
+              ADMIN_PASSWORD: event.target.value,
+            }))
           }
           placeholder="Enter Password"
         />
 
         <div className={styles.footer}>
-          <b className={styles.error}>{errorMsg}</b>
-          <button disabled={submitButtonDisabled} onClick={handleSubmission}>
+          <center>
+            <p className="text-danger fw-light mb-0">{errorMsg}</p>
+            {loginSuccess && (
+              <p className="text-success fw-light mb-0">Login successful!</p>
+            )}
+          </center>
+          <button disabled={isSubmitting} onClick={handleSubmission}>
             Login
           </button>
           <p>
@@ -77,6 +97,9 @@ function AdminLogin() {
           </p>
         </div>
       </div>
+
+      {/* Add the MUI backdrop component here */}
+      <SimpleBackdrop open={isSubmitting} />
     </div>
   );
 }

@@ -69,7 +69,7 @@ export default function CompanyCreate(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${env.API_URL}/create_company`, create_company, {
+      .post("http://18.211.130.168:5001/create_company", create_company, {
         headers,
       })
       .then((response) => {

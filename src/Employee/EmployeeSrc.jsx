@@ -105,7 +105,7 @@ const EmployeeSrc = (props) => {
     // Validate the form data before submission
 
     axios
-      .post(`${env.API_URL}/assign_project`, mergedData, {
+      .post("http://18.211.130.168:5001/assign_project", mergedData, {
         headers,
       })
       .then((response) => {
@@ -125,7 +125,7 @@ const EmployeeSrc = (props) => {
   const fetchAllEmployee = async () => {
     try {
       const response = await axios.put(
-        `${env.API_URL}/get_employee`,
+        "http://18.211.130.168:5001/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: filterallempData?.COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME:

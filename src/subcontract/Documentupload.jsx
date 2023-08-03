@@ -60,7 +60,7 @@ export default function ProjectUpload(props) {
     e.preventDefault();
 
     const response = await axios
-      .post(`${env.API_URL}/create_document`, postImage.myFile, {
+      .post("http://18.211.130.168:5001/create_document", postImage.myFile, {
         headers,
       })
       .then((response) => {
@@ -114,7 +114,7 @@ export default function ProjectUpload(props) {
         redirect: "follow",
       };
 
-      fetch(`${env.API_URL}/get_all_document`, requestOptions)
+      fetch("http://18.211.130.168:5001/get_all_document", requestOptions)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -149,7 +149,7 @@ export default function ProjectUpload(props) {
       const config = {
         method: "put",
         maxBodyLength: Infinity,
-        url: `http://3.84.137.243:5001/download_document`,
+        url: "http://3.84.137.243:5001/download_document",
         headers: {
           authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
           "Content-Type": "application/json",
@@ -165,26 +165,26 @@ export default function ProjectUpload(props) {
     }
   };
 
-  const handleDelete = (documentId, fileName) => {
-    // .preventDefault();
-    try {
-      console.log("HElloo")
-      // Send a DELETE request to the backend API to delete the document with the given ID.
+  // const handleDelete = (documentId, fileName) => {
+  //   // .preventDefault();
+  //   try {
+  //     console.log("HElloo")
+  //     // Send a DELETE request to the backend API to delete the document with the given ID.
 
-      axios.delete(`${env.API_URL}/delete_document/${documentId}`, {
-        headers: {
-          authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-          "Content-Type": "application/json",
-        },
-      });
+  //     axios.delete("http://18.211.130.168:5001/delete_document/${documentId}", {
+  //       headers: {
+  //         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
 
-      getalldocument();
-    } catch (error) {
-      // Handle any errors that might occur during the deletion process.
-      // Optionally, you can show an error message to the user.
-      setErrorMessage("Error deleting document!");
-    }
-  };
+  //     getalldocument();
+  //   } catch (error) {
+  //     // Handle any errors that might occur during the deletion process.
+  //     // Optionally, you can show an error message to the user.
+  //     setErrorMessage("Error deleting document!");
+  //   }
+  // };
 
 
 
@@ -274,9 +274,9 @@ export default function ProjectUpload(props) {
 
                   return (
                     <li className="Doc_li" key={index}>
-                      <span className="delete-icon" onClick={() => handleDelete(docs.DOCUMENT_ID, fileName)} role="button" type="submit">
+                      {/* <span className="delete-icon" onClick={() => handleDelete(docs.DOCUMENT_ID, fileName)} role="button" type="submit">
                         <i className="fa fa-trash"></i>
-                      </span>
+                      </span> */}
                       <span className="Docfile-icon">
                         {" "}
                         {isPDF ? (
@@ -312,9 +312,9 @@ export default function ProjectUpload(props) {
 
                     <li className="Doc_li" key={index}>
 
-                      <span className="delete-icon" onClick={() => handleDelete(docs.DOCUMENT_ID, fileName)} role="button" type="submit">
+                      {/* <span className="delete-icon" onClick={() => handleDelete(docs.DOCUMENT_ID, fileName)} role="button" type="submit">
                         <i className="fa fa-trash"></i>
-                      </span>
+                      </span> */}
                       <span className="Docfile-icon">
                         {" "}
                         {isPDF ? (

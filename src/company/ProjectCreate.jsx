@@ -7,7 +7,7 @@ import country from "../Api/countriess.json";
 // import states from "../Api/states.json"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import env from "react-dotenv";
+// import env from "react-dotenv";
 
 import {
   Button,
@@ -37,6 +37,7 @@ export default function ProjectCreate(props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [index, setIndex] = React.useState([]);
+  const [errorMsg, setErrorMsg] = useState("");
 
 
   const [createProject, setCreateProject] = useState({
@@ -55,7 +56,6 @@ export default function ProjectCreate(props) {
     PROJECT_STATE: "",
     PROJECT_PHONE: "",
   });
-  const [errorMsg, setErrorMsg] = useState("");
 
 
  // city-country-logic
@@ -108,14 +108,14 @@ export default function ProjectCreate(props) {
     setErrorMsg("");
 
     axios
-      .post(`${env.API_URL}/create_project`, createProject, {
+      .post("http://18.211.130.168:5001/create_project", createProject, {
         headers,
       })
       .then((response) => {
-        if (response.data.operation == "failed") {
+        if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
-        } else if (response.data.operation == "successfull") {
-          toast.success("Form submitted successfully!", {
+        } else if (response.data.operation === "successfull") {
+          toast.success("Project Created successfully!", {
             position: toast.POSITION.TOP_CENTER,
           });
           setOpen(false);
