@@ -33,7 +33,7 @@ const CompanyMain = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   // get Company data
-  const navigate = useNavigate();
+  
   const location = useLocation();
   const filterallprojectData = location.state.props
   const NavScreen = styled(Paper)((props) => ({
@@ -91,6 +91,8 @@ const CompanyMain = () => {
   // console.log(navIndex, "navindex");
 
   // navigation list
+
+  const navigate = useNavigate();
 
   const Lists = (props) => {
     return (
@@ -214,10 +216,10 @@ const CompanyMain = () => {
           className="login sidebar_footer position-absolute"
           style={{ bottom: "0" }}
         >
-          <div className="logout_icon">
+          <div className="logout_icon" role="button">
             <div className="logout_icon d-inline">
               <Button className="text-white text-uppercase" onClick={() => navigate(-1)}>
-                <LogoutIcon style={{ display: "inline" }} /> Exit
+                Exit
               </Button>
             </div>
           </div>

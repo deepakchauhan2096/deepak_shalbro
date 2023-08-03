@@ -385,6 +385,13 @@ const EmployeeSrc = (props) => {
                       color="text.secondary"
                       component="div"
                     >
+                      Password : {filterData.row.EMPLOYEE_PASSWORD}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
                       Address : {filterData.row.EMPLOYEE_STATE}
                       {""}
                       {filterData.row.EMPLOYEE_CITY}

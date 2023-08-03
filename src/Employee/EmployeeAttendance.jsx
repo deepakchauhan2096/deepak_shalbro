@@ -4,12 +4,21 @@ import Box from "@mui/material/Box";
 import { Button, Grid, Paper, Typography } from "@mui/material";
 import EmployeeNavbar from "./EmployeeNavbar";
 import { useLocation } from "react-router";
-import env from "react-dotenv";
+import SimpleBackdrop from "../components/Backdrop";
+// import env from "react-dotenv";
 
 const EmployeeAttendance = () => {
   const [indone, setIndone] = useState("");
   const [outdone, setOutdone] = useState("");
   const [allempData, setAllempData] = useState({});
+
+  // State variable to control the backdrop visibility
+  const [showBackdrop, setShowBackdrop] = useState(false);
+
+  // Callback function to hide the backdrop
+  const hideBackdrop = () => {
+    setShowBackdrop(false);
+  };
 
   //employe data using route
   const location = useLocation();
@@ -26,7 +35,7 @@ const EmployeeAttendance = () => {
   let year = date.getFullYear();
   // console.log(year, month, day);
 
-  // current date in 2023-07-23 formet
+  // current date in 2023-07-23 format
   var MyDate = new Date();
   var MyDateString;
   MyDate.setDate(MyDate.getDate());
@@ -37,12 +46,11 @@ const EmployeeAttendance = () => {
     "-" +
     ("0" + MyDate.getDate()).slice(-2);
 
-  
-
   // post attendance IN
   const handleSubmitIn = (event) => {
     // console.log(event, "in");
     event.preventDefault();
+
     let config = {
       method: "post",
       maxBodyLength: Infinity,
@@ -63,14 +71,21 @@ const EmployeeAttendance = () => {
       },
     };
 
+    // Show the backdrop when the attendance in is submitted
+    setShowBackdrop(true);
+
     axios
       .request(config)
       .then((response) => {
         // console.log(JSON.stringify(response.data), "IN ATTENDANCE");
         setIndone(response.data);
+        // Hide the backdrop after the attendance in is done
+        hideBackdrop();
       })
       .catch((error) => {
         console.log(error);
+        // Hide the backdrop on error (if needed)
+        hideBackdrop();
       });
   };
 
@@ -98,14 +113,21 @@ const EmployeeAttendance = () => {
       },
     };
 
+    // Show the backdrop when the attendance out is submitted
+    setShowBackdrop(true);
+
     axios
       .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data), "OUT ATTENDANCE");
         setOutdone(response.data);
+        // Hide the backdrop after the attendance out is done
+        hideBackdrop();
       })
       .catch((error) => {
         console.log(error);
+        // Hide the backdrop on error (if needed)
+        hideBackdrop();
       });
   };
 
@@ -121,6 +143,7 @@ const EmployeeAttendance = () => {
   return (
     <>
       <EmployeeNavbar />
+      
       <Box className="box">
         <div
           className="container-fluid d-flex pb-0 g-0 flex-column"
@@ -129,7 +152,7 @@ const EmployeeAttendance = () => {
           <div style={{ height: "20%" }}>
             <Button
               size="small"
-              className="btn button btn-blue bg-white border-0"
+              className="btn button btn-blue bg-white border-bottom-1"
               variant="outlined"
             >
               Employee Attendance
@@ -137,15 +160,18 @@ const EmployeeAttendance = () => {
           </div>
 
           <div style={screen}>
+
             <Grid
               container
               sx={{
                 height: "100%",
                 bgcolor: "#fff",
                 position: "relative",
+
               }}
               xl={12}
             >
+              {/* <h4>Welcome</h4> */}
               <Paper
                 sx={{
                   p: 2,
@@ -157,9 +183,12 @@ const EmployeeAttendance = () => {
                   position: "absolute",
                 }}
               >
+
+
                 <Typography>
                   Date : {day}-{month}-{year} Time : {currentTime}
                 </Typography>
+
                 <form>
                   <div className="form-group py-2 col-xl-12">
                     <input
@@ -242,6 +271,9 @@ const EmployeeAttendance = () => {
             </Grid>
           </div>
         </div>
+        <SimpleBackdrop />
+        <SimpleBackdrop open={showBackdrop} />
+
       </Box>
     </>
   );

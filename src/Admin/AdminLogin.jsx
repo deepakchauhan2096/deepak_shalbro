@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import InputControl from "../components/InputControl";
 import styles from "../assests/css/Login.module.css";
-import SimpleBackdrop from "../components/Backdrop"; // Replace "./SimpleBackdrop" with the correct path to the file containing the MUI backdrop component
+import SimpleBackdrop from "../components/Backdrop"; 
 
 function AdminLogin() {
   const navigate = useNavigate();
