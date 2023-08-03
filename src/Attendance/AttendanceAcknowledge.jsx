@@ -16,6 +16,7 @@ import {
   TableRow,
   styled,
 } from "@mui/material";
+import { CSVLink } from "react-csv";
 import { TableRows } from "@mui/icons-material";
 import env from "react-dotenv";
 
@@ -377,6 +378,12 @@ const filtered = (e,item) => {
 const startDate = new Date(startDateString);
 const endDate = new Date(endDateString);
 
+
+const csvReport = {
+  data: foundUsers,
+  filename: 'Doc.csv'
+};
+
 const dateArray = getDatesBetween(startDate, endDate);
 
   return (
@@ -537,7 +544,8 @@ const dateArray = getDatesBetween(startDate, endDate);
                       Export(PDF)
                     </button>{" "}
                     <button className="btn btn-secondary btn-sm">
-                      Export(CSV)
+                    <CSVLink className="sub-nav-text" {...csvReport}>↓ Export(CSV)</CSVLink>
+                      {/* Export(CSV) */}
                     </button>
                   </th>
                 </tr>

@@ -46,7 +46,7 @@ const EmployeeAttendance = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `${env.API_URL}/create_emp_attendence`,
+      url: `http://18.211.130.168:5001/create_emp_attendence`,
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const EmployeeAttendance = () => {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `${env.API_URL}/create_emp_attendence`,
+      url: `http://18.211.130.168:5001/create_emp_attendence`,
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
@@ -120,7 +120,7 @@ const EmployeeAttendance = () => {
 
   return (
     <>
-      <EmployeeNavbar />
+      <EmployeeNavbar data={employeeData} />
       <Box className="box">
         <div
           className="container-fluid d-flex pb-0 g-0 flex-column"

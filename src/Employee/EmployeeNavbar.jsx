@@ -90,7 +90,7 @@ const EmployeeNavbar = (props) => {
   };
 
 
-  const post = props.empData
+  const post = props.data
   
 //  console.log(props.empData, "empdata")
   return (

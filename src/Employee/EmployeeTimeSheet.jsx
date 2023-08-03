@@ -169,6 +169,9 @@ const EmployeeTimeSheet = (props) => {
             />
           </div>
           <div>
+            
+
+            
             <PDFDownloadLink
               document={
                 <SalaryPDF
@@ -184,7 +187,7 @@ const EmployeeTimeSheet = (props) => {
                 />
               }
               fileName="test.pdf"
-            >Download</PDFDownloadLink>
+            ><button>Download</button></PDFDownloadLink>
           </div>
         </div>
         <table className="table table-hover border">

@@ -28,7 +28,7 @@ function EmployeeLogin() {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `${env.API_URL}/emplogin`,
+      url: `http://18.211.130.168:5001/emplogin`,
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
