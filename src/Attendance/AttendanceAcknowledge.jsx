@@ -14,10 +14,13 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Typography,
   styled,
 } from "@mui/material";
+import { CSVLink } from "react-csv";
 import { TableRows } from "@mui/icons-material";
 import env from "react-dotenv";
+import AttendancePunch from "./AttendancePunch";
 
 let MyDateCurrent = new Date();
 let MyDateStringCurrent;
@@ -31,10 +34,10 @@ MyDateStringCurrent =
 
 //current Date
 
-let MyDateAfter = new Date();
+const MyDateAfter = new Date();
 let MyDateStringAfter;
 
-MyDateAfter.setDate(MyDateAfter.getDate());
+MyDateAfter.setDate(MyDateAfter.getDate()-7);
 
 MyDateStringAfter =
   MyDateAfter.getFullYear() +
@@ -50,7 +53,7 @@ function DateArray() {
   let MyDateAfter = new Date();
   let MyDateStringAfter;
 
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 8; i++) {
     MyDateAfter.setDate(MyDateAfter.getDate() - 1);
     MyDateStringAfter =
       MyDateAfter.getFullYear() +
@@ -92,14 +95,69 @@ function getDatesBetween(startDate, endDate) {
 
 
 const AttendanceReport = (props) => {
+  const [filterMethod, setFilterMethod] = useState('Date wise')
+  const [startDateString, setstartDateString] = useState(MyDateStringAfter)
+  const [endDateString, setendDateString] = useState(MyDateStringCurrent)
+  const [keyword, setKeyword] = useState(MyDateStringCurrent)
+
+
+   // date array function call
+
+ 
+  const startDate = new Date(startDateString);
+  const endDate = new Date(endDateString);
+  const dateArray = getDatesBetween(startDate, endDate);
+
+  var arrayDate = []
+   arrayDate.push(keyword)
+
+  let processedData = employees.map((employee) => {
+    console.log(arrayDate,MyDateStringCurrent,"ad")
+    let filterByDate;
+    filterByDate = employee.EMPLOYEE_ATTENDANCE.filter((item) => {
+      return (filterMethod === "By Pay Period" ? dateArray : [keyword]).includes(item.ATTENDANCE_DATE_ID);
+    });
+
+    console.log(filterByDate,arrayDate,"filter")
+
+
+
+    const totalHours = filterByDate.reduce((acc, attendance) => {
+      const attendanceIn = new Date(attendance.ATTENDANCE_IN);
+      const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
+      const hoursWorked = Math.abs(attendanceOut - attendanceIn) / (1000 * 60 * 60); // Convert milliseconds to hours
+      return acc + hoursWorked;
+    }, 0);
+
+    
+  
+    const modifiedEmployee = {
+      ...employee,
+      "TOTAL_HOURS": totalHours.toFixed(2),
+      EMPLOYEE_ATTENDANCE: filterByDate.map((attendance) => {
+        const attendanceIn = new Date(attendance.ATTENDANCE_IN);
+        const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
+        const hoursWorked = Math.abs(attendanceOut - attendanceIn) / (1000 * 60 * 60); // Convert milliseconds to hours
+  
+        return {
+          ...attendance,
+          HOURS: hoursWorked.toFixed(2),
+          REGULAR: hoursWorked.toFixed(2), // Assuming "REGULAR" represents the regular hours worked
+        };
+      }),
+    };
+  
+    return modifiedEmployee;
+  });
+  
   const [showPunch, setPunch] = useState(true);
   const [workvalue, setWorkvalue] = useState([]);
-  const [keyword, setKeyword] = useState(MyDateStringCurrent)
-  const [filterMethod, setFilterMethod] = useState('Date wise')
-  const [foundUsers, setFoundUsers] = useState(employees);
   const [name, setName] = useState("All");
-  const [startDateString, setstartDateString] = useState("--start--")
-  const [endDateString, setendDateString] = useState("--end--")
+  const [showDetail, setShowDetail ] = useState(true)
+  const [show, setshow ] = useState(true)
+  const [employeeName, setEmployeeName] = useState([])
+  const [foundUsers, setFoundUsers] = useState(employees);
+
 
   
 
@@ -173,177 +231,12 @@ const AttendanceReport = (props) => {
     display: props.screenIndex ? "block" : "none",
   }));
 
-  const PunchReport = () => {
+  const PunchReport = (e) => {
+    console.log(e, "e")
+    setshow(false)
+    setEmployeeName(e)
     return (
-      <Box className="box" style={{ background: "#277099" }}>
-        <Button
-          size="small"
-          className="btn button border-bottom-0 bg-white"
-          variant="outlined"
-        >
-          Pay Acknowledgement
-        </Button>
-        <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
-          <Box
-            style={{
-              height: "100%",
-              padding: 0,
-              paddingBottom: "0",
-              border: "",
-              overflowY: "scroll",
-            }}
-          >
-            <Grid
-              container
-              sx={{ position: "sticky", top: "0", bgcolor: "#fff" }}
-            >
-              <Grid xl={4}>
-                <Grid
-                  item
-                  container
-                  xl={12}
-                  sx={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <TableContainer>
-                    <Table>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell size="small">
-                            <label> Date filter by </label>
-                          </TableCell>
-                          <TableCell size="small">
-                            <select className="form-control border">
-                              <option>By Pay Period</option>
-                            </select>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell size="small">
-                            <label> Date </label>
-                          </TableCell>
-                          <TableCell size="small">
-                            <select className="form-control border">
-                              <option>By Pay Period</option>
-                            </select>
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Grid>
-              </Grid>
-              <Grid item container xl={4}>
-                <TableContainer>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Employee </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Department </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-              <Grid item container xl={4}>
-                <TableContainer>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Shift </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Work Type </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-            </Grid>
-
-            <table className="table table-hover table-sm table-fixed">
-              <thead
-                style={{
-                  position: "sticky",
-                  top: "85px",
-                }}
-              >
-                <tr className="table-light">
-                  <th scope="col" colSpan={7} style={{ gap: 2 }}>
-                    <button className="btn btn-primary btn-sm">
-                      Print Preview
-                    </button>{" "}
-                    <button className="btn btn-secondary btn-sm">
-                      Export(PDF)
-                    </button>{" "}
-                    <button className="btn btn-secondary btn-sm">
-                      Export(CSV)
-                    </button>
-                  </th>
-                </tr>
-                <tr className="table-light">
-                  <th scope="col">Employee</th>
-                  <th scope="col">Total</th>
-                  <th scope="col">Regular</th>
-                  <th scope="col">Overtime</th>
-                  <th scope="col">PTO</th>
-                  <th scope="col">Acknowledge</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
-                  (item) => (
-                    <tr className="table table-striped">
-                      <td>null</td>
-                      <td>null</td>
-                      <td>null</td>
-                      <td>null</td>
-                      <td>null</td>
-                      <td>null</td>
-                      <td>
-                        {" "}
-                        <button className="btn btn-secondary btn-sm">
-                          punch
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
-          </Box>
-        </MyScreen>
-      </Box>
+      setShowDetail(<AttendancePunch  data={e} />)
     );
   };
 
@@ -355,41 +248,68 @@ const filtered = (e,item) => {
   const word = e.target.value;
 
     if (word !== "" && word !== "All") {
-    const results = employees.filter((post) => {
+    const results = processedData.filter((post) => {
       return post[item].toLowerCase().includes(word.toLowerCase());
     });
     setFoundUsers(results);
   } else {
-    setFoundUsers(employees);
+    setFoundUsers(processedData);
   }
-
+   
   setName(word);
 };
 
 
- const arrayDate = []
- arrayDate.push(keyword)
-
-
- // date array function call
-
  
-const startDate = new Date(startDateString);
-const endDate = new Date(endDateString);
 
-const dateArray = getDatesBetween(startDate, endDate);
+
+
+
+
+const csvReport = {
+  data: processedData,
+  filename: 'report.csv'
+};
+
+
+
+
+
+
+
+
+
+
+
+ console.log(processedData,"process",foundUsers,"found", employees)
+
+
+
+
+
+
 
   return (
     <>
       <Box className="box" style={{ background: "#277099" }}>
         <Button
           size="small"
-          className="btn button border-bottom-0 bg-white"
-          variant="outlined"
+          variant={show ? "outlined" : "outlined"}
+          className={show ? "btn button border-bottom-0 bg-white"
+                    : "btn rounded-0 border-bottom-0  rounded-0 text-light"
+                }
+          onClick={() => setshow(true)}
         >
           Pay Acknowledgement
         </Button>
-        <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
+        {!show && <Button
+          size="small"
+          className="btn button border-bottom-0 bg-white"
+          variant="outlined"
+        >
+          Punch Detail - {employeeName.EMPLOYEE_NAME}{" "}<Typography size="small" px={1} onClick={() => setshow(true)}><i className="fa fa-times" aria-hidden="true"></i></Typography>
+        </Button>}
+       <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
           <Box
             style={{
               height: "100%",
@@ -491,7 +411,7 @@ const dateArray = getDatesBetween(startDate, endDate);
                   </Table>
                 </TableContainer>
               </Grid>
-              <Grid item container xl={4}>
+              {/* <Grid item container xl={4}>
                 <TableContainer>
                   <Table>
                     <TableBody>
@@ -518,7 +438,7 @@ const dateArray = getDatesBetween(startDate, endDate);
                     </TableBody>
                   </Table>
                 </TableContainer>
-              </Grid>
+              </Grid> */}
             </Grid>
 
             <table className="table table-hover table-sm table-fixed">
@@ -530,14 +450,15 @@ const dateArray = getDatesBetween(startDate, endDate);
               >
                 <tr className="table-light">
                   <th scope="col" colSpan={7} style={{ gap: 2 }}>
-                    <button className="btn btn-primary btn-sm">
+                    {/* <button className="btn btn-primary btn-sm" onClick={window.print()}>
                       Print Preview
-                    </button>{" "}
-                    <button className="btn btn-secondary btn-sm">
+                    </button>{" "} */}
+                    {/* <button className="btn btn-secondary btn-sm">
                       Export(PDF)
-                    </button>{" "}
+                    </button>{" "} */}
                     <button className="btn btn-secondary btn-sm">
-                      Export(CSV)
+                    <CSVLink className="sub-nav-text" {...csvReport}>↓ Export(CSV)</CSVLink>
+                      {/* Export(CSV) */}
                     </button>
                   </th>
                 </tr>
@@ -551,39 +472,34 @@ const dateArray = getDatesBetween(startDate, endDate);
                   <th scope="col">Action</th>
                 </tr>
               </thead>
+              
+
+              {show ?  
+              
               <tbody>
-                {foundUsers.map(post =>
+                {processedData.map(post =>
 
                 { 
-                  console.log(post.EMPLOYEE_ATTENDANCE, "AAA")
-                  let filterByDate;
-                    // filterByDate = post.EMPLOYEE_ATTENDANCE.filter((post) => {
-                    //   return post.ATTENDANCE_DATE_ID.toLowerCase().includes(keyword.toLowerCase())
-                    // });
-
-                    filterByDate = post.EMPLOYEE_ATTENDANCE.filter((item) => {
-                      return (filterMethod === "By Pay Period" ? dateArray : arrayDate).includes(item.ATTENDANCE_DATE_ID);
-                    });
-
-                  console.log(filterByDate,arrayDate,"filter")
-                
                return (
                   <tr className="table table-striped">
                     <td>{post.EMPLOYEE_NAME}</td>
-                    <td><span className="bg-success rounded-2 px-1 text-light" style={{width:"content-fit"}}>{total([...filterByDate])} Total</span></td>
-                    <td><span className="bg-success rounded-2 px-1 text-light" style={{width:"content-fit"}}>{total([...filterByDate])} Total</span></td>
+                    <td><span className="bg-success rounded-2 px-1 text-light" style={{width:"content-fit"}}>{post.TOTAL_HOURS} Total</span></td>
+                    <td><span className="bg-success rounded-2 px-1 text-light" style={{width:"content-fit"}}>{post.TOTAL_HOURS} Total</span></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td>
                       {" "}
-                      <button className="btn btn-secondary btn-sm">
+                      <button className="btn btn-secondary btn-sm" onClick={(e)=> PunchReport(post)}>
                         Punch Detail
                       </button>
                     </td>
                   </tr>
                 )})}
               </tbody>
+              
+              
+              : showDetail }
             </table>
           </Box>
         </MyScreen>
