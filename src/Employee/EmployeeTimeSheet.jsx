@@ -168,10 +168,8 @@ const EmployeeTimeSheet = (props) => {
               value="Submit"
             />
           </div>
-          <div>
-            
-
-            
+          <div className="form-group col-xl-1">
+            <label style={{ visibility: "hidden" }}>Result</label>
             <PDFDownloadLink
               className="btn btn-dark btn-sm"
               document={
@@ -187,8 +185,14 @@ const EmployeeTimeSheet = (props) => {
                   mapvalue={workvalue}
                 />
               }
-              fileName="test.pdf"
-            ><button>Download</button></PDFDownloadLink>
+              fileName={`${props.mainData.EMPLOYEE_NAME}.pdf`}
+            >Download</PDFDownloadLink>
+          </div>
+          <div>
+            
+
+            
+            
           </div>
         </div>
         <table className="table table-hover border">
