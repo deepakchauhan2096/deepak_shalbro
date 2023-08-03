@@ -120,7 +120,7 @@ const CompanyMain = () => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        `${env.API_URL}/get_projects`,
+        `http://18.211.130.168:5001/get_projects`,
         {
           PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
           PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
@@ -216,7 +216,7 @@ const CompanyMain = () => {
         >
           <div className="logout_icon">
             <div className="logout_icon d-inline">
-              <Button className="text-white text-uppercase" onClick={() => navigate(-1)}>
+              <Button className="text-white text-uppercase" onClick={() => {navigate(-1)}}>
                 <LogoutIcon style={{ display: "inline" }} /> Exit
               </Button>
             </div>
