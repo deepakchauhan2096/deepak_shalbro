@@ -60,7 +60,7 @@ export default function ProjectUpload(props) {
     e.preventDefault();
 
     const response = await axios
-      .post(`${env.API_URL}/create_document`, postImage.myFile, {
+      .post(`http://18.211.130.168:5001/create_document`, postImage.myFile, {
         headers,
       })
       .then((response) => {
@@ -114,7 +114,7 @@ export default function ProjectUpload(props) {
         redirect: "follow",
       };
 
-      fetch(`${env.API_URL}/get_all_document`, requestOptions)
+      fetch(`http://18.211.130.168:5001/get_all_document`, requestOptions)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -171,7 +171,7 @@ export default function ProjectUpload(props) {
       console.log("HElloo")
       // Send a DELETE request to the backend API to delete the document with the given ID.
 
-      axios.delete(`${env.API_URL}/delete_document/${documentId}`, {
+      axios.delete(`http://18.211.130.168:5001/delete_document/${documentId}`, {
         headers: {
           authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
           "Content-Type": "application/json",

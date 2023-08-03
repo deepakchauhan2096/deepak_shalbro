@@ -63,9 +63,12 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "redux-devtools-extension": "^2.13.9"
   },
-   "react-dotenv": {
-    "whitelist": ["API_URL"]
+  "react-dotenv": {
+    "whitelist": [
+      "API_URL"
+    ]
   }
 }

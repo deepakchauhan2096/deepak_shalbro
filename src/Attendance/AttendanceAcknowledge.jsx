@@ -14,10 +14,12 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Typography,
   styled,
 } from "@mui/material";
 import { TableRows } from "@mui/icons-material";
 import env from "react-dotenv";
+import AttendancePunch from "./AttendancePunch";
 
 let MyDateCurrent = new Date();
 let MyDateStringCurrent;
@@ -100,6 +102,9 @@ const AttendanceReport = (props) => {
   const [name, setName] = useState("All");
   const [startDateString, setstartDateString] = useState("--start--")
   const [endDateString, setendDateString] = useState("--end--")
+  const [showDetail, setShowDetail ] = useState(true)
+  const [show, setshow ] = useState(true)
+  const [employeeName, setEmployeeName] = useState([])
 
   
 
@@ -173,177 +178,12 @@ const AttendanceReport = (props) => {
     display: props.screenIndex ? "block" : "none",
   }));
 
-  const PunchReport = () => {
+  const PunchReport = (e) => {
+    console.log(e, "e")
+    setshow(false)
+    setEmployeeName(e)
     return (
-      <Box className="box" style={{ background: "#277099" }}>
-        <Button
-          size="small"
-          className="btn button border-bottom-0 bg-white"
-          variant="outlined"
-        >
-          Pay Acknowledgement
-        </Button>
-        <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
-          <Box
-            style={{
-              height: "100%",
-              padding: 0,
-              paddingBottom: "0",
-              border: "",
-              overflowY: "scroll",
-            }}
-          >
-            <Grid
-              container
-              sx={{ position: "sticky", top: "0", bgcolor: "#fff" }}
-            >
-              <Grid xl={4}>
-                <Grid
-                  item
-                  container
-                  xl={12}
-                  sx={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <TableContainer>
-                    <Table>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell size="small">
-                            <label> Date filter by </label>
-                          </TableCell>
-                          <TableCell size="small">
-                            <select className="form-control border">
-                              <option>By Pay Period</option>
-                            </select>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell size="small">
-                            <label> Date </label>
-                          </TableCell>
-                          <TableCell size="small">
-                            <select className="form-control border">
-                              <option>By Pay Period</option>
-                            </select>
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Grid>
-              </Grid>
-              <Grid item container xl={4}>
-                <TableContainer>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Employee </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Department </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-              <Grid item container xl={4}>
-                <TableContainer>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Shift </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Work Type </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-            </Grid>
-
-            <table className="table table-hover table-sm table-fixed">
-              <thead
-                style={{
-                  position: "sticky",
-                  top: "85px",
-                }}
-              >
-                <tr className="table-light">
-                  <th scope="col" colSpan={7} style={{ gap: 2 }}>
-                    <button className="btn btn-primary btn-sm">
-                      Print Preview
-                    </button>{" "}
-                    <button className="btn btn-secondary btn-sm">
-                      Export(PDF)
-                    </button>{" "}
-                    <button className="btn btn-secondary btn-sm">
-                      Export(CSV)
-                    </button>
-                  </th>
-                </tr>
-                <tr className="table-light">
-                  <th scope="col">Employee</th>
-                  <th scope="col">Total</th>
-                  <th scope="col">Regular</th>
-                  <th scope="col">Overtime</th>
-                  <th scope="col">PTO</th>
-                  <th scope="col">Acknowledge</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
-                  (item) => (
-                    <tr className="table table-striped">
-                      <td>null</td>
-                      <td>null</td>
-                      <td>null</td>
-                      <td>null</td>
-                      <td>null</td>
-                      <td>null</td>
-                      <td>
-                        {" "}
-                        <button className="btn btn-secondary btn-sm">
-                          punch
-                        </button>
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
-          </Box>
-        </MyScreen>
-      </Box>
+      setShowDetail(<AttendancePunch  data={e} />)
     );
   };
 
@@ -384,12 +224,22 @@ const dateArray = getDatesBetween(startDate, endDate);
       <Box className="box" style={{ background: "#277099" }}>
         <Button
           size="small"
-          className="btn button border-bottom-0 bg-white"
-          variant="outlined"
+          variant={show ? "outlined" : "outlined"}
+          className={show ? "btn button border-bottom-0 bg-white"
+                    : "btn rounded-0 border-bottom-0  rounded-0 text-light"
+                }
+          onClick={() => setshow(true)}
         >
           Pay Acknowledgement
         </Button>
-        <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
+        {!show && <Button
+          size="small"
+          className="btn button border-bottom-0 bg-white"
+          variant="outlined"
+        >
+          Punch Detail - {employeeName.EMPLOYEE_NAME}{" "}<Typography size="small" px={1} onClick={() => setshow(true)}><i className="fa fa-times" aria-hidden="true"></i></Typography>
+        </Button>}
+        {show ? <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
           <Box
             style={{
               height: "100%",
@@ -577,7 +427,7 @@ const dateArray = getDatesBetween(startDate, endDate);
                     <td></td>
                     <td>
                       {" "}
-                      <button className="btn btn-secondary btn-sm">
+                      <button className="btn btn-secondary btn-sm" onClick={(e)=> PunchReport(post)}>
                         Punch Detail
                       </button>
                     </td>
@@ -586,7 +436,7 @@ const dateArray = getDatesBetween(startDate, endDate);
               </tbody>
             </table>
           </Box>
-        </MyScreen>
+        </MyScreen> : showDetail }
       </Box>
     </>
   );

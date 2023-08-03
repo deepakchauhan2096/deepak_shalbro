@@ -57,7 +57,7 @@ const EmployeeTimeSheet = (props) => {
   const gettimesheet = async (e) => {
     try {
       const response = await axios.put(
-        `${env.API_URL}/get_employee_all_for_attendence`,
+        `http://18.211.130.168:5001/get_employee_all_for_attendence`,
         {
           ATTENDANCE_ADMIN_USERNAME:props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME,
           ATTENDANCE_EMPLOYEE_USERNAME: props.mainData?.EMPLOYEE_USERNAME,
@@ -168,8 +168,10 @@ const EmployeeTimeSheet = (props) => {
               value="Submit"
             />
           </div>
-          <div>
+          <div className="form-group col-xl-1">
+            <label style={{ visibility: "hidden" }}>Result</label>
             <PDFDownloadLink
+              className="btn btn-dark btn-sm"
               document={
                 <SalaryPDF
                   name={props.mainData.EMPLOYEE_NAME}
@@ -183,8 +185,9 @@ const EmployeeTimeSheet = (props) => {
                   mapvalue={workvalue}
                 />
               }
-              fileName="test.pdf"
+              fileName={`${props.mainData.EMPLOYEE_NAME}_salary.pdf`}
             >Download</PDFDownloadLink>
+
           </div>
         </div>
         <table className="table table-hover border">

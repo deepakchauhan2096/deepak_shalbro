@@ -59,7 +59,7 @@ export default function ProjectUpload(props) {
     e.preventDefault();
 
     const response = await axios
-      .post(`${env.API_URL}/create_document`, postImage.myFile, {
+      .post(`http://18.211.130.168:5001/create_document`, postImage.myFile, {
         headers,
       })
       .then((response) => {

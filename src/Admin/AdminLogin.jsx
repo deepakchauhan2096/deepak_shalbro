@@ -30,7 +30,7 @@ function AdminLogin() {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `${env.API_URL}/login`,
+      url: `http://18.211.130.168:5001/login`,
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
