@@ -181,3 +181,8 @@ align-items:center;
   color: crimson; /* Change the color of the delete icon as needed */
   font-size: 1.2rem; /* Adjust the font size as needed */
 }
+
+.documents{
+  display: flex;
+  flex-direction: column;
+}

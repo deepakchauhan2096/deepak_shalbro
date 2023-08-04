@@ -10,6 +10,7 @@ export default function SimpleBackdrop({ open }) {
         open={open}
       >
         <CircularProgress color="inherit" />
+        <h1>Please wait....</h1>
       </Backdrop>
     </div>
   );
