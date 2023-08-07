@@ -32,41 +32,44 @@ const style = {
   borderRadius: 4,
 };
 
-export default function ProjectCreate(props) {
+export default function ProjectEdit(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [index, setIndex] = React.useState([]);
   const [errorMsg, setErrorMsg] = useState("");
 
+const editProjectData = props?.edit.row
 
-  const [createProject, setCreateProject] = useState({
-    PROJECT_PARENT_ID: props.companyData?.COMPANY_ID,
-    PROJECT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME,
-    PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID,
-    PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME,
-    PROJECT_NAME: "",
-    PROJECT_USERNAME: "",
-    PROJECT_ADD: "",
-    PROJECT_CITY: "",
-    PROJECT_START_DATE: "",
-    PROJECT_END_DATE: "",
-    PROJECT_SUPERVISOR: "",
-    PROJECT_COUNTRY: "",
-    PROJECT_STATE: "",
-    PROJECT_PHONE: "",
+console.log("editProjectData",editProjectData)
+
+  const [EditProject, setEditProject] = useState({
+    PROJECT_PARENT_ID: editProjectData.EMPLOYEE_PARENT_ID,
+    PROJECT_PARENT_USERNAME:editProjectData.PROJECT_PARENT_USERNAME,
+    PROJECT_MEMBER_PARENT_ID: editProjectData.PROJECT_MEMBER_PARENT_ID,
+    PROJECT_MEMBER_PARENT_USERNAME: editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
+    PROJECT_NAME: editProjectData.PROJECT_NAME,
+    PROJECT_USERNAME: editProjectData.PROJECT_USERNAME,
+    PROJECT_ADD: editProjectData.PROJECT_ADD,
+    PROJECT_CITY: editProjectData.PROJECT_CITY,
+    PROJECT_START_DATE:editProjectData.PROJECT_START_DATE,
+    PROJECT_END_DATE:editProjectData.PROJECT_END_DATE,
+    PROJECT_SUPERVISOR:editProjectData.PROJECT_SUPERVISOR,
+    PROJECT_COUNTRY: editProjectData.PROJECT_COUNTRY,
+    PROJECT_STATE:editProjectData.PROJECT_STATE,
+    PROJECT_PHONE:editProjectData.PROJECT_PHONE
   });
 
 
  // city-country-logic
 
   const availableState = country?.find(
-    (c) => c.name === createProject.PROJECT_COUNTRY
+    (c) => c.name === EditProject.PROJECT_COUNTRY
   );
 
   // console.log("all states : ===> ", availableState,"country=>",country);
   const availableCities = availableState?.states?.find(
-    (s) => s.name === createProject.PROJECT_STATE
+    (s) => s.name === EditProject.PROJECT_STATE
   );
 
   //api header
@@ -77,9 +80,9 @@ export default function ProjectCreate(props) {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const handleCreate = (e) => {
-    setCreateProject({ ...createProject, [e.target.name]: e.target.value });
-    console.log("heello world", createProject);
+  const handleEdit = (e) => {
+    setEditProject({ ...EditProject, [e.target.name]: e.target.value });
+    console.log("heello world", EditProject);
   };
 
 
@@ -87,20 +90,20 @@ export default function ProjectCreate(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
-      !createProject.PROJECT_USERNAME ||
-      !createProject.PROJECT_NAME ||
-      !createProject.PROJECT_PHONE ||
-      !createProject.PROJECT_PARENT_ID ||
-      !createProject.PROJECT_PARENT_USERNAME ||
-      !createProject.PROJECT_MEMBER_PARENT_ID ||
-      !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
-      !createProject.PROJECT_ADD ||
-      !createProject.PROJECT_START_DATE ||
-      !createProject.PROJECT_END_DATE ||
-      !createProject.PROJECT_SUPERVISOR ||
-      !createProject.PROJECT_COUNTRY ||
-      !createProject.PROJECT_CITY ||
-      !createProject.PROJECT_STATE
+      !EditProject.PROJECT_USERNAME ||
+      !EditProject.PROJECT_NAME ||
+      !EditProject.PROJECT_PHONE ||
+      !EditProject.PROJECT_PARENT_ID ||
+      !EditProject.PROJECT_PARENT_USERNAME ||
+      !EditProject.PROJECT_MEMBER_PARENT_ID ||
+      !EditProject.PROJECT_MEMBER_PARENT_USERNAME ||
+      !EditProject.PROJECT_ADD ||
+      !EditProject.PROJECT_START_DATE ||
+      !EditProject.PROJECT_END_DATE ||
+      !EditProject.PROJECT_SUPERVISOR ||
+      !EditProject.PROJECT_COUNTRY ||
+      !EditProject.PROJECT_CITY ||
+      !EditProject.PROJECT_STATE
     ) {
       setErrorMsg("Fill all fields");
       return;
@@ -108,7 +111,7 @@ export default function ProjectCreate(props) {
     setErrorMsg("");
 
     axios
-      .post("http://18.211.130.168:5001/create_project", createProject, {
+      .post("http://18.211.130.168:5001/update_projects", EditProject, {
         headers,
       })
       .then((response) => {
@@ -119,7 +122,7 @@ export default function ProjectCreate(props) {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 1000,
           });
-          setCreateProject("");
+          setEditProject("");
           setOpen(false);
         }
       })
@@ -129,23 +132,19 @@ export default function ProjectCreate(props) {
   };
 
 
+
   //state city api
 
   return (
     <>
-      <Button size="small" className="btn button border-bottom-0 bg-white"  variant="outlined">
-        Project
-      </Button>
-      <Button
+       <Button
         onClick={handleOpen}
-        sx={{ color: "#277099" }}
-        className="btn rounded-0 border-0  rounded-0 text-light"
-        variant="contained"
-        size="small"
+        variant="rounded"
+        className="view-btn border border-info text-success "
+        style={{ padding: "2px 2px" }}
       >
-       + Add New Project
+        Edit
       </Button>
-
       <Modal
         open={open}
         onClose={handleClose}
@@ -161,10 +160,10 @@ export default function ProjectCreate(props) {
                   type="text"
                   className="form-control rounded-0"
                   placeholder="Username"
-                  value={createProject.PROJECT_USERNAME}
+                  value={EditProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
-                  onChange={handleCreate}
-                  //required
+                  onChange={handleEdit}
+                  disabled
                 />
                 {/* {errors.PROJECT_USERNAME && (
                   <p className="error text-danger fw-light">
@@ -179,9 +178,9 @@ export default function ProjectCreate(props) {
                   className="form-control rounded-0"
                   id="inputname"
                   placeholder="Project Name"
-                  value={createProject.PROJECT_NAME}
+                  value={EditProject.PROJECT_NAME}
                   name="PROJECT_NAME"
-                  onChange={handleCreate}
+                  onChange={handleEdit}
                   required
                 />
               </div>
@@ -193,8 +192,8 @@ export default function ProjectCreate(props) {
                   id="inputPassword4"
                   placeholder="Enter Phone Number"
                   name="PROJECT_PHONE"
-                  value={createProject.PROJECT_PHONE}
-                  onChange={handleCreate}
+                  value={EditProject.PROJECT_PHONE}
+                  onChange={handleEdit}
                   required
                 />
               </div>
@@ -204,9 +203,9 @@ export default function ProjectCreate(props) {
                 <label>Project start date</label>
                 <input
                   type="date"
-                  value={createProject.PROJECT_START_DATE}
+                  value={EditProject.PROJECT_START_DATE}
                   name="PROJECT_START_DATE"
-                  onChange={handleCreate}
+                  onChange={handleEdit}
                   className="form-control rounded-0"
                 //required
                 />
@@ -215,9 +214,9 @@ export default function ProjectCreate(props) {
                 <label>Project End date</label>
                 <input
                   type="date"
-                  value={createProject.PROJECT_END_DATE}
+                  value={EditProject.PROJECT_END_DATE}
                   name="PROJECT_END_DATE"
-                  onChange={handleCreate}
+                  onChange={handleEdit}
                   className="form-control rounded-0"
                 //required
                 />
@@ -229,9 +228,9 @@ export default function ProjectCreate(props) {
                 <select
                   id="inputEnroll"
                   className="form-control border rounded-0"
-                  onChange={handleCreate}
+                  onChange={handleEdit}
                   name="PROJECT_EMROLMNT_TYPE"
-                  value={createProject.PROJECT_EMROLMNT_TYPE}
+                  value={EditProject.PROJECT_EMROLMNT_TYPE}
                   //required
                 >
                   <option selected>Choose...</option>
@@ -249,8 +248,8 @@ export default function ProjectCreate(props) {
                   className="form-control rounded-0 "
                   id="inputsupervisor"
                   name="PROJECT_SUPERVISOR"
-                  value={createProject.PROJECT_SUPERVISOR}
-                  onChange={handleCreate}
+                  value={EditProject.PROJECT_SUPERVISOR}
+                  onChange={handleEdit}
                   //required
                 />
               </div>
@@ -264,8 +263,8 @@ export default function ProjectCreate(props) {
                   id="inputAddress2"
                   placeholder="Apartment, studio, or floor"
                   name="PROJECT_ADD"
-                  value={createProject.PROJECT_ADD}
-                  onChange={handleCreate}
+                  value={EditProject.PROJECT_ADD}
+                  onChange={handleEdit}
                   //required
                 />
               </div>
@@ -277,8 +276,8 @@ export default function ProjectCreate(props) {
                   className="form-control border rounded-0"
                   placeholder="Country"
                   name="PROJECT_COUNTRY"
-                  value={createProject.PROJECT_COUNTRY}
-                  onChange={handleCreate}
+                  value={EditProject.PROJECT_COUNTRY}
+                  onChange={handleEdit}
                   //required
                 >
                   <option >--Choose Country--</option>
@@ -299,8 +298,8 @@ export default function ProjectCreate(props) {
                   className="form-control border rounded-0"
                   placeholder="State"
                   name="PROJECT_STATE"
-                  value={createProject.PROJECT_STATE}
-                  onChange={handleCreate}
+                  value={EditProject.PROJECT_STATE}
+                  onChange={handleEdit}
                   //required
                   
                 >
@@ -321,8 +320,8 @@ export default function ProjectCreate(props) {
                   className="form-control border rounded-0"
                   placeholder="City"
                   name="PROJECT_CITY"
-                  value={createProject.PROJECT_CITY}
-                  onChange={handleCreate}
+                  value={EditProject.PROJECT_CITY}
+                  onChange={handleEdit}
                   //required
                 >
                   <option>--Choose City--</option>

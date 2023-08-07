@@ -7,7 +7,6 @@ import {Button,Skeleton,Paper} from "@mui/material";
 import ProjectCreate from "./ProjectCreate";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
-import ProjectEdit from "./ProjectEdit";
 
 const Project = (props) => {
   const [data, setData] = useState({
@@ -84,26 +83,26 @@ const Project = (props) => {
   // console.log(ProjectData, "projectdata");
 
   const columns = [
-    { field: "PROJECT_ID", headerName: "ID", width: 60 },
+    { field: "PROJECT_ID", headerName: "ID", width: 90 },
     {
       field: "PROJECT_USERNAME",
       headerName: "USername",
-      width: 120,
+      width: 150,
     },
     {
       field: "PROJECT_NAME",
       headerName: "Name",
-      width: 120,
+      width: 150,
     },
     {
       field: "PROJECT_PHONE",
       headerName: "Phone",
-      width: 130,
+      width: 150,
     },
     {
       field: "PROJECT_START_DATE",
       headerName: "Start Date",
-      width: 100,
+      width: 150,
     },
     {
       field: "PROJECT_END_DATE",
@@ -115,13 +114,13 @@ const Project = (props) => {
     {
       field: "PROJECT_SUPERVISOR",
       headerName: "Supervisor",
-      width: 130,
+      width: 200,
     },
 
     {
       field: "action",
       headerName: "Detail",
-      width: 100,
+      width: 120,
       renderCell: (cellValues) => {
         return (
           <Button
@@ -133,24 +132,6 @@ const Project = (props) => {
             }}
           >
             view
-          </Button>
-        );
-      },
-    },
-    {
-      field: "edit",
-      headerName: "Edit",
-      width: 80,
-      renderCell: (cellValues) => {
-        return (
-          <Button
-            // onClick={(event) => {
-            //   handleEdit(cellValues);
-            // }}
-          >
-            <ProjectEdit edit={cellValues} 
-            // refetch={fetchAllEmployee}
-            />
           </Button>
         );
       },
