@@ -99,6 +99,7 @@ const AttendanceReport = (props) => {
   const [startDateString, setstartDateString] = useState(MyDateStringAfter)
   const [endDateString, setendDateString] = useState(MyDateStringCurrent)
   const [keyword, setKeyword] = useState(MyDateStringCurrent)
+  const [foundUsers, setFoundUsers] = useState(employees);
 
 
    // date array function call
@@ -108,10 +109,30 @@ const AttendanceReport = (props) => {
   const endDate = new Date(endDateString);
   const dateArray = getDatesBetween(startDate, endDate);
 
+
+
+  //filter by different param
+
+const filtered = (e,item) => {
+  // topFunction()
+  const word = e.target.value;
+
+    if (word !== "" && word !== "All") {
+    const results = employees.filter((post) => {
+      return post[item].toLowerCase().includes(word.toLowerCase());
+    });
+    setFoundUsers(results);
+  } else {
+    setFoundUsers(employees);
+  }
+   
+  setName(word);
+};
+
   var arrayDate = []
    arrayDate.push(keyword)
 
-  let processedData = employees.map((employee) => {
+  let processedData = foundUsers.map((employee) => {
     console.log(arrayDate,MyDateStringCurrent,"ad")
     let filterByDate;
     filterByDate = employee.EMPLOYEE_ATTENDANCE.filter((item) => {
@@ -134,6 +155,7 @@ const AttendanceReport = (props) => {
     const modifiedEmployee = {
       ...employee,
       "TOTAL_HOURS": totalHours.toFixed(2),
+      "PUNCH": employee,
       EMPLOYEE_ATTENDANCE: filterByDate.map((attendance) => {
         const attendanceIn = new Date(attendance.ATTENDANCE_IN);
         const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
@@ -156,7 +178,7 @@ const AttendanceReport = (props) => {
   const [showDetail, setShowDetail ] = useState(true)
   const [show, setshow ] = useState(true)
   const [employeeName, setEmployeeName] = useState([])
-  const [foundUsers, setFoundUsers] = useState(employees);
+  
 
 
   
@@ -241,23 +263,7 @@ const AttendanceReport = (props) => {
   };
 
 
-//filter by different param
 
-const filtered = (e,item) => {
-  // topFunction()
-  const word = e.target.value;
-
-    if (word !== "" && word !== "All") {
-    const results = processedData.filter((post) => {
-      return post[item].toLowerCase().includes(word.toLowerCase());
-    });
-    setFoundUsers(results);
-  } else {
-    setFoundUsers(processedData);
-  }
-   
-  setName(word);
-};
 
 
  
@@ -268,7 +274,7 @@ const filtered = (e,item) => {
 
 const csvReport = {
   data: processedData,
-  filename: 'report.csv'
+  filename: 'Doc.csv'
 };
 
 
@@ -442,6 +448,7 @@ const csvReport = {
             </Grid>
 
             <table className="table table-hover table-sm table-fixed">
+            {show ?  <>
               <thead
                 style={{
                   position: "sticky",
@@ -460,6 +467,14 @@ const csvReport = {
                     <CSVLink className="sub-nav-text" {...csvReport}>↓ Export(CSV)</CSVLink>
                       {/* Export(CSV) */}
                     </button>
+                    {" "}
+                    <button className="btn btn-sm" disabled>
+                     No of Employee: {processedData.length}
+                    </button>
+                    {" "}
+                    <button className="btn btn-sm" disabled>
+                     No of Employee: {processedData.length}
+                    </button>
                   </th>
                 </tr>
                 <tr className="table-light">
@@ -474,7 +489,7 @@ const csvReport = {
               </thead>
               
 
-              {show ?  
+            
               
               <tbody>
                 {processedData.map(post =>
@@ -490,15 +505,14 @@ const csvReport = {
                     <td></td>
                     <td>
                       {" "}
-                      <button className="btn btn-secondary btn-sm" onClick={(e)=> PunchReport(post)}>
+                      <button className="btn btn-secondary btn-sm" onClick={(e)=> PunchReport(post.PUNCH)}>
                         Punch Detail
                       </button>
                     </td>
                   </tr>
                 )})}
               </tbody>
-              
-              
+              </>
               : showDetail }
             </table>
           </Box>

@@ -216,7 +216,7 @@ const CompanyMain = () => {
         >
           <div className="logout_icon">
             <div className="logout_icon d-inline">
-              <Button className="text-white text-uppercase" onClick={() => {navigate(-1)}}>
+              <Button className="text-white text-uppercase" onClick={() => navigate(-1)}>
                 <LogoutIcon style={{ display: "inline" }} /> Exit
               </Button>
             </div>
