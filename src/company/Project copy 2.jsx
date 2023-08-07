@@ -3,11 +3,10 @@ import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import {Button,Skeleton,Paper} from "@mui/material";
+import { Button, Skeleton, Paper } from "@mui/material";
 import ProjectCreate from "./ProjectCreate";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
-import ProjectEdit from "./ProjectEdit";
 
 const Project = (props) => {
   const [data, setData] = useState({
@@ -18,7 +17,7 @@ const Project = (props) => {
       PROJECT_MEMBER_PARENT_ID: "",
       PROJECT_MEMBER_PARENT_USERNAME: "",
       // PROJECT_ROLE: "",
-      PROJECT_EMROLMNT_TYPE:"",
+      PROJECT_EMROLMNT_TYPE: "",
       PROJECT_NAME: "",
       PROJECT_PHONE: "",
       PROJECT_USERNAME: "",
@@ -26,7 +25,7 @@ const Project = (props) => {
       PROJECT_END_DATE: "",
       PROJECT_SUPERVISOR: "",
       PROJECT_PROGRESS: "",
-      PROJECT_ADD:""
+      PROJECT_ADD: ""
     },
   });
 
@@ -37,21 +36,22 @@ const Project = (props) => {
   const [Edit, setEdit] = useState(false);
   const [updatedata, setUpdateData] = useState(false);
 
+  console.log("New",ProjectData[0].PROJECT_ID)
   // modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { alldata, setText } = useContext(MyContext);
   const { projectcreatedata } = useContext(MyContext);
 
- //update data
+  //update data
 
   useEffect(() => {
     fetchProjects();
   }, [projectcreatedata]);
 
-  const filterallprojectData =  props.recieveData;
+  const filterallprojectData = props.recieveData;
 
-  // console.log(filterallprojectData, "my project");
+  console.log(filterallprojectData, "my project");
 
   const headers = {
     "Content-Type": "application/json",
@@ -66,12 +66,13 @@ const Project = (props) => {
           PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
           PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
           PROJECT_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
-          PROJECT_MEMBER_PARENT_USERNAME:filterallprojectData?.COMPANY_PARENT_USERNAME,
+          PROJECT_MEMBER_PARENT_USERNAME: filterallprojectData?.COMPANY_PARENT_USERNAME,
         },
         { headers }
       );
       setTimeout(() => {
         const data = response.data;
+        // console.log("New one", data.result[0].PROJECT_ID)
         setProjectData(data?.result);
         setIsLoading(false);
         // console.log("contracts Data : =>", data);
@@ -81,7 +82,22 @@ const Project = (props) => {
     }
   };
 
+
+
   // console.log(ProjectData, "projectdata");
+  const handleEdit = (row) => {
+    setData(row);
+    setEdit(true);
+    handleOpen();
+  };
+
+  const handleSave = () => {
+    // Send an HTTP request to update project data
+    // Update state and context as needed
+    // Close the modal and reset Edit state
+    handleClose();
+    setEdit(false);
+  };
 
   const columns = [
     { field: "PROJECT_ID", headerName: "ID", width: 60 },
@@ -140,20 +156,18 @@ const Project = (props) => {
     {
       field: "edit",
       headerName: "Edit",
-      width: 80,
-      renderCell: (cellValues) => {
-        return (
-          <Button
-            // onClick={(event) => {
-            //   handleEdit(cellValues);
-            // }}
-          >
-            <ProjectEdit edit={cellValues} 
-            // refetch={fetchAllEmployee}
-            />
-          </Button>
-        );
-      },
+      width: 100,
+      renderCell: (cellValues) => (
+        <Button
+          variant="contained"
+          color="primary"
+          className="view-btn primary btn btn-success"
+          size="small"
+          onClick={() => handleEdit(cellValues)}
+        >
+          Edit
+        </Button>
+      ),
     },
   ];
 
@@ -194,7 +208,7 @@ const Project = (props) => {
   return (
     <>
       <Box className="box" style={{ background: "#277099" }}>
-      <ProjectCreate
+        <ProjectCreate
           companyData={filterallprojectData}
           update={(event) => setUpdateData(event)}
           name={"Project"}
@@ -241,14 +255,14 @@ const Project = (props) => {
             variant="contained"
             className="btn rounded-0"
             size="small"
-            
+
           >
             <ArrowBackIcon style={{ fontSize: "20px" }} />
           </Button>
           <Button
             onClick={(e) => setIndex(1)}
             variant={index === 1 ? "outlined" : "outlined"}
-            className={index === 1 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-bottom-0  rounded-0 text-light" }            
+            className={index === 1 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-bottom-0  rounded-0 text-light"}
             size="small"
           >
             Detail
@@ -256,7 +270,7 @@ const Project = (props) => {
 
           {!Edit ? (
             <Button
-              onClick={(e) => setEdit(true)}
+              onClick={handleEdit}
               variant={"contained"}
               className="btn rounded-0 border-0"
               size="small"
@@ -266,7 +280,7 @@ const Project = (props) => {
             </Button>
           ) : (
             <Button
-              onClick={(e) => setEdit(false)}
+              onClick={handleSave} // Implement this function to save edits
               variant={"contained"}
               className="btn rounded-0 border-0"
               size="small"
@@ -276,10 +290,11 @@ const Project = (props) => {
             </Button>
           )}
 
+
           <Button
             onClick={(e) => setIndex(2)}
             variant={index === 2 ? "outlined" : "outlined"}
-            className={index === 2 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-0  rounded-0 text-light" } 
+            className={index === 2 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-0  rounded-0 text-light"}
             size="small"
           >
             Payment
@@ -385,31 +400,31 @@ const Project = (props) => {
                 </div>
               </div>
               <hr />
-             
-             
+
+
               <div className="row">
                 <div className="col-4">
                   <b>Assigned Employees to this project</b>
                   <div className="p-2 rounded-3 bg-light">
-                  <ul>
-                 {filterData.PROJECT_ASSIGN?.map((assignproject,key) => {
-                      // console.log("assignproject",assignproject)
-                      return(
-                       <>
-                       <b>Employee ID</b> <span>{assignproject.EMPLOYEE_ID}</span>
-                       <br />
-                       <b>Company Username </b> <span> {assignproject.EMPLOYEE_PARENT_USERNAME}</span> <br />
-                       <b>Admin Username </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_USERNAME}</span> <br />
-                       <b>Company ID </b> <span> {assignproject.EMPLOYEE_PARENT_ID}</span> <br />
-                       <b>Admin ID </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_ID}</span> 
-                       </>
-                    
-                      )
-                  
-                   
-                    
-                 })}
-                   </ul>
+                    <ul>
+                      {filterData.PROJECT_ASSIGN?.map((assignproject, key) => {
+                        // console.log("assignproject",assignproject)
+                        return (
+                          <>
+                            <b>Employee ID</b> <span>{assignproject.EMPLOYEE_ID}</span>
+                            <br />
+                            <b>Company Username </b> <span> {assignproject.EMPLOYEE_PARENT_USERNAME}</span> <br />
+                            <b>Admin Username </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_USERNAME}</span> <br />
+                            <b>Company ID </b> <span> {assignproject.EMPLOYEE_PARENT_ID}</span> <br />
+                            <b>Admin ID </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_ID}</span>
+                          </>
+
+                        )
+
+
+
+                      })}
+                    </ul>
                   </div>
                 </div>
               </div>

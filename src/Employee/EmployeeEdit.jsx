@@ -108,7 +108,7 @@ export default function EmployeeEdit(props) {
         onClick={handleOpen}
         variant="rounded"
         className="view-btn border border-info text-success "
-        style={{ padding: "2px 2px" }}
+        style={{ padding: "2px 2px" ,onFocus:"none"}}
       >
         Edit
       </Button>
@@ -131,11 +131,11 @@ export default function EmployeeEdit(props) {
                   <input
                     type="text"
                     className="form-control rounded-0"
-                    placeholder={editdata.EMPLOYEE_USERNAME}
+                    placeholder="Edit username"
                     id="inputZip"
                     value={editEmployee.EMPLOYEE_USERNAME}
                     name="EMPLOYEE_USERNAME"
-                    onChange={handleCreate}
+                    disabled
                     required
                   />
                   {errors.EMPLOYEE_USERNAME && (
@@ -150,7 +150,7 @@ export default function EmployeeEdit(props) {
                     type="text"
                     className="form-control rounded-0"
                     id="empName"
-                    placeholder={editdata.EMPLOYEE_NAME}
+                    placeholder="Edit your Name"
                     value={editEmployee.EMPLOYEE_NAME}
                     name="EMPLOYEE_NAME"
                     // onChange={handleCreate}
