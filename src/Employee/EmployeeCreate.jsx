@@ -66,13 +66,9 @@ export default function AddEmployee(props) {
   };
 
   //firbase authentication
-
-
-
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (
       !createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME ||
       !createEmployee.EMPLOYEE_EMAIL ||
@@ -99,15 +95,16 @@ export default function AddEmployee(props) {
           headers,
         })
         .then((response) => {
-          if (response.data.operation == "failed") {
+          if (response.data.operation === "failed") {
             setErrorMsg(response.data.errorMsg);
-          } else if (response.data.operation == "successfull") {
+          } else if (response.data.operation === "successfull") {
             setIsSubmitted(true); // Set the submission status to true after successful submission
             toast.success("Form submitted successfully!", {
-              position: toast.POSITION.TOP_CENTER,
+              position: toast.POSITION.TOP_CENTER, autoClose:1000
             });
             props.update(true);
             setOpen(false);
+            setCreateEmployee('')
           }
         })
         .catch((error) => {

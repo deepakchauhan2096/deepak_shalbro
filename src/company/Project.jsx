@@ -16,7 +16,8 @@ const Project = (props) => {
       PROJECT_PARENT_USERNAME: "",
       PROJECT_MEMBER_PARENT_ID: "",
       PROJECT_MEMBER_PARENT_USERNAME: "",
-      PROJECT_ROLE: "",
+      // PROJECT_ROLE: "",
+      PROJECT_EMROLMNT_TYPE:"",
       PROJECT_NAME: "",
       PROJECT_PHONE: "",
       PROJECT_USERNAME: "",
@@ -24,6 +25,7 @@ const Project = (props) => {
       PROJECT_END_DATE: "",
       PROJECT_SUPERVISOR: "",
       PROJECT_PROGRESS: "",
+      PROJECT_ADD:""
     },
   });
 
@@ -170,12 +172,6 @@ const Project = (props) => {
       </Box>
     );
   };
-
-
-
-
-
-
   return (
     <>
       <Box className="box" style={{ background: "#277099" }}>

@@ -117,6 +117,7 @@ export default function ProjectCreate(props) {
         } else if (response.data.operation === "successfull") {
           toast.success("Project Created successfully!", {
             position: toast.POSITION.TOP_CENTER,
+            autoClose: 1000,
           });
           setOpen(false);
         }
