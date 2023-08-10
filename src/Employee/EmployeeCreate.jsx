@@ -23,9 +23,10 @@ const style = {
 
 export default function AddEmployee(props) {
   const [open, setOpen] = React.useState(false);
-  const [errors, setErrors] = useState({});
-  const [submitting, setSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const [createEmployee, setCreateEmployee] = useState({
     EMPLOYEE_NAME: "",
     EMPLOYEE_EMAIL: "",
@@ -40,18 +41,26 @@ export default function AddEmployee(props) {
     EMPLOYEE_ADD: "",
     EMPLOYEE_USERNAME: "",
     EMPLOYEE_PASSWORD: "",
-    EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME,
-    EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID,
-    EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME,
-    EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID,
+    EMPLOYEE_MEMBER_PARENT_USERNAME:"",
+    EMPLOYEE_PARENT_ID: "",
+    EMPLOYEE_PARENT_USERNAME:"",
+    EMPLOYEE_MEMBER_PARENT_ID: "",
   });
-  const [errorMsg, setErrorMsg] = useState("");
-  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
 
-  const [newdata, setNewdata] = useState([]);
+  
+  useEffect(()=>{
+    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME})); 
+    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID})); 
+    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME})); 
+    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID})); 
+  },[open])
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
+
+  console.log(createEmployee, "check")
+
+
+
 
   const headers = {
     "Content-Type": "application/json",
@@ -60,36 +69,56 @@ export default function AddEmployee(props) {
 
    
 
+  // const handleCreate = (e) => {
+  //   setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
+  // };
+
   const handleCreate = (e) => {
-    setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
-    // console.log("heello world", createEmployee);
+    const { name, value } = e.target;
+    setCreateEmployee((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  //firbase authentication
+
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+    const requiredFields = [
+      "EMPLOYEE_NAME",
+      "EMPLOYEE_EMAIL",
+      "EMPLOYEE_STATE",
+      "EMPLOYEE_CITY",
+      "EMPLOYEE_PHONE",
+      "EMPLOYEE_HOURLY_WAGE",
+      "EMPLOYEE_ROLE",
+      "EMPLOYEE_EMPLMNTTYPE",
+      "EMPLOYEE_DOB",
+      "EMPLOYEE_HIRE_DATE",
+      "EMPLOYEE_ADD",
+      "EMPLOYEE_USERNAME",
+      "EMPLOYEE_PASSWORD",
+      "EMPLOYEE_MEMBER_PARENT_USERNAME",
+      "EMPLOYEE_PARENT_ID",
+      "EMPLOYEE_PARENT_USERNAME",
+      "EMPLOYEE_MEMBER_PARENT_ID"
+    ];
+    
+    const hasEmptyFields = requiredFields.some(
+      (field) => !createEmployee[field]
+    );
 
-    if (
-      !createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME ||
-      !createEmployee.EMPLOYEE_EMAIL ||
-      !createEmployee.EMPLOYEE_PASSWORD ||
-      !createEmployee.EMPLOYEE_NAME ||
-      !createEmployee.EMPLOYEE_STATE ||
-      !createEmployee.EMPLOYEE_CITY ||
-      !createEmployee.EMPLOYEE_PHONE ||
-      !createEmployee.EMPLOYEE_HOURLY_WAGE ||
-      !createEmployee.EMPLOYEE_ROLE ||
-      !createEmployee.EMPLOYEE_EMPLMNTTYPE ||
-      !createEmployee.EMPLOYEE_DOB ||
-      !createEmployee.EMPLOYEE_HIRE_DATE ||
-      !createEmployee.EMPLOYEE_ADD ||
-      !createEmployee.EMPLOYEE_USERNAME
-    ) {
+    if (hasEmptyFields) {
       setErrorMsg("Fill all fields");
+      toast.error("Please fill in all fields", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
       return;
     }
+  
     setErrorMsg("");
-
       axios
         .post("http://18.211.130.168:5001/create_employee", createEmployee, {
           headers,
@@ -97,18 +126,28 @@ export default function AddEmployee(props) {
         .then((response) => {
           if (response.data.operation === "failed") {
             setErrorMsg(response.data.errorMsg);
-          } else if (response.data.operation === "successfull") {
-            setIsSubmitted(true); // Set the submission status to true after successful submission
-            toast.success("Form submitted successfully!", {
-              position: toast.POSITION.TOP_CENTER, autoClose:1000
+            toast.error(response.data.errorMsg, {
+              position: toast.POSITION.TOP_CENTER,
+              autoClose: 2000,
             });
-            props.update(true);
+          } else if (response.data.operation === "successfull") {
+            toast.success("Form submitted successfully!", {
+              position: toast.POSITION.TOP_CENTER, 
+              autoClose:2000
+            });
+            props.refetch();
+            // setOpen(false);
+            // setCreateEmployee('')
+            setCreateEmployee({});
             setOpen(false);
-            setCreateEmployee('')
           }
         })
         .catch((error) => {
           console.error(error);
+          toast.error("An error occurred. Please try again later.", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+          });
         });
   };
 
@@ -157,11 +196,6 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {errors.EMPLOYEE_USERNAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_USERNAME}
-                  </p>
-                  )}
                 </div>
                 <div className="form-group col-xl-6">
                   <label>Employee Name</label>

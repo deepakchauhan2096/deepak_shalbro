@@ -8,6 +8,8 @@ import ProjectCreate from "./ProjectCreate";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
 import ProjectEdit from "./ProjectEdit";
+// import { useDispatch, useSelector } from "react-redux";
+// import { initProject_fun } from "../redux/action";
 
 const Project = (props) => {
   const [data, setData] = useState({
@@ -29,12 +31,15 @@ const Project = (props) => {
       PROJECT_ADD:""
     },
   });
+  // const dispatch = useDispatch() ;
 
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
   const [ProjectData, setProjectData] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [Edit, setEdit] = useState(false);
+
   const [updatedata, setUpdateData] = useState(false);
 
   // modal
@@ -47,7 +52,7 @@ const Project = (props) => {
 
   useEffect(() => {
     fetchProjects();
-  }, [projectcreatedata]);
+  }, [updatedata]);
 
   const filterallprojectData =  props.recieveData;
 
@@ -70,12 +75,14 @@ const Project = (props) => {
         },
         { headers }
       );
-      setTimeout(() => {
+      // setTimeout(() => {
         const data = response.data;
         setProjectData(data?.result);
+        // dispatch(initProject_fun(data?.result))
+
         setIsLoading(false);
         // console.log("contracts Data : =>", data);
-      }, 1000);
+      // }, 1000);
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
@@ -149,7 +156,7 @@ const Project = (props) => {
             // }}
           >
             <ProjectEdit edit={cellValues} 
-            // refetch={fetchAllEmployee}
+            refetch={fetchProjects}
             />
           </Button>
         );
@@ -162,6 +169,7 @@ const Project = (props) => {
 
   const handleClick = (event) => {
     setData(event);
+    // dispatch(initProject_fun(event))
     handleOpen();
   };
 
@@ -196,7 +204,7 @@ const Project = (props) => {
       <Box className="box" style={{ background: "#277099" }}>
       <ProjectCreate
           companyData={filterallprojectData}
-          update={(event) => setUpdateData(event)}
+          refetch={fetchProjects}
           name={"Project"}
         />
         <MyScreen sx={{ display: "block", padding: 3 }}>
@@ -240,8 +248,7 @@ const Project = (props) => {
             onClick={handleClose}
             variant="contained"
             className="btn rounded-0"
-            size="small"
-            
+            size="small" 
           >
             <ArrowBackIcon style={{ fontSize: "20px" }} />
           </Button>
@@ -253,7 +260,6 @@ const Project = (props) => {
           >
             Detail
           </Button>
-
           {!Edit ? (
             <Button
               onClick={(e) => setEdit(true)}
@@ -275,7 +281,6 @@ const Project = (props) => {
               Save
             </Button>
           )}
-
           <Button
             onClick={(e) => setIndex(2)}
             variant={index === 2 ? "outlined" : "outlined"}
@@ -285,7 +290,6 @@ const Project = (props) => {
             Payment
           </Button>
         </div>
-
         {index === 1 ? (
           <div className="box-tab">
             <div className="container-fluid p-4">
@@ -327,9 +331,7 @@ const Project = (props) => {
                   </p>
                 </div>
               </div>
-
               <hr />
-
               <div className="row">
                 <div className="col">
                   <b>Project Role</b>
@@ -384,9 +386,7 @@ const Project = (props) => {
                   </div>
                 </div>
               </div>
-              <hr />
-             
-             
+              <hr />             
               <div className="row">
                 <div className="col-4">
                   <b>Assigned Employees to this project</b>
@@ -404,10 +404,7 @@ const Project = (props) => {
                        <b>Admin ID </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_ID}</span> 
                        </>
                     
-                      )
-                  
-                   
-                    
+                      )   
                  })}
                    </ul>
                   </div>
@@ -500,7 +497,6 @@ const Project = (props) => {
                       <i className="fa fa-search"></i>
                     </button>
                   </div>
-
                   <div>
                     <b>Time Period</b>
                   </div>
