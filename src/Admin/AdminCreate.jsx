@@ -4,7 +4,8 @@ import axios from "axios";
 import InputControl from "../components/InputControl";
 import styles from "../assests/css/Signup.module.css";
 import SimpleBackdrop from "../components/Backdrop"; // Replace "../components/Backdrop" with the correct path to the file containing the MUI backdrop component
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function AdminCreate() {
   const [values, setValues] = useState({
     ADMIN_PASSWORD: "",
@@ -15,7 +16,7 @@ function AdminCreate() {
   });
   const [errorMsg, setErrorMsg] = useState("");
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // Initialize to false
+  const [loader, setLoader] = useState(false); // Initialize to false
 
   const navigate = useNavigate();
 
@@ -25,6 +26,7 @@ function AdminCreate() {
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     if (
       !values.ADMIN_NAME ||
       !values.ADMIN_EMAIL ||
@@ -36,7 +38,7 @@ function AdminCreate() {
       return;
     }
     setErrorMsg("");
-    setIsSubmitting(true); // Show the backdrop when the signup button is clicked
+    setLoader(true); // Show the backdrop when the signup button is clicked
 
     axios
       .post("http://18.211.130.168:5001/create_admin", values, {
@@ -47,15 +49,19 @@ function AdminCreate() {
 
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
-          setIsSubmitting(false); // Hide the backdrop on signup failure
+          setLoader(false); // Hide the backdrop on signup failure
         } else if (response.data.operation === "successfull") {
+          toast.success("Congratulations.. You Ragistered successfully!!!", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 1200,
+          });
           navigate("/login");
-          setIsSubmitting(false); // Hide the backdrop on successful signup
+          setLoader(false); // Hide the backdrop on successful signup
         }
       })
       .catch((error) => {
         setErrorMsg("something went wrong");
-        setIsSubmitting(false); // Hide the backdrop on signup failure
+        setLoader(false); // Hide the backdrop on signup failure
       });
   };
 
@@ -131,7 +137,7 @@ function AdminCreate() {
       </div>
 
       {/* Add the backdrop component here */}
-      <SimpleBackdrop open={isSubmitting} />
+      <SimpleBackdrop open={loader} />
     </div>
   );
 }

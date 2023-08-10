@@ -1,17 +1,17 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
-import { Button, Container, styled } from "@mui/material";
+import { Button, Container, Hidden } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import country from "../Api/countriess.json";
+import { Fab, Paper, styled } from "@mui/material";
+import country from "../Api/countriess.json"
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import SimpleBackdrop from "../components/Backdrop";
-import { faListSquares } from "@fortawesome/free-solid-svg-icons";
-import { Fab, Paper, } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 
+import SimpleBackdrop from "../components/Backdrop";
 
 const style = {
   position: "absolute",
@@ -26,40 +26,51 @@ const style = {
   overflow: "hidden",
 };
 
-export default function CompanyCreate(props) {
+export default function CompanyEdit(props) {
   const [open, setOpen] = React.useState(false);
-  const [loader, setLoader] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const companyData = props?.companyEDit
+  const [loader, setLoader] = useState(false);
+  // const [isSubmitted, setIsSubmitted] = useState(false);
+
   const [errorMsg, setErrorMsg] = useState("");
 
-  const [create_company, setCreate_company] = useState({
-    COMPANY_PARENT_ID: props.ID,
-    COMPANY_PARENT_USERNAME: props.Username,
-    COMPANY_NAME: "",
-    COMPANY_USERNAME: "",
-    COMPANY_PHONE: "",
-    COMPANY_EMAIL: "",
-    COMPANY_ADD2: "",
-    COMPANY_STATE: "",
-    COMPANY_CITY: "",
-    COMPANY_COUNTRY: "",
+  const [edit_company, setEdit_company] = useState({
+    COMPANY_PARENT_ID: companyData.COMPANY_PARENT_ID,
+    COMPANY_PARENT_USERNAME: companyData.COMPANY_PARENT_USERNAME,
+    COMPANY_NAME: companyData.COMPANY_NAME,
+    COMPANY_PHONE: companyData.COMPANY_PHONE,
+    COMPANY_EMAIL: companyData.COMPANY_EMAIL,
+    COMPANY_ADD2: companyData.COMPANY_ADD2,
+    COMPANY_STATE: companyData.COMPANY_STATE,
+    COMPANY_CITY: companyData.COMPANY_CITY,
+    COMPANY_COUNTRY: companyData.COMPANY_COUNTRY,
+    COMPANY_USERNAME: companyData.COMPANY_USERNAME,
   });
 
-  const handleCreate = (e) => {
-    setCreate_company({ ...create_company, [e.target.name]: e.target.value });
-  };
+  // console.log("first", edit_company)
+
+  // console.log("Edit Company:", edit_company)
+
 
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
- 
+
+  const handleCreate = (e) => {
+    setEdit_company((prev) => {
+      return { ...prev, [e.target.name]: e.target.value }
+    });
+  };
+
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
 
   // Finding the states and cities of the individaul country 
-
   const availableState = country?.find(
-    (c) => c.name === create_company.COMPANY_COUNTRY
+    (c) => c.name === edit_company.COMPANY_COUNTRY
   );
 
 
@@ -67,137 +78,63 @@ export default function CompanyCreate(props) {
 
     (s) => {
 
-      return s.name === create_company.COMPANY_STATE
+      return s.name === edit_company.COMPANY_STATE
     }
   );
 
-
-
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (
-  //     !create_company.COMPANY_USERNAME ||
-  //     !create_company.COMPANY_NAME ||
-  //     !create_company.COMPANY_PHONE ||
-  //     !create_company.COMPANY_ADD2 ||
-  //     !create_company.COMPANY_EMAIL ||
-  //     !create_company.COMPANY_COUNTRY ||
-  //     !create_company.COMPANY_CITY ||
-  //     !create_company.COMPANY_STATE ||
-  //     !create_company.COMPANY_PARENT_ID||
-  //     !create_company.COMPANY_PARENT_USERNAME
-  //   ) {
-  //     setErrorMsg("Fill all fields");
-  //     return;
-  //   }
-  //   setErrorMsg("");
-
-  
-  //   axios
-  //   .post(`http://18.211.130.168:5001/create_company`, create_company, {
-  //     headers,
-  //   })
-  //   .then((response) => {
-      
-  //     if (response.data.operation === "failed") {
-  //       setErrorMsg(response.data.errorMsg);
-  //     } else if (response.data.operation === "successfull") {
-  //       toast.success("Company Created successfully!", {
-  //         position: toast.POSITION.TOP_CENTER,
-  //         autoClose: 1000,
-  //       });
-  //       props.Update(() => response.data.result);
-  //       setCreate_company("");
-  //       setOpen(false);
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error(error, "ERR");
-
-  //   });
-  // };
-  
-
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    if (
-      !create_company.COMPANY_USERNAME ||
-      !create_company.COMPANY_NAME ||
-      !create_company.COMPANY_PHONE ||
-      !create_company.COMPANY_ADD2 ||
-      !create_company.COMPANY_EMAIL ||
-      !create_company.COMPANY_COUNTRY ||
-      !create_company.COMPANY_CITY ||
-      !create_company.COMPANY_STATE ||
-      !create_company.COMPANY_PARENT_ID ||
-      !create_company.COMPANY_PARENT_USERNAME
-    ) {
-      setErrorMsg("Fill all fields");
-      toast.error("Please fill in all fields", {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 2000,
-      });
-      return;
-    }
-    setErrorMsg("");
-  
+    // setOpen(false);
+
     axios
-      .post(`http://18.211.130.168:5001/create_company`, create_company, {
+      .put("http://18.211.130.168:5001/update_company", {
+        COMPANY_ID: companyData.COMPANY_ID,
+        COMPANY_USERNAME: companyData.COMPANY_USERNAME,
+        COMPANY_ADMIN_USERNAME: companyData.COMPANY_PARENT_USERNAME,
+        COMPANY_DETAILS_FOR_UPDATE: { ...edit_company }
+      }, {
         headers,
       })
       .then((response) => {
+
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
-          toast.error(response.data.errorMsg, {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: 2000,
-          });
         } else if (response.data.operation === "successfull") {
-          toast.success("Company Created successfully!", {
+          // setLoader(false)
+          // setLoader(true)
+
+          props.reFetchfun()
+          toast.success("Fields are updated successfully!", {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 1000,
+            autoClose: 1000
           });
-          props.Update(() => response.data.result);
-          setCreate_company({
-            // Reset your state after successful submission
-            COMPANY_PARENT_ID: props.ID,
-            COMPANY_PARENT_USERNAME: props.Username,
-            COMPANY_NAME: "",
-            COMPANY_USERNAME: "",
-            COMPANY_PHONE: "",
-            COMPANY_EMAIL: "",
-            COMPANY_ADD2: "",
-            COMPANY_STATE: "",
-            COMPANY_CITY: "",
-            COMPANY_COUNTRY: "",
-          });
-          setOpen(false);
+          props.companyEDit.update(true);
+          setOpen(true);
         }
       })
       .catch((error) => {
-        console.error(error, "ERR");
-        toast.error("An error occurred. Please try again later.", {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 2000,
-        });
+        console.error(error);
       });
-  };
-  const StyledFab = styled(Fab)({
 
+  };
+
+  const StyledFab = styled(Fab)({
     position: "fixed",
     top: "80px",
     right: "80px",
-
-
   });
+
   return (
     <>
-      <StyledFab onClick={handleOpen} size="medium" color="secondary" aria-label="add" style={props.btnstyle}>
-        <AddIcon />
-      </StyledFab>
 
+      <Tooltip title="Edit Details">
+        <EditNoteOutlinedIcon
+          onClick={handleOpen}
+          color="success"
+          style={{ cursor: "pointer" }}
+
+        />
+      </Tooltip>
       <Modal
         open={open}
         onClose={handleClose}
@@ -210,7 +147,6 @@ export default function CompanyCreate(props) {
           maxWidth="xl"
         >
           <Box sx={style}>
-
             <form className="p-4">
               <div className="row">
                 <div className="form-group py-2 col-xl-6">
@@ -219,10 +155,11 @@ export default function CompanyCreate(props) {
                     type="text"
                     className="form-control rounded-0"
                     placeholder="Enter company name"
-                    value={create_company.COMPANY_NAME}
+                    value={edit_company.COMPANY_NAME}
                     name="COMPANY_NAME"
                     onChange={handleCreate}
-                    label=""
+                    label="Company name"
+                    required
                   />
                 </div>
                 <div className="form-group py-2 col-xl-6">
@@ -231,10 +168,11 @@ export default function CompanyCreate(props) {
                     type="text"
                     className="form-control rounded-0"
                     placeholder="Username"
-                    value={create_company.COMPANY_USERNAME}
+                    value={edit_company.COMPANY_USERNAME}
                     name="COMPANY_USERNAME"
                     onChange={handleCreate}
                     label="Company username"
+                    disabled
                   />
                 </div>
               </div>
@@ -246,10 +184,11 @@ export default function CompanyCreate(props) {
                     type="number"
                     className="form-control rounded-0"
                     placeholder="Enter Number"
-                    value={create_company.COMPANY_PHONE}
+                    value={edit_company.COMPANY_PHONE}
                     name="COMPANY_PHONE"
                     onChange={handleCreate}
                     label="Phone Number"
+                    required
                   />
                 </div>
                 <div className="form-group py-2 col-xl-6">
@@ -259,9 +198,10 @@ export default function CompanyCreate(props) {
                     className="form-control rounded-0"
                     placeholder="Enter company email"
                     name="COMPANY_EMAIL"
-                    value={create_company.COMPANY_EMAIL}
+                    value={edit_company.COMPANY_EMAIL}
                     onChange={handleCreate}
                     label="Company Email"
+                    required
                   />
                 </div>
               </div>
@@ -271,14 +211,15 @@ export default function CompanyCreate(props) {
                   <select
                     className="form-control border  rounded-0"
                     name="COMPANY_COUNTRY"
-                    value={create_company.COMPANY_COUNTRY}
+                    value={edit_company.COMPANY_COUNTRY}
                     onChange={handleCreate}
+                    required
                   >
-                    <option selected>Choose...</option>
+                    <option>Choose...</option>
 
                     {country.map((e, key) => {
                       return (
-                        <option value={e.name} key={key}>{e.name}</option>
+                        <option value={e.name} key={key} selected>{e.name}</option>
                       )
                     })}
 
@@ -290,17 +231,14 @@ export default function CompanyCreate(props) {
                   <select
                     className="form-control border  rounded-0"
                     name="COMPANY_STATE"
-                    value={create_company.COMPANY_STATE}
+                    value={edit_company.COMPANY_STATE}
                     onChange={handleCreate}
                   >
-
-                    <option>--Choose State--</option>
-                    {availableState?.states?.map((e, key) => {
+                    <option selected >Choose... States</option>
+                    {availableState?.states?.map((state, key) => {
                       return (
-                        <option value={e.name} key={key}>
-                          {e.name}
-                        </option>
-                      );
+                        <option value={state.name} key={key} >{state.name}</option>
+                      )
                     })}
 
                   </select>
@@ -311,8 +249,9 @@ export default function CompanyCreate(props) {
                   <select
                     className="form-control border rounded-0"
                     name="COMPANY_CITY"
-                    value={create_company.COMPANY_CITY}
+                    value={edit_company.COMPANY_CITY}
                     onChange={handleCreate}
+                    required
                   >
                     <option selected>Choose City...</option>
                     {availableCities?.cities?.map((e, key) => {
@@ -334,22 +273,20 @@ export default function CompanyCreate(props) {
                   className="form-control rounded-0"
                   placeholder="Apartment, studio, or floor"
                   name="COMPANY_ADD2"
-                  value={create_company.COMPANY_ADD2}
+                  value={edit_company.COMPANY_ADD2}
                   onChange={handleCreate}
+                  required
                 // rows="4"
                 // cols="50"
                 />
               </div>
-   
-
-
               <Button
                 type="submit"
                 variant="contained"
                 className="btn text-white rounded-2 mt-2"
                 onClick={handleSubmit}
               >
-                Submit
+                Update
               </Button>{" "}
               <Button
                 variant="contained"
@@ -359,17 +296,10 @@ export default function CompanyCreate(props) {
               >
                 Discard
               </Button>
-              {/* <center>
-              {errorMsg && (
-                <p className=" text-danger fw-light mb-0 fs-6">{errorMsg}</p>
-              )}
-            </center> */}
             </form>
-           
           </Box>
         </Container>
       </Modal>
-
       <SimpleBackdrop open={loader} />
     </>
   );

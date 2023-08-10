@@ -41,99 +41,174 @@ export default function ProjectEdit(props) {
 
 const editProjectData = props?.edit.row
 
-console.log("editProjectData",editProjectData)
 
-  const [EditProject, setEditProject] = useState({
-    PROJECT_PARENT_ID: editProjectData.EMPLOYEE_PARENT_ID,
-    PROJECT_PARENT_USERNAME:editProjectData.PROJECT_PARENT_USERNAME,
-    PROJECT_MEMBER_PARENT_ID: editProjectData.PROJECT_MEMBER_PARENT_ID,
-    PROJECT_MEMBER_PARENT_USERNAME: editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
-    PROJECT_NAME: editProjectData.PROJECT_NAME,
-    PROJECT_USERNAME: editProjectData.PROJECT_USERNAME,
-    PROJECT_ADD: editProjectData.PROJECT_ADD,
+// console.log("editProjectData",editProjectData)
+
+const [EditProject, setEditProject] = useState({
+  PROJECT_NAME: editProjectData.PROJECT_NAME,
+  PROJECT_USERNAME: editProjectData.PROJECT_USERNAME,
+  PROJECT_ADD: editProjectData.PROJECT_ADD,
     PROJECT_CITY: editProjectData.PROJECT_CITY,
     PROJECT_START_DATE:editProjectData.PROJECT_START_DATE,
     PROJECT_END_DATE:editProjectData.PROJECT_END_DATE,
     PROJECT_SUPERVISOR:editProjectData.PROJECT_SUPERVISOR,
     PROJECT_COUNTRY: editProjectData.PROJECT_COUNTRY,
     PROJECT_STATE:editProjectData.PROJECT_STATE,
-    PROJECT_PHONE:editProjectData.PROJECT_PHONE
+    PROJECT_PHONE:editProjectData.PROJECT_PHONE,
+    PROJECT_ID: editProjectData.PROJECT_ID,
+    PROJECT_PARENT_ID: editProjectData.PROJECT_PARENT_ID,
+    PROJECT_PARENT_USERNAME:editProjectData.PROJECT_PARENT_USERNAME,
+    PROJECT_MEMBER_PARENT_ID: editProjectData.PROJECT_MEMBER_PARENT_ID,
+    PROJECT_MEMBER_PARENT_USERNAME: editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
+
   });
-
-
- // city-country-logic
-
+  
+  console.log("EditProject",EditProject)
+  // city-country-logic
+  
   const availableState = country?.find(
     (c) => c.name === EditProject.PROJECT_COUNTRY
-  );
-
-  // console.log("all states : ===> ", availableState,"country=>",country);
-  const availableCities = availableState?.states?.find(
-    (s) => s.name === EditProject.PROJECT_STATE
-  );
-
-  //api header
-
+    );
+    
+    // console.log("all states : ===> ", availableState,"country=>",country);
+    const availableCities = availableState?.states?.find(
+      (s) => s.name === EditProject.PROJECT_STATE
+      );
+      
+      //api header
+      const handleEdit = (e) => {
+        setEditProject({ ...EditProject, [e.target.name]: e.target.value });
+        console.log("heello world", EditProject);
+      };
+      
+      
 
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const handleEdit = (e) => {
-    setEditProject({ ...EditProject, [e.target.name]: e.target.value });
-    console.log("heello world", EditProject);
-  };
-
+ 
 
   //api create project
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (
+  //     !EditProject.PROJECT_USERNAME ||
+  //     !EditProject.PROJECT_NAME ||
+  //     !EditProject.PROJECT_PHONE ||
+  //     !EditProject.PROJECT_PARENT_ID ||
+  //     !EditProject.PROJECT_PARENT_USERNAME ||
+  //     !EditProject.PROJECT_MEMBER_PARENT_ID ||
+  //     !EditProject.PROJECT_MEMBER_PARENT_USERNAME ||
+  //     !EditProject.PROJECT_ADD ||
+  //     !EditProject.PROJECT_START_DATE ||
+  //     !EditProject.PROJECT_END_DATE ||
+  //     !EditProject.PROJECT_SUPERVISOR ||
+  //     !EditProject.PROJECT_COUNTRY ||
+  //     !EditProject.PROJECT_CITY ||
+  //     !EditProject.PROJECT_STATE
+  //   ) {
+  //     setErrorMsg("Fill all fields");
+  //     return;
+  //   }
+  //   setErrorMsg("");
+
+  //   axios
+  //     .put("http://18.211.130.168:5001/update_projects", {
+  //       PROJECT_ID: editProjectData.PROJECT_ID,
+  //       PROJECT_PARENT_ID: editProjectData.PROJECT_PARENT_ID,
+  //       PROJECT_PARENT_USERNAME:editProjectData.PROJECT_PARENT_USERNAME,
+  //       PROJECT_MEMBER_PARENT_ID: editProjectData.PROJECT_MEMBER_PARENT_ID,
+  //       PROJECT_MEMBER_PARENT_USERNAME: editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
+  //       PROJECT_DETAILS_FOR_UPDATES:{...EditProject}
+  //   }, {
+  //       headers,
+  //     })
+  //     .then((response) => {
+  //       if (response.data.operation === "failed") {
+  //         setErrorMsg(response.data.errorMsg);
+  //       } else if (response.data.operation === "successfull") {
+  //         props.refetch();
+  //         console.log("anu", response)
+  //         toast.success("Project Created successfully!", {
+  //           position: toast.POSITION.TOP_CENTER,
+  //           autoClose: 1000,
+  //         });
+  //         // setEditProject("");
+  //         setOpen(false);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error(error, "ERR");
+  //     });
+  // };
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
-      !EditProject.PROJECT_USERNAME ||
-      !EditProject.PROJECT_NAME ||
-      !EditProject.PROJECT_PHONE ||
-      !EditProject.PROJECT_PARENT_ID ||
-      !EditProject.PROJECT_PARENT_USERNAME ||
-      !EditProject.PROJECT_MEMBER_PARENT_ID ||
-      !EditProject.PROJECT_MEMBER_PARENT_USERNAME ||
-      !EditProject.PROJECT_ADD ||
-      !EditProject.PROJECT_START_DATE ||
-      !EditProject.PROJECT_END_DATE ||
-      !EditProject.PROJECT_SUPERVISOR ||
-      !EditProject.PROJECT_COUNTRY ||
-      !EditProject.PROJECT_CITY ||
-      !EditProject.PROJECT_STATE
-    ) {
+         !EditProject.PROJECT_USERNAME ||
+         !EditProject.PROJECT_NAME ||
+         !EditProject.PROJECT_PHONE ||
+         !EditProject.PROJECT_PARENT_ID ||
+         !EditProject.PROJECT_PARENT_USERNAME ||
+         !EditProject.PROJECT_MEMBER_PARENT_ID ||
+         !EditProject.PROJECT_MEMBER_PARENT_USERNAME ||
+         !EditProject.PROJECT_ADD ||
+         !EditProject.PROJECT_START_DATE ||
+         !EditProject.PROJECT_END_DATE ||
+         !EditProject.PROJECT_SUPERVISOR ||
+         !EditProject.PROJECT_COUNTRY ||
+         !EditProject.PROJECT_CITY ||
+         !EditProject.PROJECT_STATE
+       ) {
       setErrorMsg("Fill all fields");
+      toast.error("Please fill in all fields", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
       return;
     }
     setErrorMsg("");
-
+  
     axios
-      .post("http://18.211.130.168:5001/update_projects", EditProject, {
+      .put("http://18.211.130.168:5001/update_projects", {
+        PROJECT_ID: editProjectData.PROJECT_ID,
+         PROJECT_PARENT_ID: editProjectData.PROJECT_PARENT_ID,
+         PROJECT_PARENT_USERNAME:editProjectData.PROJECT_PARENT_USERNAME,
+         PROJECT_MEMBER_PARENT_ID: editProjectData.PROJECT_MEMBER_PARENT_ID,
+         PROJECT_MEMBER_PARENT_USERNAME: editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
+         PROJECT_DETAILS_FOR_UPDATES:{...EditProject}
+      }, {
         headers,
       })
       .then((response) => {
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
-        } else if (response.data.operation === "successfull") {
-          toast.success("Project Created successfully!", {
+          toast.error(response.data.errorMsg, {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 1000,
+            autoClose: 2000,
           });
-          setEditProject("");
+        } else if (response.data.operation === "successfull") {
+          props.refetch();
+          console.log("anu", response)
+          toast.success("Project Updated successfully!", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+          });
           setOpen(false);
         }
       })
       .catch((error) => {
         console.error(error, "ERR");
+        toast.error("An error occurred. Please try again later.", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 2000,
+        });
       });
   };
-
-
-
-  //state city api
+  
 
   return (
     <>
@@ -163,13 +238,8 @@ console.log("editProjectData",editProjectData)
                   value={EditProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
                   onChange={handleEdit}
-                  disabled
+                  // disabled
                 />
-                {/* {errors.PROJECT_USERNAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_USERNAME}
-                  </p>
-                )} */}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Name</label>
@@ -335,11 +405,11 @@ console.log("editProjectData",editProjectData)
                 </select>
               </div>
             </div>
-            <center>
+            {/* <center>
               {errorMsg && (
                 <p className=" text-danger fw-light mb-0">{errorMsg}</p>
               )}
-            </center>
+            </center> */}
             <button
               type="submit"
               className="btn btn-info text-white "

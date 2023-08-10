@@ -165,26 +165,6 @@ export default function ProjectUpload(props) {
     }
   };
 
-  // const handleDelete = (documentId, fileName) => {
-  //   // .preventDefault();
-  //   try {
-  //     console.log("HElloo")
-  //     // Send a DELETE request to the backend API to delete the document with the given ID.
-
-  //     axios.delete("http://18.211.130.168:5001/delete_document/${documentId}", {
-  //       headers: {
-  //         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-
-  //     getalldocument();
-  //   } catch (error) {
-  //     // Handle any errors that might occur during the deletion process.
-  //     // Optionally, you can show an error message to the user.
-  //     setErrorMessage("Error deleting document!");
-  //   }
-  // };
 
 
 

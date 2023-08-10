@@ -21,7 +21,9 @@ import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
 import AttendanceReport from "../Attendance/AttendanceAcknowledge";
 import SubContract from "../subcontract/SubContract";
-import env from "react-dotenv";
+// import { useDispatch, useSelector } from "react-redux";
+
+
 
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
@@ -33,6 +35,7 @@ const CompanyMain = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   // get Company data
+  // const dispatch = useDispatch();
   
   const location = useLocation();
   const filterallprojectData = location.state.props
@@ -131,12 +134,11 @@ const CompanyMain = () => {
         },
         { headers }
       );
-      setTimeout(() => {
+     
         const data = response.data;
         setProjectData(data?.result);
         // setIsLoading(false);
-        // console.log("contracts Data : =>", data);
-      }, 1000);
+
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
