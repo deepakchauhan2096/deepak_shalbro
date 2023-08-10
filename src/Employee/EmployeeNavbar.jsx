@@ -90,7 +90,7 @@ const EmployeeNavbar = (props) => {
   };
 
 
-  const post = props.data
+  const post = props.empData
   
  console.log(props.empData, "empdata")
  
@@ -115,7 +115,7 @@ const EmployeeNavbar = (props) => {
           style={{ justifyContent: "space-between" }}
         >
          
-          <h3 className="text-light border border-danger">{post?.EMPLOYEE_NAME}</h3>
+          <h3 className="text-light" style={{fontSize:"20px",lineHeight: "33px"}}>{post?.EMPLOYEE_NAME}</h3>
           <Tooltip title={post?.EMPLOYEE_NAME}>
             <Avatar>{post?.EMPLOYEE_NAME?.charAt(0).toUpperCase()}</Avatar>
           </Tooltip>
