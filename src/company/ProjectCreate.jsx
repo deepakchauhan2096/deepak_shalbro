@@ -1,23 +1,13 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import country from "../Api/countriess.json";
-// import states from "../Api/states.json"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import env from "react-dotenv";
 
 import {
   Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
-  Paper,
-  Skeleton,
-  Typography,
 } from "@mui/material";
 
 const style = {
@@ -33,18 +23,15 @@ const style = {
 };
 
 export default function ProjectCreate(props) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [index, setIndex] = React.useState([]);
   const [errorMsg, setErrorMsg] = useState("");
-
-
   const [createProject, setCreateProject] = useState({
-    PROJECT_PARENT_ID: props.companyData?.COMPANY_ID,
-    PROJECT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME,
-    PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID,
-    PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME,
+    PROJECT_PARENT_ID: "",
+    PROJECT_PARENT_USERNAME: "",
+    PROJECT_MEMBER_PARENT_ID: "",
+    PROJECT_MEMBER_PARENT_USERNAME: "",
     PROJECT_NAME: "",
     PROJECT_USERNAME: "",
     PROJECT_ADD: "",
@@ -58,7 +45,15 @@ export default function ProjectCreate(props) {
   });
 
 
- // city-country-logic
+  useEffect(()=>{
+    setCreateProject((prevState) => ({...prevState, PROJECT_PARENT_ID: props.companyData?.COMPANY_ID})); 
+    setCreateProject((prevState) => ({...prevState, PROJECT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME})); 
+    setCreateProject((prevState) => ({...prevState, PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID})); 
+    setCreateProject((prevState) => ({...prevState, PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME})); 
+  },[open])
+
+
+  console.log(createProject,"check")
 
   const availableState = country?.find(
     (c) => c.name === createProject.PROJECT_COUNTRY
@@ -69,42 +64,52 @@ export default function ProjectCreate(props) {
     (s) => s.name === createProject.PROJECT_STATE
   );
 
-  //api header
-
-
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
   const handleCreate = (e) => {
-    setCreateProject({ ...createProject, [e.target.name]: e.target.value });
-    console.log("heello world", createProject);
+    const { name, value } = e.target;
+    setCreateProject((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-
-  //api create project
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !createProject.PROJECT_USERNAME ||
-      !createProject.PROJECT_NAME ||
-      !createProject.PROJECT_PHONE ||
-      !createProject.PROJECT_PARENT_ID ||
-      !createProject.PROJECT_PARENT_USERNAME ||
-      !createProject.PROJECT_MEMBER_PARENT_ID ||
-      !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
-      !createProject.PROJECT_ADD ||
-      !createProject.PROJECT_START_DATE ||
-      !createProject.PROJECT_END_DATE ||
-      !createProject.PROJECT_SUPERVISOR ||
-      !createProject.PROJECT_COUNTRY ||
-      !createProject.PROJECT_CITY ||
-      !createProject.PROJECT_STATE
-    ) {
+    const requiredFields = [
+      "PROJECT_PARENT_ID",
+      "PROJECT_PARENT_USERNAME",
+      "PROJECT_MEMBER_PARENT_ID",
+      "PROJECT_MEMBER_PARENT_USERNAME",
+      "PROJECT_NAME",
+      "PROJECT_USERNAME",
+      "PROJECT_ADD",
+      "PROJECT_CITY",
+      "PROJECT_START_DATE",
+      "PROJECT_END_DATE",
+      "PROJECT_SUPERVISOR",
+      "PROJECT_COUNTRY",
+      "PROJECT_STATE",
+      "PROJECT_PHONE",
+    ];
+    
+
+    const hasEmptyFields = requiredFields.some(
+      (field) => !createProject[field]
+    );
+
+    if (hasEmptyFields) {
       setErrorMsg("Fill all fields");
+      toast.error("Please fill in all fields", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
       return;
     }
+
     setErrorMsg("");
 
     axios
@@ -114,26 +119,33 @@ export default function ProjectCreate(props) {
       .then((response) => {
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
+          toast.error(response.data.errorMsg, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+          });
         } else if (response.data.operation === "successfull") {
           toast.success("Project Created successfully!", {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 1000,
+            autoClose: 2000,
           });
-          setCreateProject("");
+          props.refetch();
+
+          setCreateProject({});
           setOpen(false);
         }
       })
       .catch((error) => {
         console.error(error, "ERR");
+        toast.error("An error occurred. Please try again later.", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 2000,
+        });
       });
   };
 
-
-  //state city api
-
   return (
     <>
-      <Button size="small" className="btn button border-bottom-0 bg-white"  variant="outlined">
+      <Button size="small" className="btn button border-bottom-0 bg-white" variant="outlined">
         Project
       </Button>
       <Button
@@ -143,7 +155,7 @@ export default function ProjectCreate(props) {
         variant="contained"
         size="small"
       >
-       + Add New Project
+        + Add New Project
       </Button>
 
       <Modal
@@ -164,13 +176,7 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
                   onChange={handleCreate}
-                  //required
                 />
-                {/* {errors.PROJECT_USERNAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_USERNAME}
-                  </p>
-                )} */}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Name</label>
@@ -208,7 +214,6 @@ export default function ProjectCreate(props) {
                   name="PROJECT_START_DATE"
                   onChange={handleCreate}
                   className="form-control rounded-0"
-                //required
                 />
               </div>
               <div className="form-group col-xl-6">
@@ -219,7 +224,6 @@ export default function ProjectCreate(props) {
                   name="PROJECT_END_DATE"
                   onChange={handleCreate}
                   className="form-control rounded-0"
-                //required
                 />
               </div>
             </div>
@@ -232,9 +236,8 @@ export default function ProjectCreate(props) {
                   onChange={handleCreate}
                   name="PROJECT_EMROLMNT_TYPE"
                   value={createProject.PROJECT_EMROLMNT_TYPE}
-                  //required
                 >
-                  <option selected>Choose...</option>
+                  <option value="">Choose...</option>
                   <option>Painter</option>
                   <option>Fitter</option>
                   <option>Plumber</option>
@@ -251,7 +254,6 @@ export default function ProjectCreate(props) {
                   name="PROJECT_SUPERVISOR"
                   value={createProject.PROJECT_SUPERVISOR}
                   onChange={handleCreate}
-                  //required
                 />
               </div>
             </div>
@@ -266,7 +268,6 @@ export default function ProjectCreate(props) {
                   name="PROJECT_ADD"
                   value={createProject.PROJECT_ADD}
                   onChange={handleCreate}
-                  //required
                 />
               </div>
             </div>
@@ -279,10 +280,8 @@ export default function ProjectCreate(props) {
                   name="PROJECT_COUNTRY"
                   value={createProject.PROJECT_COUNTRY}
                   onChange={handleCreate}
-                  //required
                 >
-                  <option >--Choose Country--</option>
-
+                  <option value="">--Choose Country--</option>
                   {country?.map((value, key) => {
                     return (
                       <option value={value.name} key={key}>
@@ -301,10 +300,8 @@ export default function ProjectCreate(props) {
                   name="PROJECT_STATE"
                   value={createProject.PROJECT_STATE}
                   onChange={handleCreate}
-                  //required
-                  
                 >
-                  <option selected>--Choose State--</option>
+                  <option value="">--Choose State--</option>
                   {availableState?.states?.map((e, key) => {
                     return (
                       <option value={e.name} key={key}>
@@ -323,9 +320,8 @@ export default function ProjectCreate(props) {
                   name="PROJECT_CITY"
                   value={createProject.PROJECT_CITY}
                   onChange={handleCreate}
-                  //required
                 >
-                  <option>--Choose City--</option>
+                  <option value="">--Choose City--</option>
                   {availableCities?.cities?.map((e, key) => {
                     return (
                       <option value={e.name} key={key}>
@@ -336,21 +332,16 @@ export default function ProjectCreate(props) {
                 </select>
               </div>
             </div>
-            <center>
-              {errorMsg && (
-                <p className=" text-danger fw-light mb-0">{errorMsg}</p>
-              )}
-            </center>
             <button
               type="submit"
-              className="btn btn-info text-white "
+              className="btn btn-info text-white"
               onClick={handleSubmit}
             >
               Submit
             </button>{" "}
             <button
               onClick={handleClose}
-              className="btn btn-danger text-white "
+              className="btn btn-danger text-white"
             >
               Discard
             </button>
@@ -359,4 +350,4 @@ export default function ProjectCreate(props) {
       </Modal>
     </>
   );
-                }
+}

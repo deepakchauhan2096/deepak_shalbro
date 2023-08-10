@@ -29,7 +29,7 @@ import Modal from "@mui/material/Modal";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
-import CompanyEdit from "../Admin/CompanyEdit";
+import CompanyEdit from "./CompanyEdit";
 import PlaylistPlayOutlinedIcon from '@mui/icons-material/PlaylistPlayOutlined';
 import { initAdmin_fun, initCompany_fun, selectedCompany_fun } from "../redux/action";
 import CompanyDelete from "./CompanyDelete";
