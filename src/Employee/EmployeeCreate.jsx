@@ -23,9 +23,10 @@ const style = {
 
 export default function AddEmployee(props) {
   const [open, setOpen] = React.useState(false);
-  const [errors, setErrors] = useState({});
-  const [submitting, setSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const [createEmployee, setCreateEmployee] = useState({
     EMPLOYEE_NAME: "",
     EMPLOYEE_EMAIL: "",
@@ -40,18 +41,26 @@ export default function AddEmployee(props) {
     EMPLOYEE_ADD: "",
     EMPLOYEE_USERNAME: "",
     EMPLOYEE_PASSWORD: "",
-    EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME,
-    EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID,
-    EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME,
-    EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID,
+    EMPLOYEE_MEMBER_PARENT_USERNAME:"",
+    EMPLOYEE_PARENT_ID: "",
+    EMPLOYEE_PARENT_USERNAME:"",
+    EMPLOYEE_MEMBER_PARENT_ID: "",
   });
-  const [errorMsg, setErrorMsg] = useState("");
-  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
 
-  const [newdata, setNewdata] = useState([]);
+  
+  useEffect(()=>{
+    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME})); 
+    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID})); 
+    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME})); 
+    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID})); 
+  },[open])
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
+
+  console.log(createEmployee, "check")
+
+
+
 
   const headers = {
     "Content-Type": "application/json",
@@ -60,36 +69,56 @@ export default function AddEmployee(props) {
 
    
 
+  // const handleCreate = (e) => {
+  //   setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
+  // };
+
   const handleCreate = (e) => {
-    setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
-    // console.log("heello world", createEmployee);
+    const { name, value } = e.target;
+    setCreateEmployee((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  //firbase authentication
+
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+    const requiredFields = [
+      "EMPLOYEE_NAME",
+      "EMPLOYEE_EMAIL",
+      "EMPLOYEE_STATE",
+      "EMPLOYEE_CITY",
+      "EMPLOYEE_PHONE",
+      "EMPLOYEE_HOURLY_WAGE",
+      "EMPLOYEE_ROLE",
+      "EMPLOYEE_EMPLMNTTYPE",
+      "EMPLOYEE_DOB",
+      "EMPLOYEE_HIRE_DATE",
+      "EMPLOYEE_ADD",
+      "EMPLOYEE_USERNAME",
+      "EMPLOYEE_PASSWORD",
+      "EMPLOYEE_MEMBER_PARENT_USERNAME",
+      "EMPLOYEE_PARENT_ID",
+      "EMPLOYEE_PARENT_USERNAME",
+      "EMPLOYEE_MEMBER_PARENT_ID"
+    ];
+    
+    const hasEmptyFields = requiredFields.some(
+      (field) => !createEmployee[field]
+    );
 
-    if (
-      !createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME ||
-      !createEmployee.EMPLOYEE_EMAIL ||
-      !createEmployee.EMPLOYEE_PASSWORD ||
-      !createEmployee.EMPLOYEE_NAME ||
-      !createEmployee.EMPLOYEE_STATE ||
-      !createEmployee.EMPLOYEE_CITY ||
-      !createEmployee.EMPLOYEE_PHONE ||
-      !createEmployee.EMPLOYEE_HOURLY_WAGE ||
-      !createEmployee.EMPLOYEE_ROLE ||
-      !createEmployee.EMPLOYEE_EMPLMNTTYPE ||
-      !createEmployee.EMPLOYEE_DOB ||
-      !createEmployee.EMPLOYEE_HIRE_DATE ||
-      !createEmployee.EMPLOYEE_ADD ||
-      !createEmployee.EMPLOYEE_USERNAME
-    ) {
+    if (hasEmptyFields) {
       setErrorMsg("Fill all fields");
+      toast.error("Please fill in all fields", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
       return;
     }
+  
     setErrorMsg("");
-
       axios
         .post("http://18.211.130.168:5001/create_employee", createEmployee, {
           headers,
@@ -97,18 +126,28 @@ export default function AddEmployee(props) {
         .then((response) => {
           if (response.data.operation === "failed") {
             setErrorMsg(response.data.errorMsg);
-          } else if (response.data.operation === "successfull") {
-            setIsSubmitted(true); // Set the submission status to true after successful submission
-            toast.success("Form submitted successfully!", {
-              position: toast.POSITION.TOP_CENTER, autoClose:1000
+            toast.error(response.data.errorMsg, {
+              position: toast.POSITION.TOP_CENTER,
+              autoClose: 2000,
             });
-            props.update(true);
+          } else if (response.data.operation === "successfull") {
+            toast.success("Form submitted successfully!", {
+              position: toast.POSITION.TOP_CENTER, 
+              autoClose:2000
+            });
+            props.refetch();
+            // setOpen(false);
+            // setCreateEmployee('')
+            setCreateEmployee({});
             setOpen(false);
-            setCreateEmployee('')
           }
         })
         .catch((error) => {
           console.error(error);
+          toast.error("An error occurred. Please try again later.", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+          });
         });
   };
 
@@ -149,7 +188,7 @@ export default function AddEmployee(props) {
                   <label for="inputqual">Employee Username</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter Employee Username"
                     id="inputZip"
                     value={createEmployee.EMPLOYEE_USERNAME}
@@ -157,17 +196,12 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {errors.EMPLOYEE_USERNAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_USERNAME}
-                  </p>
-                  )}
                 </div>
                 <div className="form-group col-xl-6">
                   <label>Employee Name</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="empName"
                     placeholder="Enter Employee name"
                     value={createEmployee.EMPLOYEE_NAME}
@@ -182,7 +216,7 @@ export default function AddEmployee(props) {
                   <label>E-mail</label>
                   <input
                     type="email"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="email"
                     placeholder="Enter Email add..."
                     value={createEmployee.EMPLOYEE_EMAIL}
@@ -195,7 +229,7 @@ export default function AddEmployee(props) {
                   <label>State</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="phone"
                     placeholder="Enter Your state.."
                     value={createEmployee.EMPLOYEE_STATE}
@@ -208,7 +242,7 @@ export default function AddEmployee(props) {
                   <label>Phone</label>
                   <input
                     type="number"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="phone"
                     placeholder="Enter Your Number"
                     value={createEmployee.EMPLOYEE_PHONE}
@@ -221,7 +255,7 @@ export default function AddEmployee(props) {
                   <label>Employee Password</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter Employee password"
                     value={createEmployee.EMPLOYEE_PASSWORD}
                     name="EMPLOYEE_PASSWORD"
@@ -233,7 +267,7 @@ export default function AddEmployee(props) {
                   <label for="inputPassword4">Date Of Birth</label>
                   <input
                     type="date"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="inputPassword4"
                     placeholder="Enter Date of birth"
                     value={createEmployee.EMPLOYEE_DOB}
@@ -250,7 +284,7 @@ export default function AddEmployee(props) {
                     <label for="inputAddress">Address</label>
                     <textarea
                       type="text"
-                      className="form-control rounded-0"
+                      className="form-control form-control-2 rounded-0"
                       id="inputAddress"
                       placeholder="Enter Address"
                       value={createEmployee.EMPLOYEE_ADD}
@@ -264,7 +298,7 @@ export default function AddEmployee(props) {
                   <label>City</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="city"
                     placeholder="Enter Your city.."
                     value={createEmployee.EMPLOYEE_CITY}
@@ -277,7 +311,7 @@ export default function AddEmployee(props) {
                   <label>Hourly wages</label>
                   <input
                     type="number"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="hourlywage"
                     placeholder="Enter your Hourly wages"
                     value={createEmployee.EMPLOYEE_HOURLY_WAGE}
@@ -290,7 +324,7 @@ export default function AddEmployee(props) {
                   <label for="inputPassword4">Employee Role</label>
                   <select
                     id="inputqual"
-                    className="form-control rounded-0 border"
+                    className="form-control form-control-2 rounded-0 border"
                     value={createEmployee.EMPLOYEE_ROLE}
                     name="EMPLOYEE_ROLE"
                     onChange={handleCreate}
@@ -312,7 +346,7 @@ export default function AddEmployee(props) {
                   <label for="inputqual">Employement Type</label>
                   <select
                     id="inputqual"
-                    className="form-control rounded-0 border"
+                    className="form-control form-control-2 rounded-0 border"
                     value={createEmployee.EMPLOYEE_EMPLMNTTYPE}
                     name="EMPLOYEE_EMPLMNTTYPE"
                     onChange={handleCreate}
@@ -330,7 +364,7 @@ export default function AddEmployee(props) {
                   <label for="inputPassword4">Hired Date</label>
                   <input
                     type="date"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="inputPassword4"
                     placeholder="Enter hire date"
                     value={createEmployee.EMPLOYEE_HIRE_DATE}
@@ -342,9 +376,9 @@ export default function AddEmployee(props) {
               </div>
               <div className="row pt-2">
               <center>
-              {errorMsg && (
+              {/* {errorMsg && (
                 <p className=" text-danger fw-light mb-0">{errorMsg}</p>
-              )}
+              )} */}
                </center>
                 <div className="col-12">
                   <button

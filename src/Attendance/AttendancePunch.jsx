@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment/moment";
 const AttendancePunch = (props) => {
+
+  console.log(props,"props-data")
   return (
     <>
       <thead
@@ -19,7 +21,7 @@ const AttendancePunch = (props) => {
         </tr>
       </thead>
       <tbody>
-        {props.data.EMPLOYEE_ATTENDANCE.map((post) => (
+        {props.data.map((post) => (
           <tr className="table table-striped">
             <td>{props.data.EMPLOYEE_NAME}</td>
             <td>{post.ATTENDANCE_DATE_ID}</td>

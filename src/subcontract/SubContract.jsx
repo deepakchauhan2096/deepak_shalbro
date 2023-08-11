@@ -70,11 +70,12 @@ const SubContract = (props) => {
         },
         { headers }
       );
-      setTimeout(() => {
+    
         const data = response.data;
         setProjectData(data?.result);
         setIsLoading(false);
-      }, 1000);
+        
+   
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
@@ -181,7 +182,8 @@ const SubContract = (props) => {
       <Box className="box" style={{ background: "#277099" }}>
       <CreateSubcontract
           companyData={subcontractData}
-          update={(event) => setUpdateData(event)}
+          // update={(event) => setUpdateData(event)}
+          refetch={fetchsubcontracts}
           name={"Project"}
         />
         <MyScreen sx={{ display: "block", padding: 3 }}>
@@ -203,7 +205,7 @@ const SubContract = (props) => {
                 }}
                 density="compact"
                 pageSizeOptions={[5]}
-                checkboxSelection
+                // checkboxSelection
                 disableRowSelectionOnClick
               />
             )}
@@ -342,7 +344,7 @@ const SubContract = (props) => {
                     <input
                       type="date"
                       value={filterData.SUBCONTRACTOR_END_DATE}
-                      className="form-control"
+                      className="form-control form-control-2"
                     />
                   ) : (
                     <p className="bg-light text-dark p-2 rounded-2">

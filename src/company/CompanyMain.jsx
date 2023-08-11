@@ -109,7 +109,7 @@ const CompanyMain = () => {
             disablePadding
           >
             <ListItemButton sx={{ color: "#fff" }}>
-              <b className="px-2">{props.icons}</b>{props.listname}
+              <b className="px-2 list">{props.icons}</b>{props.listname}
             </ListItemButton>
           </ListItem>
         </List>
@@ -225,7 +225,7 @@ const CompanyMain = () => {
             <div className="logout_icon d-inline">
               <Button
                 className="text-white text-uppercase"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate(-2)}
               >
                 <LogoutIcon style={{ display: "inline" }} /> Exit
               </Button>

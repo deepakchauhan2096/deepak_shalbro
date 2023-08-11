@@ -29,7 +29,7 @@ import Modal from "@mui/material/Modal";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
-import CompanyEdit from "./CompanyEdit";
+import CompanyEdit from "../Admin/CompanyEdit";
 import PlaylistPlayOutlinedIcon from '@mui/icons-material/PlaylistPlayOutlined';
 import { initAdmin_fun, initCompany_fun, selectedCompany_fun } from "../redux/action";
 import CompanyDelete from "./CompanyDelete";
@@ -150,7 +150,7 @@ const AdminDashboard = (props) => {
 
   return (
     <>
-        <MyScreen screenIndex={true}>
+      <MyScreen screenIndex={true}>
         <AppBar position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
@@ -166,7 +166,7 @@ const AdminDashboard = (props) => {
                   textDecoration: "none",
                 }}
               >
-                {adminData?.ADMIN_USERNAME}
+                {tableRows?.ADMIN_USERNAME}
               </Typography>
               <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                 <IconButton
@@ -220,7 +220,7 @@ const AdminDashboard = (props) => {
                   textDecoration: "none",
                 }}
               >
-                {adminData?.ADMIN_USERNAME}
+                {tableRows?.ADMIN_USERNAME}
               </Typography>
               <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                 {pages.map((page) => (
@@ -237,40 +237,27 @@ const AdminDashboard = (props) => {
           </Container>
         </AppBar>
         <MyScreenbox screenIndex={true}>
-          {Rows.length === 0 ?
-            <div style={{
-              height: "80vh",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: "20px"
-            }}>
-
-              <p style={{
-                fontFamily: "monospace",
-                color: "grey",
-                marginBottom: "10px"
-              }}>
-                There is no data. Please create a company to move forward.
-              </p>
-              <CompanyCreate
-                btnstyle={{ position: "relative", right: "270px" }}
-                ID={adminData?.ADMIN_ID}
-                Username={adminData?.ADMIN_USERNAME}
-                Update={(e) => setUpdateData(e)}
-              />
-            </div>
-            :
-            <>
-              <CompanyCreate
-                ID={adminData?.ADMIN_ID}
-                Username={adminData?.ADMIN_USERNAME}
-                Update={(e) => setUpdateData(e)}
-              />
-
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  {Rows.length > 0 ? <TableHead>
+          {isLoading ? (
+            <Skeleton
+              variant="circular"
+              width={40}
+              height={40}
+              sx={{ position: "fixed", top: "80px", right: "80px" }}
+            />
+          ) : (
+            <CompanyCreate
+              ID={tableRows?.ADMIN_ID}
+              Username={tableRows?.ADMIN_USERNAME}
+              Update={(e) => setUpdateData(e)}
+            />
+          )}
+          {isLoading ? (
+            <Animations />
+          ) : (
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                {Rows?.length !== 0 ? (
+                  <TableHead>
                     <TableRow>
                       {[
                         "Company Name",
@@ -287,56 +274,57 @@ const AdminDashboard = (props) => {
                         <TableCell size="large">{item}</TableCell>
                       ))}
                     </TableRow>
-                  </TableHead> : ""}
-                  <TableBody>
-                    {Rows?.map((post) => (
-                      <>
-                        <TableRow
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell size="small">{post?.COMPANY_NAME}</TableCell>
-                          <TableCell size="small">{post?.COMPANY_ID}</TableCell>
-                          <TableCell size="small">
-                            {post?.COMPANY_USERNAME}
-                          </TableCell>
-                          <TableCell size="small">
-                            {post?.COMPANY_PHONE}
-                          </TableCell>
-                          <TableCell size="small">
-                            {post?.COMPANY_EMAIL}
-                          </TableCell>
-                          <TableCell size="small">{post?.COMPANY_ADD2}</TableCell>
-                          <TableCell size="small">
-                            {post?.COMPANY_STATE}
-                          </TableCell>
-                          <TableCell size="small">
-                            <Tooltip title="View Detail">
-                              <PlaylistPlayOutlinedIcon
-                                onClick={(e) => ShowCompDetail(post)}
-                                color="primary"
-                                style={{ cursor: "pointer" }}
-                              />
-                            </Tooltip>
-                          </TableCell>
-                          <TableCell size="small">
-
+                  </TableHead>
+                ) : (
+                  ""
+                )}
+                <TableBody>
+                  {Rows?.map((post) => (
+                    <>
+                      <TableRow
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell size="small">{post?.COMPANY_NAME}</TableCell>
+                        <TableCell size="small">{post?.COMPANY_ID}</TableCell>
+                        <TableCell size="small">
+                          {post?.COMPANY_USERNAME}
+                        </TableCell>
+                        <TableCell size="small">
+                          {post?.COMPANY_PHONE}
+                        </TableCell>
+                        <TableCell size="small">
+                          {post?.COMPANY_EMAIL}
+                        </TableCell>
+                        <TableCell size="small">{post?.COMPANY_ADD2}</TableCell>
+                        <TableCell size="small">
+                          {post?.COMPANY_STATE}
+                        </TableCell>
+                        <TableCell size="small">
+                          <Tooltip title="View Detail">
+                            <PlaylistPlayOutlinedIcon
+                              onClick={(e) => ShowCompDetail(post)}
+                              color="primary"
+                              style={{ cursor: "pointer" }}
+                            />
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell size="small">
+                       
                             <CompanyEdit companyEDit={post} reFetchfun={getCompanyData} />
-
-                          </TableCell>
-                          {/* <TableCell size="small">
+                        
+                        </TableCell>
+                        {/* <TableCell size="small">
                          <CompanyDelete/>
                         </TableCell> */}
-                        </TableRow>
-                      </>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </>
-          }
-
+                      </TableRow>
+                    </>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </MyScreenbox>
       </MyScreen>
     </>

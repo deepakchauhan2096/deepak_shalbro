@@ -1,25 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import locationIcon from "../assests/images/location.png"
+import React, { useState, useEffect, useRef } from "react";
+import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import locationIcon from "../assests/images/location.png";
 
 const ProjectLoc = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
 
   const [latitude2, setLatitude2] = useState(28.3903);
-  const [longitude2, setLongitude2] = useState(77.0500);
+  const [longitude2, setLongitude2] = useState(77.05);
 
-  const [locationName, setLocationName] = useState('');
+  const [locationName, setLocationName] = useState("");
   const [circleCenter, setCircleCenter] = useState([null, null]);
   const [circleRadius, setCircleRadius] = useState(500); // Default radius of the circle in meters
   const [isInsideCircle, setIsInsideCircle] = useState(false);
-  const [userLocation, setUserLocation] = useState('');
+  const [userLocation, setUserLocation] = useState("");
   const [suggestedLocations, setSuggestedLocations] = useState([]);
 
   const circleRef = useRef();
-
 
   const customIcon = new L.Icon({
     iconUrl: locationIcon, // URL to your custom marker icon image
@@ -37,15 +36,21 @@ const ProjectLoc = () => {
         (position) => {
           setLatitude(position.coords.latitude);
           setLongitude(position.coords.longitude);
-          setCircleCenter([position.coords.latitude, position.coords.longitude]);
-          fetchLocationName(position.coords.latitude, position.coords.longitude);
+          setCircleCenter([
+            position.coords.latitude,
+            position.coords.longitude,
+          ]);
+          fetchLocationName(
+            position.coords.latitude,
+            position.coords.longitude
+          );
         },
         (error) => {
-          console.error('Error getting location:', error);
+          console.error("Error getting location:", error);
         }
       );
     } else {
-      console.error('Geolocation is not supported by this browser.');
+      console.error("Geolocation is not supported by this browser.");
     }
   };
 
@@ -57,7 +62,7 @@ const ProjectLoc = () => {
       const address = data.display_name;
       setLocationName(address);
     } catch (error) {
-      console.error('Error fetching location:', error);
+      console.error("Error fetching location:", error);
     }
   };
 
@@ -95,7 +100,10 @@ const ProjectLoc = () => {
 
     const a =
       Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
-      Math.cos(phi1) * Math.cos(phi2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+      Math.cos(phi1) *
+        Math.cos(phi2) *
+        Math.sin(deltaLambda / 2) *
+        Math.sin(deltaLambda / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
 
@@ -123,17 +131,17 @@ const ProjectLoc = () => {
       const locations = data.map((item) => item.display_name);
       setSuggestedLocations(locations);
     } catch (error) {
-      console.error('Error fetching location suggestions:', error);
+      console.error("Error fetching location suggestions:", error);
     }
   };
 
   const handleGetCurrentLocation = () => {
     getLocation();
-    setUserLocation('');
+    setUserLocation("");
   };
 
   const updateMapLocation = () => {
-    if (locationName && locationName !== '') {
+    if (locationName && locationName !== "") {
       const locationUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
         locationName
       )}&format=json`;
@@ -147,65 +155,121 @@ const ProjectLoc = () => {
           }
         })
         .catch((error) => {
-          console.error('Error fetching location:', error);
+          console.error("Error fetching location:", error);
         });
     }
   };
 
   return (
-    <div>
-      {latitude && longitude && <p>Latitude: {latitude}, Longitude: {longitude}</p>}
-      {locationName && <p>Location Name: {locationName}</p>}
-      {latitude && longitude && circleCenter[0] && circleCenter[1] && (
-        <div>
-          <p>Selected Circle Center: Latitude: {circleCenter[0]}, Longitude: {circleCenter[1]}</p>
-          <label>
-            Circle Radius (in meters):
-            <input
-              type="text"
-              value={circleRadius}
-              onChange={handleCircleRadiusChange}
-            />
-          </label>
-          <p>
-            Your location is {isInsideCircle ? 'inside' : 'outside'} the circle.
-          </p>
+    <div className="container-fluid g-0">
+      <div className="row">
+        <div className="col-12">
+          <div>
+            <table className="table table-bordered table-fixed table-sm">
+              <colgroup>
+                <col style={{ width: "20%" }} />
+                <col style={{ width: "30%" }} />
+                <col style={{ width: "20%" }} />
+                <col style={{ width: "30%" }} />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Value</th>
+                  <th>Property</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {latitude && longitude && (
+                  <tr>
+                    <td>Latitude</td>
+                    <td>{latitude}</td>
+                    <td>Longitude</td>
+                    <td>{longitude}</td>
+                  </tr>
+                )}
+                {locationName && (
+                  <tr>
+                    <td>Location Name</td>
+                    <td colSpan="3">{locationName}</td>
+                  </tr>
+                )}
+                {latitude && longitude && circleCenter[0] && circleCenter[1] && (
+                  <tr>
+                    <td>Selected Circle Center - Latitude</td>
+                    <td>{circleCenter[0]}</td>
+                    <td>Selected Circle Center - Longitude</td>
+                    <td>{circleCenter[1]}</td>
+                  </tr>
+                )}
+                {latitude && longitude && circleCenter[0] && circleCenter[1] && (
+                  <tr>
+                    <td>Circle Radius (in meters)</td>
+                    <td>
+                      <input
+                        type="text"
+                        value={circleRadius}
+                        onChange={handleCircleRadiusChange}
+                        className="form-control form-control-2"
+                      />
+                    </td>
+                    <td>Your location is</td>
+                    <td>{isInsideCircle ? "inside" : "outside"} the circle.</td>
+                  </tr>
+                )}
+                <tr>
+                  <td>Enter Location</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={userLocation}
+                      onChange={handleUserLocationChange}
+                      list="suggestedLocations"
+                      className="form-control form-control-2"
+                    />
+                  </td>
+                  <td>Get Current Location</td>
+                  <td>
+                    <button className="btn btn-primary btn-sm" onClick={handleGetCurrentLocation}>
+                      Get Current Location
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            {latitude && longitude && (
+              <MapContainer
+                key={`${latitude}-${longitude}`}
+                center={[latitude, longitude]}
+                zoom={13}
+                style={{ height: "400px" }}
+              >
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <Marker position={[latitude, longitude]} icon={customIcon}>
+                  <Popup> Company Coverage</Popup>
+                </Marker>
+                <Marker position={[latitude2, longitude2]} icon={customIcon}>
+                  <Popup>Your Location</Popup>
+                </Marker>
+                {circleCenter[0] && circleCenter[1] && (
+                  <Circle
+                    center={circleCenter}
+                    radius={circleRadius}
+                    ref={circleRef}
+                  >
+                    <Popup>Selected Area</Popup>
+                  </Circle>
+                )}
+              </MapContainer>
+            )}
+          </div>
         </div>
-      )}
-      <label>
-        Enter Location:
-        <input
-          type="text"
-          value={userLocation}
-          onChange={handleUserLocationChange}
-          list="suggestedLocations"
-        />
-      </label>
-      <datalist id="suggestedLocations">
-        {suggestedLocations.map((location, index) => (
-          <option key={index} value={location} />
-        ))}
-      </datalist>
-      <button onClick={handleGetCurrentLocation}>Get Current Location</button>
-      {latitude && longitude && (
-        <MapContainer key={`${latitude}-${longitude}`} center={[latitude, longitude]} zoom={13} style={{ height: '400px' }}>
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          <Marker position={[latitude, longitude]} icon={customIcon}>
-            <Popup> Company Coverage</Popup>
-          </Marker>
-          <Marker position={[latitude2, longitude2]} icon={customIcon}>
-            <Popup>Your Location</Popup>
-          </Marker>
-          {circleCenter[0] && circleCenter[1] && (
-            <Circle center={circleCenter} radius={circleRadius} ref={circleRef}>
-              <Popup>Selected Area</Popup>
-            </Circle>
-          )}
-        </MapContainer>
-      )}
+      </div>
     </div>
   );
 };
