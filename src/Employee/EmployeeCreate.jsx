@@ -188,7 +188,7 @@ export default function AddEmployee(props) {
                   <label for="inputqual">Employee Username</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter Employee Username"
                     id="inputZip"
                     value={createEmployee.EMPLOYEE_USERNAME}
@@ -201,7 +201,7 @@ export default function AddEmployee(props) {
                   <label>Employee Name</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="empName"
                     placeholder="Enter Employee name"
                     value={createEmployee.EMPLOYEE_NAME}
@@ -216,7 +216,7 @@ export default function AddEmployee(props) {
                   <label>E-mail</label>
                   <input
                     type="email"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="email"
                     placeholder="Enter Email add..."
                     value={createEmployee.EMPLOYEE_EMAIL}
@@ -229,7 +229,7 @@ export default function AddEmployee(props) {
                   <label>State</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="phone"
                     placeholder="Enter Your state.."
                     value={createEmployee.EMPLOYEE_STATE}
@@ -242,7 +242,7 @@ export default function AddEmployee(props) {
                   <label>Phone</label>
                   <input
                     type="number"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="phone"
                     placeholder="Enter Your Number"
                     value={createEmployee.EMPLOYEE_PHONE}
@@ -255,7 +255,7 @@ export default function AddEmployee(props) {
                   <label>Employee Password</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter Employee password"
                     value={createEmployee.EMPLOYEE_PASSWORD}
                     name="EMPLOYEE_PASSWORD"
@@ -267,7 +267,7 @@ export default function AddEmployee(props) {
                   <label for="inputPassword4">Date Of Birth</label>
                   <input
                     type="date"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="inputPassword4"
                     placeholder="Enter Date of birth"
                     value={createEmployee.EMPLOYEE_DOB}
@@ -284,7 +284,7 @@ export default function AddEmployee(props) {
                     <label for="inputAddress">Address</label>
                     <textarea
                       type="text"
-                      className="form-control rounded-0"
+                      className="form-control form-control-2 rounded-0"
                       id="inputAddress"
                       placeholder="Enter Address"
                       value={createEmployee.EMPLOYEE_ADD}
@@ -298,7 +298,7 @@ export default function AddEmployee(props) {
                   <label>City</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="city"
                     placeholder="Enter Your city.."
                     value={createEmployee.EMPLOYEE_CITY}
@@ -311,7 +311,7 @@ export default function AddEmployee(props) {
                   <label>Hourly wages</label>
                   <input
                     type="number"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="hourlywage"
                     placeholder="Enter your Hourly wages"
                     value={createEmployee.EMPLOYEE_HOURLY_WAGE}
@@ -324,7 +324,7 @@ export default function AddEmployee(props) {
                   <label for="inputPassword4">Employee Role</label>
                   <select
                     id="inputqual"
-                    className="form-control rounded-0 border"
+                    className="form-control form-control-2 rounded-0 border"
                     value={createEmployee.EMPLOYEE_ROLE}
                     name="EMPLOYEE_ROLE"
                     onChange={handleCreate}
@@ -346,7 +346,7 @@ export default function AddEmployee(props) {
                   <label for="inputqual">Employement Type</label>
                   <select
                     id="inputqual"
-                    className="form-control rounded-0 border"
+                    className="form-control form-control-2 rounded-0 border"
                     value={createEmployee.EMPLOYEE_EMPLMNTTYPE}
                     name="EMPLOYEE_EMPLMNTTYPE"
                     onChange={handleCreate}
@@ -364,7 +364,7 @@ export default function AddEmployee(props) {
                   <label for="inputPassword4">Hired Date</label>
                   <input
                     type="date"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="inputPassword4"
                     placeholder="Enter hire date"
                     value={createEmployee.EMPLOYEE_HIRE_DATE}
@@ -376,9 +376,9 @@ export default function AddEmployee(props) {
               </div>
               <div className="row pt-2">
               <center>
-              {errorMsg && (
+              {/* {errorMsg && (
                 <p className=" text-danger fw-light mb-0">{errorMsg}</p>
-              )}
+              )} */}
                </center>
                 <div className="col-12">
                   <button

@@ -171,7 +171,7 @@ export default function SubcontractCreate(props) {
                 <label>Subcontract Username</label>
                 <input
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   placeholder="Username"
                   value={createSubcontract.SUBCONTRACTOR_USERNAME}
                   name="SUBCONTRACTOR_USERNAME"
@@ -182,7 +182,7 @@ export default function SubcontractCreate(props) {
                 <label>Subcontract Name</label>
                 <input
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   id="inputname"
                   placeholder="Project Name"
                   value={createSubcontract.SUBCONTRACTOR_NAME}
@@ -194,7 +194,7 @@ export default function SubcontractCreate(props) {
                 <label>Contact</label>
                 <input
                   type="number"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   id="inputPassword4"
                   placeholder="Enter Phone Number"
                   name="SUBCONTRACTOR_PHONE"
@@ -211,7 +211,7 @@ export default function SubcontractCreate(props) {
                   value={createSubcontract.SUBCONTRACTOR_START_DATE}
                   name="SUBCONTRACTOR_START_DATE"
                   onChange={handleCreate}
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                 //required
                 />
               </div>
@@ -222,7 +222,7 @@ export default function SubcontractCreate(props) {
                   value={createSubcontract.SUBCONTRACTOR_END_DATE}
                   name="SUBCONTRACTOR_END_DATE"
                   onChange={handleCreate}
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                 //required
                 />
               </div>
@@ -232,7 +232,7 @@ export default function SubcontractCreate(props) {
                 <label>Subcontract ROLE</label>
                 <select
                   id="inputEnroll"
-                  className="form-control border rounded-0"
+                  className="form-control form-control-2 border rounded-0"
                   onChange={handleCreate}
                   name="SUBCONTRACTOR_ROLE"
                   value={createSubcontract.SUBCONTRACTOR_ROLE}
@@ -248,7 +248,7 @@ export default function SubcontractCreate(props) {
                 <label>Sub Contractor</label>
                 <input
                   type="text"
-                  className="form-control rounded-0 "
+                  className="form-control form-control-2 rounded-0 "
                   id="inputsupervisor"
                   name="SUBCONTRACTOR_SUPERVISOR"
                   value={createSubcontract.SUBCONTRACTOR_SUPERVISOR}
@@ -261,7 +261,7 @@ export default function SubcontractCreate(props) {
                 <label>Address</label>
                 <textarea
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   id="inputAddress2"
                   placeholder="Apartment, studio, or floor"
                   name="SUBCONTRACTOR_ADD"
@@ -274,7 +274,7 @@ export default function SubcontractCreate(props) {
               <div className="form-group col-xl-4">
                 <label>Country</label>
                 <select
-                  className="form-control border rounded-0"
+                  className="form-control form-control-2 border rounded-0"
                   placeholder="Country"
                   name="SUBCONTRACTOR_COUNTRY"
                   value={createSubcontract.SUBCONTRACTOR_COUNTRY}
@@ -294,7 +294,7 @@ export default function SubcontractCreate(props) {
                 <label>State</label>
                 <select
                   className="
-                  form-control border rounded-0"
+                  form-control form-control-2 border rounded-0"
                   placeholder="State"
                   name="SUBCONTRACTOR_STATE"
                   value={createSubcontract.SUBCONTRACTOR_STATE}
@@ -314,7 +314,7 @@ export default function SubcontractCreate(props) {
               <div className="form-group col-xl-4">
                 <label>City</label>
                 <select
-                  className="form-control border rounded-0"
+                  className="form-control form-control-2 border rounded-0"
                   placeholder="City"
                   name="SUBCONTRACTOR_CITY"
                   value={createSubcontract.SUBCONTRACTOR_CITY}

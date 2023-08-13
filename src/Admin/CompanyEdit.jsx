@@ -173,7 +173,7 @@ export default function CompanyEdit(props) {
                   <label>Company name</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter company name"
                     value={edit_company.COMPANY_NAME}
                     name="COMPANY_NAME"
@@ -186,7 +186,7 @@ export default function CompanyEdit(props) {
                   <label>Company username</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Username"
                     value={edit_company.COMPANY_USERNAME}
                     name="COMPANY_USERNAME"
@@ -202,7 +202,7 @@ export default function CompanyEdit(props) {
                   <label>Phone Number</label>
                   <input
                     type="number"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter Number"
                     value={edit_company.COMPANY_PHONE}
                     name="COMPANY_PHONE"
@@ -215,7 +215,7 @@ export default function CompanyEdit(props) {
                   <label>Company Email</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter company email"
                     name="COMPANY_EMAIL"
                     value={edit_company.COMPANY_EMAIL}
@@ -229,7 +229,7 @@ export default function CompanyEdit(props) {
                 <div className="form-group col-xl-4">
                   <label>Country</label>
                   <select
-                    className="form-control border  rounded-0"
+                    className="form-control form-control-2 border  rounded-0"
                     name="COMPANY_COUNTRY"
                     value={edit_company.COMPANY_COUNTRY}
                     onChange={handleCreate}
@@ -249,7 +249,7 @@ export default function CompanyEdit(props) {
                 <div className="form-group col-xl-4">
                   <label>State</label>
                   <select
-                    className="form-control border  rounded-0"
+                    className="form-control form-control-2 border  rounded-0"
                     name="COMPANY_STATE"
                     value={edit_company.COMPANY_STATE}
                     onChange={handleCreate}
@@ -267,7 +267,7 @@ export default function CompanyEdit(props) {
                 <div className="form-group col-xl-4">
                   <label>City</label>
                   <select
-                    className="form-control border rounded-0"
+                    className="form-control form-control-2 border rounded-0"
                     name="COMPANY_CITY"
                     value={edit_company.COMPANY_CITY}
                     onChange={handleCreate}
@@ -290,7 +290,7 @@ export default function CompanyEdit(props) {
                 <label>Address</label>
                 <textarea
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   placeholder="Apartment, studio, or floor"
                   name="COMPANY_ADD2"
                   value={edit_company.COMPANY_ADD2}

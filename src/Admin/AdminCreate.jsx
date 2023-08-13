@@ -75,7 +75,7 @@ function AdminCreate() {
         <InputControl
           label="User Name"
           placeholder="Enter your username"
-          className="form-control"
+          className="form-control form-control-2"
           onChange={(event) =>
             setValues((prev) => ({
               ...prev,
@@ -85,7 +85,7 @@ function AdminCreate() {
         />
         <InputControl
           label="Name"
-          className="form-control"
+          className="form-control form-control-2"
           placeholder="Enter your name"
           onChange={(event) =>
             setValues((prev) => ({ ...prev, ADMIN_NAME: event.target.value }))
@@ -93,7 +93,7 @@ function AdminCreate() {
         />
         <InputControl
           label="Email"
-          className="form-control"
+          className="form-control form-control-2"
           placeholder="Enter email address"
           onChange={(event) =>
             setValues((prev) => ({ ...prev, ADMIN_EMAIL: event.target.value }))
@@ -101,7 +101,7 @@ function AdminCreate() {
         />
         <InputControl
           label="Phone"
-          className="form-control"
+          className="form-control form-control-2"
           placeholder="Enter phone"
           onChange={(event) =>
             setValues((prev) => ({ ...prev, ADMIN_PHONE: event.target.value }))
@@ -111,7 +111,7 @@ function AdminCreate() {
           type="password"
           label="Password"
           placeholder="Enter password"
-          className="form-control"
+          className="form-control form-control-2"
           onChange={(event) =>
             setValues((prev) => ({
               ...prev,

@@ -88,61 +88,7 @@ const [EditProject, setEditProject] = useState({
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
- 
 
-  //api create project
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (
-  //     !EditProject.PROJECT_USERNAME ||
-  //     !EditProject.PROJECT_NAME ||
-  //     !EditProject.PROJECT_PHONE ||
-  //     !EditProject.PROJECT_PARENT_ID ||
-  //     !EditProject.PROJECT_PARENT_USERNAME ||
-  //     !EditProject.PROJECT_MEMBER_PARENT_ID ||
-  //     !EditProject.PROJECT_MEMBER_PARENT_USERNAME ||
-  //     !EditProject.PROJECT_ADD ||
-  //     !EditProject.PROJECT_START_DATE ||
-  //     !EditProject.PROJECT_END_DATE ||
-  //     !EditProject.PROJECT_SUPERVISOR ||
-  //     !EditProject.PROJECT_COUNTRY ||
-  //     !EditProject.PROJECT_CITY ||
-  //     !EditProject.PROJECT_STATE
-  //   ) {
-  //     setErrorMsg("Fill all fields");
-  //     return;
-  //   }
-  //   setErrorMsg("");
-
-  //   axios
-  //     .put("http://18.211.130.168:5001/update_projects", {
-  //       PROJECT_ID: editProjectData.PROJECT_ID,
-  //       PROJECT_PARENT_ID: editProjectData.PROJECT_PARENT_ID,
-  //       PROJECT_PARENT_USERNAME:editProjectData.PROJECT_PARENT_USERNAME,
-  //       PROJECT_MEMBER_PARENT_ID: editProjectData.PROJECT_MEMBER_PARENT_ID,
-  //       PROJECT_MEMBER_PARENT_USERNAME: editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
-  //       PROJECT_DETAILS_FOR_UPDATES:{...EditProject}
-  //   }, {
-  //       headers,
-  //     })
-  //     .then((response) => {
-  //       if (response.data.operation === "failed") {
-  //         setErrorMsg(response.data.errorMsg);
-  //       } else if (response.data.operation === "successfull") {
-  //         props.refetch();
-  //         console.log("anu", response)
-  //         toast.success("Project Created successfully!", {
-  //           position: toast.POSITION.TOP_CENTER,
-  //           autoClose: 1000,
-  //         });
-  //         // setEditProject("");
-  //         setOpen(false);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error, "ERR");
-  //     });
-  // };
 
 
   const handleSubmit = (e) => {
@@ -233,7 +179,7 @@ const [EditProject, setEditProject] = useState({
                 <label> Project Username</label>
                 <input
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   placeholder="Username"
                   value={EditProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
@@ -245,7 +191,7 @@ const [EditProject, setEditProject] = useState({
                 <label>Project Name</label>
                 <input
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   id="inputname"
                   placeholder="Project Name"
                   value={EditProject.PROJECT_NAME}
@@ -258,7 +204,7 @@ const [EditProject, setEditProject] = useState({
                 <label>Contact</label>
                 <input
                   type="number"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   id="inputPassword4"
                   placeholder="Enter Phone Number"
                   name="PROJECT_PHONE"
@@ -276,7 +222,7 @@ const [EditProject, setEditProject] = useState({
                   value={EditProject.PROJECT_START_DATE}
                   name="PROJECT_START_DATE"
                   onChange={handleEdit}
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                 //required
                 />
               </div>
@@ -287,7 +233,7 @@ const [EditProject, setEditProject] = useState({
                   value={EditProject.PROJECT_END_DATE}
                   name="PROJECT_END_DATE"
                   onChange={handleEdit}
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                 //required
                 />
               </div>
@@ -297,7 +243,7 @@ const [EditProject, setEditProject] = useState({
                 <label>Enrollment</label>
                 <select
                   id="inputEnroll"
-                  className="form-control border rounded-0"
+                  className="form-control form-control-2 border rounded-0"
                   onChange={handleEdit}
                   name="PROJECT_EMROLMNT_TYPE"
                   value={EditProject.PROJECT_EMROLMNT_TYPE}
@@ -315,7 +261,7 @@ const [EditProject, setEditProject] = useState({
                 <label>Supervisor</label>
                 <input
                   type="text"
-                  className="form-control rounded-0 "
+                  className="form-control form-control-2 rounded-0 "
                   id="inputsupervisor"
                   name="PROJECT_SUPERVISOR"
                   value={EditProject.PROJECT_SUPERVISOR}
@@ -329,7 +275,7 @@ const [EditProject, setEditProject] = useState({
                 <label>Address</label>
                 <textarea
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   id="inputAddress2"
                   placeholder="Apartment, studio, or floor"
                   name="PROJECT_ADD"
@@ -343,7 +289,7 @@ const [EditProject, setEditProject] = useState({
               <div className="form-group col-xl-4">
                 <label>Country</label>
                 <select
-                  className="form-control border rounded-0"
+                  className="form-control form-control-2 border rounded-0"
                   placeholder="Country"
                   name="PROJECT_COUNTRY"
                   value={EditProject.PROJECT_COUNTRY}
@@ -365,7 +311,7 @@ const [EditProject, setEditProject] = useState({
               <div className="form-group col-xl-4">
                 <label>State</label>
                 <select
-                  className="form-control border rounded-0"
+                  className="form-control form-control-2 border rounded-0"
                   placeholder="State"
                   name="PROJECT_STATE"
                   value={EditProject.PROJECT_STATE}
@@ -387,7 +333,7 @@ const [EditProject, setEditProject] = useState({
               <div className="form-group col-xl-4">
                 <label>City</label>
                 <select
-                  className="form-control border rounded-0"
+                  className="form-control form-control-2 border rounded-0"
                   placeholder="City"
                   name="PROJECT_CITY"
                   value={EditProject.PROJECT_CITY}
