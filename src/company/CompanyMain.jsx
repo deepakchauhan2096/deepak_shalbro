@@ -26,6 +26,8 @@ import GroupIcon from "@mui/icons-material/Group";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import DiscFullIcon from "@mui/icons-material/DiscFull";
+import DirectionsBusFilledRoundedIcon from '@mui/icons-material/DirectionsBusFilledRounded';
+import Vehicle from "../assetmanage/Vehicle";
 // import { useDispatch, useSelector } from "react-redux";
 
 
@@ -95,6 +97,10 @@ const CompanyMain = () => {
     {
       listname: "Attendance",
       icons: <DiscFullIcon />
+    },
+    {
+      listname: "Asset Management",
+      icons: <DirectionsBusFilledRoundedIcon />
     },
   ];
 
@@ -268,6 +274,11 @@ const CompanyMain = () => {
 
       <NavScreen screenIndex={navIndex === 4}>
         <AttendanceReport mainData={allempData} />
+      </NavScreen>
+
+      
+      <NavScreen screenIndex={navIndex === 5}>
+        <Vehicle mainData={allempData} />
       </NavScreen>
     </>
   );

@@ -221,11 +221,7 @@ const EmployeeSrc = (props) => {
       width: 80,
       renderCell: (cellValues) => {
         return (
-          <Button
-            // onClick={(event) => {
-            //   handleEdit(cellValues);
-            // }}
-          >
+          <Button>
             <EmployeeEdit edit={cellValues} refetch={fetchAllEmployee}/>
           </Button>
         );
@@ -561,50 +557,6 @@ const EmployeeSrc = (props) => {
 
 
         </MyScreen>
-        {/* <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-          <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
-          <div
-            className="form-control rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Education Document
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-
-          <div
-            className="form-control rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Valid ID
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-          <div
-            className="form-control rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Other
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-        </MyScreen> */}
-
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <EmployeeTimeSheet mainData={filterData.row} />
         </MyScreen>

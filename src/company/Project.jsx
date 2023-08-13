@@ -8,6 +8,7 @@ import ProjectCreate from "./ProjectCreate";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
 import ProjectEdit from "./ProjectEdit";
+import ProjectLoc from "./ProjectLoc"
 // import { useDispatch, useSelector } from "react-redux";
 // import { initProject_fun } from "../redux/action";
 
@@ -302,12 +303,13 @@ const Project = (props) => {
           <div className="box-tab">
             <div className="container-fluid p-4">
               <div className="row">
-                <div className="col-4">
+                <d
+                iv className="col-4">
                   <b>Project Name</b>
                   <p className="bg-light text-dark p-2 rounded-2">
                     {filterData.PROJECT_NAME}
                   </p>
-                </div>
+                </d>
                 <div className="col-4">
                   <b>Phone</b>
                   <p className="bg-light text-dark p-2 rounded-2">
@@ -637,221 +639,6 @@ const Project = (props) => {
           </div>
         ) : index === 3 ? (
           <ProjectLoc />
-          // <div className="box-tab">
-          //   <div className="p-4 container-fluid">
-          //     <div className="row">
-          //       <div className="col-9">
-          //         <table className="table">
-          //           <thead>
-          //             <tr>
-          //               <th scope="col">Material</th>
-          //               <th scope="col">Quantity</th>
-          //               <th scope="col">Amount</th>
-          //               <th scope="col">Method</th>
-          //               <th scope="col">Transaction ID</th>
-          //               <th scope="col">Status</th>
-          //               <th scope="col">Date</th>
-          //             </tr>
-          //           </thead>
-          //           <tbody>
-          //             <tr>
-          //               <td>Tiles</td>
-          //               <td>10</td>
-          //               <td>20 USD</td>
-          //               <td>Cash</td>
-          //               <td>RG384054859</td>
-          //               <td>
-          //                 <b className="bg-success text-white px-2 rounded-2">
-          //                   Paid
-          //                 </b>
-          //               </td>
-          //               <td>12-10-2020</td>
-          //             </tr>
-          //             <tr>
-          //               <td>Cement</td>
-          //               <td>20</td>
-          //               <td>20 USD</td>
-          //               <td>UPI</td>
-          //               <td>TY485060</td>
-          //               <td>
-          //                 <b className="bg-warning text-white px-2 rounded-2">
-          //                   Panding
-          //                 </b>
-          //               </td>
-          //               <td>12-10-2020</td>
-          //             </tr>
-          //             <tr>
-          //               <td>Concrete</td>
-          //               <td>60</td>
-          //               <td>20 USD</td>
-          //               <td>Stripe</td>
-          //               <td>PO6970845</td>
-          //               <td>
-          //                 <b className="bg-success text-white px-2 rounded-2">
-          //                   Paid
-          //                 </b>
-          //               </td>
-          //               <td>12-10-2020</td>
-          //             </tr>
-          //             <tr>
-          //               <td>Bricks</td>
-          //               <td>120</td>
-          //               <td>the Bird</td>
-          //               <td>Visa</td>
-          //               <td>PO697084599</td>
-          //               <td>
-          //                 <b className="bg-danger text-white px-2 rounded-2">
-          //                   Failed
-          //                 </b>
-          //               </td>
-          //               <td>12-10-2020</td>
-          //             </tr>
-          //           </tbody>
-          //         </table>
-          //       </div>
-          //       <div className="col-3 px-4">
-          //         <div className="mb-5 ">
-          //           <button className="btn btn-primary float-right rounded-0">
-          //             <i className="fa fa-print"></i> Print Invoice
-          //           </button>
-          //         </div>
-          //         <div className="search-container mb-5">
-          //           <input type="text" placeholder="Search.." name="search" />
-          //           <button type="submit">
-          //             <i className="fa fa-search"></i>
-          //           </button>
-          //         </div>
-
-          //         <div>
-          //           <b>Time Period</b>
-          //         </div>
-          //         <div>
-          //           <div className="form-check py-1">
-          //             <input
-          //               className="form-check-input"
-          //               type="radio"
-          //               name="flexRadioDefault"
-          //               id="flexRadioDefault1"
-          //             />
-          //             <label
-          //               className="form-check-label"
-          //               for="flexRadioDefault1"
-          //             >
-          //               All time
-          //             </label>
-          //           </div>
-          //           <div className="form-check py-1">
-          //             <input
-          //               className="form-check-input"
-          //               type="radio"
-          //               name="flexRadioDefault"
-          //               id="flexRadioDefault2"
-          //               checked
-          //             />
-          //             <label
-          //               className="form-check-label"
-          //               for="flexRadioDefault2"
-          //             >
-          //               Today
-          //             </label>
-          //           </div>
-
-          //           <div className="form-check py-1">
-          //             <input
-          //               className="form-check-input"
-          //               type="radio"
-          //               name="flexRadioDefault"
-          //               id="flexRadioDefault2"
-          //             />
-          //             <label
-          //               className="form-check-label"
-          //               for="flexRadioDefault2"
-          //             >
-          //               This Week
-          //             </label>
-          //           </div>
-
-          //           <div className="form-check py-1">
-          //             <input
-          //               className="form-check-input"
-          //               type="radio"
-          //               name="flexRadioDefault"
-          //               id="flexRadioDefault2"
-          //             />
-          //             <label
-          //               className="form-check-label"
-          //               for="flexRadioDefault2"
-          //             >
-          //               This month
-          //             </label>
-          //           </div>
-
-          //           <div className="form-check py-1">
-          //             <input
-          //               className="form-check-input"
-          //               type="radio"
-          //               name="flexRadioDefault"
-          //               id="flexRadioDefault2"
-          //             />
-          //             <label
-          //               className="form-check-label"
-          //               for="flexRadioDefault2"
-          //             >
-          //               Custom
-          //             </label>
-          //           </div>
-          //         </div>
-          //         <b>Status</b>
-          //         <div>
-          //           <div className="form-check py-1">
-          //             <input
-          //               className="form-check-input"
-          //               type="checkbox"
-          //               value=""
-          //               id="flexCheckIndeterminate"
-          //             />
-          //             <label
-          //               className="form-check-label"
-          //               for="flexCheckIndeterminate"
-          //             >
-          //               Paid
-          //             </label>
-          //           </div>
-
-          //           <div className="form-check py-1">
-          //             <input
-          //               className="form-check-input"
-          //               type="checkbox"
-          //               value=""
-          //               id="flexCheckIndeterminate"
-          //             />
-          //             <label
-          //               className="form-check-label"
-          //               for="flexCheckIndeterminate"
-          //             >
-          //               Panding
-          //             </label>
-          //           </div>
-
-          //           <div className="form-check py-1">
-          //             <input
-          //               className="form-check-input"
-          //               type="checkbox"
-          //               value=""
-          //               id="flexCheckIndeterminate"
-          //             />
-          //             <label
-          //               className="form-check-label"
-          //               for="flexCheckIndeterminate"
-          //             >
-          //               Failed
-          //             </label>
-          //           </div>
-          //         </div>
-          //       </div>
-          //     </div>
-          //   </div>
-          // </div>
         ) : (
           ""
         )}
