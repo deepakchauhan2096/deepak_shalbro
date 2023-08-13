@@ -43,8 +43,6 @@ const CompanyMain = () => {
   const handleClose = () => setOpen(false);
 
   // get Company data
-  // const dispatch = useDispatch();
-  
   const location = useLocation();
   const filterallprojectData = location.state.props;
   const NavScreen = styled(Paper)((props) => ({

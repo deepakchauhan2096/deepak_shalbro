@@ -8,10 +8,10 @@ import ProjectCreate from "./ProjectCreate";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
 import ProjectEdit from "./ProjectEdit";
-import ProjectLoc from "./ProjectLoc"
+import ProjectLoc from "./ProjectLoc";
+import ProjectAssigned from "./ProjectAssigned";
 // import { useDispatch, useSelector } from "react-redux";
 // import { initProject_fun } from "../redux/action";
-import ProjectAssigned from "./ProjectAssigned"
 
 const Project = (props) => {
   const [data, setData] = useState({
