@@ -1,0 +1,45 @@
+.vehicle-management-form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.add-vehicle {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+}
+
+.add-vehicle input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.file-label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.file-input {
+  display: block;
+  margin-top: 5px;
+}
+
+.vehicle-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.vehicle-list li {
+  margin-bottom: 10px;
+}
+
+.tracking-container {
+  padding: 20px;
+}

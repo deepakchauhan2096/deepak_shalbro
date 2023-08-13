@@ -135,7 +135,7 @@ export default function EmployeeEdit(props) {
                     id="inputZip"
                     value={editEmployee.EMPLOYEE_USERNAME}
                     name="EMPLOYEE_USERNAME"
-                    disabled
+                  
                     required
                   />
                   {errors.EMPLOYEE_USERNAME && (

@@ -7,9 +7,8 @@ export default function SimpleBackdrop({ open }) {
     <div>
       <Backdrop
         sx={{
-          // backgroundColor: "hsl(0,0%,96.5%)",
-          backgroundColor: "#e9ecef",
-          color: "#6610f2",
+          backgroundColor: "#f0f0f0",
+          color: "#00008B",
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
         open={open}
