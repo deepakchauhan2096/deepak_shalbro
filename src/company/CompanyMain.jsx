@@ -21,24 +21,26 @@ import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
 import AttendanceReport from "../Attendance/AttendanceAcknowledge";
 import SubContract from "../subcontract/SubContract";
-// import { useDispatch, useSelector } from "react-redux";
-
-
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import GroupIcon from "@mui/icons-material/Group";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
+import RecentActorsIcon from "@mui/icons-material/RecentActors";
+import DiscFullIcon from "@mui/icons-material/DiscFull";
+import env from "react-dotenv";
 
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
   const [navIndex, setNavIndex] = useState(0);
-  const [projectData, setProjectData] =useState([])
+  const [projectData, setProjectData] = useState([]);
   const [allempData, setAllempData] = useState([]);
 
   // modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   // get Company data
-  // const dispatch = useDispatch();
-  
   const location = useLocation();
-  const filterallprojectData = location.state.props
+  const filterallprojectData = location.state.props;
   const NavScreen = styled(Paper)((props) => ({
     height: "calc(100vh)",
     padding: 0,
@@ -72,26 +74,25 @@ const CompanyMain = () => {
   const urls = [
     {
       listname: "Project",
+      icons: <AccountTreeIcon />
     },
     {
       listname: "Sub contractor",
+      icons: <RecentActorsIcon />
     },
-    // {
-    //   listname: "Dashboard",
-    // },
     {
       listname: "Document",
+      icons: <FolderCopyIcon />
     },
     {
       listname: "Employees",
+      icons: <GroupIcon />
     },
     {
       listname: "Attendance",
-    }
-   
+      icons: <DiscFullIcon />
+    },
   ];
-
-  // console.log(navIndex, "navindex");
 
   // navigation list
 
@@ -100,15 +101,15 @@ const CompanyMain = () => {
   const Lists = (props) => {
     return (
       <Box role="presentation" sx={{ width: 250 }}>
-        <List sx={{ py: 0}} onClick={() => setNavIndex(props.value)} >
+        <List sx={{ py: 0 }} onClick={() => setNavIndex(props.value)}>
           <ListItem
             sx={{
               background: props.value === navIndex ? "#3596d9" : "",
             }}
             disablePadding
           >
-            <ListItemButton sx={{ color: "#fff" }} >
-              {props.listname}
+            <ListItemButton sx={{ color: "#fff" }}>
+              <b className="px-2 list">{props.icons}</b>{props.listname}
             </ListItemButton>
           </ListItem>
         </List>
@@ -121,7 +122,6 @@ const CompanyMain = () => {
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
@@ -130,15 +130,17 @@ const CompanyMain = () => {
           PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
           PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
           PROJECT_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
-          PROJECT_MEMBER_PARENT_USERNAME:filterallprojectData?.COMPANY_PARENT_USERNAME,
+          PROJECT_MEMBER_PARENT_USERNAME:
+            filterallprojectData?.COMPANY_PARENT_USERNAME,
         },
         { headers }
       );
-     
+      setTimeout(() => {
         const data = response.data;
         setProjectData(data?.result);
         // setIsLoading(false);
-
+        // console.log("contracts Data : =>", data);
+      }, 1000);
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
@@ -157,7 +159,7 @@ const CompanyMain = () => {
         {
           EMPLOYEE_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME:
-          filterallprojectData?.COMPANY_PARENT_USERNAME,
+            filterallprojectData?.COMPANY_PARENT_USERNAME,
           EMPLOYEE_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
           EMPLOYEE_PARENT_ID: filterallprojectData?.COMPANY_ID,
         },
@@ -208,6 +210,7 @@ const CompanyMain = () => {
 
         {urls.map((post, index) => (
           <Lists
+            icons={post.icons}
             listname={post.listname}
             listlink={post.listlink}
             value={index}
@@ -220,7 +223,10 @@ const CompanyMain = () => {
         >
           <div className="logout_icon" role="button">
             <div className="logout_icon d-inline">
-              <Button className="text-white text-uppercase" onClick={() => navigate(-1)}>
+              <Button
+                className="text-white text-uppercase"
+                onClick={() => navigate(-2)}
+              >
                 <LogoutIcon style={{ display: "inline" }} /> Exit
               </Button>
             </div>
@@ -251,14 +257,15 @@ const CompanyMain = () => {
       </NavScreen>
 
       <NavScreen screenIndex={navIndex === 3}>
-        <EmployeeSrc  empData={location.state.props} AssignProjectData={projectData}/>
+        <EmployeeSrc
+          empData={location.state.props}
+          AssignProjectData={projectData}
+        />
       </NavScreen>
 
       <NavScreen screenIndex={navIndex === 4}>
         <AttendanceReport mainData={allempData} />
       </NavScreen>
-
-
     </>
   );
 };

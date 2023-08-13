@@ -217,7 +217,7 @@ export default function CompanyCreate(props) {
                   <label>Company name</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter company name"
                     value={create_company.COMPANY_NAME}
                     name="COMPANY_NAME"
@@ -229,7 +229,7 @@ export default function CompanyCreate(props) {
                   <label>Company username</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Username"
                     value={create_company.COMPANY_USERNAME}
                     name="COMPANY_USERNAME"
@@ -244,7 +244,7 @@ export default function CompanyCreate(props) {
                   <label>Phone Number</label>
                   <input
                     type="number"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter Number"
                     value={create_company.COMPANY_PHONE}
                     name="COMPANY_PHONE"
@@ -256,7 +256,7 @@ export default function CompanyCreate(props) {
                   <label>Company Email</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter company email"
                     name="COMPANY_EMAIL"
                     value={create_company.COMPANY_EMAIL}
@@ -269,7 +269,7 @@ export default function CompanyCreate(props) {
                 <div className="form-group col-xl-4">
                   <label>Country</label>
                   <select
-                    className="form-control border  rounded-0"
+                    className="form-control form-control-2 border  rounded-0"
                     name="COMPANY_COUNTRY"
                     value={create_company.COMPANY_COUNTRY}
                     onChange={handleCreate}
@@ -288,7 +288,7 @@ export default function CompanyCreate(props) {
                 <div className="form-group col-xl-4">
                   <label>State</label>
                   <select
-                    className="form-control border  rounded-0"
+                    className="form-control form-control-2 border  rounded-0"
                     name="COMPANY_STATE"
                     value={create_company.COMPANY_STATE}
                     onChange={handleCreate}
@@ -309,7 +309,7 @@ export default function CompanyCreate(props) {
                 <div className="form-group col-xl-4">
                   <label>City</label>
                   <select
-                    className="form-control border rounded-0"
+                    className="form-control form-control-2 border rounded-0"
                     name="COMPANY_CITY"
                     value={create_company.COMPANY_CITY}
                     onChange={handleCreate}
@@ -331,7 +331,7 @@ export default function CompanyCreate(props) {
                 <label>Address</label>
                 <textarea
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   placeholder="Apartment, studio, or floor"
                   name="COMPANY_ADD2"
                   value={create_company.COMPANY_ADD2}

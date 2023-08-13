@@ -135,7 +135,7 @@ const EmployeeTimeSheet = (props) => {
             <label>Date From: </label>
             <input
               type="date"
-              className="form-control"
+              className="form-control form-control-2"
               value={MyDateStringAfter}
               onChange={(event) =>
                 setDate((prev) => ({
@@ -149,7 +149,7 @@ const EmployeeTimeSheet = (props) => {
             <label>Date to: </label>
             <input
               type="date"
-              className="form-control"
+              className="form-control form-control-2"
               value={MyDateStringCurrent}
               onChange={(event) =>
                 setDate((prev) => ({
@@ -163,7 +163,7 @@ const EmployeeTimeSheet = (props) => {
             <label style={{ visibility: "hidden" }}>Result</label>
             <input
               type="submit"
-              className="form-control btn btn-info"
+              className="form-control form-control-2 btn btn-info"
               onClick={gettimesheet}
               value="Submit"
             />

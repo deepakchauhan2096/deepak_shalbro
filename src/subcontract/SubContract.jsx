@@ -205,7 +205,7 @@ const SubContract = (props) => {
                 }}
                 density="compact"
                 pageSizeOptions={[5]}
-                checkboxSelection
+                // checkboxSelection
                 disableRowSelectionOnClick
               />
             )}
@@ -344,7 +344,7 @@ const SubContract = (props) => {
                     <input
                       type="date"
                       value={filterData.SUBCONTRACTOR_END_DATE}
-                      className="form-control"
+                      className="form-control form-control-2"
                     />
                   ) : (
                     <p className="bg-light text-dark p-2 rounded-2">

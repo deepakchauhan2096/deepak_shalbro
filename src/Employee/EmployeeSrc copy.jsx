@@ -679,7 +679,7 @@ const EmployeeSrc = (props) => {
         {/* <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
           <div
-            className="form-control rounded-0 mb-1"
+            className="form-control form-control-2 rounded-0 mb-1"
             style={{ position: "relative" }}
           >
             Education Document
@@ -693,7 +693,7 @@ const EmployeeSrc = (props) => {
           </div>
 
           <div
-            className="form-control rounded-0 mb-1"
+            className="form-control form-control-2 rounded-0 mb-1"
             style={{ position: "relative" }}
           >
             Valid ID
@@ -706,7 +706,7 @@ const EmployeeSrc = (props) => {
             </button>
           </div>
           <div
-            className="form-control rounded-0 mb-1"
+            className="form-control form-control-2 rounded-0 mb-1"
             style={{ position: "relative" }}
           >
             Other
