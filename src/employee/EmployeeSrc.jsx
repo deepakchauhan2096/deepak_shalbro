@@ -221,11 +221,7 @@ const EmployeeSrc = (props) => {
       width: 80,
       renderCell: (cellValues) => {
         return (
-          <Button
-            // onClick={(event) => {
-            //   handleEdit(cellValues);
-            // }}
-          >
+          <Button>
             <EmployeeEdit edit={cellValues} refetch={fetchAllEmployee}/>
           </Button>
         );

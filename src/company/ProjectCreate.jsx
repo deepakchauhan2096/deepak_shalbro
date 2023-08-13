@@ -45,15 +45,15 @@ export default function ProjectCreate(props) {
   });
 
 
-  useEffect(()=>{
-    setCreateProject((prevState) => ({...prevState, PROJECT_PARENT_ID: props.companyData?.COMPANY_ID})); 
-    setCreateProject((prevState) => ({...prevState, PROJECT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME})); 
-    setCreateProject((prevState) => ({...prevState, PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID})); 
-    setCreateProject((prevState) => ({...prevState, PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME})); 
-  },[open])
+  useEffect(() => {
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_PARENT_ID: props.companyData?.COMPANY_ID }));
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME }));
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID }));
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME }));
+  }, [open])
 
 
-  console.log(createProject,"check")
+  console.log(createProject, "check")
 
   const availableState = country?.find(
     (c) => c.name === createProject.PROJECT_COUNTRY
@@ -95,7 +95,7 @@ export default function ProjectCreate(props) {
       "PROJECT_STATE",
       "PROJECT_PHONE",
     ];
-    
+
 
     const hasEmptyFields = requiredFields.some(
       (field) => !createProject[field]
