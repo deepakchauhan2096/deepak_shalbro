@@ -301,7 +301,7 @@ const EmployeeSrc = (props) => {
                 }}
                 density="compact"
                 pageSizeOptions={[5]}
-                // checkboxSelection
+                checkboxSelection
                 disableRowSelectionOnClick
               />
             )}
@@ -346,8 +346,8 @@ const EmployeeSrc = (props) => {
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
-           <Grid container xl={12}> 
-             <Grid item xl={6} pr={2}>
+          {/* <Grid container xl={12}> */}
+            {/* <Grid item xl={6} pr={2}>
               <Card
                 sx={{
                   display: "flex",
@@ -482,9 +482,9 @@ const EmployeeSrc = (props) => {
                   </CardContent>
                 </Box>
               </Card>
-            </Grid> 
+            </Grid> */}
 
-          <Grid item xl={12} pt={2}>
+            {/* <Grid item xl={12} pt={2}>
               <Card
                 sx={{
                   display: "flex",
@@ -556,9 +556,124 @@ const EmployeeSrc = (props) => {
                   </CardContent>
                 </Box>
               </Card>
-            </Grid> 
-          </Grid>
+            </Grid> */}
+          {/* </Grid> */}
 
+
+          <div className="table-container">
+  <div className="table-row">
+    <div className="table-cell employee-details">
+      {/* Employee details */}
+      <Card
+                sx={{
+                  display: "flex",
+                  height: "250px",
+                  backgroundColor: "#f5f5f5",
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  sx={{ width: 200 }}
+                  image={teamImg1}
+                  alt="Live from space album cover"
+                />
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <CardContent sx={{ flex: "1 0 auto" }}>
+                    <Typography component="div" variant="h5">
+                      {filterData.row.EMPLOYEE_NAME}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Email : {filterData.row.EMPLOYEE_EMAIL}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Phone : {filterData.row.EMPLOYEE_PHONE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Password : {filterData.row.EMPLOYEE_PASSWORD}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Address : {filterData.row.EMPLOYEE_STATE}
+                      {""}
+                      {filterData.row.EMPLOYEE_CITY}
+                    </Typography>
+                  </CardContent>
+                </Box>
+              </Card>
+    </div>
+    <div className="table-cell work-details">
+      {/* Work details */}
+      <Card
+                sx={{
+                  display: "flex",
+                  height: "250px",
+                  backgroundColor: "#f5f5f5",
+                }}
+              >
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <CardContent sx={{ flex: "1 0 auto" }}>
+                    <Typography component="div" variant="h5">
+                      Work detail
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Employee role : {filterData.row.EMPLOYEE_ROLE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Employee type : {filterData.row.EMPLOYEE_EMPLMNTTYPE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Hire Date : {filterData.row.EMPLOYEE_HIRE_DATE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Hourly Wages : {filterData.row.EMPLOYEE_HOURLY_WAGE}
+                    </Typography>
+                  </CardContent>
+                </Box>
+              </Card>
+    </div>
+    <div className="table-cell salary-details">
+      {/* Salary details */}
+      {/* ... Replace the Card component with the content */}
+    </div>
+  </div>
+  <div className="table-row">
+    <div className="table-cell project-assignment" colSpan="3">
+      {/* Project assignment section */}
+      {/* ... Replace the Card component with the content */}
+    </div>
+  </div>
+</div>
 
         </MyScreen>
         {/* <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>

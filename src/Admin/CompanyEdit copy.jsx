@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
@@ -7,8 +7,11 @@ import { Button, Container, Hidden } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Fab, Paper, styled } from "@mui/material";
 import country from "../Api/countriess.json"
-import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
-import env from "react-dotenv";
+import { ToastContainer, toast } from "react-toastify";
+import Tooltip from "@mui/material/Tooltip";
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
+
+import SimpleBackdrop from "../components/Backdrop";
 
 const style = {
   position: "absolute",
@@ -23,80 +26,115 @@ const style = {
   overflow: "hidden",
 };
 
-export default function CompanyDelete(props) {
+export default function CompanyEdit(props) {
   const [open, setOpen] = React.useState(false);
-  const [edit_company, setedit_company] = useState({
-    COMPANY_PARENT_ID: props.ID,
-    COMPANY_PARENT_USERNAME: props.Username,
-    COMPANY_NAME: "",
-    COMPANY_USERNAME: "",
-    COMPANY_PHONE: "",
-    COMPANY_EMAIL: "",
-    COMPANY_ADD2: "",
-    COMPANY_STATE: "",
-    COMPANY_CITY: "",
-    COMPANY_COUNTRY: "",
+  const companyData = props?.companyEDit
+  const [loader, setLoader] = useState(false);
+  // const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const [edit_company, setEdit_company] = useState({
+    COMPANY_PARENT_ID: companyData.COMPANY_PARENT_ID,
+    COMPANY_PARENT_USERNAME: companyData.COMPANY_PARENT_USERNAME,
+    COMPANY_NAME: companyData.COMPANY_NAME,
+    COMPANY_PHONE: companyData.COMPANY_PHONE,
+    COMPANY_EMAIL: companyData.COMPANY_EMAIL,
+    COMPANY_ADD2: companyData.COMPANY_ADD2,
+    COMPANY_STATE: companyData.COMPANY_STATE,
+    COMPANY_CITY: companyData.COMPANY_CITY,
+    COMPANY_COUNTRY: companyData.COMPANY_COUNTRY,
+    COMPANY_USERNAME: companyData.COMPANY_USERNAME,
   });
 
-  const handleCreate = (e) => {
-    setedit_company({ ...edit_company, [e.target.name]: e.target.value });
-  };
+  // console.log("first", edit_company)
+
+  // console.log("Edit Company:", edit_company)
+
 
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
+  const handleCreate = (e) => {
+    setEdit_company((prev) => {
+      return { ...prev, [e.target.name]: e.target.value }
+    });
+  };
+
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
 
   // Finding the states and cities of the individaul country 
-  const availableState = country?.find((c) => c.name === edit_company.PROJECT_COUNTRY);
-
-  console.log("all states : ===> ", availableState)
-  const availableCities = availableState?.states?.find(
-    (s) => s.name === edit_company.PROJECT_STATE
+  const availableState = country?.find(
+    (c) => c.name === edit_company.COMPANY_COUNTRY
   );
 
-  console.log("states data : ========>",availableState);
+
+  const availableCities = availableState?.states?.find(
+
+    (s) => {
+
+      return s.name === edit_company.COMPANY_STATE
+    }
+  );
 
   const handleSubmit = (e) => {
-    console.log("on btn submit");
     e.preventDefault();
+    // setOpen(false);
+
     axios
-      .post("http://18.211.130.168:5001/update_company", edit_company, {
+      .put("http://18.211.130.168:5001/update_company", {
+        COMPANY_ID: companyData.COMPANY_ID,
+        COMPANY_USERNAME: companyData.COMPANY_USERNAME,
+        COMPANY_ADMIN_USERNAME: companyData.COMPANY_PARENT_USERNAME,
+        COMPANY_DETAILS_FOR_UPDATE: { ...edit_company }
+      }, {
         headers,
       })
       .then((response) => {
-        props.Update(()=> response.data.result);
-        if(response){
-          handleClose();
+
+        if (response.data.operation === "failed") {
+          setErrorMsg(response.data.errorMsg);
+        } else if (response.data.operation === "successfull") {
+          // setLoader(false)
+          // setLoader(true)
+
+          props.reFetchfun()
+          toast.success("Fields are updated successfully!", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 1000
+          });
+          props.companyEDit.update(true);
+          setOpen(true);
         }
       })
       .catch((error) => {
         console.error(error);
       });
-    
+
   };
 
   const StyledFab = styled(Fab)({
-
     position: "fixed",
     top: "80px",
     right: "80px",
   });
 
-
   return (
     <>
-       <DeleteSweepOutlinedIcon 
-       color="error"
-       onClick={handleOpen}
-       style={{cursor:"pointer"}}
-       
-       />
-  
+
+      <Tooltip title="Edit Details">
+        <EditNoteOutlinedIcon
+          onClick={handleOpen}
+          color="success"
+          style={{ cursor: "pointer" }}
+
+        />
+      </Tooltip>
       <Modal
         open={open}
         onClose={handleClose}
@@ -120,7 +158,8 @@ export default function CompanyDelete(props) {
                     value={edit_company.COMPANY_NAME}
                     name="COMPANY_NAME"
                     onChange={handleCreate}
-                    label=""
+                    label="Company name"
+                    required
                   />
                 </div>
                 <div className="form-group py-2 col-xl-6">
@@ -133,53 +172,57 @@ export default function CompanyDelete(props) {
                     name="COMPANY_USERNAME"
                     onChange={handleCreate}
                     label="Company username"
+                    disabled
                   />
                 </div>
               </div>
 
               <div className="row">
-              <div className="form-group py-2 col-xl-6">
+                <div className="form-group py-2 col-xl-6">
                   <label>Phone Number</label>
-                <input
-                  type="number"
-                  className="form-control form-control-2 rounded-0"
-                  placeholder="Enter Number"
-                  value={edit_company.COMPANY_PHONE}
-                  name="COMPANY_PHONE"
-                  onChange={handleCreate}
-                  label="Phone Number"
-                />
+                  <input
+                    type="number"
+                    className="form-control form-control-2 rounded-0"
+                    placeholder="Enter Number"
+                    value={edit_company.COMPANY_PHONE}
+                    name="COMPANY_PHONE"
+                    onChange={handleCreate}
+                    label="Phone Number"
+                    required
+                  />
                 </div>
                 <div className="form-group py-2 col-xl-6">
                   <label>Company Email</label>
-                <input
-                  type="text"
-                  className="form-control form-control-2 rounded-0"
-                  placeholder="Enter company email"
-                  name="COMPANY_EMAIL"
-                  value={edit_company.COMPANY_EMAIL}
-                  onChange={handleCreate}
-                  label="Company Email"
-                />
+                  <input
+                    type="text"
+                    className="form-control form-control-2 rounded-0"
+                    placeholder="Enter company email"
+                    name="COMPANY_EMAIL"
+                    value={edit_company.COMPANY_EMAIL}
+                    onChange={handleCreate}
+                    label="Company Email"
+                    required
+                  />
                 </div>
               </div>
               <div className="row py-2">
-              <div className="form-group col-xl-4">
+                <div className="form-group col-xl-4">
                   <label>Country</label>
                   <select
                     className="form-control form-control-2 border  rounded-0"
-                    name="COMPANY_STATE"
+                    name="COMPANY_COUNTRY"
                     value={edit_company.COMPANY_COUNTRY}
                     onChange={handleCreate}
+                    required
                   >
-                    <option selected>Choose...</option>
-                   
-                   {country.map((e,key)=>{
-                    return(
-                          <option value={e.name} key={key}>{e.name}</option>
-                    )
-                   })} 
-                    
+                    <option>Choose...</option>
+
+                    {country.map((e, key) => {
+                      return (
+                        <option value={e.name} key={key} selected>{e.name}</option>
+                      )
+                    })}
+
                   </select>
                 </div>
 
@@ -192,12 +235,12 @@ export default function CompanyDelete(props) {
                     onChange={handleCreate}
                   >
                     <option selected >Choose... States</option>
-                  {availableState?.states?.map((state,key) => {
-                    return(
-                      <option value={state.name} key={key} >{state.name}</option>
-                    )
-                  })} 
-                    
+                    {availableState?.states?.map((state, key) => {
+                      return (
+                        <option value={state.name} key={key} >{state.name}</option>
+                      )
+                    })}
+
                   </select>
                 </div>
 
@@ -208,19 +251,20 @@ export default function CompanyDelete(props) {
                     name="COMPANY_CITY"
                     value={edit_company.COMPANY_CITY}
                     onChange={handleCreate}
+                    required
                   >
                     <option selected>Choose City...</option>
-                  {availableCities?.cities?.map((e,key)=> {
-                    return(
-                      <option value={e.name} key={key}>{e.name}</option>
-                    )
-                  })} 
-                     
+                    {availableCities?.cities?.map((e, key) => {
+                      return (
+                        <option value={e.name} key={key}>{e.name}</option>
+                      )
+                    })}
+
                   </select>
                 </div>
-               
 
-              
+
+
               </div>
               <div className="form-group col-xl-12">
                 <label>Address</label>
@@ -231,8 +275,9 @@ export default function CompanyDelete(props) {
                   name="COMPANY_ADD2"
                   value={edit_company.COMPANY_ADD2}
                   onChange={handleCreate}
-                  // rows="4"
-                  // cols="50"
+                  required
+                // rows="4"
+                // cols="50"
                 />
               </div>
               <Button
@@ -241,7 +286,7 @@ export default function CompanyDelete(props) {
                 className="btn text-white rounded-2 mt-2"
                 onClick={handleSubmit}
               >
-                Submit
+                Update
               </Button>{" "}
               <Button
                 variant="contained"
@@ -255,6 +300,7 @@ export default function CompanyDelete(props) {
           </Box>
         </Container>
       </Modal>
+      <SimpleBackdrop open={loader} />
     </>
   );
 }

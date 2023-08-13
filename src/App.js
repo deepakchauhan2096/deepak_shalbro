@@ -12,6 +12,7 @@ import { MyContext } from "./context/Mycontext";
 import { ToastContainer } from "react-toastify";
 import EmployeeAttendance from "./employee/EmployeeAttendance";
 import EmployeeLogin from "./employee/EmployeeLogin";
+import Temp from "./Attendance/Temp";
 
 function App() {
   // const [emailname, setEmailName] = useState(false);
@@ -36,6 +37,7 @@ function App() {
               <Route path="/" element={<AdminLogin />} />
               <Route path="/employee" element={<EmployeeAttendance />} />
               <Route path="/employee/login" element={<EmployeeLogin />} />
+              <Route path="/temp" element={<Temp />} />
             </Routes> 
           </BrowserRouter>
         </MyContext.Provider>
