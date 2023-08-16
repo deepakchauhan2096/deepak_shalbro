@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, {useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import InputControl from "../components/InputControl";
 import styles from "../assests/css/Login.module.css";
 import SimpleBackdrop from "../components/Backdrop"; 
+import { useContext } from 'react';
+import { MyContext } from "../context/Mycontext";
 
-function AdminLogin() {
+function AdminLogin({onDataFetched}) {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     ADMIN_USERNAME: "",
@@ -14,6 +16,9 @@ function AdminLogin() {
   const [errorMsg, setErrorMsg] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
+  const { auth, setAuth } = useContext(MyContext);
+  
+
 
   const handleSubmission = () => {
     if (!values.ADMIN_USERNAME || !values.ADMIN_PASSWORD) {
@@ -42,6 +47,7 @@ function AdminLogin() {
         setLoginSuccess(true);
         const data = response.data;
         if (data.operation === "successfull") {
+          setAuth(data)
           navigate("/admin", { state: { data } });
         }
       })
