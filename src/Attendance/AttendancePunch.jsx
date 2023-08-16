@@ -21,9 +21,9 @@ const AttendancePunch = (props) => {
         </tr>
       </thead>
       <tbody>
-        {props.data.map((post) => (
+        {props.data.AttendanceData.map((post) => (
           <tr className="table table-striped">
-            <td>{props.data.EMPLOYEE_NAME}</td>
+            <td>{props.data._doc.EMPLOYEE_NAME}</td>
             <td>{post.ATTENDANCE_DATE_ID}</td>
             <td>{moment(post.ATTENDANCE_IN).format("LT")}</td>
             <td>{moment(post.ATTENDANCE_OUT).format("LT")}</td>

@@ -20,7 +20,7 @@ const EmployeeAttendance = () => {
   const [latitude2, setLatitude2] = useState(28.3903);
   const [longitude2, setLongitude2] = useState(77.05);
   const [circleCenter, setCircleCenter] = useState([null, null]);
-  const [circleRadius, setCircleRadius] = useState(500); // Default radius of the circle in meters
+  const [circleRadius, setCircleRadius] = useState(30000); // Default radius of the circle in meters
   const [isInsideCircle, setIsInsideCircle] = useState(false);
   const circleRef = useRef();
 
