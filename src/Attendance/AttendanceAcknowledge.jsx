@@ -95,161 +95,51 @@ function getDatesBetween(startDate, endDate) {
 const AttendanceReport = (props) => {
   const [employees, getReport] = useState();
   const [foundUsers, setFoundUsers] = useState([]);
-
-    // modified data
-
-    // const employees = getReport?.map(item => {
-    //   return {
-    //     "EMPLOYEE_ID": item._doc.EMPLOYEE_ID,
-    //     "EMPLOYEE_PARENT_ID": item._doc.EMPLOYEE_PARENT_ID,
-    //     "EMPLOYEE_PARENT_USERNAME": item._doc.EMPLOYEE_PARENT_USERNAME,
-    //     "EMPLOYEE_MEMBER_PARENT_ID": item._doc.EMPLOYEE_MEMBER_PARENT_ID,
-    //     "EMPLOYEE_MEMBER_PARENT_USERNAME": item._doc.EMPLOYEE_MEMBER_PARENT_USERNAME,
-    //     "EMPLOYEE_ROLE": item._doc.EMPLOYEE_ROLE,
-    //     "EMPLOYEE_NAME": item._doc.EMPLOYEE_NAME,
-    //     "EMPLOYEE_PHONE": item._doc.EMPLOYEE_PHONE,
-    //     "EMPLOYEE_EMAIL": item._doc.EMPLOYEE_EMAIL,
-    //     "EMPLOYEE_USERNAME": item._doc.EMPLOYEE_USERNAME,
-    //     "EMPLOYEE_DOB": item._doc.EMPLOYEE_DOB,
-    //     "EMPLOYEE_EMPLMNTTYPE": item._doc.EMPLOYEE_EMPLMNTTYPE,
-    //     "EMPLOYEE_HIRE_DATE": item._doc.EMPLOYEE_HIRE_DATE,
-    //     "EMPLOYEE_HOURLY_WAGE": item._doc.EMPLOYEE_HOURLY_WAGE,
-    //     "EMPLOYEE_ADD": item._doc.EMPLOYEE_ADD,
-    //     "EMPLOYEE_STATE": item._doc.EMPLOYEE_STATE,
-    //     "EMPLOYEE_CITY": item._doc.EMPLOYEE_CITY,
-    //     "EMPLOYEE_PASSWORD": item._doc.EMPLOYEE_PASSWORD,
-    //     "EMPLOYEE_ATTENDANCE": item.AttendanceData?.map(attendance => {
-    //       return {
-    //         "ATTENDANCE_DATE_ID": attendance.ATTENDANCE_DATE_ID,
-    //         "ATTENDANCE_IN": attendance.ATTENDANCE_IN,
-    //         "ATTENDANCE_OUT": attendance.ATTENDANCE_OUT
-    //       };
-    //     })
-    //   };
-    // });
-
-
-
-
-
-
-
-
-
-
   const [filterMethod, setFilterMethod] = useState("Date wise");
   const [startDateString, setstartDateString] = useState(MyDateStringAfter);
   const [endDateString, setendDateString] = useState(MyDateStringCurrent);
   const [keyword, setKeyword] = useState(MyDateStringCurrent);
-  
-
-
-
- console.log(foundUsers,employees,"fundoo")
-
+  const [name, setName] = useState("All");
+  const [showDetail, setShowDetail] = useState(true);
+  const [show, setshow] = useState(true);
+  const [employeeName, setEmployeeName] = useState([]);
 
   // get data
-
   const Reports = () => {
-  let data = JSON.stringify({
-    "ADMIN_USERNAME": "deepak2096",
-    "EMPLOYEE_PARENT_USERNAME": "vervebot12345"
-  });
-  
-  let config = {
-    method: 'put',
-    maxBodyLength: Infinity,
-    url: 'http://18.211.130.168:5001/get_employee_details_for_attendence',
-    headers: { 
-      'authorization_key': 'qzOUsBmZFgMDlwGtrgYypxUz', 
-      'Content-Type': 'application/json'
-    },
-    data : data
+    let data = JSON.stringify({
+      ADMIN_USERNAME: "deepak2096",
+      EMPLOYEE_PARENT_USERNAME: "vervebot12345",
+    });
+
+    let config = {
+      method: "put",
+      maxBodyLength: Infinity,
+      url: "http://18.211.130.168:5001/get_employee_details_for_attendence",
+      headers: {
+        authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(response.data.result, "dut");
+        setTimeout(() => {
+          setFoundUsers(response.data.result);
+          getReport(response.data.result);
+        }, 1000);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
-  
-  axios.request(config)
-  .then((response) => {
-
-    console.log(response.data.result,"dut");
-     setTimeout(() => {
-      setFoundUsers(response.data.result)
-      getReport(response.data.result)
-    }, 1000);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-
-  }
 
   //fatch data
-  useEffect(() =>{
-    Reports()
-  },[])
-
-
-  // console.log(getReport,"get")
-
-
-  // modified data
-
-  //  const employees = getReport?.map(item => {
-  //   return {
-  //     "_id": item._doc._id,
-  //     "EMPLOYEE_ID": item._doc.EMPLOYEE_ID,
-  //     "EMPLOYEE_PARENT_ID": item._doc.EMPLOYEE_PARENT_ID,
-  //     "EMPLOYEE_PARENT_USERNAME": item._doc.EMPLOYEE_PARENT_USERNAME,
-  //     "EMPLOYEE_MEMBER_PARENT_ID": item._doc.EMPLOYEE_MEMBER_PARENT_ID,
-  //     "EMPLOYEE_MEMBER_PARENT_USERNAME": item._doc.EMPLOYEE_MEMBER_PARENT_USERNAME,
-  //     "EMPLOYEE_ROLE": item._doc.EMPLOYEE_ROLE,
-  //     "EMPLOYEE_NAME": item._doc.EMPLOYEE_NAME,
-  //     "EMPLOYEE_PHONE": item._doc.EMPLOYEE_PHONE,
-  //     "EMPLOYEE_EMAIL": item._doc.EMPLOYEE_EMAIL,
-  //     "EMPLOYEE_USERNAME": item._doc.EMPLOYEE_USERNAME,
-  //     "EMPLOYEE_DOB": item._doc.EMPLOYEE_DOB,
-  //     "EMPLOYEE_EMPLMNTTYPE": item._doc.EMPLOYEE_EMPLMNTTYPE,
-  //     "EMPLOYEE_HIRE_DATE": item._doc.EMPLOYEE_HIRE_DATE,
-  //     "EMPLOYEE_HOURLY_WAGE": item._doc.EMPLOYEE_HOURLY_WAGE,
-  //     "EMPLOYEE_ADD": item._doc.EMPLOYEE_ADD,
-  //     "EMPLOYEE_STATE": item._doc.EMPLOYEE_STATE,
-  //     "EMPLOYEE_CITY": item._doc.EMPLOYEE_CITY,
-  //     "__v": item._doc.__v,
-  //     "EMPLOYEE_PASSWORD": item._doc.EMPLOYEE_PASSWORD,
-  //     "EMPLOYEE_ATTENDANCE": item.AttendanceData?.map(attendance => {
-  //       return {
-  //         "ATTENDANCE_DATE_ID": attendance.ATTENDANCE_DATE_ID,
-  //         "ATTENDANCE_IN": attendance.ATTENDANCE_IN,
-  //         "ATTENDANCE_OUT": attendance.ATTENDANCE_OUT
-  //       };
-  //     })
-  //   };
-  // });
-
-
-  // console.log(employees,"modified")
-
-
-  // useEffect(() =>{
-  //   setFoundUsers(employees)
-  // },[])
-
-
-  // console.log(foundUsers,"mulatani")
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
+  useEffect(() => {
+    Reports();
+  }, []);
 
   // date array function call
 
@@ -278,6 +168,7 @@ const AttendanceReport = (props) => {
   var arrayDate = [];
   arrayDate.push(keyword);
 
+  //modify data
   let processedData = foundUsers?.map((employee) => {
     console.log(employee, "aditional");
     let filterByDate;
@@ -319,44 +210,6 @@ const AttendanceReport = (props) => {
     return modifiedEmployee;
   });
 
-  const [showPunch, setPunch] = useState(true);
-  const [workvalue, setWorkvalue] = useState([]);
-  const [name, setName] = useState("All");
-  const [showDetail, setShowDetail] = useState(true);
-  const [show, setshow] = useState(true);
-  const [employeeName, setEmployeeName] = useState([]);
-
-  const [dateValue, setDate] = useState({
-    ATTENDANCE_START_DATE: MyDateStringCurrent,
-    ATTENDANCE_END_DATE: MyDateAfter,
-  });
-
-  
-
-  //gate cuurent and addition seven days
-
-  const total = (event) => {
-    const e = event?.map((post) => {
-      return (
-        Math.abs(
-          new Date(post.ATTENDANCE_OUT).getUTCHours() -
-            new Date(post.ATTENDANCE_IN).getUTCHours()
-        ) +
-        ":" +
-        Math.abs(
-          new Date(post.ATTENDANCE_OUT).getUTCMinutes() -
-            new Date(post.ATTENDANCE_IN).getUTCMinutes()
-        )
-      );
-    });
-
-    const sum = e.reduce(
-      (time1, time2) => time1.add(moment.duration(time2)),
-      moment.duration()
-    );
-    return sum._data.hours + ":" + sum._data.minutes;
-  };
-
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
     padding: 0,
@@ -374,15 +227,10 @@ const AttendanceReport = (props) => {
     return setShowDetail(<AttendancePunch data={e} />);
   };
 
-  
   const csvReport = {
     data: processedData,
     filename: "Doc.csv",
   };
-
-  // console.log(processedData, "process", foundUsers, "found", employees);
-
-
 
   return (
     <>
@@ -405,7 +253,7 @@ const AttendanceReport = (props) => {
             className="btn button border-bottom-0 bg-white"
             variant="outlined"
           >
-            Punch Detail - {employeeName.EMPLOYEE_NAME}{" "}
+            Punch Detail - {employeeName._doc.EMPLOYEE_NAME}{" "}
             <Typography size="small" px={1} onClick={() => setshow(true)}>
               <i className="fa fa-times" aria-hidden="true"></i>
             </Typography>
@@ -549,34 +397,6 @@ const AttendanceReport = (props) => {
                   </Table>
                 </TableContainer>
               </Grid>
-              {/* <Grid item container xl={4}>
-                <TableContainer>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Shift </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Work Type </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select className="form-control border">
-                            <option>All</option>
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid> */}
             </Grid>
 
             <table className="table table-hover table-sm table-fixed">
