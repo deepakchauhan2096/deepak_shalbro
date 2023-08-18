@@ -3,10 +3,11 @@ import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import {Button,Skeleton,Paper} from "@mui/material";
+import { Button, Skeleton, Paper } from "@mui/material";
 import CreateSubcontract from "./CreateSubcontract";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
+import EditSubcontract from "./EditSubContract";
 // import env from "react-dotenv";
 
 const SubContract = (props) => {
@@ -43,14 +44,14 @@ const SubContract = (props) => {
   const { alldata, setText } = useContext(MyContext);
   const { projectcreatedata } = useContext(MyContext);
 
- //update data
+  //update data
 
   useEffect(() => {
     fetchsubcontracts();
   }, [projectcreatedata]);
 
-  const subcontractData =  props.recieveData;
-  console.log("filterallprojectData",subcontractData)
+  const subcontractData = props.recieveData;
+  console.log("filterallprojectData", subcontractData)
 
 
   const headers = {
@@ -61,27 +62,33 @@ const SubContract = (props) => {
   const fetchsubcontracts = async (e) => {
     try {
       const response = await axios.put(
-       "http://18.211.130.168:5001/get_subcontractor",
+        "http://18.211.130.168:5001/get_subcontractor",
         {
           SUBCONTRACTOR_PARENT_ID: subcontractData?.COMPANY_ID,
           SUBCONTRACTOR_PARENT_USERNAME: subcontractData?.COMPANY_USERNAME,
           SUBCONTRACTOR_MEMBER_PARENT_ID: subcontractData?.COMPANY_PARENT_ID,
-          SUBCONTRACTOR_MEMBER_PARENT_USERNAME:subcontractData?.COMPANY_PARENT_USERNAME,
+          SUBCONTRACTOR_MEMBER_PARENT_USERNAME: subcontractData?.COMPANY_PARENT_USERNAME,
         },
         { headers }
       );
-    
-        const data = response.data;
-        setProjectData(data?.result);
-        setIsLoading(false);
-        
-   
+
+      const data = response.data;
+      setProjectData(data?.result);
+      setIsLoading(false);
+
+
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
   };
 
+  const [editedSubcontract, setEditedSubcontract] = useState(null);
 
+  const handleEdit = (subcontract) => {
+    setEditedSubcontract(subcontract);
+    handleOpen();
+  };
+ 
   const columns = [
     { field: "SUBCONTRACTOR_ID", headerName: "ID", width: 90 },
     {
@@ -136,6 +143,23 @@ const SubContract = (props) => {
         );
       },
     },
+    {
+      field: "edit",
+      headerName: "Edit",
+      width: 120,
+      renderCell: (cellValues) => {
+        return (
+          <Button
+          // onClick={(event) => {
+          //   handleEdit(cellValues);
+          // }}
+          >
+            <EditSubcontract editsubcontract={cellValues} refetch={fetchsubcontracts} />
+          </Button>
+        );
+      },
+    },
+
   ];
 
   const rows = ProjectData;
@@ -172,20 +196,15 @@ const SubContract = (props) => {
     );
   };
 
-
-
-
-
-
   return (
     <>
       <Box className="box" style={{ background: "#277099" }}>
-      <CreateSubcontract
+        <CreateSubcontract
           companyData={subcontractData}
-          // update={(event) => setUpdateData(event)}
           refetch={fetchsubcontracts}
           name={"Project"}
         />
+     
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
@@ -228,14 +247,14 @@ const SubContract = (props) => {
             variant="contained"
             className="btn rounded-0"
             size="small"
-            
+
           >
             <ArrowBackIcon style={{ fontSize: "20px" }} />
           </Button>
           <Button
             onClick={(e) => setIndex(1)}
             variant={index === 1 ? "outlined" : "outlined"}
-            className={index === 1 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-bottom-0  rounded-0 text-light" }            
+            className={index === 1 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-bottom-0  rounded-0 text-light"}
             size="small"
           >
             Detail
@@ -266,7 +285,7 @@ const SubContract = (props) => {
           <Button
             onClick={(e) => setIndex(2)}
             variant={index === 2 ? "outlined" : "outlined"}
-            className={index === 2 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-0  rounded-0 text-light" } 
+            className={index === 2 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-0  rounded-0 text-light"}
             size="small"
           >
             Payment
@@ -372,8 +391,8 @@ const SubContract = (props) => {
                 </div>
               </div>
               <hr />
-             {/* Assigining project to the subcontractor  */}
-{/*              
+              {/* Assigining project to the subcontractor  */}
+              {/*              
               <div className="row">
                 <div className="col-4">
                   <b>Assigned Employees to this project</b>

@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import country from "../Api/countriess.json";
 import { ToastContainer, toast } from "react-toastify";
@@ -27,36 +27,35 @@ export default function SubcontractCreate(props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
-
   const [createSubcontract, setCreatesubcontract] = useState({
-      SUBCONTRACTOR_PARENT_ID: props.companyData?.COMPANY_ID,
-      SUBCONTRACTOR_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME,
-      SUBCONTRACTOR_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID,
-      SUBCONTRACTOR_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME,
-      SUBCONTRACTOR_ROLE: "",
-      SUBCONTRACTOR_NAME: "",
-      SUBCONTRACTOR_PHONE: "",
-      SUBCONTRACTOR_USERNAME: "",
-      SUBCONTRACTOR_START_DATE: "",
-      SUBCONTRACTOR_END_DATE: "",
-      SUBCONTRACTOR_SUPERVISOR: "",
-      SUBCONTRACTOR_COUNTRY: "",
-      SUBCONTRACTOR_STATE: "",
-      SUBCONTRACTOR_ADD: "",
-      SUBCONTRACTOR_CITY: "",
-    });
+    SUBCONTRACTOR_PARENT_ID: props.companyData?.COMPANY_ID,
+    SUBCONTRACTOR_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME,
+    SUBCONTRACTOR_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID,
+    SUBCONTRACTOR_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME,
+    SUBCONTRACTOR_ROLE: "",
+    SUBCONTRACTOR_NAME: "",
+    SUBCONTRACTOR_PHONE: "",
+    SUBCONTRACTOR_USERNAME: "",
+    SUBCONTRACTOR_START_DATE: "",
+    SUBCONTRACTOR_END_DATE: "",
+    SUBCONTRACTOR_SUPERVISOR: "",
+    SUBCONTRACTOR_COUNTRY: "",
+    SUBCONTRACTOR_STATE: "",
+    SUBCONTRACTOR_ADD: "",
+    SUBCONTRACTOR_CITY: "",
+  });
 
 
-    
-  useEffect(()=>{
-    setCreatesubcontract((prevState) => ({...prevState, SUBCONTRACTOR_PARENT_ID: props.companyData?.COMPANY_ID})); 
-    setCreatesubcontract((prevState) => ({...prevState, SUBCONTRACTOR_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME})); 
-    setCreatesubcontract((prevState) => ({...prevState, SUBCONTRACTOR_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID})); 
-    setCreatesubcontract((prevState) => ({...prevState, SUBCONTRACTOR_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME})); 
-  },[open])
 
-  
-  console.log(createSubcontract,"check")
+  useEffect(() => {
+    setCreatesubcontract((prevState) => ({ ...prevState, SUBCONTRACTOR_PARENT_ID: props.companyData?.COMPANY_ID }));
+    setCreatesubcontract((prevState) => ({ ...prevState, SUBCONTRACTOR_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME }));
+    setCreatesubcontract((prevState) => ({ ...prevState, SUBCONTRACTOR_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID }));
+    setCreatesubcontract((prevState) => ({ ...prevState, SUBCONTRACTOR_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME }));
+  }, [open])
+
+
+  console.log(createSubcontract, "check")
 
 
   const availableState = country?.find(
@@ -96,9 +95,9 @@ export default function SubcontractCreate(props) {
       "SUBCONTRACTOR_SUPERVISOR",
       "SUBCONTRACTOR_COUNTRY",
       "SUBCONTRACTOR_CITY",
-      "SUBCONTRACTOR_STATE", 
-     ]
-    
+      "SUBCONTRACTOR_STATE",
+    ]
+
     const hasEmptyFields = requiredFields.some(
       (field) => !createSubcontract[field]
     );
@@ -114,10 +113,10 @@ export default function SubcontractCreate(props) {
 
     setErrorMsg("");
 
-   
+
 
     axios
-      .post("http://18.211.130.168:5001/create_subcontractor",createSubcontract , {
+      .post("http://18.211.130.168:5001/create_subcontractor", createSubcontract, {
         headers,
       })
       .then((response) => {
@@ -331,21 +330,23 @@ export default function SubcontractCreate(props) {
                 </select>
               </div>
             </div>
-            <center>
+            <div className="FormButtonAlign">
               <button
                 type="submit"
                 className="btn btn-info text-white"
                 onClick={handleSubmit}
               >
-                Submit
+                Create Subcontractor
               </button>{" "}
               <button
                 onClick={handleClose}
                 className="btn btn-danger text-white"
               >
-                Discard
+                Cancel
               </button>
-            </center>
+            </div>
+
+
           </form>
         </Box>
       </Modal>

@@ -377,7 +377,7 @@ const Vehicle = () => {
               <form onSubmit={handleSubmit}>
                 <div className="row py-2">
                   <div className="form-group col-xl-6">
-                    <label> Project Username</label>
+                    <label> Vehicle Name</label>
 
                     <TextField
                       label="Vehicle Name"
@@ -391,7 +391,7 @@ const Vehicle = () => {
                     />
                   </div>
                   <div className="form-group col-xl-6">
-                    <label> Project Username</label>
+                    <label> Vehicle Name</label>
 
                     <TextField
                       label="Vehicle Number"

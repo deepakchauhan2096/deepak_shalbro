@@ -10,7 +10,7 @@ import placeholder from "../assests/images/placeholder.png";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-const EmployeeAttendance = () => {
+const EmployeeAttendance = (props) => {
   const [indone, setIndone] = useState(false);
   const [outdone, setOutdone] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(false);
@@ -20,18 +20,30 @@ const EmployeeAttendance = () => {
   const [latitude2, setLatitude2] = useState(28.3903);
   const [longitude2, setLongitude2] = useState(77.05);
   const [circleCenter, setCircleCenter] = useState([null, null]);
-  const [circleRadius, setCircleRadius] = useState(500); // Default radius of the circle in meters
+  const [circleRadius, setCircleRadius] = useState(30000); // Default radius of the circle in meters
   const [isInsideCircle, setIsInsideCircle] = useState(false);
   const circleRef = useRef();
 
-  const location = useLocation();
-  const employeeData = location.state.data.result;
+  // const location = useLocation();
+
+  const employeeData = props.state.result;
+
+  console.log(employeeData, "emp-data");
 
   const currentTime = new Date().toLocaleTimeString();
   const currentDate = new Date().toLocaleDateString();
 
-  const MyDate = new Date().toISOString().split("T")[0];
+  const MyDate = new Date();
   console.log(MyDate, "Mydate");
+
+  const currentDates = new Date();
+  currentDates.setDate(currentDates.getDate());
+  const year = currentDates.getFullYear();
+  const month = String(currentDates.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDates.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
+
+  console.log(formattedDate, "for");
 
   const handleSubmitIn = (event) => {
     event.preventDefault();
@@ -42,7 +54,7 @@ const EmployeeAttendance = () => {
       ATTENDANCE_COMPANY_USERNAME: employeeData?.EMPLOYEE_PARENT_USERNAME,
       ATTENDANCE_EMPLOYEE_ID: employeeData?.EMPLOYEE_ID,
       ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
-      ATTENDANCE_DATE_ID: MyDate,
+      ATTENDANCE_DATE_ID: formattedDate,
       ATTENDANCE_IN: new Date(),
     };
 
@@ -78,7 +90,7 @@ const EmployeeAttendance = () => {
       ATTENDANCE_COMPANY_USERNAME: employeeData?.EMPLOYEE_PARENT_USERNAME,
       ATTENDANCE_EMPLOYEE_ID: employeeData?.EMPLOYEE_ID,
       ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
-      ATTENDANCE_DATE_ID: MyDate,
+      ATTENDANCE_DATE_ID: formattedDate,
       ATTENDANCE_OUT: new Date(),
     };
 
@@ -204,7 +216,7 @@ const EmployeeAttendance = () => {
 
   return (
     <>
-      <EmployeeNavbar empData={employeeData} />
+      <EmployeeNavbar state={employeeData} />
 
       <Box className="box">
         <div
@@ -316,7 +328,7 @@ const EmployeeAttendance = () => {
 
                           <tr>
                             {indone ? (
-                              <td >
+                              <td>
                                 <Button
                                   disabled
                                   name="in_btn"
