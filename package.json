@@ -23,6 +23,7 @@
     "country-state-city": "^2.2.0",
     "firebase": "^9.23.0",
     "geolib": "^3.3.4",
+    "js-cookie": "^3.0.5",
     "js-file-download": "^0.4.12",
     "leaflet": "^1.9.4",
     "moment": "^2.29.4",
