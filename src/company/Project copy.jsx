@@ -3,10 +3,15 @@ import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import {Button,Skeleton,Paper} from "@mui/material";
+import { Button, Skeleton, Paper } from "@mui/material";
 import ProjectCreate from "./ProjectCreate";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
+import ProjectEdit from "./ProjectEdit";
+import ProjectLoc from "./ProjectLoc";
+import ProjectAssigned from "./ProjectAssigned";
+// import { useDispatch, useSelector } from "react-redux";
+// import { initProject_fun } from "../redux/action";
 
 const Project = (props) => {
   const [data, setData] = useState({
@@ -17,24 +22,29 @@ const Project = (props) => {
       PROJECT_MEMBER_PARENT_ID: "",
       PROJECT_MEMBER_PARENT_USERNAME: "",
       // PROJECT_ROLE: "",
-      PROJECT_EMROLMNT_TYPE:"",
+      PROJECT_TYPE: "",
       PROJECT_NAME: "",
-      PROJECT_PHONE: "",
+      PROJECT_ACCOUNT: "",
       PROJECT_USERNAME: "",
       PROJECT_START_DATE: "",
       PROJECT_END_DATE: "",
       PROJECT_SUPERVISOR: "",
       PROJECT_PROGRESS: "",
-      PROJECT_ADD:""
+      PROJECT_ADD: "",
+      PROJECT_VALUE:"",
+      PROJECT_CURRENCY:"",
     },
   });
-
+  // const dispatch = useDispatch() ;
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
   const [ProjectData, setProjectData] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const [Edit, setEdit] = useState(false);
+
   const [updatedata, setUpdateData] = useState(false);
+  console.log("hgsvdcv",ProjectData)
 
   // modal
   const handleOpen = () => setOpen(true);
@@ -42,13 +52,13 @@ const Project = (props) => {
   const { alldata, setText } = useContext(MyContext);
   const { projectcreatedata } = useContext(MyContext);
 
- //update data
+  //update data
 
   useEffect(() => {
     fetchProjects();
-  }, [projectcreatedata]);
+  }, [updatedata]);
 
-  const filterallprojectData =  props.recieveData;
+  const filterallprojectData = props.recieveData;
 
   // console.log(filterallprojectData, "my project");
 
@@ -65,16 +75,19 @@ const Project = (props) => {
           PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
           PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
           PROJECT_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
-          PROJECT_MEMBER_PARENT_USERNAME:filterallprojectData?.COMPANY_PARENT_USERNAME,
+          PROJECT_MEMBER_PARENT_USERNAME:
+            filterallprojectData?.COMPANY_PARENT_USERNAME,
         },
         { headers }
       );
-      setTimeout(() => {
-        const data = response.data;
-        setProjectData(data?.result);
-        setIsLoading(false);
-        // console.log("contracts Data : =>", data);
-      }, 1000);
+      // setTimeout(() => {
+      const data = response.data;
+      setProjectData(data?.result);
+      // dispatch(initProject_fun(data?.result))
+
+      setIsLoading(false);
+      // console.log("contracts Data : =>", data);
+      // }, 1000);
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
@@ -83,26 +96,26 @@ const Project = (props) => {
   // console.log(ProjectData, "projectdata");
 
   const columns = [
-    { field: "PROJECT_ID", headerName: "ID", width: 90 },
+    { field: "PROJECT_ID", headerName: "ID", width: 60 },
     {
       field: "PROJECT_USERNAME",
       headerName: "USername",
-      width: 150,
+      width: 120,
     },
     {
       field: "PROJECT_NAME",
       headerName: "Name",
-      width: 150,
+      width: 120,
     },
     {
-      field: "PROJECT_PHONE",
-      headerName: "Phone",
-      width: 150,
+      field: "PROJECT_ACCOUNT",
+      headerName: "Account",
+      width: 130,
     },
     {
       field: "PROJECT_START_DATE",
       headerName: "Start Date",
-      width: 150,
+      width: 100,
     },
     {
       field: "PROJECT_END_DATE",
@@ -114,13 +127,32 @@ const Project = (props) => {
     {
       field: "PROJECT_SUPERVISOR",
       headerName: "Supervisor",
-      width: 200,
+      width: 150,
+    },
+
+    {
+      field: "PROJECT_VALUE",
+      headerName: "Project Value",
+      width: 120,
+      renderCell: (cellValues) => {
+        return (
+          <span>
+            {cellValues.row.PROJECT_VALUE} {cellValues.row.PROJECT_CURRENCY}
+          </span>
+        );
+      },
+    },
+   
+    {
+      field: "PROJECT_TYPE",
+      headerName: "Project Type",
+      width: 140,
     },
 
     {
       field: "action",
       headerName: "Detail",
-      width: 120,
+      width: 80,
       renderCell: (cellValues) => {
         return (
           <Button
@@ -136,6 +168,22 @@ const Project = (props) => {
         );
       },
     },
+    {
+      field: "edit",
+      headerName: "Edit",
+      width: 80,
+      renderCell: (cellValues) => {
+        return (
+          <Button
+          // onClick={(event) => {
+          //   handleEdit(cellValues);
+          // }}
+          >
+            <ProjectEdit edit={cellValues} refetch={fetchProjects} />
+          </Button>
+        );
+      },
+    },
   ];
 
   const rows = ProjectData;
@@ -143,6 +191,7 @@ const Project = (props) => {
 
   const handleClick = (event) => {
     setData(event);
+    // dispatch(initProject_fun(event))
     handleOpen();
   };
 
@@ -151,6 +200,7 @@ const Project = (props) => {
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
     padding: 0,
+    background: "#fff",
     paddingBottom: "0",
     overflow: "auto",
     borderRadius: 0,
@@ -175,9 +225,9 @@ const Project = (props) => {
   return (
     <>
       <Box className="box" style={{ background: "#277099" }}>
-      <ProjectCreate
+        <ProjectCreate
           companyData={filterallprojectData}
-          update={(event) => setUpdateData(event)}
+          refetch={fetchProjects}
           name={"Project"}
         />
         <MyScreen sx={{ display: "block", padding: 3 }}>
@@ -199,7 +249,8 @@ const Project = (props) => {
                 }}
                 density="compact"
                 pageSizeOptions={[5]}
-                checkboxSelection
+                checkboxSelection={false}
+
                 disableRowSelectionOnClick
               />
             )}
@@ -222,19 +273,21 @@ const Project = (props) => {
             variant="contained"
             className="btn rounded-0"
             size="small"
-            
           >
             <ArrowBackIcon style={{ fontSize: "20px" }} />
           </Button>
           <Button
             onClick={(e) => setIndex(1)}
             variant={index === 1 ? "outlined" : "outlined"}
-            className={index === 1 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-bottom-0  rounded-0 text-light" }            
+            className={
+              index === 1
+                ? "btn button border-bottom-0 bg-white"
+                : "btn rounded-0 border-bottom-0  rounded-0 text-light"
+            }
             size="small"
           >
             Detail
           </Button>
-
           {!Edit ? (
             <Button
               onClick={(e) => setEdit(true)}
@@ -256,585 +309,143 @@ const Project = (props) => {
               Save
             </Button>
           )}
-
           <Button
             onClick={(e) => setIndex(2)}
             variant={index === 2 ? "outlined" : "outlined"}
-            className={index === 2 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-0  rounded-0 text-light" } 
+            className={
+              index === 2
+                ? "btn button border-bottom-0 bg-white"
+                : "btn rounded-0 border-0  rounded-0 text-light"
+            }
             size="small"
           >
-            Payment
+            Allocate Employees
+          </Button>
+          <Button
+            onClick={(e) => setIndex(3)}
+            variant={index === 3 ? "outlined" : "outlined"}
+            className={
+              index === 3
+                ? "btn button border-bottom-0 bg-white"
+                : "btn rounded-0 border-0  rounded-0 text-light"
+            }
+            size="small"
+          >
+            Track
           </Button>
         </div>
 
-        {index === 1 ? (
-          <div className="box-tab">
-            <div className="container-fluid p-4">
-              <div className="row">
-                <div className="col-4">
-                  <b>Project Name</b>
-                  <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_NAME}
-                  </p>
-                </div>
-                <div className="col-4">
-                  <b>Phone</b>
-                  <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_PHONE}
-                  </p>
-                </div>
-                <div className="col-4">
-                  <b>Username</b>
-                  <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_USERNAME}
-                  </p>
-                </div>
-                <div className="col-4">
-                  <b>Supervisor</b>
-                  <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_SUPERVISOR}
-                  </p>
-                </div>
-                <div className="col-4">
-                  <b>Employement Type</b>
-                  <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_EMROLMNT_TYPE}
-                  </p>
-                </div>
-                <div className="col-4">
-                  <b>Location</b>
-                  <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_ADD}
-                  </p>
-                </div>
+        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
+          <div className="container-fluid g-0">
+            <div className="row">
+              <div className="col-4">
+                <b>Project Name</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_NAME}
+                </p>
               </div>
-
-              <hr />
-
-              <div className="row">
-                <div className="col">
-                  <b>Project Role</b>
-                  <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_ROLE
-                      ? filterData.PROJECT_ROLE
-                      : "not mentioned !"}
-                  </p>
-                </div>
-                <div className="col">
-                  <b>Project Status</b>
-                  <p className="bg-success text-dark p-2 rounded-2">
-                    In Execution
-                  </p>
-                </div>
-                <div className="col">
-                  <b>Project Start</b>
-                  <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.PROJECT_START_DATE}
-                  </p>
-                </div>
-                <div className="col">
-                  <b>Project End</b>
-                  {Edit ? (
-                    <input
-                      type="date"
-                      value={filterData.PROJECT_END_DATE}
-                      className="form-control"
-                    />
-                  ) : (
-                    <p className="bg-light text-dark p-2 rounded-2">
-                      {filterData.PROJECT_END_DATE}
-                    </p>
-                  )}
-                </div>
+              <div className="col-4">
+                <b>Phone</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_PHONE}
+                </p>
               </div>
-
-              <div className="row">
-                <div className="col-4">
-                  <b>Project Progress</b>
-                  <div className="p-2 rounded-3 bg-light">
-                    <div
-                      className="progress-bar"
-                      style={{
-                        background: `radial-gradient(closest-side, white 79%, transparent 80% 100%),conic-gradient(hotpink ${filterData.PROJECT_PROGRESS}%, pink 0)`,
-                      }}
-                    >
-                      <div className="counter">
-                        {filterData.PROJECT_PROGRESS}%
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="col-4">
+                <b>Username</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_USERNAME}
+                </p>
               </div>
-              <hr />
-             
-             
-              <div className="row">
-                <div className="col-4">
-                  <b>Assigned Employees to this project</b>
-                  <div className="p-2 rounded-3 bg-light">
-                  <ul>
-                 {filterData.PROJECT_ASSIGN?.map((assignproject,key) => {
-                      // console.log("assignproject",assignproject)
-                      return(
-                       <>
-                       <b>Employee ID</b> <span>{assignproject.EMPLOYEE_ID}</span>
-                       <br />
-                       <b>Company Username </b> <span> {assignproject.EMPLOYEE_PARENT_USERNAME}</span> <br />
-                       <b>Admin Username </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_USERNAME}</span> <br />
-                       <b>Company ID </b> <span> {assignproject.EMPLOYEE_PARENT_ID}</span> <br />
-                       <b>Admin ID </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_ID}</span> 
-                       </>
-                    
-                      )
-                  
-                   
-                    
-                 })}
-                   </ul>
-                  </div>
-                </div>
+              <div className="col-4">
+                <b>Supervisor</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_SUPERVISOR}
+                </p>
+              </div>
+              <div className="col-4">
+                <b>Employement Type</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_TYPE}
+                </p>
+              </div>
+              <div className="col-4">
+                <b>Location</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_ADD}
+                </p>
               </div>
             </div>
-          </div>
-        ) : index === 2 ? (
-          <div className="box-tab">
-            <div className="p-4 container-fluid">
-              <div className="row">
-                <div className="col-9">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Material</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Method</th>
-                        <th scope="col">Transaction ID</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Tiles</td>
-                        <td>10</td>
-                        <td>20 USD</td>
-                        <td>Cash</td>
-                        <td>RG384054859</td>
-                        <td>
-                          <b className="bg-success text-white px-2 rounded-2">
-                            Paid
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Cement</td>
-                        <td>20</td>
-                        <td>20 USD</td>
-                        <td>UPI</td>
-                        <td>TY485060</td>
-                        <td>
-                          <b className="bg-warning text-white px-2 rounded-2">
-                            Panding
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Concrete</td>
-                        <td>60</td>
-                        <td>20 USD</td>
-                        <td>Stripe</td>
-                        <td>PO6970845</td>
-                        <td>
-                          <b className="bg-success text-white px-2 rounded-2">
-                            Paid
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Bricks</td>
-                        <td>120</td>
-                        <td>the Bird</td>
-                        <td>Visa</td>
-                        <td>PO697084599</td>
-                        <td>
-                          <b className="bg-danger text-white px-2 rounded-2">
-                            Failed
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div className="col-3 px-4">
-                  <div className="mb-5 ">
-                    <button className="btn btn-primary float-right rounded-0">
-                      <i className="fa fa-print"></i> Print Invoice
-                    </button>
-                  </div>
-                  <div className="search-container mb-5">
-                    <input type="text" placeholder="Search.." name="search" />
-                    <button type="submit">
-                      <i className="fa fa-search"></i>
-                    </button>
-                  </div>
+            <hr />
+            <div className="row">
+              <div className="col">
+                <b>Project Role</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_ROLE
+                    ? filterData.PROJECT_ROLE
+                    : "not mentioned !"}
+                </p>
+              </div>
+              <div className="col">
+                <b>Project Status</b>
+                <p className="bg-success text-dark p-2 rounded-2">
+                  In Execution
+                </p>
+              </div>
+              <div className="col">
+                <b>Project Start</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_START_DATE}
+                </p>
+              </div>
+              <div className="col">
+                <b>Project End</b>
+                {Edit ? (
+                  <input
+                    type="date"
+                    value={filterData.PROJECT_END_DATE}
+                    className="form-control"
+                  />
+                ) : (
+                  <p className="bg-light text-dark p-2 rounded-2">
+                    {filterData.PROJECT_END_DATE}
+                  </p>
+                )}
+              </div>
+            </div>
 
-                  <div>
-                    <b>Time Period</b>
-                  </div>
-                  <div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault1"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault1"
-                      >
-                        All time
-                      </label>
-                    </div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                        checked
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        Today
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        This Week
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        This month
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        Custom
-                      </label>
-                    </div>
-                  </div>
-                  <b>Status</b>
-                  <div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Paid
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Panding
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Failed
-                      </label>
+            <div className="row">
+              <div className="col-4">
+                <b>Project Progress</b>
+                <div className="p-2 rounded-3 bg-light">
+                  <div
+                    className="progress-bar"
+                    style={{
+                      background: `radial-gradient(closest-side, white 79%, transparent 80% 100%),conic-gradient(hotpink ${filterData.PROJECT_PROGRESS}%, pink 0)`,
+                    }}
+                  >
+                    <div className="counter">
+                      {filterData.PROJECT_PROGRESS}%
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        ) : index === 3 ? (
-          <div className="box-tab">
-            <div className="p-4 container-fluid">
-              <div className="row">
-                <div className="col-9">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Material</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Method</th>
-                        <th scope="col">Transaction ID</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Tiles</td>
-                        <td>10</td>
-                        <td>20 USD</td>
-                        <td>Cash</td>
-                        <td>RG384054859</td>
-                        <td>
-                          <b className="bg-success text-white px-2 rounded-2">
-                            Paid
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Cement</td>
-                        <td>20</td>
-                        <td>20 USD</td>
-                        <td>UPI</td>
-                        <td>TY485060</td>
-                        <td>
-                          <b className="bg-warning text-white px-2 rounded-2">
-                            Panding
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Concrete</td>
-                        <td>60</td>
-                        <td>20 USD</td>
-                        <td>Stripe</td>
-                        <td>PO6970845</td>
-                        <td>
-                          <b className="bg-success text-white px-2 rounded-2">
-                            Paid
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Bricks</td>
-                        <td>120</td>
-                        <td>the Bird</td>
-                        <td>Visa</td>
-                        <td>PO697084599</td>
-                        <td>
-                          <b className="bg-danger text-white px-2 rounded-2">
-                            Failed
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div className="col-3 px-4">
-                  <div className="mb-5 ">
-                    <button className="btn btn-primary float-right rounded-0">
-                      <i className="fa fa-print"></i> Print Invoice
-                    </button>
-                  </div>
-                  <div className="search-container mb-5">
-                    <input type="text" placeholder="Search.." name="search" />
-                    <button type="submit">
-                      <i className="fa fa-search"></i>
-                    </button>
-                  </div>
+        </MyScreen>
 
-                  <div>
-                    <b>Time Period</b>
-                  </div>
-                  <div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault1"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault1"
-                      >
-                        All time
-                      </label>
-                    </div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                        checked
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        Today
-                      </label>
-                    </div>
+        <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
+          <ProjectAssigned projectData={filterData} />
+        </MyScreen>
+        <MyScreen screenIndex={index === 10} sx={{ padding: 3 }}>
+       
+        </MyScreen>
 
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        This Week
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        This month
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        Custom
-                      </label>
-                    </div>
-                  </div>
-                  <b>Status</b>
-                  <div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Paid
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Panding
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Failed
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
+        <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
+                <ProjectLoc />
+        </MyScreen>
       </Box>
     </>
   );
 };
 
 export default Project;
-

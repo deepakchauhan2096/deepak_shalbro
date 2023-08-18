@@ -22,57 +22,77 @@ const style = {
   borderRadius: 4,
 };
 
-export default function SubcontractCreate(props) {
+export default function EditSubcontract(props) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [createSubcontract, setCreatesubcontract] = useState({
-    SUBCONTRACTOR_PARENT_ID: props.companyData?.COMPANY_ID,
-    SUBCONTRACTOR_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME,
-    SUBCONTRACTOR_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID,
-    SUBCONTRACTOR_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME,
-    SUBCONTRACTOR_ROLE: "",
-    SUBCONTRACTOR_NAME: "",
-    SUBCONTRACTOR_PHONE: "",
-    SUBCONTRACTOR_USERNAME: "",
-    SUBCONTRACTOR_START_DATE: "",
-    SUBCONTRACTOR_END_DATE: "",
-    SUBCONTRACTOR_SUPERVISOR: "",
-    SUBCONTRACTOR_COUNTRY: "",
-    SUBCONTRACTOR_STATE: "",
-    SUBCONTRACTOR_ADD: "",
-    SUBCONTRACTOR_CITY: "",
+
+  const [editSubcontract, setEditsubcontract] = useState({
+    SUBCONTRACTOR_PARENT_ID: '',
+    SUBCONTRACTOR_PARENT_USERNAME: '',
+    SUBCONTRACTOR_MEMBER_PARENT_ID: '',
+    SUBCONTRACTOR_MEMBER_PARENT_USERNAME: '',
+    SUBCONTRACTOR_ROLE: '',
+    SUBCONTRACTOR_NAME: '',
+    SUBCONTRACTOR_PHONE: '',
+    SUBCONTRACTOR_USERNAME: '',
+    SUBCONTRACTOR_START_DATE: '',
+    SUBCONTRACTOR_END_DATE: '',
+    SUBCONTRACTOR_SUPERVISOR: '',
+    SUBCONTRACTOR_COUNTRY: '',
+    SUBCONTRACTOR_STATE: '',
+    SUBCONTRACTOR_ADD: '',
+    SUBCONTRACTOR_CITY: '',
   });
+
+  const editsubcontract = props?.editsubcontract.row
+  console.log(editSubcontract, "check")
 
 
 
   useEffect(() => {
-    setCreatesubcontract((prevState) => ({ ...prevState, SUBCONTRACTOR_PARENT_ID: props.companyData?.COMPANY_ID }));
-    setCreatesubcontract((prevState) => ({ ...prevState, SUBCONTRACTOR_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME }));
-    setCreatesubcontract((prevState) => ({ ...prevState, SUBCONTRACTOR_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID }));
-    setCreatesubcontract((prevState) => ({ ...prevState, SUBCONTRACTOR_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME }));
-  }, [open])
+    if (editsubcontract) {
+      setEditsubcontract((prevState) => ({
+        ...prevState,
+        SUBCONTRACTOR_PARENT_ID: editsubcontract.COMPANY_ID,
+        SUBCONTRACTOR_PARENT_USERNAME: editsubcontract.COMPANY_USERNAME,
+        SUBCONTRACTOR_MEMBER_PARENT_ID: editsubcontract.COMPANY_PARENT_ID,
+        SUBCONTRACTOR_MEMBER_PARENT_USERNAME: editsubcontract.COMPANY_PARENT_USERNAME,
+        SUBCONTRACTOR_ROLE: editsubcontract.SUBCONTRACTOR_ROLE,
+        SUBCONTRACTOR_NAME: editsubcontract.SUBCONTRACTOR_NAME,
+        SUBCONTRACTOR_PHONE: editsubcontract.SUBCONTRACTOR_PHONE,
+        SUBCONTRACTOR_USERNAME: editsubcontract.SUBCONTRACTOR_USERNAME,
+        SUBCONTRACTOR_START_DATE: editsubcontract.SUBCONTRACTOR_START_DATE,
+        SUBCONTRACTOR_END_DATE: editsubcontract.SUBCONTRACTOR_END_DATE,
+        SUBCONTRACTOR_SUPERVISOR: editsubcontract.SUBCONTRACTOR_SUPERVISOR,
+        SUBCONTRACTOR_COUNTRY: editsubcontract.SUBCONTRACTOR_COUNTRY,
+        SUBCONTRACTOR_STATE: editsubcontract.SUBCONTRACTOR_STATE,
+        SUBCONTRACTOR_ADD: editsubcontract.SUBCONTRACTOR_ADD,
+        SUBCONTRACTOR_CITY: editsubcontract.SUBCONTRACTOR_CITY,
+      }));
+    }
+  }, [editsubcontract]);
 
 
-  console.log(createSubcontract, "check")
-
+ 
+  console.log("editcontract", editsubcontract)
 
   const availableState = country?.find(
-    (c) => c.name === createSubcontract.SUBCONTRACTOR_COUNTRY
+    (c) => c.name === editSubcontract.SUBCONTRACTOR_COUNTRY
   );
 
   const availableCities = availableState?.states?.find(
-    (s) => s.name === createSubcontract.SUBCONTRACTOR_STATE
+    (s) => s.name === editSubcontract.SUBCONTRACTOR_STATE
   );
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const handleCreate = (e) => {
+  const handleEdit = (e) => {
     const { name, value } = e.target;
-    setCreatesubcontract((prevState) => ({
+    setEditsubcontract((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -99,7 +119,7 @@ export default function SubcontractCreate(props) {
     ]
 
     const hasEmptyFields = requiredFields.some(
-      (field) => !createSubcontract[field]
+      (field) => !editSubcontract[field]
     );
 
     if (hasEmptyFields) {
@@ -116,7 +136,7 @@ export default function SubcontractCreate(props) {
 
 
     axios
-      .post("http://18.211.130.168:5001/create_subcontractor", createSubcontract, {
+      .post("http://18.211.130.168:5001/update_subcontructor", editSubcontract, {
         headers,
       })
       .then((response) => {
@@ -131,7 +151,7 @@ export default function SubcontractCreate(props) {
             position: toast.POSITION.TOP_CENTER,
           });
           props.refetch();
-          setCreatesubcontract({});
+          setEditsubcontract({});
           setOpen(false);
         }
       })
@@ -144,17 +164,15 @@ export default function SubcontractCreate(props) {
 
   return (
     <>
-      <Button size="small" className="btn button border-bottom-0 bg-white" variant="outlined">
-        Subcontract
-      </Button>
+
+
       <Button
         onClick={handleOpen}
-        sx={{ color: "#277099" }}
-        className="btn rounded-0 border-0  rounded-0 text-light"
-        variant="contained"
-        size="small"
+        variant="rounded"
+        className="view-btn border border-info text-success "
+        style={{ padding: "2px 2px" }}
       >
-        + Add Subcontract
+        Edit
       </Button>
 
       <Modal
@@ -172,9 +190,9 @@ export default function SubcontractCreate(props) {
                   type="text"
                   className="form-control form-control-2 rounded-0"
                   placeholder="Username"
-                  value={createSubcontract.SUBCONTRACTOR_USERNAME}
+                  value={editSubcontract.SUBCONTRACTOR_USERNAME}
                   name="SUBCONTRACTOR_USERNAME"
-                  onChange={handleCreate}
+                  onChange={handleEdit}
                 />
               </div>
               <div className="form-group col-xl-4">
@@ -184,9 +202,9 @@ export default function SubcontractCreate(props) {
                   className="form-control form-control-2 rounded-0"
                   id="inputname"
                   placeholder="Project Name"
-                  value={createSubcontract.SUBCONTRACTOR_NAME}
+                  value={editSubcontract.SUBCONTRACTOR_NAME}
                   name="SUBCONTRACTOR_NAME"
-                  onChange={handleCreate}
+                  onChange={handleEdit}
                 />
               </div>
               <div className="form-group col-xl-4">
@@ -197,8 +215,8 @@ export default function SubcontractCreate(props) {
                   id="inputPassword4"
                   placeholder="Enter Phone Number"
                   name="SUBCONTRACTOR_PHONE"
-                  value={createSubcontract.SUBCONTRACTOR_PHONE}
-                  onChange={handleCreate}
+                  value={editSubcontract.SUBCONTRACTOR_PHONE}
+                  onChange={handleEdit}
                 />
               </div>
             </div>
@@ -207,9 +225,9 @@ export default function SubcontractCreate(props) {
                 <label>Project start date</label>
                 <input
                   type="date"
-                  value={createSubcontract.SUBCONTRACTOR_START_DATE}
+                  value={editSubcontract.SUBCONTRACTOR_START_DATE}
                   name="SUBCONTRACTOR_START_DATE"
-                  onChange={handleCreate}
+                  onChange={handleEdit}
                   className="form-control form-control-2 rounded-0"
                 //required
                 />
@@ -218,9 +236,9 @@ export default function SubcontractCreate(props) {
                 <label>Project End date</label>
                 <input
                   type="date"
-                  value={createSubcontract.SUBCONTRACTOR_END_DATE}
+                  value={editSubcontract.SUBCONTRACTOR_END_DATE}
                   name="SUBCONTRACTOR_END_DATE"
-                  onChange={handleCreate}
+                  onChange={handleEdit}
                   className="form-control form-control-2 rounded-0"
                 //required
                 />
@@ -232,9 +250,9 @@ export default function SubcontractCreate(props) {
                 <select
                   id="inputEnroll"
                   className="form-control form-control-2 border rounded-0"
-                  onChange={handleCreate}
+                  onChange={handleEdit}
                   name="SUBCONTRACTOR_ROLE"
-                  value={createSubcontract.SUBCONTRACTOR_ROLE}
+                  value={editSubcontract.SUBCONTRACTOR_ROLE}
                 >
                   <option selected>Choose...</option>
                   <option>Painter</option>
@@ -250,8 +268,8 @@ export default function SubcontractCreate(props) {
                   className="form-control form-control-2 rounded-0 "
                   id="inputsupervisor"
                   name="SUBCONTRACTOR_SUPERVISOR"
-                  value={createSubcontract.SUBCONTRACTOR_SUPERVISOR}
-                  onChange={handleCreate}
+                  value={editSubcontract.SUBCONTRACTOR_SUPERVISOR}
+                  onChange={handleEdit}
                 />
               </div>
             </div>
@@ -264,8 +282,8 @@ export default function SubcontractCreate(props) {
                   id="inputAddress2"
                   placeholder="Apartment, studio, or floor"
                   name="SUBCONTRACTOR_ADD"
-                  value={createSubcontract.SUBCONTRACTOR_ADD}
-                  onChange={handleCreate}
+                  value={editSubcontract.SUBCONTRACTOR_ADD}
+                  onChange={handleEdit}
                 />
               </div>
             </div>
@@ -276,8 +294,8 @@ export default function SubcontractCreate(props) {
                   className="form-control form-control-2 border rounded-0"
                   placeholder="Country"
                   name="SUBCONTRACTOR_COUNTRY"
-                  value={createSubcontract.SUBCONTRACTOR_COUNTRY}
-                  onChange={handleCreate}
+                  value={editSubcontract.SUBCONTRACTOR_COUNTRY}
+                  onChange={handleEdit}
                 >
                   <option>--Choose Country--</option>
                   {country?.map((value, key) => {
@@ -296,8 +314,8 @@ export default function SubcontractCreate(props) {
                   form-control form-control-2 border rounded-0"
                   placeholder="State"
                   name="SUBCONTRACTOR_STATE"
-                  value={createSubcontract.SUBCONTRACTOR_STATE}
-                  onChange={handleCreate}
+                  value={editSubcontract.SUBCONTRACTOR_STATE}
+                  onChange={handleEdit}
                 >
                   <option selected>--Choose State--</option>
                   {availableState?.states?.map((e, key) => {
@@ -316,8 +334,8 @@ export default function SubcontractCreate(props) {
                   className="form-control form-control-2 border rounded-0"
                   placeholder="City"
                   name="SUBCONTRACTOR_CITY"
-                  value={createSubcontract.SUBCONTRACTOR_CITY}
-                  onChange={handleCreate}
+                  value={editSubcontract.SUBCONTRACTOR_CITY}
+                  onChange={handleEdit}
                 >
                   <option>--Choose City--</option>
                   {availableCities?.cities?.map((e, key) => {
@@ -331,21 +349,21 @@ export default function SubcontractCreate(props) {
               </div>
             </div>
             <div className="FormButtonAlign">
-              <button
-                type="submit"
-                className="btn btn-info text-white"
-                onClick={handleSubmit}
-              >
-                Create Subcontractor
-              </button>{" "}
-              <button
-                onClick={handleClose}
-                className="btn btn-danger text-white"
-              >
-                Cancel
-              </button>
-            </div>
 
+            <button
+              type="submit"
+              className="btn btn-info text-white"
+              onClick={handleSubmit}
+            >
+              Edit Subcontractor
+            </button>{" "}
+            <button
+              onClick={handleClose}
+              className="btn btn-danger text-white"
+            >
+              Cancel
+            </button>
+            </div>
 
           </form>
         </Box>

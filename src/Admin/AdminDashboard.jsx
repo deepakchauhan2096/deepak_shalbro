@@ -56,6 +56,7 @@ const AdminDashboard = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [tableRows, setTableRows] = useState(adminData);
   const [Rows, setRows] = useState([]);
+  console.log("first",Rows)
 
   const dispatch = useDispatch()
 
@@ -278,6 +279,7 @@ const AdminDashboard = (props) => {
                         "Company username",
                         "Phone",
                         "Email",
+                        "Company Role",
                         "Address",
                         "State",
                         "Detail",
@@ -306,6 +308,9 @@ const AdminDashboard = (props) => {
                           </TableCell>
                           <TableCell size="small">
                             {post?.COMPANY_EMAIL}
+                          </TableCell>
+                          <TableCell size="small">
+                            {post?.COMPANY_ROLE}
                           </TableCell>
                           <TableCell size="small">{post?.COMPANY_ADD2}</TableCell>
                           <TableCell size="small">
