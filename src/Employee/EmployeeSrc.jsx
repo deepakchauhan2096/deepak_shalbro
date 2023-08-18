@@ -113,6 +113,8 @@ const EmployeeSrc = (props) => {
       .then((response) => {
         setSelectedProject(response.data.result);
         setIsSuccessMessageVisible(true);
+        props.refetch();
+
       })
       .catch((error) => {
         console.error(error, "ERR");

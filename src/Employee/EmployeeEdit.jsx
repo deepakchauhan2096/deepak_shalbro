@@ -333,22 +333,24 @@ export default function EmployeeEdit(props) {
                     <p className=" text-danger fw-light mb-0">{errorMsg}</p>
                   )}
                 </center>
-                <div className="col-12">
+                </div>
+                <div className="FormButtonAlign">
+
                   <button
                     type="submit"
                     className="btn btn-info text-white "
                     onClick={handleSubmit}
                   >
-                    Update
+                    Edit Employee
                   </button>{" "}
                   <button
                     onClick={handleClose}
                     className="btn btn-danger text-white "
                   >
-                    Discard
+                    Cancel
                   </button>
                 </div>
-              </div>
+             
             </form>
           </Box>
         </Container>

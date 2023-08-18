@@ -61,6 +61,7 @@ const AdminDashboard = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [tableRows, setTableRows] = useState(adminData);
   const [Rows, setRows] = useState([]);
+  console.log("first",Rows)
 
   const dispatch = useDispatch();
 
