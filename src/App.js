@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assests/css/sidebar.css";
@@ -13,44 +13,115 @@ import AdminLogin from "./Admin/AdminLogin";
 import EmployeeAttendance from "./employee/EmployeeAttendance";
 import EmployeeLogin from "./employee/EmployeeLogin";
 import Temp from "./Attendance/Temp";
+import Cookies from "js-cookie";
+import EmployeeNavbar from "./employee/EmployeeNavbar";
+import EmployeeHistory from "./employee/EmployeeHistory";
 
 function App() {
-  const [auth, setAuth] = useState({
-    operation: "",
-    result: ""
-  });
 
-  const isAuthenticated = auth.operation === "successfull";
+  const [data , setData] = useState("")
+  const [user, userData] = useState("")
+  const [dataEmp , setDataEmp] = useState("")
+  const [userEmp, userDataEmp] = useState("")
 
-  const ProtectedRoute = ({ path, element }) => {
-    if (isAuthenticated) {
-      return element; // Use the provided element directly
-    } else {
-      return <Navigate to="/login" replace />;
-    }
-  };
+  // get cookie
 
-  console.log(auth.operation, "op");
+  useEffect(()=>{
+    let cookdata;
+
+    const cookieData = Cookies.get("myResponseData");
+  
+      if (cookieData) {
+        const parsedData = JSON.parse(cookieData);
+        cookdata = parsedData
+        userData(parsedData)
+      } else {
+        console.log("Cookie data not found.");
+      }
+  
+    console.log(cookdata?.operation,"stored data")
+  
+  
+    let isAuthenticated = cookdata?.operation === "successfull";
+    setData(isAuthenticated)
+
+    
+
+  },[])
+
+
+  useEffect(()=>{
+    let cookdataEmp;
+
+    const cookieData = Cookies.get("myResponseEmployee");
+  
+      if (cookieData) {
+        const parsedData = JSON.parse(cookieData);
+        cookdataEmp = parsedData
+        userDataEmp(parsedData)
+      } else {
+        console.log("Cookie data not found.");
+      }
+  
+    console.log(cookdataEmp?.operation,"stored data emp")
+  
+  
+    let isAuthenticated = cookdataEmp?.operation === "successfull";
+    setDataEmp(isAuthenticated)
+
+    
+
+  },[])
+
+  
+ 
+
+
+
+
+
+
+ console.log(userEmp,"op")
+
+
+ 
 
   return (
     <div className="wrapper" style={{ overflowX: "scroll", overflow: "hidden" }}>
-      <ToastContainer />
-      <MyContext.Provider value={{ auth, setAuth }}>
         <BrowserRouter>
           <Routes>
-            {/* Public routes */}
-            <Route path="/signup" element={<AdminCreate />} />
-            <Route path="/login" element={<AdminLogin />} />
-            <Route path="/" element={<AdminLogin />} />
+            <>
+            
+            <Route path="/signup/*" element={<AdminCreate />} />
+            <Route path="/login/*" element={<AdminLogin />} />
+            <Route path="/*" element={<AdminLogin />} />
+            <Route path="/employee/login/*" element={<EmployeeLogin />} />
+            </>
 
-            {/* Protected routes */}
-            <Route path="/admin/*" element={<ProtectedRoute path="/admin/*" element={<AdminDashboard />} />} />
-            <Route path="/company/*" element={<ProtectedRoute path="/company/*" element={<CompanyMain />} />} />
-            <Route path="/employee/*" element={<ProtectedRoute path="/employee/*" element={<EmployeeAttendance />} />} />
-            <Route path="/temp/*" element={<ProtectedRoute path="/temp/*" element={<Temp />} />} />
+            {data ? 
+            <>
+            <Route
+                path="/"
+                element={<Navigate to="/admin" />} // Redirect to admin dashboard
+              />
+            <Route path="/admin/*" element={<AdminDashboard state={user} />} />
+            <Route path="/company/*" element={<CompanyMain />}/>
+            <Route path="/temp/*" element={<Temp />} />
+            </> :
+            <Route path="/*" element={<Navigate to="/login" />} />
+            }
+
+            {dataEmp ? 
+            <>
+            <Route path="/employee/*" element={<EmployeeAttendance state={userEmp} />} />
+            <Route path="/employee/attendance/*" element={<EmployeeAttendance state={userEmp} />} />
+            <Route path="/employee/history/*" element={<EmployeeHistory state={userEmp} />} />
+            </> :
+            // <Route path="/employee/*" element={<Navigate to="/employee/login" />} />
+            ""
+            }
           </Routes>
         </BrowserRouter>
-      </MyContext.Provider>
     </div>
   );
 }

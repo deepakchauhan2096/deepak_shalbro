@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios"
 import InputControl from "../components/InputControl";
 import styles from "../assests/css/Login.module.css";
+import Cookies from "js-cookie";
 import env from "react-dotenv";
 
 function EmployeeLogin() {
@@ -43,7 +44,8 @@ function EmployeeLogin() {
         // setSubmitButtonDisabled(false);
         const data = response.data
         if(data.operation === "successfull"){
-        navigate("/employee",  { state: { data } });
+          Cookies.set("myResponseEmployee", JSON.stringify(data), { expires: 7 }); // Cookie will expire in 7 days
+          window.location.replace("/employee")
         }
       })
       .catch((error) => {

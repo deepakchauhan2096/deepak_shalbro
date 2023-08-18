@@ -8,6 +8,8 @@ import teamImg1 from "../assests/images/team-1.jpg";
 import { styled } from "@mui/material/styles";
 import Snackbar from "@mui/material/Snackbar";
 import "../assests/css/employeesrc.css";
+import Cookies from "js-cookie";
+
 import {
   Button,
   Card,
@@ -269,6 +271,14 @@ const EmployeeSrc = (props) => {
         <Skeleton animation="pulse" height={50} />
       </Box>
     );
+  };
+
+  
+  const ClearCookie = () => {
+    // Clear the cookie by removing it
+    Cookies.remove("myResponseData");
+    window.location.replace("/employee/login");
+    console.log("Cookie cleared.");
   };
 
   return (
