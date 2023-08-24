@@ -235,12 +235,12 @@ const EmployeeAttendance = (props) => {
 
           <div
             style={{
-              height: "calc(100vh - 30px)",
+              height: "100vh",
               padding: 0,
               paddingBottom: "0",
               overflow: "auto",
               position: "relative",
-              background: "blue",
+              background: "white",
             }}
           >
             <Grid
@@ -334,7 +334,7 @@ const EmployeeAttendance = (props) => {
                                   name="in_btn"
                                   variant="contained"
                                   className="btn btn-block"
-                                  px={2}
+                                  sx={{height:"20px",width:"20px"}}
                                 >
                                   ATTENDANCE IN
                                 </Button>

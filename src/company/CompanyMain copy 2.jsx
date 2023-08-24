@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
@@ -32,6 +34,9 @@ import Vehicle from "../assetmanage/Vehicle";
 
 
 
+import MenuIcon from "@mui/icons-material/Menu";
+import "./CompanyMain.css";
+
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
   const [navIndex, setNavIndex] = useState(0);
@@ -41,6 +46,8 @@ const CompanyMain = () => {
   // modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // get Company data
   const location = useLocation();
@@ -191,13 +198,25 @@ const CompanyMain = () => {
 
   return (
     <>
+
+<Button
+        className={`hamburger-button ${drawerOpen ? "open" : ""}`}
+        onClick={() => setDrawerOpen(!drawerOpen)}
+      >
+        <MenuIcon />
+    
+      </Button>
       <Drawer
         anchor="left"
         variant="permanent"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
         PaperProps={{
           className: "sidebar",
           sx: {
             overflow: "hidden",
+            display: drawerOpen ? "block" : "none",
+            width: drawerOpen ? "100%" : 0,
           },
         }}
       >
@@ -222,7 +241,6 @@ const CompanyMain = () => {
             listname={post.listname}
             listlink={post.listlink}
             value={index}
-            className="list"
           />
         ))}
 

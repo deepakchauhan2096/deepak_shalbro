@@ -1,7 +1,13 @@
 import React from "react";
+import axios from "axios";
 
 const ProjectAssigned = (props) => {
+
   const filterData = props.projectData;
+  console.log("Hello employee", filterData)
+
+
+
   return (
     <div className="container-fluid g-0">
       <div className="row">
@@ -10,7 +16,7 @@ const ProjectAssigned = (props) => {
           <table className="table table-fixed table-sm">
             <thead>
               <tr >
-              <td>
+                <td>
                   <b>S. No.</b>
                 </td>
                 <td>
@@ -35,7 +41,7 @@ const ProjectAssigned = (props) => {
                 <>
                   <tr key={key}>
                     <td>
-                        {key+1}
+                      {key + 1}
                     </td>
                     <td>
                       <span>{assignproject.EMPLOYEE_ID}</span>

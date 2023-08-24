@@ -51,7 +51,7 @@ const ProjectLoc = () => {
 
   const fetchLocationName = async (lat, lon) => {
     try {
-      const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyCLpjHrEXsS2HVPdlB8lZihxg8YBreB9Yk`;
       const response = await fetch(url);
       const data = await response.json();
       const address = data.display_name;
@@ -269,7 +269,7 @@ const ProjectLoc = () => {
             {latitude && longitude && (
               <>
 
-                <LoadScript googleMapsApiKey="">
+                <LoadScript googleMapsApiKey="AIzaSyCLpjHrEXsS2HVPdlB8lZihxg8YBreB9Yk">
                   <WrappedMap
                     containerElement={<div style={{ height: "400px" }} />}
                     mapElement={<div style={{ height: "100%" }} />}
