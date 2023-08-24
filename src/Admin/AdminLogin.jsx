@@ -73,7 +73,7 @@ function AdminLogin({onDataFetched}) {
               ADMIN_USERNAME: event.target.value,
             }))
           }
-          placeholder="Enter email address"
+          placeholder="Enter Username"
         />
         <InputControl
           label="Password"

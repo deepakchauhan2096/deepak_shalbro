@@ -10,6 +10,9 @@ export default function SimpleBackdrop({ open }) {
           backgroundColor: "#f0f0f0",
           color: "#00008B",
           zIndex: (theme) => theme.zIndex.drawer + 1,
+          position:"absolute",
+          top:"0",
+          left:"0"
         }}
         open={open}
       >

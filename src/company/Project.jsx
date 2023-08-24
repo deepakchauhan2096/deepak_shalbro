@@ -470,7 +470,7 @@ const Project = (props) => {
         </MyScreen>
 
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
-          <ProjectLoc />
+          <ProjectLoc projectData={filterData} />
         </MyScreen>
       </Box>
     </>
