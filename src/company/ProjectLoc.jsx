@@ -88,7 +88,7 @@ const ProjectLoc = (props) => {
       setLocationName(data?.result[0]?.LOCATION_NAME)
       
 
-      console.log("one Data : =>", data);
+      // console.log("one Data : =>", data);
       }, 1000);
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
@@ -105,13 +105,6 @@ const ProjectLoc = (props) => {
     }));
   }, [markerPosition.lat, markerPosition.lng, circleRadius, locationName]);
 
-  //api header
-  // const handleEdit = (e) => {
-  //   setEditProject({ ...EditProject, [e.target.name]: e.target.value });
-  //   console.log("heello world", EditProject);
-  // };
-
-  // console.log(ProjectData, "kkkk");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -262,7 +255,7 @@ const ProjectLoc = (props) => {
     }
   };
 
-  console.log(circleCenter, "circleCenter");
+  // console.log(circleCenter, "circleCenter");
 
   useEffect(() => {
     if (

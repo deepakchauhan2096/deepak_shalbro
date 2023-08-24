@@ -60,7 +60,7 @@ const Project = (props) => {
 
   useEffect(() => {
     fetchProjects();
-  }, [updatedata]);
+  }, []);
 
   const filterallprojectData = props.recieveData;
 
