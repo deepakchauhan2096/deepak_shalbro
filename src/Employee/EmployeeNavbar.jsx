@@ -13,7 +13,8 @@ import {
   ListItemButton,
   Tooltip,
 } from "@mui/material";
-
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import HistoryIcon from '@mui/icons-material/History';
 const EmployeeNavbar = (props) => {
   const [userName, setUserName] = useState("U");
   const [showProfile, setShowProfile] = useState(false);
@@ -39,10 +40,12 @@ const EmployeeNavbar = (props) => {
     {
       listname: "Attendence",
       listlink: "/employee/attendance",
+      icons: <FingerprintIcon />
     },
     {
       listname: "History",
       listlink: "/employee/history",
+      icons: <HistoryIcon />
     },
   ];
 
@@ -59,7 +62,7 @@ const EmployeeNavbar = (props) => {
               disablePadding
             >
               <ListItemButton sx={{ color: "#fff" }}>
-                {props.listname}
+              <span>{props.icons}</span> {props.listname}
               </ListItemButton>
             </ListItem>
           </Link>
@@ -104,7 +107,7 @@ const EmployeeNavbar = (props) => {
         <Divider />
 
         {urls.map((post) => (
-          <Lists listname={post.listname} listlink={post.listlink} />
+          <Lists  icons={post.icons} listname={post.listname} listlink={post.listlink}  />
         ))}
 
         <div
