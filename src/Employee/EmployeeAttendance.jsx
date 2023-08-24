@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { useLocation } from "react-router";
 import EmployeeNavbar from "./EmployeeNavbar";
 import SimpleBackdrop from "../components/Backdrop";
 import locationIcon from "../assests/images/location.png";
 import placeholder from "../assests/images/placeholder.png";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+
 
 const EmployeeAttendance = (props) => {
   const [indone, setIndone] = useState(false);
@@ -117,17 +116,9 @@ const EmployeeAttendance = (props) => {
       });
   };
 
-  const customIcon = new L.Icon({
-    iconUrl: locationIcon, // URL to your custom marker icon image
-    iconSize: [32, 32], // Size of the icon
-    iconAnchor: [16, 32], // Anchor point of the icon (centered at bottom)
-  });
 
-  const customIcon2 = new L.Icon({
-    iconUrl: placeholder, // URL to your custom marker icon image
-    iconSize: [32, 32], // Size of the icon
-    iconAnchor: [16, 32], // Anchor point of the icon (centered at bottom)
-  });
+
+
 
   const getLocation = () => {
     if (navigator.geolocation) {
@@ -386,40 +377,7 @@ const EmployeeAttendance = (props) => {
                   </div>
 
                   <div className="col-8">
-                    {latitude && longitude && (
-                      <MapContainer
-                        key={`${latitude}-${longitude}`}
-                        center={[latitude, longitude]}
-                        zoom={13}
-                        style={{ height: "100%" }}
-                      >
-                        <TileLayer
-                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        />
-                        <Marker
-                          position={[latitude, longitude]}
-                          icon={customIcon}
-                        >
-                          <Popup>Your Location</Popup>
-                        </Marker>
-                        <Marker
-                          position={[latitude2, longitude2]}
-                          icon={customIcon2}
-                        >
-                          <Popup>Company Coverage </Popup>
-                        </Marker>
-                        {circleCenter[0] && circleCenter[1] && (
-                          <Circle
-                            center={circleCenter}
-                            radius={circleRadius}
-                            ref={circleRef}
-                          >
-                            <Popup>Selected Area</Popup>
-                          </Circle>
-                        )}
-                      </MapContainer>
-                    )}
+      
                   </div>
                 </div>
               </div>

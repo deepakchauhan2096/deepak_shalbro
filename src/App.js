@@ -14,7 +14,6 @@ import EmployeeAttendance from "./employee/EmployeeAttendance";
 import EmployeeLogin from "./employee/EmployeeLogin";
 import Temp from "./Attendance/Temp";
 import Cookies from "js-cookie";
-import EmployeeNavbar from "./employee/EmployeeNavbar";
 import EmployeeHistory from "./employee/EmployeeHistory";
 
 function App() {

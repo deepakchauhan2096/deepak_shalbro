@@ -4,7 +4,7 @@ import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Skeleton, Paper } from "@mui/material";
-import CreateSubcontract from "./CreateSubContract";
+import CreateSubcontract from "./CreateSubcontract";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
 import EditSubcontract from "./EditSubContract";
