@@ -39,10 +39,9 @@ export default function ProjectEdit(props) {
   const [index, setIndex] = React.useState([]);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const editProjectData = props?.edit.row
+  const editProjectData = props?.edit.row;
 
-
-  console.log("editProjectData",editProjectData)
+  console.log("editProjectData", editProjectData);
 
   const [EditProject, setEditProject] = useState({
     PROJECT_NAME: editProjectData.PROJECT_NAME,
@@ -55,18 +54,18 @@ export default function ProjectEdit(props) {
     PROJECT_COUNTRY: editProjectData.PROJECT_COUNTRY,
     PROJECT_STATE: editProjectData.PROJECT_STATE,
     PROJECT_ACCOUNT: editProjectData.PROJECT_PHONE,
-    PROJECT_CURRENCY:editProjectData.PROJECT_CURRENCY,
-    PROJECT_VALUE:editProjectData.PROJECT_VALUE,
+    PROJECT_CURRENCY: editProjectData.PROJECT_CURRENCY,
+    PROJECT_VALUE: editProjectData.PROJECT_VALUE,
     PROJECT_TYPE: editProjectData.PROJECT_TYPE,
     PROJECT_ID: editProjectData.PROJECT_ID,
     PROJECT_PARENT_ID: editProjectData.PROJECT_PARENT_ID,
     PROJECT_PARENT_USERNAME: editProjectData.PROJECT_PARENT_USERNAME,
     PROJECT_MEMBER_PARENT_ID: editProjectData.PROJECT_MEMBER_PARENT_ID,
-    PROJECT_MEMBER_PARENT_USERNAME: editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
-
+    PROJECT_MEMBER_PARENT_USERNAME:
+      editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
   });
 
-  console.log("EditProject", EditProject)
+  console.log("EditProject", EditProject);
   // city-country-logic
 
   const availableState = country?.find(
@@ -105,10 +104,9 @@ export default function ProjectEdit(props) {
       !EditProject.PROJECT_SUPERVISOR ||
       !EditProject.PROJECT_COUNTRY ||
       !EditProject.PROJECT_CITY ||
-      !EditProject.PROJECT_STATE||
+      !EditProject.PROJECT_STATE ||
       !EditProject.PROJECT_VALUE ||
-      !EditProject.PROJECT_CURRENCY 
-
+      !EditProject.PROJECT_CURRENCY
     ) {
       setErrorMsg("Fill all fields");
       toast.error("Please fill in all fields", {
@@ -120,16 +118,21 @@ export default function ProjectEdit(props) {
     setErrorMsg("");
 
     axios
-      .put("http://18.211.130.168:5001/update_projects", {
-        PROJECT_ID: editProjectData.PROJECT_ID,
-        PROJECT_PARENT_ID: editProjectData.PROJECT_PARENT_ID,
-        PROJECT_PARENT_USERNAME: editProjectData.PROJECT_PARENT_USERNAME,
-        PROJECT_MEMBER_PARENT_ID: editProjectData.PROJECT_MEMBER_PARENT_ID,
-        PROJECT_MEMBER_PARENT_USERNAME: editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
-        PROJECT_DETAILS_FOR_UPDATES: { ...EditProject }
-      }, {
-        headers,
-      })
+      .put(
+        "http://18.211.130.168:5001/update_projects",
+        {
+          PROJECT_ID: editProjectData.PROJECT_ID,
+          PROJECT_PARENT_ID: editProjectData.PROJECT_PARENT_ID,
+          PROJECT_PARENT_USERNAME: editProjectData.PROJECT_PARENT_USERNAME,
+          PROJECT_MEMBER_PARENT_ID: editProjectData.PROJECT_MEMBER_PARENT_ID,
+          PROJECT_MEMBER_PARENT_USERNAME:
+            editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
+          PROJECT_DETAILS_FOR_UPDATES: { ...EditProject },
+        },
+        {
+          headers,
+        }
+      )
       .then((response) => {
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
@@ -139,7 +142,7 @@ export default function ProjectEdit(props) {
           });
         } else if (response.data.operation === "successfull") {
           props.refetch();
-          console.log("anu", response)
+          console.log("anu", response);
           toast.success("Project Updated successfully!", {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 2000,
@@ -155,7 +158,6 @@ export default function ProjectEdit(props) {
         });
       });
   };
-
 
   return (
     <>
@@ -175,7 +177,6 @@ export default function ProjectEdit(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-         
           <form onSubmit={handleSubmit}>
             <div className="row py-2">
               <div className="form-group col-xl-4">
@@ -249,9 +250,15 @@ export default function ProjectEdit(props) {
                   <option value="">--Choose Project Type--</option>
                   <option value="Architect">Architect</option>
                   <option value="Civil Engineer">Civil Engineer</option>
-                  <option value="Structural Engineer">Structural Engineer</option>
-                  <option value="Mechanical Engineer">Mechanical Engineer</option>
-                  <option value="Electrical Engineer">Electrical Engineer</option>
+                  <option value="Structural Engineer">
+                    Structural Engineer
+                  </option>
+                  <option value="Mechanical Engineer">
+                    Mechanical Engineer
+                  </option>
+                  <option value="Electrical Engineer">
+                    Electrical Engineer
+                  </option>
                   <option value="Project Manager">Project Manager</option>
                   <option value="Quantity Surveyor">Quantity Surveyor</option>
                   <option value="Interior Designer">Interior Designer</option>
@@ -262,8 +269,6 @@ export default function ProjectEdit(props) {
               </div>
             </div>
             <div className="row py-2">
-
-
               <div className="form-group col-md-4">
                 <label>Supervisor</label>
                 <input
@@ -275,7 +280,6 @@ export default function ProjectEdit(props) {
                   onChange={handleEdit}
                 />
               </div>
-
 
               <div className="form-group col-md-4">
                 <label>Project Value</label>
@@ -290,7 +294,7 @@ export default function ProjectEdit(props) {
               </div>
 
               <div className="form-group col-md-4">
-                <label ></label>
+                <label></label>
                 <select
                   id="inputEnroll"
                   className="form-control form-control-2 border rounded-0"
@@ -384,24 +388,21 @@ export default function ProjectEdit(props) {
                 </select>
               </div>
             </div>
-            <div className="FormButtonAlign">
-          
-        
-            <button
-              type="submit"
-              className="btn btn-info text-white"
-              onClick={handleSubmit}
-            >
-              Edit Project
-            </button>{" "}
-            <button
-              onClick={handleClose}
-              className="btn btn-danger text-white"
-            >
-              Cancel
-            </button>
+            <div className="py-2">
+              <button
+                type="submit"
+                className="btn btn-info text-white"
+                onClick={handleSubmit}
+              >
+                Edit Project
+              </button>{" "}
+              <button
+                onClick={handleClose}
+                className="btn btn-danger text-white"
+              >
+                Cancel
+              </button>
             </div>
-
           </form>
         </Box>
       </Modal>

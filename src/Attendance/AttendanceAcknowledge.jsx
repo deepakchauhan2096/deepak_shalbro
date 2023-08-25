@@ -5,10 +5,12 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import moment from "moment/moment";
 // import employees from "./dummy.json";
 import {
+  Backdrop,
   Box,
   Button,
   Grid,
   Paper,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
@@ -21,6 +23,7 @@ import { CSVLink } from "react-csv";
 import { TableRows } from "@mui/icons-material";
 import env from "react-dotenv";
 import AttendancePunch from "./AttendancePunch";
+import SimpleBackdrop from "../components/Backdrop";
 
 let MyDateCurrent = new Date();
 let MyDateStringCurrent;
@@ -103,12 +106,31 @@ const AttendanceReport = (props) => {
   const [showDetail, setShowDetail] = useState(true);
   const [show, setshow] = useState(true);
   const [employeeName, setEmployeeName] = useState([]);
+  const { mainData } = props;
+
+  console.log(mainData, "mainData");
+
+  // loader
+  const Animations = () => {
+    return (
+      <Box sx={{ width: "100%" }}>
+        <Skeleton animation="pulse" height={60} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+      </Box>
+    );
+  };
 
   // get data
-  const Reports = () => {
+  const Reports = (ADMIN_USERNAME, EMPLOYEE_PARENT_USERNAME) => {
     let data = JSON.stringify({
-      ADMIN_USERNAME: "deepak2096",
-      EMPLOYEE_PARENT_USERNAME: "vervebot12345",
+      ADMIN_USERNAME,
+      EMPLOYEE_PARENT_USERNAME,
     });
 
     let config = {
@@ -138,8 +160,13 @@ const AttendanceReport = (props) => {
 
   //fatch data
   useEffect(() => {
-    Reports();
+    Reports(
+      mainData[0]?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+      mainData[0]?.EMPLOYEE_PARENT_USERNAME
+    );
   }, []);
+
+  console.log(employees, "report");
 
   // date array function call
 
@@ -234,258 +261,271 @@ const AttendanceReport = (props) => {
 
   return (
     <>
-      <Box className="box" style={{ background: "#277099" }}>
-        <Button
-          size="small"
-          variant={show ? "outlined" : "outlined"}
-          className={
-            show
-              ? "btn button border-bottom-0 bg-white"
-              : "btn rounded-0 border-bottom-0  rounded-0 text-light"
-          }
-          onClick={() => setshow(true)}
-        >
-          Pay Acknowledgement
-        </Button>
-        {!show && (
+     
+        <Box className="box" style={{ background: "#277099" }}>
           <Button
             size="small"
-            className="btn button border-bottom-0 bg-white"
-            variant="outlined"
+            variant={show ? "outlined" : "outlined"}
+            className={
+              show
+                ? "btn button border-bottom-0 bg-white"
+                : "btn rounded-0 border-bottom-0  rounded-0 text-light"
+            }
+            onClick={() => setshow(true)}
           >
-            Punch Detail - {employeeName._doc.EMPLOYEE_NAME}{" "}
-            <Typography size="small" px={1} onClick={() => setshow(true)}>
-              <i className="fa fa-times" aria-hidden="true"></i>
-            </Typography>
+            Pay Acknowledgement
           </Button>
-        )}
-        <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
-          <Box
-            style={{
-              height: "100%",
-              padding: 0,
-              paddingBottom: "0",
-              border: "",
-              overflowY: "scroll",
-            }}
-          >
-            <Grid
-              container
-              sx={{ position: "sticky", top: "0", bgcolor: "#fff" }}
+          {!show && (
+            <Button
+              size="small"
+              className="btn button border-bottom-0 bg-white"
+              variant="outlined"
             >
-              <Grid xl={6}>
-                <Grid
-                  item
-                  container
-                  xl={12}
-                  sx={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <TableContainer>
-                    <Table>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell size="small">
-                            <label> Date filter by </label>
-                          </TableCell>
-                          <TableCell size="small">
-                            <select
-                              className="form-control border"
-                              onChange={(e) => setFilterMethod(e.target.value)}
-                              value={filterMethod}
-                            >
-                              <option>Date wise</option>
-                              <option>By Pay Period</option>
-                            </select>
-                          </TableCell>
-                        </TableRow>
-                        {filterMethod === "By Pay Period" && (
+              Punch Detail - {employeeName._doc.EMPLOYEE_NAME}{" "}
+              <Typography size="small" px={1} onClick={() => setshow(true)}>
+                <i className="fa fa-times" aria-hidden="true"></i>
+              </Typography>
+            </Button>
+          )}
+          {employees ? ( <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
+            <Box
+              style={{
+                height: "100%",
+                padding: 0,
+                paddingBottom: "0",
+                border: "",
+                overflowY: "scroll",
+              }}
+            >
+              <Grid
+                container
+                sx={{ position: "sticky", top: "0", bgcolor: "#fff" }}
+              >
+                <Grid xl={6}>
+                  <Grid
+                    item
+                    container
+                    xl={12}
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <TableContainer>
+                      <Table>
+                        <TableBody>
                           <TableRow>
-                            <TableCell size="small">
-                              <label>Period</label>
-                            </TableCell>
-                            <TableCell size="small">
-                              <div
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "row",
-                                  gap: 2,
-                                }}
-                              >
-                                <input
-                                  type="date"
-                                  className="form-control"
-                                  value={startDateString}
-                                  onChange={(e) =>
-                                    setstartDateString(e.target.value)
-                                  }
-                                />
-                                <input
-                                  type="date"
-                                  className="form-control"
-                                  value={endDateString}
-                                  onChange={(e) =>
-                                    setendDateString(e.target.value)
-                                  }
-                                />
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        )}
-                        {filterMethod === "Date wise" && (
-                          <>
                             <TableCell size="small">
                               <label> Date filter by </label>
                             </TableCell>
                             <TableCell size="small">
                               <select
-                                value={keyword}
                                 className="form-control border"
-                                onChange={(e) => setKeyword(e.target.value)}
+                                onChange={(e) =>
+                                  setFilterMethod(e.target.value)
+                                }
+                                value={filterMethod}
                               >
-                                <option selected>{MyDateStringCurrent}</option>
-                                {result?.map((item) => (
-                                  <option>{item}</option>
-                                ))}
+                                <option>Date wise</option>
+                                <option>By Pay Period</option>
                               </select>
                             </TableCell>
-                          </>
-                        )}
+                          </TableRow>
+                          {filterMethod === "By Pay Period" && (
+                            <TableRow>
+                              <TableCell size="small">
+                                <label>Period</label>
+                              </TableCell>
+                              <TableCell size="small">
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    gap: 2,
+                                  }}
+                                >
+                                  <input
+                                    type="date"
+                                    className="form-control"
+                                    value={startDateString}
+                                    onChange={(e) =>
+                                      setstartDateString(e.target.value)
+                                    }
+                                  />
+                                  <input
+                                    type="date"
+                                    className="form-control"
+                                    value={endDateString}
+                                    onChange={(e) =>
+                                      setendDateString(e.target.value)
+                                    }
+                                  />
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          )}
+                          {filterMethod === "Date wise" && (
+                            <>
+                              <TableCell size="small">
+                                <label> Date filter by </label>
+                              </TableCell>
+                              <TableCell size="small">
+                                <select
+                                  value={keyword}
+                                  className="form-control border"
+                                  onChange={(e) => setKeyword(e.target.value)}
+                                >
+                                  <option selected>
+                                    {MyDateStringCurrent}
+                                  </option>
+                                  {result?.map((item) => (
+                                    <option>{item}</option>
+                                  ))}
+                                </select>
+                              </TableCell>
+                            </>
+                          )}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Grid>
+                </Grid>
+                <Grid item container xl={6}>
+                  <TableContainer>
+                    <Table>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell size="small">
+                            <label> Employee </label>
+                          </TableCell>
+                          <TableCell size="small">
+                            <select
+                              className="form-control border"
+                              onChange={(e) => filtered(e, "EMPLOYEE_NAME")}
+                              value={name}
+                            >
+                              <option selected>All</option>
+                              {employees?.map((e) => (
+                                <option>{e._doc.EMPLOYEE_NAME}</option>
+                              ))}
+                            </select>
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell size="small">
+                            <label> Department </label>
+                          </TableCell>
+                          <TableCell size="small">
+                            <select
+                              className="form-control border"
+                              onChange={(e) => filtered(e, "EMPLOYEE_ROLE")}
+                              value={name}
+                            >
+                              <option selected>All</option>
+                              {employees?.map((e) => (
+                                <option>{e._doc.EMPLOYEE_ROLE}</option>
+                              ))}
+                            </select>
+                          </TableCell>
+                        </TableRow>
                       </TableBody>
                     </Table>
                   </TableContainer>
                 </Grid>
               </Grid>
-              <Grid item container xl={6}>
-                <TableContainer>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Employee </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select
-                            className="form-control border"
-                            onChange={(e) => filtered(e, "EMPLOYEE_NAME")}
-                            value={name}
-                          >
-                            <option selected>All</option>
-                            {employees?.map((e) => (
-                              <option>{e._doc.EMPLOYEE_NAME}</option>
-                            ))}
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell size="small">
-                          <label> Department </label>
-                        </TableCell>
-                        <TableCell size="small">
-                          <select
-                            className="form-control border"
-                            onChange={(e) => filtered(e, "EMPLOYEE_ROLE")}
-                            value={name}
-                          >
-                            <option selected>All</option>
-                            {employees?.map((e) => (
-                              <option>{e._doc.EMPLOYEE_ROLE}</option>
-                            ))}
-                          </select>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-            </Grid>
 
-            <table className="table table-hover table-sm table-fixed">
-              {show ? (
-                <>
-                  <thead
-                    style={{
-                      position: "sticky",
-                      top: "85px",
-                    }}
-                  >
-                    <tr className="table-light">
-                      <th scope="col" colSpan={7} style={{ gap: 2 }}>
-                        {/* <button className="btn btn-primary btn-sm" onClick={window.print()}>
+              <table className="table table-hover table-sm table-fixed">
+                {show ? (
+                  <>
+                    <thead
+                      style={{
+                        position: "sticky",
+                        top: "85px",
+                      }}
+                    >
+                      <tr className="table-light">
+                        <th scope="col" colSpan={7} style={{ gap: 2 }}>
+                          {/* <button className="btn btn-primary btn-sm" onClick={window.print()}>
                       Print Preview
                     </button>{" "} */}
-                        {/* <button className="btn btn-secondary btn-sm">
+                          {/* <button className="btn btn-secondary btn-sm">
                       Export(PDF)
                     </button>{" "} */}
-                        <button className="btn btn-secondary btn-sm">
-                          <CSVLink className="sub-nav-text" {...csvReport}>
-                            ↓ Export(CSV)
-                          </CSVLink>
-                          {/* Export(CSV) */}
-                        </button>{" "}
-                        <button className="btn btn-sm" disabled>
-                          No of Employee: {processedData?.length}
-                        </button>{" "}
-                        <button className="btn btn-sm" disabled>
-                          No of Employee: {processedData?.length}
-                        </button>
-                      </th>
-                    </tr>
-                    <tr className="table-light">
-                      <th scope="col">Employee</th>
-                      <th scope="col">Total</th>
-                      <th scope="col">Regular</th>
-                      <th scope="col">Overtime</th>
-                      <th scope="col">PTO</th>
-                      <th scope="col">Acknowledge</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
+                          <button className="btn btn-secondary btn-sm">
+                            <CSVLink className="sub-nav-text" {...csvReport}>
+                              ↓ Export(CSV)
+                            </CSVLink>
+                            {/* Export(CSV) */}
+                          </button>{" "}
+                          <button className="btn btn-sm" disabled>
+                            No of Employee: {processedData?.length}
+                          </button>{" "}
+                          <button className="btn btn-sm" disabled>
+                            No of Employee: {processedData?.length}
+                          </button>
+                        </th>
+                      </tr>
+                      <tr className="table-light">
+                        <th scope="col">Employee</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Regular</th>
+                        <th scope="col">Overtime</th>
+                        <th scope="col">PTO</th>
+                        <th scope="col">Acknowledge</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
 
-                  <tbody>
-                    {processedData?.map((post) => {
-                      return (
-                        <tr className="table table-striped">
-                          <td>{post.EMPLOYEE_NAME}</td>
-                          <td>
-                            <span
-                              className="bg-success rounded-2 px-1 text-light"
-                              style={{ width: "content-fit" }}
-                            >
-                              {post.TOTAL_HOURS} Total
-                            </span>
-                          </td>
-                          <td>
-                            <span
-                              className="bg-success rounded-2 px-1 text-light"
-                              style={{ width: "content-fit" }}
-                            >
-                              {post.TOTAL_HOURS} Total
-                            </span>
-                          </td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td>
-                            {" "}
-                            <button
-                              className="btn btn-secondary btn-sm"
-                              onClick={(e) => PunchReport(post.PUNCH)}
-                            >
-                              Punch Detail
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </>
-              ) : (
-                showDetail
-              )}
-            </table>
+                    <tbody>
+                      {processedData?.map((post) => {
+                        return (
+                          <tr className="table table-striped">
+                            <td>{post.EMPLOYEE_NAME}</td>
+                            <td>
+                              <span
+                                className="bg-success rounded-2 px-1 text-light"
+                                style={{ width: "content-fit" }}
+                              >
+                                {post.TOTAL_HOURS} Total
+                              </span>
+                            </td>
+                            <td>
+                              <span
+                                className="bg-success rounded-2 px-1 text-light"
+                                style={{ width: "content-fit" }}
+                              >
+                                {post.TOTAL_HOURS} Total
+                              </span>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                              {" "}
+                              <button
+                                className="btn btn-secondary btn-sm"
+                                onClick={(e) => PunchReport(post.PUNCH)}
+                              >
+                                Punch Detail
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </>
+                ) : (
+                  showDetail
+                )}
+              </table>
+            </Box>
+          </MyScreen>
+       
+      ) : (
+        <MyScreen sx={{ display: "block", padding: 3 }}>
+          <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
+            <Animations />
           </Box>
         </MyScreen>
-      </Box>
+      )}
+       </Box>
     </>
   );
 };

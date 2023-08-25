@@ -1,34 +1,19 @@
-/* h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: 1.5rem !important;
-} */
 
-/* p,
-b,
-div,
-button,
-tr,
-th,
-td,
-li {
-  font-size: 0.9rem !important;
-} */
 
 ::placeholder, label, option,select{
-  font-size: 14px;
+  font-size: 12px;
 }
 
 *{
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  user-select: none;
+
 }
 
 
 p,b{
-  font-size: 1rem;
+  font-size: 12px;
 }
 
 .fw-light {
@@ -38,7 +23,7 @@ p,b{
 
 .form-control-2{
   height: 30px !important;
-  font-size: 14px !important;
+  font-size: 12px !important;
   padding: 0 10px !important;
 }
 
@@ -97,4 +82,17 @@ p,b{
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+
+@media (max-width:991px){
+  .box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(100% - 50px);
+    height: 100vh;
+    background: #fff;
+    margin-left: 50px;
+  }
 }

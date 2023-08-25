@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { useLocation } from "react-router";
-import EmployeeNavbar from "./EmployeeNavbar";
+
 import SimpleBackdrop from "../components/Backdrop";
 import locationIcon from "../assests/images/location.png";
 import placeholder from "../assests/images/placeholder.png";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import EmployeeNavbar from "./EmployeeNavbar";
+
+
 
 const EmployeeHistory = (props) => {
   const employeeData = props.state.result;
