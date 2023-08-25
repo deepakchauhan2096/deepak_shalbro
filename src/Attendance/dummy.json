@@ -22,32 +22,37 @@
         "EMPLOYEE_PASSWORD": "Mahesh12345",
         "EMPLOYEE_ATTENDANCE":
         [
-            {               
-              "ATTENDANCE_DATE_ID":"2023-07-25",
-              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-07-25T13:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
-              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
-              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-09-25T12:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
-              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
-              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-11-25T14:14:36.717Z"
-            }
-        ]
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T00:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-08-3",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T05:34:36.717Z"
+          }
+      ]
     }, 
     {
         "EMPLOYEE_PASSWORD": "",
@@ -78,22 +83,22 @@
               "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
             },
             {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
+              "ATTENDANCE_DATE_ID":"2023-07-26",
               "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
               "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
             },
             {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
+              "ATTENDANCE_DATE_ID":"2023-07-28",
               "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
               "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
             },
             {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
+              "ATTENDANCE_DATE_ID":"2023-07-29",
               "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
               "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
             },
             {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
+              "ATTENDANCE_DATE_ID":"2023-07-30",
               "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
               "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
             }
@@ -122,32 +127,32 @@
         "__v": 0,
         "EMPLOYEE_ATTENDANCE":
         [
-            {               
-              "ATTENDANCE_DATE_ID":"2023-07-25",
-              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-07-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
-              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
-              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-09-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
-              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
-              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-11-25T14:34:36.717Z"
-            }
-        ]
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
     },
     {
         "EMPLOYEE_PASSWORD": "",
@@ -172,32 +177,32 @@
         "__v": 0,
         "EMPLOYEE_ATTENDANCE":
         [
-            {               
-              "ATTENDANCE_DATE_ID":"2023-07-25",
-              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-07-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
-              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
-              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-09-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
-              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
-              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-11-25T14:34:36.717Z"
-            }
-        ]
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
     },
     {
         "EMPLOYEE_PASSWORD": "",
@@ -222,32 +227,32 @@
         "__v": 0,
         "EMPLOYEE_ATTENDANCE":
         [
-            {               
-              "ATTENDANCE_DATE_ID":"2023-07-25",
-              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-07-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
-              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
-              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-09-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
-              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
-              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-11-25T14:34:36.717Z"
-            }
-        ]
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
     },
     {
         "EMPLOYEE_PASSWORD": "",
@@ -272,32 +277,32 @@
         "__v": 0,
         "EMPLOYEE_ATTENDANCE":
         [
-            {               
-              "ATTENDANCE_DATE_ID":"2023-07-25",
-              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-07-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
-              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
-              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-09-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
-              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
-              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-11-25T14:34:36.717Z"
-            }
-        ]
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
     },
     {
         "EMPLOYEE_PASSWORD": "",
@@ -322,32 +327,32 @@
         "__v": 0,
         "EMPLOYEE_ATTENDANCE":
         [
-            {               
-              "ATTENDANCE_DATE_ID":"2023-07-25",
-              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-07-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
-              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
-              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-09-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
-              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
-              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-11-25T14:34:36.717Z"
-            }
-        ]
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
     },
     {
         "EMPLOYEE_PASSWORD": "",
@@ -372,32 +377,32 @@
         "__v": 0,
         "EMPLOYEE_ATTENDANCE":
         [
-            {               
-              "ATTENDANCE_DATE_ID":"2023-07-25",
-              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-07-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
-              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
-              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-09-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
-              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
-              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-11-25T14:34:36.717Z"
-            }
-        ]
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
     },
     {
         "EMPLOYEE_PASSWORD": "",
@@ -422,32 +427,32 @@
         "__v": 0,
         "EMPLOYEE_ATTENDANCE":
         [
-            {               
-              "ATTENDANCE_DATE_ID":"2023-07-25",
-              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-07-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
-              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
-              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-09-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
-              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
-              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-11-25T14:34:36.717Z"
-            }
-        ]
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
     },
     {
         "EMPLOYEE_PASSWORD": "",
@@ -472,32 +477,32 @@
         "__v": 0,
         "EMPLOYEE_ATTENDANCE":
         [
-            {               
-              "ATTENDANCE_DATE_ID":"2023-07-25",
-              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-07-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
-              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
-              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-09-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
-              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
-              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-11-25T14:34:36.717Z"
-            }
-        ]
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
     },
     {
         "EMPLOYEE_PASSWORD": "",
@@ -522,32 +527,32 @@
         "__v": 0,
         "EMPLOYEE_ATTENDANCE":
         [
-            {               
-              "ATTENDANCE_DATE_ID":"2023-07-25",
-              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-07-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
-              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
-              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-09-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
-              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
-              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-11-25T14:34:36.717Z"
-            }
-        ]
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
     },
     {
         "EMPLOYEE_PASSWORD": "",
@@ -573,31 +578,31 @@
         ,
         "EMPLOYEE_ATTENDANCE":
         [
-            {               
-              "ATTENDANCE_DATE_ID":"2023-07-25",
-              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-07-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-08-25",
-              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-08-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-09-25",
-              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-09-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-10-25",
-              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-10-25T14:34:36.717Z"
-            },
-            {               
-              "ATTENDANCE_DATE_ID":"2023-11-25",
-              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
-              "ATTENDANCE_OUT":"2023-11-25T14:34:36.717Z"
-            }
-        ]
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
     }
 ]

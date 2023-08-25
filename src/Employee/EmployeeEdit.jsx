@@ -88,12 +88,12 @@ export default function EmployeeEdit(props) {
         } else if (response.data.operation === "successfull") {
           setIsSubmitted(true); 
           props.refetch()
+          setOpen(false);
+
           toast.success("Fields are updated successfully!", {
             position: toast.POSITION.TOP_CENTER,
+            autoClose:1000
           });
-          props.update(true);
-          setOpen(true);
-         
         }
       })
       .catch((error) => {
@@ -108,7 +108,7 @@ export default function EmployeeEdit(props) {
         onClick={handleOpen}
         variant="rounded"
         className="view-btn border border-info text-success "
-        style={{ padding: "2px 2px" }}
+        style={{ padding: "2px 2px" ,onFocus:"none"}}
       >
         Edit
       </Button>
@@ -130,12 +130,12 @@ export default function EmployeeEdit(props) {
                   <label for="inputqual">Employee Username</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
-                    placeholder={editdata.EMPLOYEE_USERNAME}
+                    className="form-control form-control-2 rounded-0"
+                    placeholder="Edit username"
                     id="inputZip"
                     value={editEmployee.EMPLOYEE_USERNAME}
                     name="EMPLOYEE_USERNAME"
-                    onChange={handleCreate}
+                  
                     required
                   />
                   {errors.EMPLOYEE_USERNAME && (
@@ -148,9 +148,9 @@ export default function EmployeeEdit(props) {
                   <label>Employee Name</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="empName"
-                    placeholder={editdata.EMPLOYEE_NAME}
+                    placeholder="Edit your Name"
                     value={editEmployee.EMPLOYEE_NAME}
                     name="EMPLOYEE_NAME"
                     // onChange={handleCreate}
@@ -169,7 +169,7 @@ export default function EmployeeEdit(props) {
                   <label>E-mail</label>
                   <input
                     type="email"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="email"
                     placeholder="Enter Email add..."
                     value={editEmployee.EMPLOYEE_EMAIL}
@@ -182,7 +182,7 @@ export default function EmployeeEdit(props) {
                   <label>State</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="phone"
                     placeholder="Enter Your state.."
                     value={editEmployee.EMPLOYEE_STATE}
@@ -195,7 +195,7 @@ export default function EmployeeEdit(props) {
                   <label>Phone</label>
                   <input
                     type="number"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="phone"
                     placeholder="Enter Your Number"
                     value={editEmployee.EMPLOYEE_PHONE}
@@ -208,7 +208,7 @@ export default function EmployeeEdit(props) {
                   <label>Employee Password</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter Employee password"
                     value={editEmployee.EMPLOYEE_PASSWORD}
                     name="EMPLOYEE_PASSWORD"
@@ -220,7 +220,7 @@ export default function EmployeeEdit(props) {
                   <label for="inputPassword4">Date Of Birth</label>
                   <input
                     type="date"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="inputPassword4"
                     placeholder="Enter Date of birth"
                     value={editEmployee.EMPLOYEE_DOB}
@@ -237,7 +237,7 @@ export default function EmployeeEdit(props) {
                     <label for="inputAddress">Address</label>
                     <textarea
                       type="text"
-                      className="form-control rounded-0"
+                      className="form-control form-control-2 rounded-0"
                       id="inputAddress"
                       placeholder="Enter Address"
                       value={editEmployee.EMPLOYEE_ADD}
@@ -251,7 +251,7 @@ export default function EmployeeEdit(props) {
                   <label>City</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="city"
                     placeholder="Enter Your city.."
                     value={editEmployee.EMPLOYEE_CITY}
@@ -264,7 +264,7 @@ export default function EmployeeEdit(props) {
                   <label>Hourly wages</label>
                   <input
                     type="number"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="hourlywage"
                     placeholder="Enter your Hourly wages"
                     value={editEmployee.EMPLOYEE_HOURLY_WAGE}
@@ -277,7 +277,7 @@ export default function EmployeeEdit(props) {
                   <label for="inputPassword4">Employee Role</label>
                   <select
                     id="inputqual"
-                    className="form-control rounded-0 border"
+                    className="form-control form-control-2 rounded-0 border"
                     value={editEmployee.EMPLOYEE_ROLE}
                     name="EMPLOYEE_ROLE"
                     onChange={handleCreate}
@@ -299,7 +299,7 @@ export default function EmployeeEdit(props) {
                   <label for="inputqual">Employement Type</label>
                   <select
                     id="inputqual"
-                    className="form-control rounded-0 border"
+                    className="form-control form-control-2 rounded-0 border"
                     value={editEmployee.EMPLOYEE_EMPLMNTTYPE}
                     name="EMPLOYEE_EMPLMNTTYPE"
                     onChange={handleCreate}
@@ -317,7 +317,7 @@ export default function EmployeeEdit(props) {
                   <label for="inputPassword4">Hired Date</label>
                   <input
                     type="date"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="inputPassword4"
                     placeholder="Enter hire date"
                     value={editEmployee.EMPLOYEE_HIRE_DATE}
@@ -333,22 +333,24 @@ export default function EmployeeEdit(props) {
                     <p className=" text-danger fw-light mb-0">{errorMsg}</p>
                   )}
                 </center>
-                <div className="col-12">
+                </div>
+                <div className="FormButtonAlign">
+
                   <button
                     type="submit"
                     className="btn btn-info text-white "
                     onClick={handleSubmit}
                   >
-                    Update
+                    Edit Employee
                   </button>{" "}
                   <button
                     onClick={handleClose}
                     className="btn btn-danger text-white "
                   >
-                    Discard
+                    Cancel
                   </button>
                 </div>
-              </div>
+             
             </form>
           </Box>
         </Container>

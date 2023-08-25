@@ -8,6 +8,8 @@ import teamImg1 from "../assests/images/team-1.jpg";
 import { styled } from "@mui/material/styles";
 import Snackbar from "@mui/material/Snackbar";
 import "../assests/css/employeesrc.css";
+import Cookies from "js-cookie";
+
 import {
   Button,
   Card,
@@ -26,7 +28,7 @@ import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
-import env from "react-dotenv";
+// import env from "react-dotenv";
 
 const EmployeeSrc = (props) => {
   //isLoading this is for the Skeleton
@@ -45,6 +47,7 @@ const EmployeeSrc = (props) => {
   // Assinging Projects
   const [filterData, setFilteredData] = useState({
     row: {
+      EMPLOYEE_ID: "",
       EMPLOYEE_DOB: "",
       EMPLOYEE_EMPLMNTTYPE: "",
       EMPLOYEE_HIRE_DATE: "",
@@ -95,11 +98,11 @@ const EmployeeSrc = (props) => {
       PROJECT_MEMBER_PARENT_USERNAME:
         getallparam[0]?.PROJECT_MEMBER_PARENT_USERNAME,
       PROJECT_USERNAME: getallparam[0]?.PROJECT_USERNAME,
-      EMPLOYEE_ID: rows[0]?.EMPLOYEE_ID,
-      EMPLOYEE_PARENT_ID: rows[0]?.EMPLOYEE_PARENT_ID,
-      EMPLOYEE_PARENT_USERNAME: rows[0]?.EMPLOYEE_PARENT_USERNAME,
-      EMPLOYEE_MEMBER_PARENT_ID: rows[0]?.EMPLOYEE_MEMBER_PARENT_ID,
-      EMPLOYEE_MEMBER_PARENT_USERNAME: rows[0]?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+      EMPLOYEE_ID:filterData.row?.EMPLOYEE_ID,
+      EMPLOYEE_PARENT_ID: filterData.row?.EMPLOYEE_PARENT_ID,
+      EMPLOYEE_PARENT_USERNAME: filterData.row?.EMPLOYEE_PARENT_USERNAME,
+      EMPLOYEE_MEMBER_PARENT_ID: filterData.row?.EMPLOYEE_MEMBER_PARENT_ID,
+      EMPLOYEE_MEMBER_PARENT_USERNAME: filterData.row?.EMPLOYEE_MEMBER_PARENT_USERNAME,
     };
 
     // Validate the form data before submission
@@ -111,6 +114,8 @@ const EmployeeSrc = (props) => {
       .then((response) => {
         setSelectedProject(response.data.result);
         setIsSuccessMessageVisible(true);
+        props.refetch();
+
       })
       .catch((error) => {
         console.error(error, "ERR");
@@ -221,11 +226,7 @@ const EmployeeSrc = (props) => {
       width: 80,
       renderCell: (cellValues) => {
         return (
-          <Button
-            // onClick={(event) => {
-            //   handleEdit(cellValues);
-            // }}
-          >
+          <Button>
             <EmployeeEdit edit={cellValues} refetch={fetchAllEmployee}/>
           </Button>
         );
@@ -273,13 +274,21 @@ const EmployeeSrc = (props) => {
     );
   };
 
+  
+  const ClearCookie = () => {
+    // Clear the cookie by removing it
+    Cookies.remove("myResponseData");
+    window.location.replace("/employee/login");
+    console.log("Cookie cleared.");
+  };
+
   return (
     <>
       <Box className="box" style={{ background: "#277099" }}>
         <EmployeeCreate
           mainData={filterallempData}
-          update={(event) => setUpdateData(event)}
           name={"Employee"}
+          refetch={fetchAllEmployee}
         />
 
         <MyScreen sx={{ display: "block", padding: 3 }}>
@@ -301,7 +310,7 @@ const EmployeeSrc = (props) => {
                 }}
                 density="compact"
                 pageSizeOptions={[5]}
-                checkboxSelection
+                // checkboxSelection
                 disableRowSelectionOnClick
               />
             )}
@@ -346,8 +355,8 @@ const EmployeeSrc = (props) => {
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
-          <Grid container xl={12}>
-            <Grid item xl={6} pr={2}>
+           <Grid container xl={12}> 
+             <Grid item xl={6} pr={2}>
               <Card
                 sx={{
                   display: "flex",
@@ -371,6 +380,13 @@ const EmployeeSrc = (props) => {
                       color="text.secondary"
                       component="div"
                     >
+                      Username : {filterData.row.EMPLOYEE_USERNAME}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
                       Email : {filterData.row.EMPLOYEE_EMAIL}
                     </Typography>
                     <Typography
@@ -379,6 +395,13 @@ const EmployeeSrc = (props) => {
                       component="div"
                     >
                       Phone : {filterData.row.EMPLOYEE_PHONE}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Password : {filterData.row.EMPLOYEE_PASSWORD}
                     </Typography>
                     <Typography
                       variant="subtitle1"
@@ -475,9 +498,9 @@ const EmployeeSrc = (props) => {
                   </CardContent>
                 </Box>
               </Card>
-            </Grid>
+            </Grid> 
 
-            <Grid item xl={12} pt={2}>
+          <Grid item xl={12} pt={2}>
               <Card
                 sx={{
                   display: "flex",
@@ -486,7 +509,7 @@ const EmployeeSrc = (props) => {
                 }}
               >
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  {/* Button and Dropdown */}
+                
                   <h4 style={{ margin: "10px" }}>
                     Assigning Projects to{" "}
                     <span style={{ color: "tan" }}>
@@ -504,7 +527,6 @@ const EmployeeSrc = (props) => {
                         <option value="Select Project" selected>
                           Select Project
                         </option>
-                        {/* Here, you can map over the list of available projects and create a MenuItem for each one */}
                         {allProjectData.map((project, key) => {
                           return (
                             <option value={project.PROJECT_NAME} key={key}>
@@ -524,8 +546,8 @@ const EmployeeSrc = (props) => {
 
                     <Snackbar
                       open={isSuccessMessageVisible}
-                      autoHideDuration={3000} // Hide after 3 seconds
-                      onClose={() => setIsSuccessMessageVisible(false)} // Close the Snackbar
+                      autoHideDuration={3000} 
+                      onClose={() => setIsSuccessMessageVisible(false)} 
                       message="Project assigned successfully!"
                       style={{
                         display: "flex",
@@ -550,13 +572,15 @@ const EmployeeSrc = (props) => {
                   </CardContent>
                 </Box>
               </Card>
-            </Grid>
+            </Grid> 
           </Grid>
+
+
         </MyScreen>
         {/* <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
           <div
-            className="form-control rounded-0 mb-1"
+            className="form-control form-control-2 rounded-0 mb-1"
             style={{ position: "relative" }}
           >
             Education Document
@@ -570,7 +594,7 @@ const EmployeeSrc = (props) => {
           </div>
 
           <div
-            className="form-control rounded-0 mb-1"
+            className="form-control form-control-2 rounded-0 mb-1"
             style={{ position: "relative" }}
           >
             Valid ID
@@ -583,7 +607,7 @@ const EmployeeSrc = (props) => {
             </button>
           </div>
           <div
-            className="form-control rounded-0 mb-1"
+            className="form-control form-control-2 rounded-0 mb-1"
             style={{ position: "relative" }}
           >
             Other

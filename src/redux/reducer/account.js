@@ -1,4 +1,4 @@
-import {initAdmin,initCompany,selectedCompany} from "../action/index.js"
+import {initAdmin,initCompany,selectedCompany,initProject,initEmployee} from "../action/index.js"
 
 export function accountReducer(state={},action){
     switch (action.type) {
@@ -12,3 +12,25 @@ export function accountReducer(state={},action){
                 return state
     }
 }
+
+
+export function projectReducer(state={},action){
+        switch (action.type) {
+            case initProject:
+                    return {...state,['Projects']:action.payload}
+
+            default:
+                    return state
+        }
+    }
+
+
+ export function employeeReducer(state={},action){
+        switch (action.type) {
+            case initEmployee:
+                    return {...state,['Employees']:action.payload}
+
+            default:
+                    return state
+        }
+    }

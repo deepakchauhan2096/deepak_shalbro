@@ -1,23 +1,14 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import country from "../Api/countriess.json";
-// import states from "../Api/states.json"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import env from "react-dotenv";
-
+import moment from "moment-timezone";
 import {
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
-  Paper,
-  Skeleton,
-  Typography,
+  Button, MenuItem,
+  Select,
 } from "@mui/material";
 
 const style = {
@@ -33,18 +24,16 @@ const style = {
 };
 
 export default function ProjectCreate(props) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [index, setIndex] = React.useState([]);
   const [errorMsg, setErrorMsg] = useState("");
-
-
+  const [selectedTimeZone, setSelectedTimeZone] = useState("");
   const [createProject, setCreateProject] = useState({
-    PROJECT_PARENT_ID: props.companyData?.COMPANY_ID,
-    PROJECT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME,
-    PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID,
-    PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME,
+    PROJECT_PARENT_ID: "",
+    PROJECT_PARENT_USERNAME: "",
+    PROJECT_MEMBER_PARENT_ID: "",
+    PROJECT_MEMBER_PARENT_USERNAME: "",
     PROJECT_NAME: "",
     PROJECT_USERNAME: "",
     PROJECT_ADD: "",
@@ -53,12 +42,23 @@ export default function ProjectCreate(props) {
     PROJECT_END_DATE: "",
     PROJECT_SUPERVISOR: "",
     PROJECT_COUNTRY: "",
+    PROJECT_TYPE: "",
     PROJECT_STATE: "",
-    PROJECT_PHONE: "",
+    PROJECT_ACCOUNT: "",
+    PROJECT_VALUE: "",
+    PROJECT_CURRENCY: "",
   });
+  console.log("project", createProject)
+
+  useEffect(() => {
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_PARENT_ID: props.companyData?.COMPANY_ID }));
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME }));
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID }));
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME }));
+  }, [open])
 
 
- // city-country-logic
+  console.log(createProject, "check")
 
   const availableState = country?.find(
     (c) => c.name === createProject.PROJECT_COUNTRY
@@ -69,42 +69,56 @@ export default function ProjectCreate(props) {
     (s) => s.name === createProject.PROJECT_STATE
   );
 
-  //api header
-
-
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
   const handleCreate = (e) => {
-    setCreateProject({ ...createProject, [e.target.name]: e.target.value });
-    console.log("heello world", createProject);
+    const { name, value } = e.target;
+    setCreateProject((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-
-  //api create project
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !createProject.PROJECT_USERNAME ||
-      !createProject.PROJECT_NAME ||
-      !createProject.PROJECT_PHONE ||
-      !createProject.PROJECT_PARENT_ID ||
-      !createProject.PROJECT_PARENT_USERNAME ||
-      !createProject.PROJECT_MEMBER_PARENT_ID ||
-      !createProject.PROJECT_MEMBER_PARENT_USERNAME ||
-      !createProject.PROJECT_ADD ||
-      !createProject.PROJECT_START_DATE ||
-      !createProject.PROJECT_END_DATE ||
-      !createProject.PROJECT_SUPERVISOR ||
-      !createProject.PROJECT_COUNTRY ||
-      !createProject.PROJECT_CITY ||
-      !createProject.PROJECT_STATE
-    ) {
+    const requiredFields = [
+      "PROJECT_PARENT_ID",
+      "PROJECT_PARENT_USERNAME",
+      "PROJECT_MEMBER_PARENT_ID",
+      "PROJECT_MEMBER_PARENT_USERNAME",
+      "PROJECT_NAME",
+      "PROJECT_USERNAME",
+      "PROJECT_ADD",
+      "PROJECT_CITY",
+      "PROJECT_START_DATE",
+      "PROJECT_END_DATE",
+      "PROJECT_SUPERVISOR",
+      "PROJECT_COUNTRY",
+      "PROJECT_TYPE",
+      "PROJECT_STATE",
+      "PROJECT_ACCOUNT",
+      "PROJECT_VALUE",
+      "PROJECT_CURRENCY",
+
+    ];
+
+
+    const hasEmptyFields = requiredFields.some(
+      (field) => !createProject[field]
+    );
+
+    if (hasEmptyFields) {
       setErrorMsg("Fill all fields");
+      toast.error("Please fill in all fields", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
       return;
     }
+
     setErrorMsg("");
 
     axios
@@ -114,24 +128,35 @@ export default function ProjectCreate(props) {
       .then((response) => {
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
+          toast.error(response.data.errorMsg, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+          });
         } else if (response.data.operation === "successfull") {
           toast.success("Project Created successfully!", {
             position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
           });
+          props.refetch();
+
+          setCreateProject({});
           setOpen(false);
         }
       })
       .catch((error) => {
         console.error(error, "ERR");
+        toast.error("An error occurred. Please try again later.", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 2000,
+        });
       });
   };
 
 
-  //state city api
 
   return (
     <>
-      <Button size="small" className="btn button border-bottom-0 bg-white"  variant="outlined">
+      <Button size="small" className="btn button border-bottom-0 bg-white" variant="outlined">
         Project
       </Button>
       <Button
@@ -141,7 +166,7 @@ export default function ProjectCreate(props) {
         variant="contained"
         size="small"
       >
-       + Add New Project
+        + Add New Project
       </Button>
 
       <Modal
@@ -157,24 +182,18 @@ export default function ProjectCreate(props) {
                 <label> Project Username</label>
                 <input
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   placeholder="Username"
                   value={createProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
                   onChange={handleCreate}
-                  //required
                 />
-                {/* {errors.PROJECT_USERNAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.PROJECT_USERNAME}
-                  </p>
-                )} */}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Name</label>
                 <input
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   id="inputname"
                   placeholder="Project Name"
                   value={createProject.PROJECT_NAME}
@@ -184,73 +203,110 @@ export default function ProjectCreate(props) {
                 />
               </div>
               <div className="form-group col-xl-4">
-                <label>Contact</label>
+                <label>Account</label>
                 <input
                   type="number"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   id="inputPassword4"
                   placeholder="Enter Phone Number"
-                  name="PROJECT_PHONE"
-                  value={createProject.PROJECT_PHONE}
+                  name="PROJECT_ACCOUNT"
+                  value={createProject.PROJECT_ACCOUNT}
                   onChange={handleCreate}
                   required
                 />
               </div>
             </div>
             <div className="row py-2">
-              <div className="form-group col-xl-6">
+              <div className="form-group col-xl-4">
                 <label>Project start date</label>
                 <input
                   type="date"
                   value={createProject.PROJECT_START_DATE}
                   name="PROJECT_START_DATE"
                   onChange={handleCreate}
-                  className="form-control rounded-0"
-                //required
+                  className="form-control form-control-2 rounded-0"
                 />
               </div>
-              <div className="form-group col-xl-6">
+              <div className="form-group col-xl-4">
                 <label>Project End date</label>
                 <input
                   type="date"
                   value={createProject.PROJECT_END_DATE}
                   name="PROJECT_END_DATE"
                   onChange={handleCreate}
-                  className="form-control rounded-0"
-                //required
+                  className="form-control form-control-2 rounded-0"
                 />
+              </div>
+              <div className="form-group col-xl-4">
+                <label>Project Type</label>
+                <select
+                  id="inputEnroll"
+                  className="form-control form-control-2 border rounded-0"
+                  onChange={handleCreate}
+                  name="PROJECT_TYPE"
+                  value={createProject.PROJECT_TYPE}
+                >
+                  <option value="">--Choose Project Type--</option>
+                  <option value="Architect">Architect</option>
+                  <option value="Civil Engineer">Civil Engineer</option>
+                  <option value="Structural Engineer">Structural Engineer</option>
+                  <option value="Mechanical Engineer">Mechanical Engineer</option>
+                  <option value="Electrical Engineer">Electrical Engineer</option>
+                  <option value="Project Manager">Project Manager</option>
+                  <option value="Quantity Surveyor">Quantity Surveyor</option>
+                  <option value="Interior Designer">Interior Designer</option>
+                  <option value="Landscaper">Landscaper</option>
+                  <option value="Contractor">Contractor</option>
+                  <option value="Scheduler">Scheduler</option>
+                </select>
               </div>
             </div>
             <div className="row py-2">
-              <div className="form-group col-xl-6">
-                <label>Enrollment</label>
-                <select
-                  id="inputEnroll"
-                  className="form-control border rounded-0"
-                  onChange={handleCreate}
-                  name="PROJECT_EMROLMNT_TYPE"
-                  value={createProject.PROJECT_EMROLMNT_TYPE}
-                  //required
-                >
-                  <option selected>Choose...</option>
-                  <option>Painter</option>
-                  <option>Fitter</option>
-                  <option>Plumber</option>
-                  <option>Engineer</option>
-                </select>
-              </div>
 
-              <div className="form-group col-md-6">
+
+              <div className="form-group col-md-4">
                 <label>Supervisor</label>
                 <input
                   type="text"
-                  className="form-control rounded-0 "
+                  className="form-control form-control-2 rounded-0 "
                   id="inputsupervisor"
                   name="PROJECT_SUPERVISOR"
                   value={createProject.PROJECT_SUPERVISOR}
                   onChange={handleCreate}
-                  //required
                 />
+              </div>
+
+
+              <div className="form-group col-md-4">
+                <label>Project Value</label>
+                <input
+                  type="number"
+                  className="form-control form-control-2 rounded-0 "
+                  id="inputsupervisor"
+                  name="PROJECT_VALUE"
+                  value={createProject.PROJECT_VALUE}
+                  onChange={handleCreate}
+                />
+              </div>
+
+              <div className="form-group col-md-4">
+                <label ></label>
+                <select
+                  id="inputEnroll"
+                  className="form-control form-control-2 border rounded-0"
+                  onChange={handleCreate}
+                  name="PROJECT_CURRENCY"
+                  value={createProject.PROJECT_CURRENCY}
+                >
+                  <option value="">--Select Currency--</option>
+                  <option value="INR">INR</option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option> {/* Euro */}
+                  <option value="GBP">GBP</option> {/* British Pound */}
+                  <option value="JPY">JPY</option>
+                  {/* <option>Plumber</option>
+                  <option>Engineer</option> */}
+                </select>
               </div>
             </div>
             <div className="row py-2">
@@ -258,13 +314,12 @@ export default function ProjectCreate(props) {
                 <label>Address</label>
                 <textarea
                   type="text"
-                  className="form-control rounded-0"
+                  className="form-control form-control-2 rounded-0"
                   id="inputAddress2"
                   placeholder="Apartment, studio, or floor"
                   name="PROJECT_ADD"
                   value={createProject.PROJECT_ADD}
                   onChange={handleCreate}
-                  //required
                 />
               </div>
             </div>
@@ -272,15 +327,13 @@ export default function ProjectCreate(props) {
               <div className="form-group col-xl-4">
                 <label>Country</label>
                 <select
-                  className="form-control border rounded-0"
+                  className="form-control form-control-2 border rounded-0"
                   placeholder="Country"
                   name="PROJECT_COUNTRY"
                   value={createProject.PROJECT_COUNTRY}
                   onChange={handleCreate}
-                  //required
                 >
-                  <option >--Choose Country--</option>
-
+                  <option value="">--Choose Country--</option>
                   {country?.map((value, key) => {
                     return (
                       <option value={value.name} key={key}>
@@ -294,15 +347,13 @@ export default function ProjectCreate(props) {
               <div className="form-group col-xl-4">
                 <label>State</label>
                 <select
-                  className="form-control border rounded-0"
+                  className="form-control form-control-2 border rounded-0"
                   placeholder="State"
                   name="PROJECT_STATE"
                   value={createProject.PROJECT_STATE}
                   onChange={handleCreate}
-                  //required
-                  
                 >
-                  <option selected>--Choose State--</option>
+                  <option value="">--Choose State--</option>
                   {availableState?.states?.map((e, key) => {
                     return (
                       <option value={e.name} key={key}>
@@ -316,14 +367,13 @@ export default function ProjectCreate(props) {
               <div className="form-group col-xl-4">
                 <label>City</label>
                 <select
-                  className="form-control border rounded-0"
+                  className="form-control form-control-2 border rounded-0"
                   placeholder="City"
                   name="PROJECT_CITY"
                   value={createProject.PROJECT_CITY}
                   onChange={handleCreate}
-                  //required
                 >
-                  <option>--Choose City--</option>
+                  <option value="">--Choose City--</option>
                   {availableCities?.cities?.map((e, key) => {
                     return (
                       <option value={e.name} key={key}>
@@ -334,27 +384,26 @@ export default function ProjectCreate(props) {
                 </select>
               </div>
             </div>
-            <center>
-              {errorMsg && (
-                <p className=" text-danger fw-light mb-0">{errorMsg}</p>
-              )}
-            </center>
+          
+            <div className="FormButtonAlign">
+        
             <button
               type="submit"
-              className="btn btn-info text-white "
+              className="btn btn-info text-white"
               onClick={handleSubmit}
             >
-              Submit
+              Create Project
             </button>{" "}
             <button
               onClick={handleClose}
-              className="btn btn-danger text-white "
+              className="btn btn-danger text-white"
             >
-              Discard
+              Cancel
             </button>
+            </div>
           </form>
         </Box>
       </Modal>
     </>
   );
-                }
+}

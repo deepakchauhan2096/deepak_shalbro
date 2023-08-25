@@ -12,14 +12,15 @@ import logger from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 // reducers
-import { accountReducer } from './redux/reducer/account';
+import { accountReducer, projectReducer } from './redux/reducer/account';
 import env from "react-dotenv";
 
 const middleware = [thunk, logger];
 
 let store = createStore(
   combineReducers({
-    account: accountReducer
+    account: accountReducer,
+    projects:projectReducer,
   }),
   composeWithDevTools(applyMiddleware(...middleware)),
 )

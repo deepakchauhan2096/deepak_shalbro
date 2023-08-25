@@ -29,11 +29,16 @@ import Modal from "@mui/material/Modal";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
-import CompanyEdit from "../Admin/CompanyEdit";
-import PlaylistPlayOutlinedIcon from '@mui/icons-material/PlaylistPlayOutlined';
-import { initAdmin_fun, initCompany_fun, selectedCompany_fun } from "../redux/action";
+import CompanyEdit from "./CompanyEdit";
+import PlaylistPlayOutlinedIcon from "@mui/icons-material/PlaylistPlayOutlined";
+import {
+  initAdmin_fun,
+  initCompany_fun,
+  selectedCompany_fun,
+} from "../redux/action";
 import CompanyDelete from "./CompanyDelete";
 import env from "react-dotenv";
+import Cookies from "js-cookie";
 
 const style = {
   position: "absolute",
@@ -48,16 +53,17 @@ const style = {
 
 const AdminDashboard = (props) => {
   const location = useLocation();
-  const adminData = location.state?.data.result;
+  const adminData = props.state.result;
   const [open, setOpen] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [update, setUpdateData] = React.useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [tableRows, setTableRows] = useState(adminData);
-  const [Rows, setRows] = useState([]);
+  const [Rows, setRows] = useState("");
+  console.log("first", Rows);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -65,6 +71,14 @@ const AdminDashboard = (props) => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   const headers = {
@@ -90,7 +104,7 @@ const AdminDashboard = (props) => {
         // console.log("response.data : ", response.data);
         const data = response.data;
         setRows(data.result);
-        dispatch(initCompany_fun(data.result))
+        dispatch(initCompany_fun(data.result));
       }, 1000);
       setIsLoading(false);
     } catch (error) {
@@ -148,26 +162,40 @@ const AdminDashboard = (props) => {
     );
   };
 
+  const ClearCookie = () => {
+    // Clear the cookie by removing it
+    Cookies.remove("myResponseData");
+    window.location.replace("/");
+    console.log("Cookie cleared.");
+  };
+
+  console.log(Rows, "lili")
+
   return (
     <>
       <MyScreen screenIndex={true}>
         <AppBar position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
+              {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
               <Typography
                 variant="h6"
                 noWrap
+                component="b"
                 href="/"
                 sx={{
                   mr: 2,
                   display: { xs: "none", md: "flex" },
+                  fontFamily: "arial",
                   fontWeight: 700,
+                  letterSpacing: ".3rem",
                   color: "inherit",
                   textDecoration: "none",
                 }}
               >
                 {tableRows?.ADMIN_USERNAME}
               </Typography>
+
               <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
                 <IconButton
                   size="large"
@@ -209,13 +237,14 @@ const AdminDashboard = (props) => {
                 variant="h5"
                 noWrap
                 component="a"
-                href=""
+                href="/"
                 sx={{
                   mr: 2,
                   display: { xs: "flex", md: "none" },
                   flexGrow: 1,
-                  //   fontFamily: 'monospace',
+                  fontFamily: "",
                   fontWeight: 700,
+                  letterSpacing: ".3rem",
                   color: "inherit",
                   textDecoration: "none",
                 }}
@@ -233,98 +262,170 @@ const AdminDashboard = (props) => {
                   </Button>
                 ))}
               </Box>
+
+              <Box sx={{ flexGrow: 0, position: "relative" }}>
+                {/* <Tooltip title="Open settings" sx={{position: "relative" }}> */}
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt={tableRows?.ADMIN_USERNAME}
+                    src="/static/images/avatar/2.jpg"
+                  />
+                </IconButton>
+                <Menu
+                  sx={{ mt: "45px", position: "absolute", right: "20px" }}
+                  id="menu-appbar"
+                  // anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">
+                      {tableRows?.ADMIN_NAME}
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem>
+                    <Typography textAlign="center" onClick={ClearCookie}>
+                      logout
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+                {/* </Tooltip> */}
+              </Box>
             </Toolbar>
           </Container>
         </AppBar>
+
         <MyScreenbox screenIndex={true}>
-          {isLoading ? (
-            <Skeleton
-              variant="circular"
-              width={40}
-              height={40}
-              sx={{ position: "fixed", top: "80px", right: "80px" }}
-            />
-          ) : (
-            <CompanyCreate
-              ID={tableRows?.ADMIN_ID}
-              Username={tableRows?.ADMIN_USERNAME}
-              Update={(e) => setUpdateData(e)}
-            />
-          )}
-          {isLoading ? (
-            <Animations />
-          ) : (
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                {Rows?.length !== 0 ? (
-                  <TableHead>
-                    <TableRow>
-                      {[
-                        "Company Name",
-                        "Company ID",
-                        "Company username",
-                        "Phone",
-                        "Email",
-                        "Address",
-                        "State",
-                        "Detail",
-                        "Edit",
-                        //  "Delete"
-                      ].map((item) => (
-                        <TableCell size="large">{item}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                ) : (
-                  ""
-                )}
-                <TableBody>
-                  {Rows?.map((post) => (
-                    <>
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell size="small">{post?.COMPANY_NAME}</TableCell>
-                        <TableCell size="small">{post?.COMPANY_ID}</TableCell>
-                        <TableCell size="small">
-                          {post?.COMPANY_USERNAME}
-                        </TableCell>
-                        <TableCell size="small">
-                          {post?.COMPANY_PHONE}
-                        </TableCell>
-                        <TableCell size="small">
-                          {post?.COMPANY_EMAIL}
-                        </TableCell>
-                        <TableCell size="small">{post?.COMPANY_ADD2}</TableCell>
-                        <TableCell size="small">
-                          {post?.COMPANY_STATE}
-                        </TableCell>
-                        <TableCell size="small">
-                          <Tooltip title="View Detail">
-                            <PlaylistPlayOutlinedIcon
-                              onClick={(e) => ShowCompDetail(post)}
-                              color="primary"
-                              style={{ cursor: "pointer" }}
-                            />
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell size="small">
-                       
-                            <CompanyEdit companyEDit={post} reFetchfun={getCompanyData} />
-                        
-                        </TableCell>
-                        {/* <TableCell size="small">
+          <>
+          
+
+            {Rows && (
+              <>
+                {Rows.length > 0 ?
+                <>
+                <CompanyCreate
+                  ID={adminData?.ADMIN_ID}
+                  Username={adminData?.ADMIN_USERNAME}
+                  Update={(e) => setUpdateData(e)}
+                />
+
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    {Rows.length > 0 ? (
+                      <TableHead>
+                        <TableRow>
+                          {[
+                            "Company Name",
+                            "Company ID",
+                            "Company username",
+                            "Phone",
+                            "Email",
+                            "Address",
+                            "State",
+                            "Detail",
+                            "Edit",
+                            //  "Delete"
+                          ].map((item) => (
+                            <TableCell size="large">{item}</TableCell>
+                          ))}
+                        </TableRow>
+                      </TableHead>
+                    ) : (
+                      ""
+                    )}
+                    <TableBody>
+                      {Rows?.map((post) => (
+                        <>
+                          <TableRow
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell size="small">
+                              {post?.COMPANY_NAME}
+                            </TableCell>
+                            <TableCell size="small">
+                              {post?.COMPANY_ID}
+                            </TableCell>
+                            <TableCell size="small">
+                              {post?.COMPANY_USERNAME}
+                            </TableCell>
+                            <TableCell size="small">
+                              {post?.COMPANY_PHONE}
+                            </TableCell>
+                            <TableCell size="small">
+                              {post?.COMPANY_EMAIL}
+                            </TableCell>
+                            <TableCell size="small">
+                              {post?.COMPANY_ADD2}
+                            </TableCell>
+                            <TableCell size="small">
+                              {post?.COMPANY_STATE}
+                            </TableCell>
+                            <TableCell size="small">
+                              <Tooltip title="View Detail">
+                                <PlaylistPlayOutlinedIcon
+                                  onClick={(e) => ShowCompDetail(post)}
+                                  color="primary"
+                                  style={{ cursor: "pointer" }}
+                                />
+                              </Tooltip>
+                            </TableCell>
+                            <TableCell size="small">
+                              <CompanyEdit
+                                companyEDit={post}
+                                reFetchfun={getCompanyData}
+                              />
+                            </TableCell>
+                            {/* <TableCell size="small">
                          <CompanyDelete/>
                         </TableCell> */}
-                      </TableRow>
-                    </>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
+                          </TableRow>
+                        </>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer> </>:  <div
+                style={{
+                  height: "80vh",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "arial",
+                    color: "grey",
+                    marginTop: "60px",
+                  }}
+                >
+                  There is no data. Please create a company to move forward.
+                </p>
+                <CompanyCreate
+                  btnstyle={{
+                    position: "absolute",
+                    top: "50%",
+                    transform: "translate(-50%,-50%)",
+                    left: "50%",
+                  }}
+                  ID={adminData?.ADMIN_ID}
+                  Username={adminData?.ADMIN_USERNAME}
+                  Update={(e) => setUpdateData(e)}
+                />
+              </div>}
+              </>
+            )}
+          </>
         </MyScreenbox>
       </MyScreen>
     </>

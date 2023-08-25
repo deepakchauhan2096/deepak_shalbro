@@ -68,6 +68,7 @@ const EmployeeTimeSheet = (props) => {
       );
       setTimeout(() => {
         setWorkvalue(response.data.result);
+        console.log(response.data.result,"getdate")
       }, 1000);
     } catch (err) {
       console.log("something Went wrong: =>", err);
@@ -135,7 +136,7 @@ const EmployeeTimeSheet = (props) => {
             <label>Date From: </label>
             <input
               type="date"
-              className="form-control"
+              className="form-control form-control-2"
               value={MyDateStringAfter}
               onChange={(event) =>
                 setDate((prev) => ({
@@ -149,7 +150,7 @@ const EmployeeTimeSheet = (props) => {
             <label>Date to: </label>
             <input
               type="date"
-              className="form-control"
+              className="form-control form-control-2"
               value={MyDateStringCurrent}
               onChange={(event) =>
                 setDate((prev) => ({
@@ -163,13 +164,15 @@ const EmployeeTimeSheet = (props) => {
             <label style={{ visibility: "hidden" }}>Result</label>
             <input
               type="submit"
-              className="form-control btn btn-info"
+              className="form-control form-control-2 btn btn-info"
               onClick={gettimesheet}
               value="Submit"
             />
           </div>
-          <div>
+          <div className="form-group col-xl-1">
+            <label style={{ visibility: "hidden" }}>Result</label>
             <PDFDownloadLink
+              className="btn btn-dark btn-sm"
               document={
                 <SalaryPDF
                   name={props.mainData.EMPLOYEE_NAME}
@@ -183,8 +186,15 @@ const EmployeeTimeSheet = (props) => {
                   mapvalue={workvalue}
                 />
               }
-              fileName="test.pdf"
+              fileName={`${props.mainData.EMPLOYEE_NAME}.pdf`}
             >Download</PDFDownloadLink>
+            {/* lll */}
+          </div>
+          <div>
+            
+
+            
+            
           </div>
         </div>
         <table className="table table-hover border">

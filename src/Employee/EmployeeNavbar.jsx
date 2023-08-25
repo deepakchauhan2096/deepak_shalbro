@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import Cookies from "js-cookie";
 import {
   AppBar,
   Avatar,
@@ -14,65 +13,47 @@ import {
   ListItemButton,
   Tooltip,
 } from "@mui/material";
-import env from "react-dotenv";
-
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import HistoryIcon from '@mui/icons-material/History';
 const EmployeeNavbar = (props) => {
   const [userName, setUserName] = useState("U");
-
   const [showProfile, setShowProfile] = useState(false);
-
   const handleClose = () => {
-    setShowProfile(false)
-  }
-
+    setShowProfile(false);
+  };
   const handleOpen = () => {
-    setShowProfile(true)
-  }
-
-
+    setShowProfile(true);
+  };
   const location = useLocation();
-  console.log(location.pathname, "loc");
 
+  //pathname for navigation
+  console.log(location.pathname, "loc");
   const navigate = useNavigate();
 
   const Logout = () => {
-    setShowProfile(false);
-    signOut(auth)
-      .then(() => {
-        navigate("/employee/login");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
+   
   };
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUserName(user.email);
-      } else setUserName("");
-    });
-  }, []);
+
 
   const urls = [
     {
       listname: "Attendence",
-      listlink: "/dashboard",
+      listlink: "/employee/attendance",
+      icons: <FingerprintIcon />
     },
     {
-      listname: "My Project",
-      listlink: "/project",
-    }
+      listname: "History",
+      listlink: "/employee/history",
+      icons: <HistoryIcon />
+    },
   ];
-
-
 
   const Lists = (props) => {
     return (
-      
-      <Box role="presentation" sx={{width:250}}>
-        
-          <List sx={{ py: 0 }}>
+      <Box role="presentation" sx={{ width: 250 }}>
+        <List sx={{ py: 0 }}>
+          <Link to={props.listlink}>
             <ListItem
               sx={{
                 background:
@@ -81,21 +62,21 @@ const EmployeeNavbar = (props) => {
               disablePadding
             >
               <ListItemButton sx={{ color: "#fff" }}>
-                {props.listname}
+              <span>{props.icons}</span> {props.listname}
               </ListItemButton>
             </ListItem>
-          </List>
+          </Link>
+        </List>
       </Box>
     );
   };
 
+  const post = props.state;
 
-  const post = props.empData
-  
-//  console.log(props.empData, "empdata")
+  console.log(post, "empdata 222");
+
   return (
     <>
-    
       <Drawer
         open={showProfile}
         onClose={handleClose}
@@ -103,26 +84,30 @@ const EmployeeNavbar = (props) => {
         variant="permanent"
         PaperProps={{
           className: "sidebar",
-          sx:{
-            overflow:"hidden"
-          }
+          sx: {
+            overflow: "hidden",
+          },
         }}
       >
-        
         <div
           className="sidebar-header d-flex"
           style={{ justifyContent: "space-between" }}
         >
-          <h3 className="text-white">{post?.EMPLOYEE_NAME}</h3>
+          <h3
+            className="text-light"
+            style={{ fontSize: "20px", lineHeight: "33px" }}
+          >
+            {post?.EMPLOYEE_NAME}
+          </h3>
           <Tooltip title={post?.EMPLOYEE_NAME}>
             <Avatar>{post?.EMPLOYEE_NAME?.charAt(0).toUpperCase()}</Avatar>
           </Tooltip>
         </div>
 
-        <Divider/>
+        <Divider />
 
         {urls.map((post) => (
-          <Lists listname={post.listname} listlink={post.listlink} />
+          <Lists  icons={post.icons} listname={post.listname} listlink={post.listlink}  />
         ))}
 
         <div
@@ -132,7 +117,7 @@ const EmployeeNavbar = (props) => {
           <div className="logout_icon">
             <LogoutIcon style={{ display: "inline" }} />{" "}
             <div className="logout_icon d-inline" onClick={Logout}>
-              Exit
+              Logout
             </div>
           </div>
         </div>

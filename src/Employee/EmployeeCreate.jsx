@@ -8,7 +8,8 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
 import env from "react-dotenv";
-
+import country from "../Api/countriess.json";
+import employeeRole from "../jsonlist/employeeRole.json"
 const style = {
   position: "absolute",
   top: "50%",
@@ -23,12 +24,14 @@ const style = {
 
 export default function AddEmployee(props) {
   const [open, setOpen] = React.useState(false);
-  const [errors, setErrors] = useState({});
-  const [submitting, setSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const [createEmployee, setCreateEmployee] = useState({
     EMPLOYEE_NAME: "",
     EMPLOYEE_EMAIL: "",
+    EMPLOYEE_COUNTRY: "",
     EMPLOYEE_STATE: "",
     EMPLOYEE_CITY: "",
     EMPLOYEE_PHONE: "",
@@ -40,88 +43,133 @@ export default function AddEmployee(props) {
     EMPLOYEE_ADD: "",
     EMPLOYEE_USERNAME: "",
     EMPLOYEE_PASSWORD: "",
-    EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME,
-    EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID,
-    EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME,
-    EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID,
+    EMPLOYEE_MEMBER_PARENT_USERNAME: "",
+    EMPLOYEE_PARENT_ID: "",
+    EMPLOYEE_PARENT_USERNAME: "",
+    EMPLOYEE_MEMBER_PARENT_ID: "",
   });
-  const [errorMsg, setErrorMsg] = useState("");
-  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
 
-  const [newdata, setNewdata] = useState([]);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  useEffect(() => {
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME }));
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID }));
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME }));
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID }));
+  }, [open])
+
+
+
+  console.log(createEmployee, "check")
+
+
+
+  const availableState = country?.find(
+    (c) => c.name === createEmployee.EMPLOYEE_COUNTRY
+  );
+
+  // console.log("all states : ===> ", availableState,"country=>",country);
+  const availableCities = availableState?.states?.find(
+    (s) => s.name === createEmployee.EMPLOYEE_STATE
+  );
+
 
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-   
+
+
+  // const handleCreate = (e) => {
+  //   setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
+  // };
 
   const handleCreate = (e) => {
-    setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
-    // console.log("heello world", createEmployee);
+    const { name, value } = e.target;
+    setCreateEmployee((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
-
-  //firbase authentication
-
-
-
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME ||
-      !createEmployee.EMPLOYEE_EMAIL ||
-      !createEmployee.EMPLOYEE_PASSWORD ||
-      !createEmployee.EMPLOYEE_NAME ||
-      !createEmployee.EMPLOYEE_STATE ||
-      !createEmployee.EMPLOYEE_CITY ||
-      !createEmployee.EMPLOYEE_PHONE ||
-      !createEmployee.EMPLOYEE_HOURLY_WAGE ||
-      !createEmployee.EMPLOYEE_ROLE ||
-      !createEmployee.EMPLOYEE_EMPLMNTTYPE ||
-      !createEmployee.EMPLOYEE_DOB ||
-      !createEmployee.EMPLOYEE_HIRE_DATE ||
-      !createEmployee.EMPLOYEE_ADD ||
-      !createEmployee.EMPLOYEE_USERNAME
-    ) {
+
+    const requiredFields = [
+      "EMPLOYEE_NAME",
+      "EMPLOYEE_EMAIL",
+      "EMPLOYEE_COUNTRY",
+      "EMPLOYEE_STATE",
+      "EMPLOYEE_CITY",
+      "EMPLOYEE_PHONE",
+      "EMPLOYEE_HOURLY_WAGE",
+      "EMPLOYEE_ROLE",
+      "EMPLOYEE_EMPLMNTTYPE",
+      "EMPLOYEE_DOB",
+      "EMPLOYEE_HIRE_DATE",
+      "EMPLOYEE_ADD",
+      "EMPLOYEE_USERNAME",
+      "EMPLOYEE_PASSWORD",
+      "EMPLOYEE_MEMBER_PARENT_USERNAME",
+      "EMPLOYEE_PARENT_ID",
+      "EMPLOYEE_PARENT_USERNAME",
+      "EMPLOYEE_MEMBER_PARENT_ID"
+    ];
+
+    const hasEmptyFields = requiredFields.some(
+      (field) => !createEmployee[field]
+    );
+
+    if (hasEmptyFields) {
       setErrorMsg("Fill all fields");
+      toast.error("Please fill in all fields", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
       return;
     }
-    setErrorMsg("");
 
-      axios
-        .post("http://18.211.130.168:5001/create_employee", createEmployee, {
-          headers,
-        })
-        .then((response) => {
-          if (response.data.operation == "failed") {
-            setErrorMsg(response.data.errorMsg);
-          } else if (response.data.operation == "successfull") {
-            setIsSubmitted(true); // Set the submission status to true after successful submission
-            toast.success("Form submitted successfully!", {
-              position: toast.POSITION.TOP_CENTER,
-            });
-            props.update(true);
-            setOpen(false);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
+    setErrorMsg("");
+    axios
+      .post("http://18.211.130.168:5001/create_employee", createEmployee, {
+        headers,
+      })
+      .then((response) => {
+        if (response.data.operation === "failed") {
+          setErrorMsg(response.data.errorMsg);
+          toast.error(response.data.errorMsg, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+          });
+        } else if (response.data.operation === "successfull") {
+          toast.success("Form submitted successfully!", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000
+          });
+          props.refetch();
+          // setOpen(false);
+          // setCreateEmployee('')
+          setCreateEmployee({});
+          setOpen(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("An error occurred. Please try again later.", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 2000,
         });
+      });
   };
 
 
   return (
     < >
       <Button
-          size="small"
-          className="btn button border-bottom-0 bg-white" 
-          variant="outlined"
+        size="small"
+        className="btn button border-bottom-0 bg-white"
+        variant="outlined"
       >
         Employee
       </Button>
@@ -152,7 +200,7 @@ export default function AddEmployee(props) {
                   <label for="inputqual">Employee Username</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter Employee Username"
                     id="inputZip"
                     value={createEmployee.EMPLOYEE_USERNAME}
@@ -160,17 +208,12 @@ export default function AddEmployee(props) {
                     onChange={handleCreate}
                     required
                   />
-                  {errors.EMPLOYEE_USERNAME && (
-                  <p className="error text-danger fw-light">
-                    {errors.EMPLOYEE_USERNAME}
-                  </p>
-                  )}
                 </div>
                 <div className="form-group col-xl-6">
                   <label>Employee Name</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="empName"
                     placeholder="Enter Employee name"
                     value={createEmployee.EMPLOYEE_NAME}
@@ -185,7 +228,7 @@ export default function AddEmployee(props) {
                   <label>E-mail</label>
                   <input
                     type="email"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="email"
                     placeholder="Enter Email add..."
                     value={createEmployee.EMPLOYEE_EMAIL}
@@ -195,14 +238,15 @@ export default function AddEmployee(props) {
                   />
                 </div>
                 <div className="form-group col-xl-6 py-1">
-                  <label>State</label>
+
+                  <label for="inputPassword4">Date Of Birth</label>
                   <input
-                    type="text"
-                    className="form-control rounded-0"
-                    id="phone"
-                    placeholder="Enter Your state.."
-                    value={createEmployee.EMPLOYEE_STATE}
-                    name="EMPLOYEE_STATE"
+                    type="date"
+                    className="form-control form-control-2 rounded-0"
+                    id="inputPassword4"
+                    placeholder="Enter Date of birth"
+                    value={createEmployee.EMPLOYEE_DOB}
+                    name="EMPLOYEE_DOB"
                     onChange={handleCreate}
                     required
                   />
@@ -211,7 +255,7 @@ export default function AddEmployee(props) {
                   <label>Phone</label>
                   <input
                     type="number"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="phone"
                     placeholder="Enter Your Number"
                     value={createEmployee.EMPLOYEE_PHONE}
@@ -224,7 +268,7 @@ export default function AddEmployee(props) {
                   <label>Employee Password</label>
                   <input
                     type="text"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     placeholder="Enter Employee password"
                     value={createEmployee.EMPLOYEE_PASSWORD}
                     name="EMPLOYEE_PASSWORD"
@@ -233,17 +277,48 @@ export default function AddEmployee(props) {
                   />
                 </div>
                 <div className="form-group col-xl-6 py-1">
-                  <label for="inputPassword4">Date Of Birth</label>
-                  <input
-                    type="date"
-                    className="form-control rounded-0"
-                    id="inputPassword4"
-                    placeholder="Enter Date of birth"
-                    value={createEmployee.EMPLOYEE_DOB}
-                    name="EMPLOYEE_DOB"
+
+                  <label>Country</label>
+
+
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    placeholder="Country"
+                    name="EMPLOYEE_COUNTRY"
+                    value={createEmployee.EMPLOYEE_COUNTRY}
                     onChange={handleCreate}
-                    required
-                  />
+                  >
+                    <option value="">--Choose Country--</option>
+                    {country?.map((value, key) => {
+                      console.log("hhh", value.name)
+                      return (
+                        <option value={value.name} key={key}>
+                          {value.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+
+                </div>
+                <div className="form-group col-xl-6 py-1">
+                  <label>State</label>
+
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    placeholder="State"
+                    name="EMPLOYEE_STATE"
+                    value={createEmployee.EMPLOYEE_STATE}
+                    onChange={handleCreate}
+                  >
+                    <option value="">--Choose State--</option>
+                    {availableState?.states?.map((e, key) => {
+                      return (
+                        <option value={e.name} key={key}>
+                          {e.name}
+                        </option>
+                      );
+                    })}
+                  </select>
 
                 </div>
               </div>
@@ -253,7 +328,7 @@ export default function AddEmployee(props) {
                     <label for="inputAddress">Address</label>
                     <textarea
                       type="text"
-                      className="form-control rounded-0"
+                      className="form-control form-control-2 rounded-0"
                       id="inputAddress"
                       placeholder="Enter Address"
                       value={createEmployee.EMPLOYEE_ADD}
@@ -265,22 +340,28 @@ export default function AddEmployee(props) {
                 </div>
                 <div className="form-group col-xl-4 py-1">
                   <label>City</label>
-                  <input
-                    type="text"
-                    className="form-control rounded-0"
-                    id="city"
-                    placeholder="Enter Your city.."
-                    value={createEmployee.EMPLOYEE_CITY}
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    placeholder="City"
                     name="EMPLOYEE_CITY"
+                    value={createEmployee.EMPLOYEE_CITY}
                     onChange={handleCreate}
-                    required
-                  />
+                  >
+                    <option value="">--Choose City--</option>
+                    {availableCities?.cities?.map((e, key) => {
+                      return (
+                        <option value={e.name} key={key}>
+                          {e.name}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </div>
                 <div className="form-group col-xl-4 py-1">
                   <label>Hourly wages</label>
                   <input
                     type="number"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="hourlywage"
                     placeholder="Enter your Hourly wages"
                     value={createEmployee.EMPLOYEE_HOURLY_WAGE}
@@ -293,19 +374,19 @@ export default function AddEmployee(props) {
                   <label for="inputPassword4">Employee Role</label>
                   <select
                     id="inputqual"
-                    className="form-control rounded-0 border"
+                    className="form-control form-control-2 rounded-0 border"
                     value={createEmployee.EMPLOYEE_ROLE}
                     name="EMPLOYEE_ROLE"
                     onChange={handleCreate}
                     required
                   >
                     <option selected>Choose role...</option>
-                    <option>Employee</option>
-                    <option>Trainee</option>
-                    <option>Student</option>
-                    <option>SuperWiser</option>
-                    <option>Worker</option>
-                    <option>other</option>
+                    {employeeRole.map((roles, index) => {
+                      return (
+                        <option>{roles}</option>
+                      )
+                    })}
+
                   </select>
 
                 </div>
@@ -315,7 +396,7 @@ export default function AddEmployee(props) {
                   <label for="inputqual">Employement Type</label>
                   <select
                     id="inputqual"
-                    className="form-control rounded-0 border"
+                    className="form-control form-control-2 rounded-0 border"
                     value={createEmployee.EMPLOYEE_EMPLMNTTYPE}
                     name="EMPLOYEE_EMPLMNTTYPE"
                     onChange={handleCreate}
@@ -333,7 +414,7 @@ export default function AddEmployee(props) {
                   <label for="inputPassword4">Hired Date</label>
                   <input
                     type="date"
-                    className="form-control rounded-0"
+                    className="form-control form-control-2 rounded-0"
                     id="inputPassword4"
                     placeholder="Enter hire date"
                     value={createEmployee.EMPLOYEE_HIRE_DATE}
@@ -343,28 +424,24 @@ export default function AddEmployee(props) {
                   />
                 </div>
               </div>
-              <div className="row pt-2">
-              <center>
-              {errorMsg && (
-                <p className=" text-danger fw-light mb-0">{errorMsg}</p>
-              )}
-               </center>
-                <div className="col-12">
-                  <button
-                    type="submit"
-                    className="btn btn-info text-white "
-                    onClick={handleSubmit}
-                  >
-                    Submit
-                  </button>{" "}
-                  <button
-                    onClick={handleClose}
-                    className="btn btn-danger text-white "
-                  >
-                    Discard
-                  </button>
-                </div>
+
+              <div className="FormButtonAlign">
+
+                <button
+                  type="submit"
+                  className="btn btn-info text-white "
+                  onClick={handleSubmit}
+                >
+                  Create Employee
+                </button>{" "}
+                <button
+                  onClick={handleClose}
+                  className="btn btn-danger text-white "
+                >
+                  Cancel
+                </button>
               </div>
+
             </form>
           </Box>
         </Container>
