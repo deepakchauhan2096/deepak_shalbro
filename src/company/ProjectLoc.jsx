@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import { GoogleMap, withGoogleMap, Marker, Circle } from "react-google-maps";
+import { LoadScript } from "@react-google-maps/api";
 import locationIcon from "../assests/images/location.png";
 
 const ProjectLoc = () => {
@@ -20,11 +19,7 @@ const ProjectLoc = () => {
 
   const circleRef = useRef();
 
-  const customIcon = new L.Icon({
-    iconUrl: locationIcon, // URL to your custom marker icon image
-    iconSize: [32, 32], // Size of the icon
-    iconAnchor: [16, 32], // Anchor point of the icon (centered at bottom)
-  });
+ 
 
   useEffect(() => {
     getLocation();
@@ -160,6 +155,38 @@ const ProjectLoc = () => {
     }
   };
 
+
+  console.log(circleCenter, "circle center")
+
+
+  const WrappedMap = withGoogleMap(() => (
+    <GoogleMap
+      defaultZoom={13}
+      defaultCenter={{ lat: latitude || 0, lng: longitude || 0 }}
+    >
+      {latitude && longitude && (
+        <Marker position={{ lat: latitude, lng: longitude }} />
+      )}
+      {latitude2 && longitude2 && (
+        <Marker position={{ lat: latitude2, lng: longitude2 }} />
+      )}
+
+      
+
+      {circleCenter[0] && circleCenter[1] && (
+      <Circle
+                  defaultCenter={{
+                    lat: circleCenter[0],
+                    lng: circleCenter[1]
+                  }}
+                  radius={circleRadius}
+                  options={{strokeColor: "#ff0000"}}
+                  ref={circleRef}
+                />
+                )}
+    </GoogleMap>
+  ));
+
   return (
     <div className="container-fluid g-0">
       <div className="row">
@@ -240,32 +267,15 @@ const ProjectLoc = () => {
             </table>
 
             {latitude && longitude && (
-              <MapContainer
-                key={`${latitude}-${longitude}`}
-                center={[latitude, longitude]}
-                zoom={13}
-                style={{ height: "400px" }}
-              >
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-                <Marker position={[latitude, longitude]} icon={customIcon}>
-                  <Popup> Company Coverage</Popup>
-                </Marker>
-                <Marker position={[latitude2, longitude2]} icon={customIcon}>
-                  <Popup>Your Location</Popup>
-                </Marker>
-                {circleCenter[0] && circleCenter[1] && (
-                  <Circle
-                    center={circleCenter}
-                    radius={circleRadius}
-                    ref={circleRef}
-                  >
-                    <Popup>Selected Area</Popup>
-                  </Circle>
-                )}
-              </MapContainer>
+              <>
+
+                <LoadScript googleMapsApiKey="">
+                  <WrappedMap
+                    containerElement={<div style={{ height: "400px" }} />}
+                    mapElement={<div style={{ height: "100%" }} />}
+                  />
+                </LoadScript>
+              </>
             )}
           </div>
         </div>
