@@ -6,6 +6,7 @@ import { useLocation } from "react-router";
 import SimpleBackdrop from "../components/Backdrop";
 import locationIcon from "../assests/images/location.png";
 import placeholder from "../assests/images/placeholder.png";
+import EmployeeNavbar from "./EmployeeNavbar";
 
 
 

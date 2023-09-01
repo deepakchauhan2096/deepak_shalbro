@@ -54,7 +54,12 @@ const Project = (props) => {
   const { alldata, setText } = useContext(MyContext);
   const { projectcreatedata } = useContext(MyContext);
 
- 
+
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
 
   const filterallprojectData = props.recieveData;
 

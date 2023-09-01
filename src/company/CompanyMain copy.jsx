@@ -163,7 +163,7 @@ const CompanyMain = () => {
   const fetchAllEmployee = async () => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_employee",
+        "http://3.84.137.243:5001/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME:
@@ -178,7 +178,7 @@ const CompanyMain = () => {
         const data = response.data;
         setAllempData(data.result);
         // setIsLoading(false);
-        console.log("please", data)
+        // console.log("all main project", data)
       }, 1000);
     } catch (err) {
       console.log("something Went wrong: =>", err);
@@ -188,8 +188,6 @@ const CompanyMain = () => {
   useEffect(() => {
     fetchAllEmployee();
   }, []);
-
-  console.log(allempData,"india")
 
   return (
     <>
@@ -224,7 +222,6 @@ const CompanyMain = () => {
             listname={post.listname}
             listlink={post.listlink}
             value={index}
-            className="list"
           />
         ))}
 
@@ -236,7 +233,7 @@ const CompanyMain = () => {
             <div className="logout_icon d-inline">
               <Button
                 className="text-white text-uppercase"
-                onClick={() => navigate("/admin")}
+                onClick={() => navigate(-2)}
               >
                 <LogoutIcon style={{ display: "inline" }} /> Exit
               </Button>
@@ -278,7 +275,7 @@ const CompanyMain = () => {
         <AttendanceReport mainData={allempData} />
       </NavScreen>
 
-
+      
       <NavScreen screenIndex={navIndex === 5}>
         <Vehicle mainData={allempData} />
       </NavScreen>
