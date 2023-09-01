@@ -15,6 +15,7 @@ import EmployeeLogin from "./employee/EmployeeLogin";
 import Temp from "./Attendance/Temp";
 import Cookies from "js-cookie";
 import EmployeeHistory from "./employee/EmployeeHistory";
+import EmployeeDetail from "./employee/EmployeeDetail";
 
 function App() {
 
@@ -80,18 +81,22 @@ function App() {
                 path="/"
                 element={<Navigate to="/admin" />} // Redirect to admin dashboard
               />
+
               <Route path="/admin/*" element={<AdminDashboard state={user} />} />
               <Route path="/company/*" element={<CompanyMain />} />
               <Route path="/temp/*" element={<Temp />} />
+
             </> :
             <Route path="/*" element={<Navigate to="/login" />} />
           }
 
           {dataEmp ?
             <>
-              <Route path="/employee/*" element={<EmployeeAttendance state={userEmp} />} />
-              <Route path="/employee/attendance/*" element={<EmployeeAttendance state={userEmp} />} />
-              <Route path="/employee/history/*" element={<EmployeeHistory state={userEmp} />} />
+
+            <Route path="/employee/*" element={<EmployeeDetail state={userEmp.result} />} />
+            <Route path="/employee/attendance/:id/*" element={<EmployeeAttendance state={userEmp} />} />
+            <Route path="/employee/history/:*" element={<EmployeeHistory state={userEmp} />} />
+
             </> :
             // <Route path="/employee/*" element={<Navigate to="/employee/login" />} />
             ""

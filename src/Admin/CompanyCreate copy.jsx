@@ -73,7 +73,7 @@ export default function CompanyCreate(props) {
   );
 
 const list = companytype;
-console.log("hbbbdf", create_company)
+console.log("hbbbdf", list)
 
 
   // const handleSubmit = (e) => {
@@ -124,26 +124,26 @@ console.log("hbbbdf", create_company)
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    // if (
-    //   !create_company.COMPANY_USERNAME ||
-    //   !create_company.COMPANY_NAME ||
-    //   !create_company.COMPANY_PHONE ||
-    //   !create_company.COMPANY_ADD2 ||
-    //   !create_company.COMPANY_EMAIL ||
-    //   !create_company.COMPANY_COUNTRY ||
-    //   !create_company.COMPANY_CITY ||
-    //   !create_company.COMPANY_STATE ||
-    //   !create_company.COMPANY_PARENT_ID ||
-    //   !create_company.COMPANY_PARENT_USERNAME
-    // ) {
-    //   setErrorMsg("Fill all fields");
-    //   toast.error("Please fill in all fields", {
-    //     position: toast.POSITION.TOP_CENTER,
-    //     autoClose: 2000,
-    //   });
-    //   return;
-    // }
-    // setErrorMsg("");
+    if (
+      !create_company.COMPANY_USERNAME ||
+      !create_company.COMPANY_NAME ||
+      !create_company.COMPANY_PHONE ||
+      !create_company.COMPANY_ADD2 ||
+      !create_company.COMPANY_EMAIL ||
+      !create_company.COMPANY_COUNTRY ||
+      !create_company.COMPANY_CITY ||
+      !create_company.COMPANY_STATE ||
+      !create_company.COMPANY_PARENT_ID ||
+      !create_company.COMPANY_PARENT_USERNAME
+    ) {
+      setErrorMsg("Fill all fields");
+      toast.error("Please fill in all fields", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+      return;
+    }
+    setErrorMsg("");
   
     axios
       .post(`http://18.211.130.168:5001/create_company`, create_company, {
@@ -162,6 +162,20 @@ console.log("hbbbdf", create_company)
             autoClose: 1000,
           });
           props.Update(() => response.data.result);
+          setCreate_company({
+            // Reset your state after successful submission
+            COMPANY_PARENT_ID: props.ID,
+            COMPANY_PARENT_USERNAME: props.Username,
+            COMPANY_NAME: "",
+            COMPANY_USERNAME: "",
+            COMPANY_PHONE: "",
+            COMPANY_EMAIL: "",
+            COMPANY_ROLE: "",
+            COMPANY_ADD2: "",
+            COMPANY_STATE: "",
+            COMPANY_CITY: "",
+            COMPANY_COUNTRY: "",
+          });
           setOpen(false);
         }
       })
@@ -173,16 +187,19 @@ console.log("hbbbdf", create_company)
         });
       });
   };
+  const StyledFab = styled(Fab)({
 
+    position: "fixed",
+    top: "80px",
+    right: "80px",
+
+
+  });
   return (
     <>
-       <button
-        onClick={handleOpen}
-        className="btn btn-primary btn-sm"
-        style={{ width: "fit-content" }}
-      >
-        <AddIcon /> Add Company
-      </button>
+      <StyledFab onClick={handleOpen} size="medium" color="secondary" aria-label="add" style={props.btnstyle}>
+        <AddIcon />
+      </StyledFab>
 
       <Modal
         open={open}
@@ -378,6 +395,6 @@ console.log("hbbbdf", create_company)
       </Modal>
 
       <SimpleBackdrop open={loader} />
-</>
-);
+    </>
+  );
 }

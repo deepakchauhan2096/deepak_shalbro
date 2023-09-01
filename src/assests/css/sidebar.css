@@ -4,9 +4,11 @@
 
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
-  font-family: "Poppins", sans-serif;
-  background: #fafafa;
-  /* user-select: none; */
+
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    /* user-select: none; */
+
 }
 
 p {
@@ -27,12 +29,12 @@ a:focus {
 }
 
 .navbar {
-  padding: 15px 10px;
-  background: #fff;
-  border: none;
-  border-radius: 0;
-  margin-bottom: 40px;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
+
 }
 
 .navbar-btn {

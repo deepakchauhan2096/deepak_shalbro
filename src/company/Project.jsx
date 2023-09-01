@@ -21,7 +21,6 @@ const Project = (props) => {
       PROJECT_PARENT_USERNAME: "",
       PROJECT_MEMBER_PARENT_ID: "",
       PROJECT_MEMBER_PARENT_USERNAME: "",
-      // PROJECT_ROLE: "",
       PROJECT_TYPE: "",
       PROJECT_NAME: "",
       PROJECT_ACCOUNT: "",
@@ -39,7 +38,6 @@ const Project = (props) => {
 
     },
   });
-  // const dispatch = useDispatch() ;
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
   const [ProjectData, setProjectData] = useState([]);
@@ -56,11 +54,12 @@ const Project = (props) => {
   const { alldata, setText } = useContext(MyContext);
   const { projectcreatedata } = useContext(MyContext);
 
-  //update data
+
 
   useEffect(() => {
     fetchProjects();
   }, []);
+
 
   const filterallprojectData = props.recieveData;
 
@@ -96,6 +95,13 @@ const Project = (props) => {
       console.log("Something Went Wrong: =>", err);
     }
   };
+
+
+   //update data
+
+   useEffect(() => {
+    fetchProjects();
+  }, []);
 
   // console.log(ProjectData, "projectdata");
 
