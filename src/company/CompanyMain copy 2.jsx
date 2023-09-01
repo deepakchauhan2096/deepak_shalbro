@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
@@ -32,6 +34,9 @@ import Vehicle from "../assetmanage/Vehicle";
 
 
 
+import MenuIcon from "@mui/icons-material/Menu";
+import "./CompanyMain.css";
+
 const CompanyMain = () => {
   const [open, setOpen] = React.useState(false);
   const [navIndex, setNavIndex] = useState(0);
@@ -41,6 +46,8 @@ const CompanyMain = () => {
   // modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // get Company data
   const location = useLocation();
@@ -163,7 +170,7 @@ const CompanyMain = () => {
   const fetchAllEmployee = async () => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_employee",
+        "http://3.84.137.243:5001/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME:
@@ -178,7 +185,7 @@ const CompanyMain = () => {
         const data = response.data;
         setAllempData(data.result);
         // setIsLoading(false);
-        console.log("please", data)
+        // console.log("all main project", data)
       }, 1000);
     } catch (err) {
       console.log("something Went wrong: =>", err);
@@ -189,17 +196,27 @@ const CompanyMain = () => {
     fetchAllEmployee();
   }, []);
 
-  console.log(allempData,"india")
-
   return (
     <>
+
+<Button
+        className={`hamburger-button ${drawerOpen ? "open" : ""}`}
+        onClick={() => setDrawerOpen(!drawerOpen)}
+      >
+        <MenuIcon />
+    
+      </Button>
       <Drawer
         anchor="left"
         variant="permanent"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
         PaperProps={{
           className: "sidebar",
           sx: {
             overflow: "hidden",
+            display: drawerOpen ? "block" : "none",
+            width: drawerOpen ? "100%" : 0,
           },
         }}
       >
@@ -224,7 +241,6 @@ const CompanyMain = () => {
             listname={post.listname}
             listlink={post.listlink}
             value={index}
-            className="list"
           />
         ))}
 
@@ -236,7 +252,7 @@ const CompanyMain = () => {
             <div className="logout_icon d-inline">
               <Button
                 className="text-white text-uppercase"
-                onClick={() => navigate("/admin")}
+                onClick={() => navigate(-2)}
               >
                 <LogoutIcon style={{ display: "inline" }} /> Exit
               </Button>

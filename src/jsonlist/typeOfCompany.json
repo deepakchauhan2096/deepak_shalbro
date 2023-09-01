@@ -1,71 +1,69 @@
-Architecture 
-Communications 
-Communications I Data 
-Concrete 
-Concrete | Cast-in-Place
-Concrete I Precast 
-Construction Management 
-Conveying Equipment 
-Conveying Equipment I Elevators 
-Demoli�on
-Earthwork 
-Earthwork I Site Excava�on & Grading 
-Electrical 
-Electrical Power Genera�on 
-Electronic Safety & Security 
-Equipment 
-Equipment I Kitchen Appliances 
-Exterior Improvements 
-Exterior Fences & Gates 
-Exterior | Landscaping
-Exterior I Irriga�on 
-Finishes 
-Finishes I Carpe�ng 
-Finishes I Ceiling 
-Finishes I Drywall 
-Finishes 
-Floorng 
-Finishes I Pain�ng & Coa�ng 
-Finishes | Tile 
-Fire Suppression 
-Furnishings
-Furnishings I Casework & Cabinets 
-Furnishings I Countertops 
-Furnishings I Window Treatments 
-General Contractor 
-HVAC Hea�ng, Ven�la�ng, & Air Condi�oning
-Industry-Specific Manufacturing Processing 
-Integrated Automa�on 
-Masonry 
-Material Processing & Handling Equipment 
-Metals
-Metals I Structural Steel / Framing 
-Moisture Protec�on 
-Moisture Protec�on I Roofing 
-Moisture Protec�on | Waterproofing 
-Openings
-Openings I Doors & Frames 
-Openings 
-Entrances & Storefronts 
-Openings 
-Glazıng 
-Openings I Roof Windows & Skylights 
-Openings I Windows
-Owner
-Plumbing
-Pollu�on & Waste Control Equipment
-Process Gas & Liquid Handling, Purifca�on, & Storage Equipment
-Process Hea�ng, Cooling, & Drying Equipment
-Process Integra�on 
-Process Integra�on I Piping 
-Special Construc�on 
-Special�es 
-Special�es I Signage 
-U�li�es 
-Water & Wastewater Equipment 
-Waterway & Marine Construc�on
-Waterway & Marine Construc�on 
-Wood & Plas�cs 
-Wood & Plas�cs I Millwork 
-Wood & Plas�cs I Rough Carpentry 
-Other (custom)
+[
+    "Architecture",
+    "Communications",
+    "Communications I Data",
+    "Concrete",
+    "Concrete | Cast-in-Place",
+    "Concrete I Precast",
+    "Construction Management",
+    "Conveying Equipment",
+    "Conveying Equipment I Elevators",
+    "Demolition",
+    "Earthwork",
+    "Earthwork I Site Excavation & Grading",
+    "Electrical",
+    "Electrical Power Generation",
+    "Electronic Safety & Security",
+    "Equipment",
+    "Equipment I Kitchen Appliances",
+    "Exterior Improvements",
+    "Exterior Fences & Gates",
+    "Exterior | Landscaping",
+    "Exterior I Irrigation",
+    "Finishes",
+    "Finishes I Carpeting",
+    "Finishes I Ceiling",
+    "Finishes I Drywall",
+    "Finishes I Painting & Coating",
+    "Finishes | Tile",
+    "Fire Suppression",
+    "Furnishings",
+    "Furnishings I Casework & Cabinets",
+    "Furnishings I Countertops",
+    "Furnishings I Window Treatments",
+    "General Contractor",
+    "HVAC Heating, Ventilating, & Air Conditioning",
+    "Industry-Specific Manufacturing Processing",
+    "Integrated Automation",
+    "Masonry",
+    "Material Processing & Handling Equipment",
+    "Metals",
+    "Metals I Structural Steel / Framing",
+    "Moisture Protection",
+    "Moisture Protection I Roofing",
+    "Moisture Protection | Waterproofing",
+    "Openings",
+    "Openings I Doors & Frames",
+    "Entrances & Storefronts",
+    "Glazing",
+    "Openings I Roof Windows & Skylights",
+    "Openings I Windows",
+    "Owner",
+    "Plumbing",
+    "Pollution & Waste Control Equipment",
+    "Process Gas & Liquid Handling, Purification, & Storage Equipment",
+    "Process Heating, Cooling, & Drying Equipment",
+    "Process Integration",
+    "Process Integration I Piping",
+    "Special Construction",
+    "Specialties",
+    "Specialties I Signage",
+    "Utilities",
+    "Water & Wastewater Equipment",
+    "Waterway & Marine Construction",
+    "Wood & Plastics",
+    "Wood & Plastics I Millwork",
+    "Wood & Plastics I Rough Carpentry",
+    "Other (custom)"
+  ]
+  

@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import SimpleBackdrop from "../components/Backdrop";
 import { faListSquares } from "@fortawesome/free-solid-svg-icons";
 import { Fab, Paper, } from "@mui/material";
-
+import companytype from "../jsonlist/typeOfCompany.json"
 
 const style = {
   position: "absolute",
@@ -40,6 +40,7 @@ export default function CompanyCreate(props) {
     COMPANY_USERNAME: "",
     COMPANY_PHONE: "",
     COMPANY_EMAIL: "",
+    COMPANY_ROLE:"",
     COMPANY_ADD2: "",
     COMPANY_STATE: "",
     COMPANY_CITY: "",
@@ -71,7 +72,8 @@ export default function CompanyCreate(props) {
     }
   );
 
-
+const list = companytype;
+console.log("hbbbdf", list)
 
 
   // const handleSubmit = (e) => {
@@ -168,6 +170,7 @@ export default function CompanyCreate(props) {
             COMPANY_USERNAME: "",
             COMPANY_PHONE: "",
             COMPANY_EMAIL: "",
+            COMPANY_ROLE: "",
             COMPANY_ADD2: "",
             COMPANY_STATE: "",
             COMPANY_CITY: "",
@@ -265,7 +268,27 @@ export default function CompanyCreate(props) {
                   />
                 </div>
               </div>
+
               <div className="row py-2">
+              <div className="form-group col-xl-4">
+                  <label>Company Type</label>
+                  <select
+                    className="form-control form-control-2 border  rounded-0"
+                    name="COMPANY_ROLE"
+                    value={create_company.COMPANY_ROLE}
+                    onChange={handleCreate}
+                  >
+                    <option selected>Choose...</option>
+
+                    {list.map((e, key) => {
+                      return (
+                        <option value={e} key={key}>{e}</option>
+                      )
+                    })}
+
+                  </select>
+                </div>
+
                 <div className="form-group col-xl-4">
                   <label>Country</label>
                   <select
@@ -306,7 +329,10 @@ export default function CompanyCreate(props) {
                   </select>
                 </div>
 
-                <div className="form-group col-xl-4">
+              </div>
+             
+               <div className="row py-2">
+               <div className="form-group col-xl-4">
                   <label>City</label>
                   <select
                     className="form-control form-control-2 border rounded-0"
@@ -323,11 +349,7 @@ export default function CompanyCreate(props) {
 
                   </select>
                 </div>
-
-
-
-              </div>
-              <div className="form-group col-xl-12">
+              <div className="form-group col-xl-8">
                 <label>Address</label>
                 <textarea
                   type="text"
@@ -340,6 +362,8 @@ export default function CompanyCreate(props) {
                 // cols="50"
                 />
               </div>
+               </div>
+            
    
 
 

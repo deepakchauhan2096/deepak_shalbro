@@ -8,6 +8,7 @@ import './vehicle.css';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import VehicleTrackingSystem from "./TrackVehicle";
 // import { styled } from "@mui/material/styles";
 
 
@@ -54,7 +55,7 @@ const Vehicle = () => {
   const [activeButton, setActiveButton] = useState("VehicleList");
   const [errorMsg, setErrorMsg] = useState("");
   const [currentScreen, setCurrentScreen] = useState("VehicleList"); // Default screen
-
+  const [index, setIndex] = useState(1);
   const handleScreenChange = (screen) => {
     setCurrentScreen(screen);
   };
@@ -81,15 +82,6 @@ const Vehicle = () => {
     display: props.screenIndex ? 'block' : 'none',
   }));
 
-  const TrackingScreen = styled(Paper)((props) => ({
-    height: 'calc(100vh - 32px)',
-    padding: 0,
-    paddingBottom: '0',
-    overflow: 'auto',
-    borderRadius: 0,
-    Border: 0,
-    display: props.open ? 'block' : 'none',
-  }));
   const handleSubmit = (e) => {
     e.preventDefault();
     const requiredFields = [
@@ -166,19 +158,6 @@ const Vehicle = () => {
   };
 
 
-  //   const StyledButton = styled.button`
-  //   background-color: #007bff;
-  //   color: #ffffff;
-  //   border: none;
-  //   padding: 6px 12px;
-  //   cursor: pointer;
-  //   transition: background-color 0.2s ease-in-out;
-
-  //   &:hover {
-  //     background-color: #0056b3;
-  //   }
-  // `;
-  // 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
     {
@@ -196,15 +175,17 @@ const Vehicle = () => {
     {
       field: 'licenseFile',
       headerName: 'License File',
-      className: "view-btn primary btn btn-success",
+      className: "view-btn primary btn btn-success button",
       width: 150,
       renderCell: (params) => (
-        <Button
+      
+          <Button
+          className="view-btn primary btn btn-success button"
+          variant="outlined"
           onClick={() => handleDownload(params.row.licenseFile)}
-          variant= "outlined"
         >
           License
-        </Button>
+          </Button>
       ),
     },
     {
@@ -213,8 +194,8 @@ const Vehicle = () => {
       width: 150,
       renderCell: (params) => (
         <Button
-          className="view-btn primary btn btn-success"
-          variant= "outlined"
+          className="view-btn  button"
+          variant="outlined"
           onClick={() => handleDownload(params.row.pollutionFile)}
         >
           Pollution
@@ -234,6 +215,8 @@ const Vehicle = () => {
     // Add more rows
   ];
 
+  console.log(index, "index")
+
 
 
   const handleDownload = (filename) => {
@@ -244,217 +227,72 @@ const Vehicle = () => {
 
   return (
     <>
-      <Box className="box" style={{ background: '#f0f0f0' }}>
-
-
-        {/* <Button
-          onClick={() => handleScreenChange("VehicleList")}
-          sx={{
-            color: currentScreen === "VehicleList" ? "#277099" : "#ffffff",
-            backgroundColor: currentScreen === "VehicleList" ? "#ffffff" : "#277099",
-          }}
-          className="btn rounded-0 border-0 rounded-0 text-primary bg-white"
-          variant="contained"
+      <Box className="box" style={{ background: '#277099' }}>
+       
+        <Button
+          onClick={(e) => setIndex(1)}
+          className={
+            index === 1
+              ? "btn button border-bottom-0 bg-white"
+              : "btn rounded-0 border-0  rounded-0 text-light"
+          }
           size="small"
+
+          variant={index === 1 ? "outlined" : "outlined"}
         >
           Vehicle
         </Button>
         <Button
-          onClick={() => {
-            handleScreenChange("TrackVehicles");
-            setTrackButtonClicked(true); // Update the state
-          }}
-          sx={{
-            color: currentScreen === "TrackVehicles" ? "#277099" : "#ffffff",
-            backgroundColor: trackButtonClicked ? "#ffffff" : "#277099", // Update background color based on state
-          }}
-          className="btn rounded-0 border-0 rounded-0 text-primary bg-white"
-          variant="contained"
+          onClick={(e) => setIndex(2)}
+      
+          className={
+            index === 2
+              ? "btn button border-bottom-0 bg-white"
+              : "btn rounded-0 border-0  rounded-0 text-light"
+          }
           size="small"
-        >
-          Track Vehicles
-        </Button> */}
-        <Button
-          onClick={() => handleScreenChange("VehicleList")}
-          sx={{
-            color: "#ffffff",
-            backgroundColor: activeButton === "VehicleList" ? "#277099" : "#007bff",
-          }}
-          className="btn rounded-0 border-0 rounded-0 text-primary bg-white"
-          variant="contained"
-          size="small"
-        >
-          Vehicle
-        </Button>
-        <Button
-          onClick={() => handleScreenChange("TrackVehicles")}
-          sx={{
-            color: "#ffffff",
-            backgroundColor: activeButton === "TrackVehicles" ? "#277099" : "#007bff",
-          }}
-          className="btn rounded-0 border-0 rounded-0 text-primary bg-white"
-          variant="contained"
-          size="small"
-        >
-          Track Vehicles
-        </Button>
 
+          variant={index === 2 ? "outlined" : "outlined"}
+        >
+          Track Vehicles
+        </Button>
         <VehicleForm name={'Project'} />
 
-        {currentScreen === "VehicleList" && (
 
-          <MyScreen sx={{ display: 'block', padding: 3 }}>
-            <Box sx={{ height: 400, width: '100%' }}>
 
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 5,
-                    },
+
+        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
+     
+          <Box sx={{ height: 400, width: '100%' }}>
+
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
                   },
-                }}
-                density="compact"
-                pageSizeOptions={[5]}
-                checkboxSelection
-                disableRowSelectionOnClick
-              />
+                },
+              }}
+              density="compact"
+              pageSizeOptions={[5]}
+              checkboxSelection
+              disableRowSelectionOnClick
+            />
 
 
-            </Box>
-          </MyScreen>
-        )}
-
-        {currentScreen === "TrackVehicles" && (
-
-          <TrackingScreen open={trackingOpen}>
-            <Button
-              onClick={handleTrackingClose}
-              sx={{ color: '#277099' }}
-              className="btn rounded-0 border-0  rounded-0 text-light"
-              variant="contained"
-              size="small"
-            >
-              Back to Vehicle List
-            </Button>
-            <div className="tracking-container">
-              <h3>Tracked Vehicles</h3>
-              <div style={{ height: 400, width: '100%' }}>
-                <DataGrid
-                  rows={trackedVehicles}
-                  columns={trackingColumns}
-                  pageSize={5}
-                  rowsPerPageOptions={[5]}
-                />
-              </div>
-            </div>
-          </TrackingScreen>
-        )}
+          </Box>
+       
+        </MyScreen>
+        <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
+        <VehicleTrackingSystem />
+        </MyScreen>
       </Box>
 
-      {/* VehicleCreate Modal */}
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '60%', bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 4 }}>
-          <Button
-            onClick={handleOpen}
-            sx={{ color: "#277099" }}
-            className="btn rounded-0 border-0  rounded-0 text-light"
-            variant="contained"
-            size="small"
-          >
-            + Add New Vehicle
-          </Button>
+     
+      
 
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <form onSubmit={handleSubmit}>
-                <div className="row py-2">
-                  <div className="form-group col-xl-6">
-                    <label> Project Username</label>
-
-                    <TextField
-                      label="Vehicle Name"
-                      fullWidth
-                      variant="outlined"
-                      margin="normal"
-                      value={createVehicle.vehicleName}
-                      name="vehicleName"
-                      onChange={handleCreate}
-                      required
-                    />
-                  </div>
-                  <div className="form-group col-xl-6">
-                    <label> Project Username</label>
-
-                    <TextField
-                      label="Vehicle Number"
-                      fullWidth
-                      variant="outlined"
-                      margin="normal"
-                      value={createVehicle.vehicleNumber}
-                      name="vehicleNumber"
-                      onChange={handleCreate}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="row py-2">
-
-                  <div className="form-group col-xl-6">
-
-                    <FileInputLabel>
-                      Upload License Document
-                      <FileInput
-                        type="file"
-                        onChange={(e) => handleFileChange(e, "licenseFile")}
-                        required
-
-                      />
-                    </FileInputLabel>
-                  </div>
-                  <div className="form-group col-xl-6">
-
-                    <FileInputLabel>
-                      Upload Pollution Document
-                      <FileInput
-                        type="file"
-                        onChange={(e) => handleFileChange(e, "pollutionFile")}
-                        required
-                      />
-                    </FileInputLabel>
-                  </div>
-                </div>
-
-
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  startIcon={<CloudUploadIcon />}
-                >
-                  Submit
-                </Button>{" "}
-                <Button
-                  onClick={handleClose}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Discard
-                </Button>
-              </form>
-            </Box>
-          </Modal>
-          <ToastContainer />
-        </Box>
-      </Modal>
     </>
   );
 };

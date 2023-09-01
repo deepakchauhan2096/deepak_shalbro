@@ -8,6 +8,8 @@ import teamImg1 from "../assests/images/team-1.jpg";
 import { styled } from "@mui/material/styles";
 import Snackbar from "@mui/material/Snackbar";
 import "../assests/css/employeesrc.css";
+import Cookies from "js-cookie";
+
 import {
   Button,
   Card,
@@ -45,6 +47,7 @@ const EmployeeSrc = (props) => {
   // Assinging Projects
   const [filterData, setFilteredData] = useState({
     row: {
+      EMPLOYEE_ID: "",
       EMPLOYEE_DOB: "",
       EMPLOYEE_EMPLMNTTYPE: "",
       EMPLOYEE_HIRE_DATE: "",
@@ -95,11 +98,11 @@ const EmployeeSrc = (props) => {
       PROJECT_MEMBER_PARENT_USERNAME:
         getallparam[0]?.PROJECT_MEMBER_PARENT_USERNAME,
       PROJECT_USERNAME: getallparam[0]?.PROJECT_USERNAME,
-      EMPLOYEE_ID: rows[0]?.EMPLOYEE_ID,
-      EMPLOYEE_PARENT_ID: rows[0]?.EMPLOYEE_PARENT_ID,
-      EMPLOYEE_PARENT_USERNAME: rows[0]?.EMPLOYEE_PARENT_USERNAME,
-      EMPLOYEE_MEMBER_PARENT_ID: rows[0]?.EMPLOYEE_MEMBER_PARENT_ID,
-      EMPLOYEE_MEMBER_PARENT_USERNAME: rows[0]?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+      EMPLOYEE_ID:filterData.row?.EMPLOYEE_ID,
+      EMPLOYEE_PARENT_ID: filterData.row?.EMPLOYEE_PARENT_ID,
+      EMPLOYEE_PARENT_USERNAME: filterData.row?.EMPLOYEE_PARENT_USERNAME,
+      EMPLOYEE_MEMBER_PARENT_ID: filterData.row?.EMPLOYEE_MEMBER_PARENT_ID,
+      EMPLOYEE_MEMBER_PARENT_USERNAME: filterData.row?.EMPLOYEE_MEMBER_PARENT_USERNAME,
     };
 
     // Validate the form data before submission
@@ -271,6 +274,14 @@ const EmployeeSrc = (props) => {
     );
   };
 
+  
+  const ClearCookie = () => {
+    // Clear the cookie by removing it
+    Cookies.remove("myResponseData");
+    window.location.replace("/employee/login");
+    console.log("Cookie cleared.");
+  };
+
   return (
     <>
       <Box className="box" style={{ background: "#277099" }}>
@@ -363,6 +374,13 @@ const EmployeeSrc = (props) => {
                   <CardContent sx={{ flex: "1 0 auto" }}>
                     <Typography component="div" variant="h5">
                       {filterData.row.EMPLOYEE_NAME}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      Username : {filterData.row.EMPLOYEE_USERNAME}
                     </Typography>
                     <Typography
                       variant="subtitle1"

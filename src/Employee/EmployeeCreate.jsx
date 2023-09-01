@@ -9,7 +9,7 @@ import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
 import env from "react-dotenv";
 import country from "../Api/countriess.json";
-
+import employeeRole from "../jsonlist/employeeRole.json"
 const style = {
   position: "absolute",
   top: "50%",
@@ -279,7 +279,6 @@ export default function AddEmployee(props) {
                 <div className="form-group col-xl-6 py-1">
 
                   <label>Country</label>
-               
 
                   <select
                     className="form-control form-control-2 border rounded-0"
@@ -290,7 +289,7 @@ export default function AddEmployee(props) {
                   >
                     <option value="">--Choose Country--</option>
                     {country?.map((value, key) => {
-                      console.log("hhh" ,value.name)
+                      console.log("hhh", value.name)
                       return (
                         <option value={value.name} key={key}>
                           {value.name}
@@ -302,7 +301,6 @@ export default function AddEmployee(props) {
                 </div>
                 <div className="form-group col-xl-6 py-1">
                   <label>State</label>
-                
                   <select
                     className="form-control form-control-2 border rounded-0"
                     placeholder="State"
@@ -381,12 +379,12 @@ export default function AddEmployee(props) {
                     required
                   >
                     <option selected>Choose role...</option>
-                    <option>Employee</option>
-                    <option>Trainee</option>
-                    <option>Student</option>
-                    <option>SuperWiser</option>
-                    <option>Worker</option>
-                    <option>other</option>
+                    {employeeRole.map((roles, index) => {
+                      return (
+                        <option>{roles}</option>
+                      )
+                    })}
+
                   </select>
 
                 </div>
@@ -424,28 +422,24 @@ export default function AddEmployee(props) {
                   />
                 </div>
               </div>
-              <div className="row pt-2">
-                <center>
-                  {/* {errorMsg && (
-                <p className=" text-danger fw-light mb-0">{errorMsg}</p>
-              )} */}
-                </center>
-                <div className="col-12">
-                  <button
-                    type="submit"
-                    className="btn btn-info text-white "
-                    onClick={handleSubmit}
-                  >
-                    Submit
-                  </button>{" "}
-                  <button
-                    onClick={handleClose}
-                    className="btn btn-danger text-white "
-                  >
-                    Discard
-                  </button>
-                </div>
+
+              <div className="FormButtonAlign">
+
+                <button
+                  type="submit"
+                  className="btn btn-info text-white "
+                  onClick={handleSubmit}
+                >
+                  Create Employee
+                </button>{" "}
+                <button
+                  onClick={handleClose}
+                  className="btn btn-danger text-white "
+                >
+                  Cancel
+                </button>
               </div>
+
             </form>
           </Box>
         </Container>

@@ -68,6 +68,7 @@ const EmployeeTimeSheet = (props) => {
       );
       setTimeout(() => {
         setWorkvalue(response.data.result);
+        console.log(response.data.result,"getdate")
       }, 1000);
     } catch (err) {
       console.log("something Went wrong: =>", err);

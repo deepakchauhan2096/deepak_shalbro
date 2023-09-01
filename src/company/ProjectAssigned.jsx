@@ -1,7 +1,36 @@
 import React from "react";
+import axios from "axios";
 
 const ProjectAssigned = (props) => {
+
   const filterData = props.projectData;
+  console.log("Hello employee", filterData)
+
+  // const fetchAllEmployee = async () => {
+  //   try {
+  //     const response = await axios.put(
+  //       "http://18.211.130.168:5001/get_employee",
+  //       {
+  //         EMPLOYEE_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
+  //         EMPLOYEE_MEMBER_PARENT_USERNAME:
+  //           filterallprojectData?.COMPANY_PARENT_USERNAME,
+  //         EMPLOYEE_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
+  //         EMPLOYEE_PARENT_ID: filterallprojectData?.COMPANY_ID,
+  //       },
+  //       { headers }
+  //     );
+  //     setTimeout(() => {
+  //       // console.log("ALL EMPLOYEE data ", response);
+  //       const data = response.data;
+  //       setAllempData(data.result);
+  //       // setIsLoading(false);
+  //       console.log("please", data)
+  //     }, 1000);
+  //   } catch (err) {
+  //     console.log("something Went wrong: =>", err);
+  //   }
+  // };
+
   return (
     <div className="container-fluid g-0">
       <div className="row">
@@ -10,7 +39,7 @@ const ProjectAssigned = (props) => {
           <table className="table table-fixed table-sm">
             <thead>
               <tr >
-              <td>
+                <td>
                   <b>S. No.</b>
                 </td>
                 <td>
@@ -35,7 +64,7 @@ const ProjectAssigned = (props) => {
                 <>
                   <tr key={key}>
                     <td>
-                        {key+1}
+                      {key + 1}
                     </td>
                     <td>
                       <span>{assignproject.EMPLOYEE_ID}</span>

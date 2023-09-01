@@ -1,0 +1,19 @@
+/* Example media query for small screens */
+@media (max-width: 768px) {
+    /* Hide the sidebar by default */
+    .sidebar {
+      display: none;
+    }
+  
+    /* Show the sidebar when the drawer is open */
+    .sidebar.open {
+      display: block;
+      width: 100%;
+    }
+  
+    /* Adjust other styles as needed */
+    .hamburger-button {
+      display: block;
+    }
+  }
+  

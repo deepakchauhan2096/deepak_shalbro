@@ -157,3 +157,13 @@ p {
   cursor: pointer;
 }
 
+/* scrollbar color  */
+
+
+/* FormButtonAlign */
+.FormButtonAlign{
+  display: flex;
+  justify-content:space-around;
+  margin: 20px;
+  width: 300px;
+}

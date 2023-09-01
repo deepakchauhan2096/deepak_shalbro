@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React,{useState, useEffect} from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { Button, TextField } from "@mui/material";
@@ -38,7 +38,7 @@ const FileInputLabel = styled("label")({
   },
 });
 
-export default function VehicleCreate(props) {
+const  VehicleCreate = (props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -216,4 +216,5 @@ export default function VehicleCreate(props) {
       <ToastContainer />
     </>
   );
-}
+};
+ export default VehicleCreate;

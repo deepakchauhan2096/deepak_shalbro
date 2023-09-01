@@ -22,19 +22,24 @@ const Project = (props) => {
       PROJECT_MEMBER_PARENT_ID: "",
       PROJECT_MEMBER_PARENT_USERNAME: "",
       // PROJECT_ROLE: "",
-      PROJECT_EMROLMNT_TYPE: "",
+      PROJECT_TYPE: "",
       PROJECT_NAME: "",
-      PROJECT_PHONE: "",
+      PROJECT_ACCOUNT: "",
       PROJECT_USERNAME: "",
       PROJECT_START_DATE: "",
       PROJECT_END_DATE: "",
       PROJECT_SUPERVISOR: "",
       PROJECT_PROGRESS: "",
       PROJECT_ADD: "",
+      PROJECT_VALUE: "",
+      PROJECT_COUNTRY: "",
+      PROJECT_STATE: "",
+      PROJECT_CITY: "",
+      PROJECT_CURRENCY: "",
+
     },
   });
   // const dispatch = useDispatch() ;
-
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
   const [ProjectData, setProjectData] = useState([]);
@@ -43,6 +48,7 @@ const Project = (props) => {
   const [Edit, setEdit] = useState(false);
 
   const [updatedata, setUpdateData] = useState(false);
+  console.log("hgsvdcv", ProjectData)
 
   // modal
   const handleOpen = () => setOpen(true);
@@ -54,7 +60,7 @@ const Project = (props) => {
 
   useEffect(() => {
     fetchProjects();
-  }, [updatedata]);
+  }, []);
 
   const filterallprojectData = props.recieveData;
 
@@ -106,8 +112,8 @@ const Project = (props) => {
       width: 120,
     },
     {
-      field: "PROJECT_PHONE",
-      headerName: "Phone",
+      field: "PROJECT_ACCOUNT",
+      headerName: "Account",
       width: 130,
     },
     {
@@ -125,13 +131,32 @@ const Project = (props) => {
     {
       field: "PROJECT_SUPERVISOR",
       headerName: "Supervisor",
-      width: 130,
+      width: 150,
+    },
+
+    {
+      field: "PROJECT_VALUE",
+      headerName: "Project Value",
+      width: 120,
+      renderCell: (cellValues) => {
+        return (
+          <span>
+            {cellValues.row.PROJECT_VALUE} {cellValues.row.PROJECT_CURRENCY}
+          </span>
+        );
+      },
+    },
+
+    {
+      field: "PROJECT_TYPE",
+      headerName: "Project Type",
+      width: 140,
     },
 
     {
       field: "action",
       headerName: "Detail",
-      width: 100,
+      width: 80,
       renderCell: (cellValues) => {
         return (
           <Button
@@ -228,7 +253,8 @@ const Project = (props) => {
                 }}
                 density="compact"
                 pageSizeOptions={[5]}
-                checkboxSelection
+                checkboxSelection={false}
+
                 disableRowSelectionOnClick
               />
             )}
@@ -316,36 +342,61 @@ const Project = (props) => {
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <div className="container-fluid g-0">
             <div className="row">
-              <div className="col-4">
+              <div className="col-md-2">
                 <b>Project Name</b>
                 <p className="bg-light text-dark p-2 rounded-2">
                   {filterData.PROJECT_NAME}
                 </p>
               </div>
-              <div className="col-4">
-                <b>Phone</b>
+              <div className="col-md-2">
+                <b>Account</b>
                 <p className="bg-light text-dark p-2 rounded-2">
-                  {filterData.PROJECT_PHONE}
+                  {filterData.PROJECT_ACCOUNT}
                 </p>
               </div>
-              <div className="col-4">
+              <div className="col-md-2">
                 <b>Username</b>
                 <p className="bg-light text-dark p-2 rounded-2">
                   {filterData.PROJECT_USERNAME}
                 </p>
               </div>
-              <div className="col-4">
+              <div className="col-md-2">
                 <b>Supervisor</b>
                 <p className="bg-light text-dark p-2 rounded-2">
                   {filterData.PROJECT_SUPERVISOR}
                 </p>
               </div>
-              <div className="col-4">
-                <b>Employement Type</b>
+              <div className="col-2">
+                <b>Project Value</b>
                 <p className="bg-light text-dark p-2 rounded-2">
-                  {filterData.PROJECT_EMROLMNT_TYPE}
+                  {`${filterData.PROJECT_VALUE} ${filterData.PROJECT_CURRENCY}`}
                 </p>
               </div>
+              <div className="col-2">
+                <b>Employement Type</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_TYPE}
+                </p>
+              </div>
+              <div className="col-2">
+                <b>Country</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_COUNTRY}
+                </p>
+              </div>
+              <div className="col-2">
+                <b>State</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_STATE}
+                </p>
+              </div>
+              <div className="col-2">
+                <b>City</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_CITY}
+                </p>
+              </div>
+
               <div className="col-4">
                 <b>Location</b>
                 <p className="bg-light text-dark p-2 rounded-2">
@@ -415,11 +466,10 @@ const Project = (props) => {
           <ProjectAssigned projectData={filterData} />
         </MyScreen>
         <MyScreen screenIndex={index === 10} sx={{ padding: 3 }}>
-       
         </MyScreen>
 
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
-                <ProjectLoc />
+          <ProjectLoc projectData={filterData} />
         </MyScreen>
       </Box>
     </>

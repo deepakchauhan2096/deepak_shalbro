@@ -5,9 +5,10 @@ import axios from "axios";
 import country from "../Api/countriess.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import projectList from "../jsonlist/typeOfProject.json"
 import {
-  Button,
+  Button, MenuItem,
+  Select,
 } from "@mui/material";
 
 const style = {
@@ -27,6 +28,7 @@ export default function ProjectCreate(props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [selectedTimeZone, setSelectedTimeZone] = useState("");
   const [createProject, setCreateProject] = useState({
     PROJECT_PARENT_ID: "",
     PROJECT_PARENT_USERNAME: "",
@@ -40,10 +42,13 @@ export default function ProjectCreate(props) {
     PROJECT_END_DATE: "",
     PROJECT_SUPERVISOR: "",
     PROJECT_COUNTRY: "",
+    PROJECT_TYPE: "",
     PROJECT_STATE: "",
-    PROJECT_PHONE: "",
+    PROJECT_ACCOUNT: "",
+    PROJECT_VALUE: "",
+    PROJECT_CURRENCY: "",
   });
-
+  console.log("project", createProject)
 
   useEffect(() => {
     setCreateProject((prevState) => ({ ...prevState, PROJECT_PARENT_ID: props.companyData?.COMPANY_ID }));
@@ -51,6 +56,7 @@ export default function ProjectCreate(props) {
     setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID }));
     setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME }));
   }, [open])
+
 
 
   console.log(createProject, "check")
@@ -92,8 +98,12 @@ export default function ProjectCreate(props) {
       "PROJECT_END_DATE",
       "PROJECT_SUPERVISOR",
       "PROJECT_COUNTRY",
+      "PROJECT_TYPE",
       "PROJECT_STATE",
-      "PROJECT_PHONE",
+      "PROJECT_ACCOUNT",
+      "PROJECT_VALUE",
+      "PROJECT_CURRENCY",
+
     ];
 
 
@@ -141,6 +151,13 @@ export default function ProjectCreate(props) {
           autoClose: 2000,
         });
       });
+  };
+
+
+  // const timeZones = moment.tz.names(); // Get the array of time zone names
+
+  const handleTimeZoneSelect = (e) => {
+    setSelectedTimeZone(e.target.value);
   };
 
   return (
@@ -192,21 +209,21 @@ export default function ProjectCreate(props) {
                 />
               </div>
               <div className="form-group col-xl-4">
-                <label>Contact</label>
+                <label>Account</label>
                 <input
                   type="number"
                   className="form-control form-control-2 rounded-0"
                   id="inputPassword4"
-                  placeholder="Enter Phone Number"
-                  name="PROJECT_PHONE"
-                  value={createProject.PROJECT_PHONE}
+                  placeholder="Enter your Account"
+                  name="PROJECT_ACCOUNT"
+                  value={createProject.PROJECT_ACCOUNT}
                   onChange={handleCreate}
                   required
                 />
               </div>
             </div>
             <div className="row py-2">
-              <div className="form-group col-xl-6">
+              <div className="form-group col-xl-4">
                 <label>Project start date</label>
                 <input
                   type="date"
@@ -216,7 +233,7 @@ export default function ProjectCreate(props) {
                   className="form-control form-control-2 rounded-0"
                 />
               </div>
-              <div className="form-group col-xl-6">
+              <div className="form-group col-xl-4">
                 <label>Project End date</label>
                 <input
                   type="date"
@@ -226,26 +243,29 @@ export default function ProjectCreate(props) {
                   className="form-control form-control-2 rounded-0"
                 />
               </div>
-            </div>
-            <div className="row py-2">
-              <div className="form-group col-xl-6">
-                <label>Enrollment</label>
+              <div className="form-group col-xl-4">
+                <label>Project Type</label>
                 <select
                   id="inputEnroll"
                   className="form-control form-control-2 border rounded-0"
                   onChange={handleCreate}
-                  name="PROJECT_EMROLMNT_TYPE"
-                  value={createProject.PROJECT_EMROLMNT_TYPE}
+                  name="PROJECT_TYPE"
+                  value={createProject.PROJECT_TYPE}
                 >
-                  <option value="">Choose...</option>
-                  <option>Painter</option>
-                  <option>Fitter</option>
-                  <option>Plumber</option>
-                  <option>Engineer</option>
+                  <option value="">--Choose Project Type--</option>
+                  {projectList.map((projectname) => {
+                    return (
+                      <option value="Architect">{projectname}</option>
+                    )
+                  })}
+         
                 </select>
               </div>
+            </div>
+            <div className="row py-2">
 
-              <div className="form-group col-md-6">
+
+              <div className="form-group col-md-4">
                 <label>Supervisor</label>
                 <input
                   type="text"
@@ -255,6 +275,38 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_SUPERVISOR}
                   onChange={handleCreate}
                 />
+              </div>
+
+
+              <div className="form-group col-md-4">
+                <label>Project Value</label>
+                <input
+                  type="number"
+                  className="form-control form-control-2 rounded-0 "
+                  id="inputsupervisor"
+                  name="PROJECT_VALUE"
+                  value={createProject.PROJECT_VALUE}
+                  onChange={handleCreate}
+                />
+              </div>
+
+              <div className="form-group col-md-4">
+                <label ></label>
+                <select
+                  id="inputEnroll"
+                  className="form-control form-control-2 border rounded-0"
+                  onChange={handleCreate}
+                  name="PROJECT_CURRENCY"
+                  value={createProject.PROJECT_CURRENCY}
+                >
+                  <option value="">--Select Currency--</option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="INR">INR</option>
+                
+                  {/* <option>Plumber</option>
+                  <option>Engineer</option> */}
+                </select>
               </div>
             </div>
             <div className="row py-2">
@@ -332,19 +384,23 @@ export default function ProjectCreate(props) {
                 </select>
               </div>
             </div>
-            <button
-              type="submit"
-              className="btn btn-info text-white"
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>{" "}
-            <button
-              onClick={handleClose}
-              className="btn btn-danger text-white"
-            >
-              Discard
-            </button>
+
+            <div className="FormButtonAlign">
+
+              <button
+                type="submit"
+                className="btn btn-info text-white"
+                onClick={handleSubmit}
+              >
+                Create Project
+              </button>{" "}
+              <button
+                onClick={handleClose}
+                className="btn btn-danger text-white"
+              >
+                Cancel
+              </button>
+            </div>
           </form>
         </Box>
       </Modal>
