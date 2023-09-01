@@ -4,8 +4,6 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { ToastContainer, toast } from "react-toastify";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
 import env from "react-dotenv";
 import country from "../Api/countriess.json";
@@ -132,7 +130,7 @@ export default function AddEmployee(props) {
 
     setErrorMsg("");
     axios
-      .post("http://18.211.130.168:5001/create_employee", createEmployee, {
+      .post("http://13.235.27.242:5001/create_employee", createEmployee, {
         headers,
       })
       .then((response) => {

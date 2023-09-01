@@ -116,7 +116,7 @@ export default function SubcontractCreate(props) {
 
 
     axios
-      .post("http://18.211.130.168:5001/create_subcontractor", createSubcontract, {
+      .post("http://13.235.27.242:5001/create_subcontractor", createSubcontract, {
         headers,
       })
       .then((response) => {

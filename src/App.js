@@ -91,8 +91,8 @@ function App() {
           {dataEmp ?
             <>
               <Route path="/employee/*" element={<EmployeeDetail state={userEmp.result} />} />
-            <Route path="/employee/attendance/:id/*" element={<EmployeeAttendance state={userEmp} />} />
-            <Route path="/employee/history/:*" element={<EmployeeHistory state={userEmp} />} />
+              <Route path="/employee/attendance/:id/*" element={<EmployeeAttendance state={userEmp} />} />
+              <Route path="/employee/history/:*" element={<EmployeeHistory state={userEmp} />} />
             </> :
             // <Route path="/employee/*" element={<Navigate to="/employee/login" />} />
             ""

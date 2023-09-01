@@ -65,7 +65,7 @@ export default function CompanyDelete(props) {
     console.log("on btn submit");
     e.preventDefault();
     axios
-      .post("http://18.211.130.168:5001/update_company", edit_company, {
+      .post("http://13.235.27.242:5001/update_company", edit_company, {
         headers,
       })
       .then((response) => {

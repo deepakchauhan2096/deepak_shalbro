@@ -66,7 +66,7 @@ const ProjectLoc = (props) => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_projects_one",
+        "http://13.235.27.242:5001/get_projects_one",
         {
           PROJECT_ID: editProjectData?.PROJECT_ID,
           PROJECT_MEMBER_PARENT_ID: editProjectData?.PROJECT_MEMBER_PARENT_ID,
@@ -125,7 +125,7 @@ const ProjectLoc = (props) => {
 
     axios
       .put(
-        "http://18.211.130.168:5001/update_projects",
+        "http://13.235.27.242:5001/update_projects",
         {
           PROJECT_ID: editProjectData.PROJECT_ID,
           PROJECT_PARENT_ID: editProjectData.PROJECT_PARENT_ID,

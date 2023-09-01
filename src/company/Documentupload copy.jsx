@@ -54,7 +54,7 @@ export default function ProjectUpload(props) {
     e.preventDefault();
     setBackdrop(true);
     const response = await axios
-      .post("http://18.211.130.168:5001/create_document", postImage.myFile, {
+      .post("http://13.235.27.242:5001/create_document", postImage.myFile, {
         headers,
       })
       .then((response) => {
@@ -106,7 +106,7 @@ export default function ProjectUpload(props) {
         redirect: "follow",
       };
 
-      fetch("http://18.211.130.168:5001/get_all_document", requestOptions)
+      fetch("http://13.235.27.242:5001/get_all_document", requestOptions)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -140,7 +140,7 @@ export default function ProjectUpload(props) {
       const config = {
         method: "put",
         maxBodyLength: Infinity,
-        url: "http://18.211.130.168:5001/download_document",
+        url: "http://13.235.27.242:5001/download_document",
         headers: {
           authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
           "Content-Type": "application/json",
@@ -171,7 +171,7 @@ export default function ProjectUpload(props) {
     let config = {
       method: 'delete',
       maxBodyLength: Infinity,
-      url: `http://18.211.130.168:5001/delete_document/${documentId}`,
+      url: `http://13.235.27.242:5001/delete_document/${documentId}`,
       headers: {
         'authorization_key': 'qzOUsBmZFgMDlwGtrgYypxUz',
         'Content-Type': 'application/json'

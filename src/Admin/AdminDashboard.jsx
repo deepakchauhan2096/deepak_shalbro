@@ -26,8 +26,7 @@ import CompanyCreate from "./CompanyCreate";
 import { useNavigate, useLocation } from "react-router-dom";
 import ProjectCreate from "../company/ProjectCreate";
 import Modal from "@mui/material/Modal";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+
 import { useDispatch, useSelector } from "react-redux";
 import CompanyEdit from "./CompanyEdit";
 import PlaylistPlayOutlinedIcon from "@mui/icons-material/PlaylistPlayOutlined";
@@ -93,7 +92,7 @@ const AdminDashboard = (props) => {
   const getCompanyData = async () => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_all_company",
+        "http://13.235.27.242:5001/get_all_company",
         {
           COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
           COMPANY_PARENT_USERNAME: tableRows?.ADMIN_USERNAME,

@@ -41,7 +41,7 @@ function AdminCreate() {
     setLoader(true); // Show the backdrop when the signup button is clicked
 
     axios
-      .post("http://18.211.130.168:5001/create_admin", values, {
+      .post("http://13.235.27.242:5001/create_admin", values, {
         headers,
       })
       .then((response) => {

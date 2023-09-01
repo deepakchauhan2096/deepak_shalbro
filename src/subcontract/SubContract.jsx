@@ -62,7 +62,7 @@ const SubContract = (props) => {
   const fetchsubcontracts = async (e) => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_subcontractor",
+        "http://13.235.27.242:5001/get_subcontractor",
         {
           SUBCONTRACTOR_PARENT_ID: subcontractData?.COMPANY_ID,
           SUBCONTRACTOR_PARENT_USERNAME: subcontractData?.COMPANY_USERNAME,

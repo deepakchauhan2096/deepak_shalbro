@@ -132,7 +132,7 @@ export default function EditSubcontract(props) {
   
             setErrorMsg("");
             axios
-                .put("http://18.211.130.168:5001/update_subcontructor",
+                .put("http://13.235.27.242:5001/update_subcontructor",
                     {
                         SUBCONTRACTOR_ID: editsubcontracts.SUBCONTRACTOR_ID,
                         SUBCONTRACTOR_PARENT_ID: editsubcontracts.SUBCONTRACTOR_PARENT_ID,
