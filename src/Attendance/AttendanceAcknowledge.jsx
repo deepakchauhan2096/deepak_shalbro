@@ -24,6 +24,8 @@ import { TableRows } from "@mui/icons-material";
 import env from "react-dotenv";
 import AttendancePunch from "./AttendancePunch";
 import SimpleBackdrop from "../components/Backdrop";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import SalaryPDF from "../Invoices/SalaryPDF";
 
 let MyDateCurrent = new Date();
 let MyDateStringCurrent;
@@ -261,33 +263,33 @@ const AttendanceReport = (props) => {
 
   return (
     <>
-     
-        <Box className="box" style={{ background: "#277099" }}>
+      <Box className="box" style={{ background: "#277099" }}>
+        <Button
+          size="small"
+          variant={show ? "outlined" : "outlined"}
+          className={
+            show
+              ? "btn button border-bottom-0 bg-white"
+              : "btn rounded-0 border-bottom-0  rounded-0 text-light"
+          }
+          onClick={() => setshow(true)}
+        >
+          Pay Acknowledgement
+        </Button>
+        {!show && (
           <Button
             size="small"
-            variant={show ? "outlined" : "outlined"}
-            className={
-              show
-                ? "btn button border-bottom-0 bg-white"
-                : "btn rounded-0 border-bottom-0  rounded-0 text-light"
-            }
-            onClick={() => setshow(true)}
+            className="btn button border-bottom-0 bg-white"
+            variant="outlined"
           >
-            Pay Acknowledgement
+            Punch Detail - {employeeName._doc.EMPLOYEE_NAME}{" "}
+            <Typography size="small" px={1} onClick={() => setshow(true)}>
+              <i className="fa fa-times" aria-hidden="true"></i>
+            </Typography>
           </Button>
-          {!show && (
-            <Button
-              size="small"
-              className="btn button border-bottom-0 bg-white"
-              variant="outlined"
-            >
-              Punch Detail - {employeeName._doc.EMPLOYEE_NAME}{" "}
-              <Typography size="small" px={1} onClick={() => setshow(true)}>
-                <i className="fa fa-times" aria-hidden="true"></i>
-              </Typography>
-            </Button>
-          )}
-          {employees ? ( <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
+        )}
+        {employees ? (
+          <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
             <Box
               style={{
                 height: "100%",
@@ -457,9 +459,6 @@ const AttendanceReport = (props) => {
                           <button className="btn btn-sm" disabled>
                             No of Employee: {processedData?.length}
                           </button>{" "}
-                          <button className="btn btn-sm" disabled>
-                            No of Employee: {processedData?.length}
-                          </button>
                         </th>
                       </tr>
                       <tr className="table-light">
@@ -496,7 +495,26 @@ const AttendanceReport = (props) => {
                             </td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <td>
+                                <PDFDownloadLink
+                                  className="btn btn-dark btn-sm"
+                                  document={
+                                    <SalaryPDF
+                                      name={post.EMPLOYEE_NAME}
+                                      email={post.EMPLOYEE_EMAIL}
+                                      phone={post.EMPLOYEE_PHONE}
+                                      address={post.EMPLOYEE_ADD}
+                                      wages={post.EMPLOYEE_HOURLY_WAGE}
+                                      totalIncome={post.TOTAL_HOURS}
+                                      workingHours={post.TOTAL_HOURS}
+                                      mapvalue={post.PUNCH.AttendanceData}
+                                    />
+                                  }
+                                  fileName={`${post.EMPLOYEE_NAME}.pdf`}
+                                >
+                                  Download
+                                </PDFDownloadLink>
+                            </td>
                             <td>
                               {" "}
                               <button
@@ -517,15 +535,14 @@ const AttendanceReport = (props) => {
               </table>
             </Box>
           </MyScreen>
-       
-      ) : (
-        <MyScreen sx={{ display: "block", padding: 3 }}>
-          <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
-            <Animations />
-          </Box>
-        </MyScreen>
-      )}
-       </Box>
+        ) : (
+          <MyScreen sx={{ display: "block", padding: 3 }}>
+            <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
+              <Animations />
+            </Box>
+          </MyScreen>
+        )}
+      </Box>
     </>
   );
 };

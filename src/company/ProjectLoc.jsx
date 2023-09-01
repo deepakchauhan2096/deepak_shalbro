@@ -34,7 +34,7 @@ const ProjectLoc = (props) => {
   const [circleRadius, setCircleRadius] = useState(500);
   const [isInsideCircle, setIsInsideCircle] = useState(false);
   const [map, setMap] = useState(null);
-  window.google = window.google || {};
+ 
 
   const [markerPosition, setMarkerPosition] = useState({
     lat: "",
@@ -56,7 +56,6 @@ const ProjectLoc = (props) => {
 
   
 
-  // console.log(filterallprojectData, "my project");
 
   const headers = {
     "Content-Type": "application/json",
@@ -105,13 +104,6 @@ const ProjectLoc = (props) => {
     }));
   }, [markerPosition.lat, markerPosition.lng, circleRadius, locationName]);
 
-  //api header
-  // const handleEdit = (e) => {
-  //   setEditProject({ ...EditProject, [e.target.name]: e.target.value });
-  //   console.log("heello world", EditProject);
-  // };
-
-  // console.log(ProjectData, "kkkk");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -195,7 +187,7 @@ const ProjectLoc = (props) => {
       const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAPS_API_KEY}`;
       const response = await fetch(url);
       const data = await response.json();
-      const address = data.results[0].formatted_address;
+      const address = data?.results[0]?.formatted_address;
       setLocationName(address);
     } catch (error) {
       console.error("Error fetching location:", error);
