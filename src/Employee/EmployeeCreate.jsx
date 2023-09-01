@@ -8,6 +8,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
 import env from "react-dotenv";
+import country from "../Api/countriess.json";
 
 const style = {
   position: "absolute",
@@ -30,6 +31,7 @@ export default function AddEmployee(props) {
   const [createEmployee, setCreateEmployee] = useState({
     EMPLOYEE_NAME: "",
     EMPLOYEE_EMAIL: "",
+    EMPLOYEE_COUNTRY: "",
     EMPLOYEE_STATE: "",
     EMPLOYEE_CITY: "",
     EMPLOYEE_PHONE: "",
@@ -41,19 +43,19 @@ export default function AddEmployee(props) {
     EMPLOYEE_ADD: "",
     EMPLOYEE_USERNAME: "",
     EMPLOYEE_PASSWORD: "",
-    EMPLOYEE_MEMBER_PARENT_USERNAME:"",
+    EMPLOYEE_MEMBER_PARENT_USERNAME: "",
     EMPLOYEE_PARENT_ID: "",
-    EMPLOYEE_PARENT_USERNAME:"",
+    EMPLOYEE_PARENT_USERNAME: "",
     EMPLOYEE_MEMBER_PARENT_ID: "",
   });
 
-  
-  useEffect(()=>{
-    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME})); 
-    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID})); 
-    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME})); 
-    setCreateEmployee((prevState) => ({...prevState, EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID})); 
-  },[open])
+
+  useEffect(() => {
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME }));
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID }));
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME }));
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID }));
+  }, [open])
 
 
 
@@ -61,13 +63,22 @@ export default function AddEmployee(props) {
 
 
 
+  const availableState = country?.find(
+    (c) => c.name === createEmployee.EMPLOYEE_COUNTRY
+  );
+
+  // console.log("all states : ===> ", availableState,"country=>",country);
+  const availableCities = availableState?.states?.find(
+    (s) => s.name === createEmployee.EMPLOYEE_STATE
+  );
+
 
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-   
+
 
   // const handleCreate = (e) => {
   //   setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
@@ -84,10 +95,11 @@ export default function AddEmployee(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const requiredFields = [
       "EMPLOYEE_NAME",
       "EMPLOYEE_EMAIL",
+      "EMPLOYEE_COUNTRY",
       "EMPLOYEE_STATE",
       "EMPLOYEE_CITY",
       "EMPLOYEE_PHONE",
@@ -104,7 +116,7 @@ export default function AddEmployee(props) {
       "EMPLOYEE_PARENT_USERNAME",
       "EMPLOYEE_MEMBER_PARENT_ID"
     ];
-    
+
     const hasEmptyFields = requiredFields.some(
       (field) => !createEmployee[field]
     );
@@ -117,47 +129,47 @@ export default function AddEmployee(props) {
       });
       return;
     }
-  
+
     setErrorMsg("");
-      axios
-        .post("http://18.211.130.168:5001/create_employee", createEmployee, {
-          headers,
-        })
-        .then((response) => {
-          if (response.data.operation === "failed") {
-            setErrorMsg(response.data.errorMsg);
-            toast.error(response.data.errorMsg, {
-              position: toast.POSITION.TOP_CENTER,
-              autoClose: 2000,
-            });
-          } else if (response.data.operation === "successfull") {
-            toast.success("Form submitted successfully!", {
-              position: toast.POSITION.TOP_CENTER, 
-              autoClose:2000
-            });
-            props.refetch();
-            // setOpen(false);
-            // setCreateEmployee('')
-            setCreateEmployee({});
-            setOpen(false);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          toast.error("An error occurred. Please try again later.", {
+    axios
+      .post("http://18.211.130.168:5001/create_employee", createEmployee, {
+        headers,
+      })
+      .then((response) => {
+        if (response.data.operation === "failed") {
+          setErrorMsg(response.data.errorMsg);
+          toast.error(response.data.errorMsg, {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 2000,
           });
+        } else if (response.data.operation === "successfull") {
+          toast.success("Form submitted successfully!", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000
+          });
+          props.refetch();
+          // setOpen(false);
+          // setCreateEmployee('')
+          setCreateEmployee({});
+          setOpen(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("An error occurred. Please try again later.", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 2000,
         });
+      });
   };
 
 
   return (
     < >
       <Button
-          size="small"
-          className="btn button border-bottom-0 bg-white" 
-          variant="outlined"
+        size="small"
+        className="btn button border-bottom-0 bg-white"
+        variant="outlined"
       >
         Employee
       </Button>
@@ -226,14 +238,15 @@ export default function AddEmployee(props) {
                   />
                 </div>
                 <div className="form-group col-xl-6 py-1">
-                  <label>State</label>
+
+                  <label for="inputPassword4">Date Of Birth</label>
                   <input
-                    type="text"
+                    type="date"
                     className="form-control form-control-2 rounded-0"
-                    id="phone"
-                    placeholder="Enter Your state.."
-                    value={createEmployee.EMPLOYEE_STATE}
-                    name="EMPLOYEE_STATE"
+                    id="inputPassword4"
+                    placeholder="Enter Date of birth"
+                    value={createEmployee.EMPLOYEE_DOB}
+                    name="EMPLOYEE_DOB"
                     onChange={handleCreate}
                     required
                   />
@@ -264,17 +277,48 @@ export default function AddEmployee(props) {
                   />
                 </div>
                 <div className="form-group col-xl-6 py-1">
-                  <label for="inputPassword4">Date Of Birth</label>
-                  <input
-                    type="date"
-                    className="form-control form-control-2 rounded-0"
-                    id="inputPassword4"
-                    placeholder="Enter Date of birth"
-                    value={createEmployee.EMPLOYEE_DOB}
-                    name="EMPLOYEE_DOB"
+
+                  <label>Country</label>
+               
+
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    placeholder="Country"
+                    name="EMPLOYEE_COUNTRY"
+                    value={createEmployee.EMPLOYEE_COUNTRY}
                     onChange={handleCreate}
-                    required
-                  />
+                  >
+                    <option value="">--Choose Country--</option>
+                    {country?.map((value, key) => {
+                      console.log("hhh" ,value.name)
+                      return (
+                        <option value={value.name} key={key}>
+                          {value.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+
+                </div>
+                <div className="form-group col-xl-6 py-1">
+                  <label>State</label>
+                
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    placeholder="State"
+                    name="EMPLOYEE_STATE"
+                    value={createEmployee.EMPLOYEE_STATE}
+                    onChange={handleCreate}
+                  >
+                    <option value="">--Choose State--</option>
+                    {availableState?.states?.map((e, key) => {
+                      return (
+                        <option value={e.name} key={key}>
+                          {e.name}
+                        </option>
+                      );
+                    })}
+                  </select>
 
                 </div>
               </div>
@@ -296,16 +340,22 @@ export default function AddEmployee(props) {
                 </div>
                 <div className="form-group col-xl-4 py-1">
                   <label>City</label>
-                  <input
-                    type="text"
-                    className="form-control form-control-2 rounded-0"
-                    id="city"
-                    placeholder="Enter Your city.."
-                    value={createEmployee.EMPLOYEE_CITY}
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    placeholder="City"
                     name="EMPLOYEE_CITY"
+                    value={createEmployee.EMPLOYEE_CITY}
                     onChange={handleCreate}
-                    required
-                  />
+                  >
+                    <option value="">--Choose City--</option>
+                    {availableCities?.cities?.map((e, key) => {
+                      return (
+                        <option value={e.name} key={key}>
+                          {e.name}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </div>
                 <div className="form-group col-xl-4 py-1">
                   <label>Hourly wages</label>
@@ -375,11 +425,11 @@ export default function AddEmployee(props) {
                 </div>
               </div>
               <div className="row pt-2">
-              <center>
-              {/* {errorMsg && (
+                <center>
+                  {/* {errorMsg && (
                 <p className=" text-danger fw-light mb-0">{errorMsg}</p>
               )} */}
-               </center>
+                </center>
                 <div className="col-12">
                   <button
                     type="submit"
