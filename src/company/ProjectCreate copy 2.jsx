@@ -161,15 +161,18 @@ export default function ProjectCreate(props) {
 
   return (
     <>
-      <button
+      <Button size="small" className="btn button border-bottom-0 bg-white" variant="outlined">
+        Project
+      </Button>
+      <Button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
-        className="btn rounded-0 border-0  rounded-0 text-light btn-primary btn-sm"
-        // variant="contained"
+        className="btn rounded-0 border-0  rounded-0 text-light"
+        variant="contained"
         size="small"
       >
         + Add New Project
-      </button>
+      </Button>
 
       <Modal
         open={open}

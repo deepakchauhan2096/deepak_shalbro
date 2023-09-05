@@ -75,7 +75,7 @@ const ProjectLoc = (props) => {
         { headers }
       );
       setTimeout(() => {
-      const data = response.data;
+      const data = response?.data;
       setProjectData(data?.result[0]);
       setMarkerPosition((prev) => ({
         ...prev,
@@ -87,7 +87,7 @@ const ProjectLoc = (props) => {
       setLocationName(data?.result[0]?.LOCATION_NAME)
       
 
-      console.log("one Data : =>", data);
+      // console.log("one Data : =>", data);
       }, 1000);
     } catch (err) {
       console.log("Something Went Wrong: =>", err);

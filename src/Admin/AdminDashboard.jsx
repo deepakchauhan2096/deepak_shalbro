@@ -121,7 +121,7 @@ const AdminDashboard = (props) => {
                             reFetchfun={getCompanyData}
                           />
                         </td>
-                        <td><Link to={`/company/${COMPANY_ID}/&${COMPANY_USERNAME}/`}/></Link></td>
+                        <td><Link to={`/company/${post.COMPANY_ID}&${post.COMPANY_USERNAME}&${post.COMPANY_PARENT_ID}&${post.COMPANY_PARENT_USERNAME}`} className="text-dark">Visit</Link></td>
                       </tr>
                     ))}
                   </tbody>

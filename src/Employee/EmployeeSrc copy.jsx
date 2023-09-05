@@ -123,6 +123,7 @@ const EmployeeSrc = (props) => {
   };
 
   const fetchAllEmployee = async () => {
+    e.preventDefault();
     try {
       const response = await axios.put(
         "http://18.211.130.168:5001/get_employee",

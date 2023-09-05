@@ -26,6 +26,8 @@ import AttendancePunch from "./AttendancePunch";
 import SimpleBackdrop from "../components/Backdrop";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import SalaryPDF from "../Invoices/SalaryPDF";
+import Sidebar from "../components/Sidebar";
+import { useParams } from "react-router-dom";
 
 let MyDateCurrent = new Date();
 let MyDateStringCurrent;
@@ -98,6 +100,14 @@ function getDatesBetween(startDate, endDate) {
 }
 
 const AttendanceReport = (props) => {
+  const { id } = useParams();
+
+  const param = id.split("&");
+  const COMPANY_ID = param[0];
+  const COMPANY_USERNAME = param[1];
+  const COMPANY_PARENT_ID = param[2];
+  const COMPANY_PARENT_USERNAME = param[3];
+
   const [employees, getReport] = useState();
   const [foundUsers, setFoundUsers] = useState([]);
   const [filterMethod, setFilterMethod] = useState("Date wise");
@@ -108,9 +118,64 @@ const AttendanceReport = (props) => {
   const [showDetail, setShowDetail] = useState(true);
   const [show, setshow] = useState(true);
   const [employeeName, setEmployeeName] = useState([]);
-  const { mainData } = props;
+  const [allempData, setAllempData] = useState({
+    COMPANY_PARENT_ID: "",
+    COMPANY_PARENT_USERNAME: "",
+  });
+  const  mainData  = allempData;
 
   console.log(mainData, "mainData");
+
+  const headers = {
+    "Content-Type": "application/json",
+    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  };
+
+
+  const fetchAllEmployees = async () => {
+    try {
+      const response = await axios.put(
+        "http://18.211.130.168:5001/get_employee",
+        {
+          EMPLOYEE_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+          EMPLOYEE_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+          EMPLOYEE_PARENT_USERNAME: COMPANY_USERNAME,
+          EMPLOYEE_PARENT_ID: COMPANY_ID,
+        },
+        { headers }
+      );
+
+      const data = response.data;
+
+      console.log("Employee Data: =>", data);
+      return data;
+    } catch (err) {
+      console.log("Something Went Wrong: =>", err);
+      throw err;
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const [employeeData] = await Promise.all([
+        fetchAllEmployees(),
+      ]);
+
+      // Both requests have completed here
+      // setIsLoading(false);
+      setAllempData(employeeData.result);
+      console.log("Both requests completed", employeeData);
+
+      // Now you can access employeeData and projectsData for further processing if needed
+    } catch (err) {
+      console.log("An error occurred:", err);
+    }
+  };
+
+   useEffect(() => {
+    fetchData();
+  }, []);
+
 
   // loader
   const Animations = () => {
@@ -263,6 +328,13 @@ const AttendanceReport = (props) => {
 
   return (
     <>
+      <Sidebar
+        COMPANY_ID={COMPANY_ID}
+        COMPANY_USERNAME={COMPANY_USERNAME}
+        COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+        COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+        active={3}
+      />
       <Box className="box" style={{ background: "#277099" }}>
         <Button
           size="small"

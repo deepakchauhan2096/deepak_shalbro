@@ -3,17 +3,41 @@ import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Button, Skeleton, Paper } from "@mui/material";
 import ProjectCreate from "./ProjectCreate";
-import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
 import ProjectEdit from "./ProjectEdit";
 import ProjectLoc from "./ProjectLoc";
 import ProjectAssigned from "./ProjectAssigned";
+import {
+  Avatar,
+  Button,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Skeleton,
+  Toolbar,
+  Tooltip,
+  styled,
+} from "@mui/material";
+import { Link, useParams } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 // import { useDispatch, useSelector } from "react-redux";
 // import { initProject_fun } from "../redux/action";
 
 const Project = (props) => {
+  const { id } = useParams();
+
+  const param = id.split("&");
+  const COMPANY_ID = param[0];
+  const COMPANY_USERNAME = param[1];
+  const COMPANY_PARENT_ID = param[2];
+  const COMPANY_PARENT_USERNAME = param[3];
+
   const [data, setData] = useState({
     row: {
       PROJECT_ID: "",
@@ -35,7 +59,6 @@ const Project = (props) => {
       PROJECT_STATE: "",
       PROJECT_CITY: "",
       PROJECT_CURRENCY: "",
-
     },
   });
   const [open, setOpen] = React.useState(false);
@@ -46,15 +69,11 @@ const Project = (props) => {
   const [Edit, setEdit] = useState(false);
 
   const [updatedata, setUpdateData] = useState(false);
-  console.log("hgsvdcv", ProjectData)
+  console.log("hgsvdcv", ProjectData);
 
   // modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { alldata, setText } = useContext(MyContext);
-  const { projectcreatedata } = useContext(MyContext);
-
- 
 
   const filterallprojectData = props.recieveData;
 
@@ -70,11 +89,10 @@ const Project = (props) => {
       const response = await axios.put(
         "http://18.211.130.168:5001/get_projects",
         {
-          PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
-          PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
-          PROJECT_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
-          PROJECT_MEMBER_PARENT_USERNAME:
-            filterallprojectData?.COMPANY_PARENT_USERNAME,
+          PROJECT_PARENT_ID: COMPANY_ID,
+          PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
+          PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+          PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
         },
         { headers }
       );
@@ -91,11 +109,80 @@ const Project = (props) => {
     }
   };
 
+  //update data
 
-   //update data
-
-   useEffect(() => {
+  useEffect(() => {
     fetchProjects();
+  }, []);
+
+  const fetchProject = async () => {
+    try {
+      const response = await axios.put(
+        "http://18.211.130.168:5001/get_projects",
+        {
+          PROJECT_PARENT_ID: COMPANY_ID,
+          PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
+          PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+          PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+        },
+        { headers }
+      );
+
+      const data = response.data;
+      setProjectData(data?.result);
+      console.log("Projects Data: =>", data);
+      return data;
+    } catch (err) {
+      console.log("Something Went Wrong: =>", err);
+      throw err;
+    }
+  };
+
+  const fetchAllEmployees = async () => {
+    try {
+      const response = await axios.put(
+        "http://18.211.130.168:5001/get_employee",
+        {
+          EMPLOYEE_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+          EMPLOYEE_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+          EMPLOYEE_PARENT_USERNAME: COMPANY_USERNAME,
+          EMPLOYEE_PARENT_ID: COMPANY_ID,
+        },
+        { headers }
+      );
+
+      const data = response.data;
+      // setAllempData(data?.result);
+      console.log("Employee Data: =>", data);
+      return data;
+    } catch (err) {
+      console.log("Something Went Wrong: =>", err);
+      throw err;
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const [employeeData, projectsData] = await Promise.all([
+        fetchAllEmployees(),
+        fetchProject(),
+      ]);
+
+      // Both requests have completed here
+      setIsLoading(false);
+      console.log("Both requests completed", employeeData, projectsData);
+
+      // Now you can access employeeData and projectsData for further processing if needed
+    } catch (err) {
+      console.log("An error occurred:", err);
+    }
+  };
+
+  // Call the fetchData function to fetch both sets of data concurrently
+  //update data
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   // console.log(ProjectData, "projectdata");
@@ -227,8 +314,19 @@ const Project = (props) => {
       </Box>
     );
   };
+
+  const drawerWidth = 250;
+
   return (
     <>
+
+      <Sidebar
+        COMPANY_ID={COMPANY_ID}
+        COMPANY_USERNAME={COMPANY_USERNAME}
+        COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+        COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+        active={1}
+      />
       <Box className="box" style={{ background: "#277099" }}>
         <ProjectCreate
           companyData={filterallprojectData}
@@ -255,7 +353,6 @@ const Project = (props) => {
                 density="compact"
                 pageSizeOptions={[5]}
                 checkboxSelection={false}
-
                 disableRowSelectionOnClick
               />
             )}
@@ -466,9 +563,7 @@ const Project = (props) => {
         <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
           <ProjectAssigned projectData={filterData} />
         </MyScreen>
-        <MyScreen screenIndex={index === 10} sx={{ padding: 3 }}>
-
-        </MyScreen>
+        <MyScreen screenIndex={index === 10} sx={{ padding: 3 }}></MyScreen>
 
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
           <ProjectLoc projectData={filterData} />

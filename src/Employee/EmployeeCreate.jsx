@@ -166,22 +166,22 @@ export default function AddEmployee(props) {
 
   return (
     < >
-      <Button
+      {/* <Button
         size="small"
         className="btn button border-bottom-0 bg-white"
         variant="outlined"
       >
         Employee
-      </Button>
-      <Button
+      </Button> */}
+      <button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
-        className="btn rounded-0 border-0  rounded-0 text-light"
-        variant="contained"
+        className="btn btn-sm btn-primary rounded-0 border-0  rounded-0 text-light"
+        // variant="contained"
         size="small"
       >
         + Add New Employee
-      </Button>
+      </button>
       <Modal
         open={open}
         onClose={handleClose}
