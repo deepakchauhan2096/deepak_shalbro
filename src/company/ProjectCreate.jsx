@@ -123,7 +123,7 @@ export default function ProjectCreate(props) {
     setErrorMsg("");
 
     axios
-      .post("http://13.235.27.242:5001/create_project", createProject, {
+      .post("http://18.211.130.168:5001/create_project", createProject, {
         headers,
       })
       .then((response) => {

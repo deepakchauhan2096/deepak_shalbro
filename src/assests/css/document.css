@@ -1,5 +1,5 @@
 
-
+/* 
 .software-ui h2 {
   font-size: 24px;
   text-align: center;
@@ -65,12 +65,12 @@
   font-size: 14px;
   color: #007bff;
   cursor: pointer;
-}
+} */
 
-.documents-section .document-download:hover {
+/* .documents-section .document-download:hover {
   text-decoration: underline;
-}
-
+} */
+/* 
 .Doc_ul {
   list-style: none;
   display: flex;
@@ -124,7 +124,6 @@ align-items:center;
   padding: 2px;
   color: white;
   display: block;
-  /* border-top: 1px solid grey; */
   width: 100%;
   border: none;
   transition: cubic-bezier(0.75, 0.82, 0.165, 2);
@@ -136,7 +135,7 @@ align-items:center;
   display: block;
   background-color: whitesmoke;
 
-}
+} */
 
 -----------------------------------
 
@@ -145,14 +144,14 @@ align-items:center;
 
 /* Bar Divider Style */
 
-.bar-divider {
+/* .bar-divider {
   width: 100%;
   height: 2px;
   background-color: #ccc;
-}
+} */
 
 /* Documents Header Style */
-.documents-header {
+/* .documents-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -161,7 +160,7 @@ align-items:center;
 
 .total-documents p {
   margin: 0;
-}
+} */
 
 /* ... (existing CSS) */
 
@@ -170,19 +169,49 @@ align-items:center;
 
 /* Add this CSS to your existing document.css or create a new CSS file */
 .Doc_li {
-  position: relative; /* Parent container of the document item */
+  position: relative; 
 }
 
-.delete-icon {
+/* .delete-icon {
   position: absolute;
-  top: -0.2rem; /* Adjust the top distance as needed */
-  right: 0.2rem; /* Adjust the right distance as needed */
+  top: -0.2rem; right: 0.2rem;
   cursor: pointer;
-  color: crimson; /* Change the color of the delete icon as needed */
-  font-size: 1.2rem; /* Adjust the font size as needed */
-}
+  color: crimson;  font-size: 1.2rem;
+} */
 
-.documents{
+/* .documents{
   display: flex;
   flex-direction: column;
+} */
+
+
+
+/* new css of modal document  */
+.modalWidth{
+  width: 1200px;
+  margin: 0 auto;
+}
+.labelSelectFile{
+font-size: 15px;
+font-weight: 600;
+color: rgb(24, 84, 106);
+text-align: center;
+margin:5px auto;
+letter-spacing: 1px;
+font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.inputDate{
+  height: 40px;
+  width: 70%;
+  color: rgb(24, 84, 106);
+/* border: 1px solid rgb(24, 84, 106); */
+border: 1px solid rgb(93, 186, 220);
+}
+
+
+.expiry-date-input{
+  width: 500px;
+  border: 1px solid red;
+  padding: 10px 10px;
 }

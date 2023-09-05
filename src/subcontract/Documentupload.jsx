@@ -60,7 +60,7 @@ export default function ProjectUpload(props) {
     e.preventDefault();
 
     const response = await axios
-      .post("http://13.235.27.242:5001/create_document", postImage.myFile, {
+      .post("http://18.211.130.168:5001/create_document", postImage.myFile, {
         headers,
       })
       .then((response) => {
@@ -114,7 +114,7 @@ export default function ProjectUpload(props) {
         redirect: "follow",
       };
 
-      fetch("http://13.235.27.242:5001/get_all_document", requestOptions)
+      fetch("http://18.211.130.168:5001/get_all_document", requestOptions)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");

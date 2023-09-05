@@ -138,7 +138,7 @@ const AttendanceReport = (props) => {
     let config = {
       method: "put",
       maxBodyLength: Infinity,
-      url: "http://13.235.27.242:5001/get_employee_details_for_attendence",
+      url: "http://18.211.130.168:5001/get_employee_details_for_attendence",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",

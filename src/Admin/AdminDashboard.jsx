@@ -92,7 +92,7 @@ const AdminDashboard = (props) => {
   const getCompanyData = async () => {
     try {
       const response = await axios.put(
-        "http://13.235.27.242:5001/get_all_company",
+        "http://18.211.130.168:5001/get_all_company",
         {
           COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
           COMPANY_PARENT_USERNAME: tableRows?.ADMIN_USERNAME,
