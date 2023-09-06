@@ -5,7 +5,7 @@ import axios from "axios";
 import country from "../Api/countriess.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import moment from "moment-timezone";
+import projectList from "../jsonlist/typeOfProject.json"
 import {
   Button, MenuItem,
   Select,
@@ -56,6 +56,7 @@ export default function ProjectCreate(props) {
     setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID }));
     setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME }));
   }, [open])
+
 
 
   console.log(createProject, "check")
@@ -153,6 +154,11 @@ export default function ProjectCreate(props) {
   };
 
 
+  // const timeZones = moment.tz.names(); // Get the array of time zone names
+
+  const handleTimeZoneSelect = (e) => {
+    setSelectedTimeZone(e.target.value);
+  };
 
   return (
     <>
@@ -205,7 +211,7 @@ export default function ProjectCreate(props) {
                   type="number"
                   className="form-control form-control-2 rounded-0"
                   id="inputPassword4"
-                  placeholder="Enter Phone Number"
+                  placeholder="Enter your Account"
                   name="PROJECT_ACCOUNT"
                   value={createProject.PROJECT_ACCOUNT}
                   onChange={handleCreate}
@@ -244,17 +250,12 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_TYPE}
                 >
                   <option value="">--Choose Project Type--</option>
-                  <option value="Architect">Architect</option>
-                  <option value="Civil Engineer">Civil Engineer</option>
-                  <option value="Structural Engineer">Structural Engineer</option>
-                  <option value="Mechanical Engineer">Mechanical Engineer</option>
-                  <option value="Electrical Engineer">Electrical Engineer</option>
-                  <option value="Project Manager">Project Manager</option>
-                  <option value="Quantity Surveyor">Quantity Surveyor</option>
-                  <option value="Interior Designer">Interior Designer</option>
-                  <option value="Landscaper">Landscaper</option>
-                  <option value="Contractor">Contractor</option>
-                  <option value="Scheduler">Scheduler</option>
+                  {projectList.map((projectname) => {
+                    return (
+                      <option value="Architect">{projectname}</option>
+                    )
+                  })}
+         
                 </select>
               </div>
             </div>
@@ -296,11 +297,10 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_CURRENCY}
                 >
                   <option value="">--Select Currency--</option>
-                  <option value="INR">INR</option>
                   <option value="USD">USD</option>
-                  <option value="EUR">EUR</option> {/* Euro */}
-                  <option value="GBP">GBP</option> {/* British Pound */}
-                  <option value="JPY">JPY</option>
+                  <option value="EUR">EUR</option>
+                  <option value="INR">INR</option>
+                
                   {/* <option>Plumber</option>
                   <option>Engineer</option> */}
                 </select>
@@ -381,22 +381,22 @@ export default function ProjectCreate(props) {
                 </select>
               </div>
             </div>
-          
+
             <div className="FormButtonAlign">
-        
-            <button
-              type="submit"
-              className="btn btn-info text-white"
-              onClick={handleSubmit}
-            >
-              Create Project
-            </button>{" "}
-            <button
-              onClick={handleClose}
-              className="btn btn-danger text-white"
-            >
-              Cancel
-            </button>
+
+              <button
+                type="submit"
+                className="btn btn-info text-white"
+                onClick={handleSubmit}
+              >
+                Create Project
+              </button>{" "}
+              <button
+                onClick={handleClose}
+                className="btn btn-danger text-white"
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </Box>

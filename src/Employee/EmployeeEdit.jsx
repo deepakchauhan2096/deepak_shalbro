@@ -4,8 +4,6 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { ToastContainer, toast } from "react-toastify";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
 import env from "react-dotenv";
 
