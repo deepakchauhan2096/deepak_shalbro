@@ -231,9 +231,9 @@ const AttendanceReport = (props) => {
       mainData[0]?.EMPLOYEE_MEMBER_PARENT_USERNAME,
       mainData[0]?.EMPLOYEE_PARENT_USERNAME
     );
-  }, []);
+  }, [allempData]);
 
-  console.log(employees, "report");
+  console.log(mainData, "report");
 
   // date array function call
 
@@ -325,6 +325,8 @@ const AttendanceReport = (props) => {
     data: processedData,
     filename: "Doc.csv",
   };
+
+  console.log(processedData,"processedData")
 
   return (
     <>
@@ -506,8 +508,8 @@ const AttendanceReport = (props) => {
               </Grid>
 
               <table className="table table-hover table-sm table-fixed">
-                {show ? (
-                  <>
+                {show ?  (
+                  !processedData ? "Loading..." : <>
                     <thead
                       style={{
                         position: "sticky",
@@ -518,10 +520,10 @@ const AttendanceReport = (props) => {
                         <th scope="col" colSpan={7} style={{ gap: 2 }}>
                           {/* <button className="btn btn-primary btn-sm" onClick={window.print()}>
                       Print Preview
-                    </button>{" "} */}
+                      </button>{" "} */}
                           {/* <button className="btn btn-secondary btn-sm">
                       Export(PDF)
-                    </button>{" "} */}
+                      </button>{" "} */}
                           <button className="btn btn-secondary btn-sm">
                             <CSVLink className="sub-nav-text" {...csvReport}>
                               ↓ Export(CSV)

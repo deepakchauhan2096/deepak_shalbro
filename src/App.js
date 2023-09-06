@@ -113,6 +113,7 @@ function App() {
             <Route path="/company/projects/:id/*" element={<Project/>}/>
             <Route path="/company/employees/:id/*" element={<EmployeeSrc/>}/>
             <Route path="/company/attendance/:id/*" element={<AttendanceReport/>}/>
+            <Route path="/company/documents/:id/*" element={<AttendanceReport/>}/>
             <Route path="/temp/*" element={<Temp />} />
             </> :
             <Route path="/*" element={<Navigate to="/login" />} />
