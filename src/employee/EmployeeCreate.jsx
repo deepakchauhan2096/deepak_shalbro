@@ -280,7 +280,6 @@ export default function AddEmployee(props) {
 
                   <label>Country</label>
 
-
                   <select
                     className="form-control form-control-2 border rounded-0"
                     placeholder="Country"
@@ -302,7 +301,6 @@ export default function AddEmployee(props) {
                 </div>
                 <div className="form-group col-xl-6 py-1">
                   <label>State</label>
-
                   <select
                     className="form-control form-control-2 border rounded-0"
                     placeholder="State"
