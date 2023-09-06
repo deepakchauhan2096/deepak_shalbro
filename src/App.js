@@ -20,7 +20,7 @@ import CompanyDashboard from "./company/CompanyDashboard";
 import Project from "./company/Project";
 import EmployeeSrc from "./employee/EmployeeSrc";
 import AttendanceReport from "./Attendance/AttendanceAcknowledge";
-import Documents from "./document/Documents";
+import Document from "./Document/Documents";
 
 function App() {
 
@@ -91,7 +91,7 @@ function App() {
             <Route path="/company/projects/:id/*" element={<Project/>}/>
             <Route path="/company/employees/:id/*" element={<EmployeeSrc/>}/>
             <Route path="/company/attendance/:id/*" element={<AttendanceReport/>}/>
-            <Route path="/company/documents/:id/*" element={<Documents/>}/>
+            <Route path="/company/documents/:id/*" element={<Document/>}/>
             <Route path="/temp/*" element={<Temp />} />
             </> :
             <Route path="/*" element={<Navigate to="/login" />} />

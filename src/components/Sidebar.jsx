@@ -102,7 +102,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/documnet/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/documents/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 4 ? "#f3f3f3" : "" }}
             >
@@ -200,7 +200,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/documnet/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/documents/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 4 ? "#f3f3f3" : "" }}
             >
