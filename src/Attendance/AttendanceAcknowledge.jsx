@@ -24,6 +24,10 @@ import { TableRows } from "@mui/icons-material";
 import env from "react-dotenv";
 import AttendancePunch from "./AttendancePunch";
 import SimpleBackdrop from "../components/Backdrop";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import SalaryPDF from "../Invoices/SalaryPDF";
+import Sidebar from "../components/Sidebar";
+import { useParams } from "react-router-dom";
 
 let MyDateCurrent = new Date();
 let MyDateStringCurrent;
@@ -96,6 +100,14 @@ function getDatesBetween(startDate, endDate) {
 }
 
 const AttendanceReport = (props) => {
+  const { id } = useParams();
+
+  const param = id.split("&");
+  const COMPANY_ID = param[0];
+  const COMPANY_USERNAME = param[1];
+  const COMPANY_PARENT_ID = param[2];
+  const COMPANY_PARENT_USERNAME = param[3];
+
   const [employees, getReport] = useState();
   const [foundUsers, setFoundUsers] = useState([]);
   const [filterMethod, setFilterMethod] = useState("Date wise");
@@ -106,9 +118,64 @@ const AttendanceReport = (props) => {
   const [showDetail, setShowDetail] = useState(true);
   const [show, setshow] = useState(true);
   const [employeeName, setEmployeeName] = useState([]);
-  const { mainData } = props;
+  const [allempData, setAllempData] = useState({
+    COMPANY_PARENT_ID: "",
+    COMPANY_PARENT_USERNAME: "",
+  });
+  const  mainData  = allempData;
 
   console.log(mainData, "mainData");
+
+  const headers = {
+    "Content-Type": "application/json",
+    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  };
+
+
+  const fetchAllEmployees = async () => {
+    try {
+      const response = await axios.put(
+        "http://54.243.89.186:5001/get_employee",
+        {
+          EMPLOYEE_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+          EMPLOYEE_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+          EMPLOYEE_PARENT_USERNAME: COMPANY_USERNAME,
+          EMPLOYEE_PARENT_ID: COMPANY_ID,
+        },
+        { headers }
+      );
+
+      const data = response.data;
+
+      console.log("Employee Data: =>", data);
+      return data;
+    } catch (err) {
+      console.log("Something Went Wrong: =>", err);
+      throw err;
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const [employeeData] = await Promise.all([
+        fetchAllEmployees(),
+      ]);
+
+      // Both requests have completed here
+      // setIsLoading(false);
+      setAllempData(employeeData.result);
+      console.log("Both requests completed", employeeData);
+
+      // Now you can access employeeData and projectsData for further processing if needed
+    } catch (err) {
+      console.log("An error occurred:", err);
+    }
+  };
+
+   useEffect(() => {
+    fetchData();
+  }, []);
+
 
   // loader
   const Animations = () => {
@@ -136,7 +203,7 @@ const AttendanceReport = (props) => {
     let config = {
       method: "put",
       maxBodyLength: Infinity,
-      url: "http://18.211.130.168:5001/get_employee_details_for_attendence",
+      url: "http://54.243.89.186:5001/get_employee_details_for_attendence",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
@@ -261,33 +328,40 @@ const AttendanceReport = (props) => {
 
   return (
     <>
-     
-        <Box className="box" style={{ background: "#277099" }}>
+      <Sidebar
+        COMPANY_ID={COMPANY_ID}
+        COMPANY_USERNAME={COMPANY_USERNAME}
+        COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+        COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+        active={3}
+      />
+      <Box className="box" style={{ background: "#277099" }}>
+        <Button
+          size="small"
+          variant={show ? "outlined" : "outlined"}
+          className={
+            show
+              ? "btn button border-bottom-0 bg-white"
+              : "btn rounded-0 border-bottom-0  rounded-0 text-light"
+          }
+          onClick={() => setshow(true)}
+        >
+          Pay Acknowledgement
+        </Button>
+        {!show && (
           <Button
             size="small"
-            variant={show ? "outlined" : "outlined"}
-            className={
-              show
-                ? "btn button border-bottom-0 bg-white"
-                : "btn rounded-0 border-bottom-0  rounded-0 text-light"
-            }
-            onClick={() => setshow(true)}
+            className="btn button border-bottom-0 bg-white"
+            variant="outlined"
           >
-            Pay Acknowledgement
+            Punch Detail - {employeeName._doc.EMPLOYEE_NAME}{" "}
+            <Typography size="small" px={1} onClick={() => setshow(true)}>
+              <i className="fa fa-times" aria-hidden="true"></i>
+            </Typography>
           </Button>
-          {!show && (
-            <Button
-              size="small"
-              className="btn button border-bottom-0 bg-white"
-              variant="outlined"
-            >
-              Punch Detail - {employeeName._doc.EMPLOYEE_NAME}{" "}
-              <Typography size="small" px={1} onClick={() => setshow(true)}>
-                <i className="fa fa-times" aria-hidden="true"></i>
-              </Typography>
-            </Button>
-          )}
-          {employees ? ( <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
+        )}
+        {employees ? (
+          <MyScreen sx={{ display: "block", padding: 3, border: "" }}>
             <Box
               style={{
                 height: "100%",
@@ -457,9 +531,6 @@ const AttendanceReport = (props) => {
                           <button className="btn btn-sm" disabled>
                             No of Employee: {processedData?.length}
                           </button>{" "}
-                          <button className="btn btn-sm" disabled>
-                            No of Employee: {processedData?.length}
-                          </button>
                         </th>
                       </tr>
                       <tr className="table-light">
@@ -496,7 +567,26 @@ const AttendanceReport = (props) => {
                             </td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <td>
+                                <PDFDownloadLink
+                                  className="btn btn-dark btn-sm"
+                                  document={
+                                    <SalaryPDF
+                                      name={post.EMPLOYEE_NAME}
+                                      email={post.EMPLOYEE_EMAIL}
+                                      phone={post.EMPLOYEE_PHONE}
+                                      address={post.EMPLOYEE_ADD}
+                                      wages={post.EMPLOYEE_HOURLY_WAGE}
+                                      totalIncome={post.TOTAL_HOURS}
+                                      workingHours={post.TOTAL_HOURS}
+                                      mapvalue={post.PUNCH.AttendanceData}
+                                    />
+                                  }
+                                  fileName={`${post.EMPLOYEE_NAME}.pdf`}
+                                >
+                                  Download
+                                </PDFDownloadLink>
+                            </td>
                             <td>
                               {" "}
                               <button
@@ -517,15 +607,14 @@ const AttendanceReport = (props) => {
               </table>
             </Box>
           </MyScreen>
-       
-      ) : (
-        <MyScreen sx={{ display: "block", padding: 3 }}>
-          <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
-            <Animations />
-          </Box>
-        </MyScreen>
-      )}
-       </Box>
+        ) : (
+          <MyScreen sx={{ display: "block", padding: 3 }}>
+            <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
+              <Animations />
+            </Box>
+          </MyScreen>
+        )}
+      </Box>
     </>
   );
 };

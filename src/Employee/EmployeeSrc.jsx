@@ -22,29 +22,60 @@ import {
   List,
   ListItem,
   ListItemText,
+  Drawer,
+  Toolbar,
+  Divider,
+  ListItemButton,
 } from "@mui/material";
 import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
 import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
+import { Link, useParams } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 // import env from "react-dotenv";
 
 const EmployeeSrc = (props) => {
+  const { id } = useParams();
+  const param = id.split("&");
+  const COMPANY_ID = param[0];
+  const COMPANY_USERNAME = param[1];
+  const COMPANY_PARENT_ID = param[2];
+  const COMPANY_PARENT_USERNAME = param[3];
   //isLoading this is for the Skeleton
   const [isLoading, setIsLoading] = useState(true);
-  // assigned Project which is selected from using dropdown
-  const [assignedProject, setAssignedProject] = useState([]);
+
   // all employee data
   const [allempData, setAllempData] = useState({
-    COMPANY_PARENT_ID: 18,
-    COMPANY_PARENT_USERNAME: "deepanshu1",
+    COMPANY_PARENT_ID: "",
+    COMPANY_PARENT_USERNAME: "",
   });
-  // adding employee and it show chnages on run time
-  const [updatedata, setUpdateData] = useState(false);
-  // all projects data which is existing projects
-  const allProjectData = props.AssignProjectData;
-  // Assinging Projects
+
+  const [data, setData] = useState([
+    {
+      PROJECT_ID: "",
+      PROJECT_PARENT_ID: "",
+      PROJECT_PARENT_USERNAME: "",
+      PROJECT_MEMBER_PARENT_ID: "",
+      PROJECT_MEMBER_PARENT_USERNAME: "",
+      PROJECT_TYPE: "",
+      PROJECT_NAME: "",
+      PROJECT_ACCOUNT: "",
+      PROJECT_USERNAME: "",
+      PROJECT_START_DATE: "",
+      PROJECT_END_DATE: "",
+      PROJECT_SUPERVISOR: "",
+      PROJECT_PROGRESS: "",
+      PROJECT_ADD: "",
+      PROJECT_VALUE: "",
+      PROJECT_COUNTRY: "",
+      PROJECT_STATE: "",
+      PROJECT_CITY: "",
+      PROJECT_CURRENCY: "",
+    },
+  ]);
+
   const [filterData, setFilteredData] = useState({
     row: {
       EMPLOYEE_ID: "",
@@ -75,80 +106,89 @@ const EmployeeSrc = (props) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const rows = allempData;
+  // const filterallempData = props.empData;
 
-  const filterallempData = props.empData;
-
-  const getallparam = allProjectData.filter(
-    (e) => e.PROJECT_NAME === selectedProject
-  );
-
-  useEffect(() => {
-    fetchAllEmployee();
-  }, [updatedata]);
-
-  const handleAssignProject = (e) => {
-    e.preventDefault();
-
-    // Create a new object that combines the selected project data and employee data
-    const mergedData = {
-      PROJECT_ID: getallparam[0]?.PROJECT_ID,
-      PROJECT_PARENT_ID: getallparam[0]?.PROJECT_PARENT_ID,
-      PROJECT_MEMBER_PARENT_ID: getallparam[0]?.PROJECT_MEMBER_PARENT_ID,
-      PROJECT_MEMBER_PARENT_USERNAME:
-        getallparam[0]?.PROJECT_MEMBER_PARENT_USERNAME,
-      PROJECT_USERNAME: getallparam[0]?.PROJECT_USERNAME,
-      EMPLOYEE_ID:filterData.row?.EMPLOYEE_ID,
-      EMPLOYEE_PARENT_ID: filterData.row?.EMPLOYEE_PARENT_ID,
-      EMPLOYEE_PARENT_USERNAME: filterData.row?.EMPLOYEE_PARENT_USERNAME,
-      EMPLOYEE_MEMBER_PARENT_ID: filterData.row?.EMPLOYEE_MEMBER_PARENT_ID,
-      EMPLOYEE_MEMBER_PARENT_USERNAME: filterData.row?.EMPLOYEE_MEMBER_PARENT_USERNAME,
-    };
-
-    // Validate the form data before submission
-
-    axios
-      .post("http://18.211.130.168:5001/assign_project", mergedData, {
-        headers,
-      })
-      .then((response) => {
-        setSelectedProject(response.data.result);
-        setIsSuccessMessageVisible(true);
-        props.refetch();
-
-      })
-      .catch((error) => {
-        console.error(error, "ERR");
-      });
-  };
+  // const getallparam = allProjectData.filter(
+  //   (e) => e.PROJECT_NAME === selectedProject
+  // );
 
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  const fetchAllEmployee = async () => {
+  const fetchProject = async () => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_employee",
+        "http://54.243.89.186:5001/get_projects",
         {
-          EMPLOYEE_MEMBER_PARENT_ID: filterallempData?.COMPANY_PARENT_ID,
-          EMPLOYEE_MEMBER_PARENT_USERNAME:
-            filterallempData?.COMPANY_PARENT_USERNAME,
-          EMPLOYEE_PARENT_USERNAME: filterallempData?.COMPANY_USERNAME,
-          EMPLOYEE_PARENT_ID: filterallempData?.COMPANY_ID,
+          PROJECT_PARENT_ID: COMPANY_ID,
+          PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
+          PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+          PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
         },
         { headers }
       );
-      setTimeout(() => {
-        const data = response.data;
-        setAllempData(data.result);
-        setIsLoading(false);
-      }, 1000);
+
+      const data = response.data;
+      // setProjectData(data?.result);
+      console.log("Projects Data: =>", data);
+      return data;
     } catch (err) {
-      console.log("something Went wrong: =>", err);
+      console.log("Something Went Wrong: =>", err);
+      throw err;
     }
   };
+
+  const fetchAllEmployees = async () => {
+    try {
+      const response = await axios.put(
+        "http://54.243.89.186:5001/get_employee",
+        {
+          EMPLOYEE_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+          EMPLOYEE_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+          EMPLOYEE_PARENT_USERNAME: COMPANY_USERNAME,
+          EMPLOYEE_PARENT_ID: COMPANY_ID,
+        },
+        { headers }
+      );
+
+      const data = response.data;
+
+      console.log("Employee Data: =>", data);
+      return data;
+    } catch (err) {
+      console.log("Something Went Wrong: =>", err);
+      throw err;
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const [employeeData, projectsData] = await Promise.all([
+        fetchAllEmployees(),
+        fetchProject(),
+      ]);
+
+      // Both requests have completed here
+      setIsLoading(false);
+      setData(projectsData.result);
+      setAllempData(employeeData.result);
+      console.log("Both requests completed", employeeData, projectsData);
+
+      // Now you can access employeeData and projectsData for further processing if needed
+    } catch (err) {
+      console.log("An error occurred:", err);
+    }
+  };
+
+  // Call the fetchData function to fetch both sets of data concurrently
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const rows = allempData;
 
   const columns = [
     { field: "EMPLOYEE_ID", headerName: "ID", width: 60 },
@@ -227,7 +267,7 @@ const EmployeeSrc = (props) => {
       renderCell: (cellValues) => {
         return (
           <Button>
-            <EmployeeEdit edit={cellValues} refetch={fetchAllEmployee}/>
+            <EmployeeEdit edit={cellValues} refetch={fetchData} />
           </Button>
         );
       },
@@ -247,7 +287,6 @@ const EmployeeSrc = (props) => {
     setFilteredData(event);
     handleOpen();
   };
-
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
@@ -274,21 +313,64 @@ const EmployeeSrc = (props) => {
     );
   };
 
-  
-  const ClearCookie = () => {
-    // Clear the cookie by removing it
-    Cookies.remove("myResponseData");
-    window.location.replace("/employee/login");
-    console.log("Cookie cleared.");
+  console.log(data, "data");
+  const getallparam = data.filter(
+    (e) => e.PROJECT_ID === parseInt(selectedProject)
+  );
+
+  console.log(filterData, "getallparam");
+
+  const handleAssignProject = (e) => {
+    e.preventDefault();
+
+    // Create a new object that combines the selected project data and employee data
+    const mergedData = {
+      PROJECT_ID: getallparam[0]?.PROJECT_ID,
+      PROJECT_PARENT_ID: getallparam[0]?.PROJECT_PARENT_ID,
+      PROJECT_MEMBER_PARENT_ID: getallparam[0]?.PROJECT_MEMBER_PARENT_ID,
+      PROJECT_MEMBER_PARENT_USERNAME:
+        getallparam[0]?.PROJECT_MEMBER_PARENT_USERNAME,
+      PROJECT_USERNAME: getallparam[0]?.PROJECT_USERNAME,
+      EMPLOYEE_ID: filterData?.row.EMPLOYEE_ID,
+      EMPLOYEE_PARENT_ID: filterData?.row.EMPLOYEE_PARENT_ID,
+      EMPLOYEE_PARENT_USERNAME: filterData?.row.EMPLOYEE_PARENT_USERNAME,
+      EMPLOYEE_MEMBER_PARENT_ID: filterData?.row.EMPLOYEE_MEMBER_PARENT_ID,
+      EMPLOYEE_MEMBER_PARENT_USERNAME:
+        filterData?.row.EMPLOYEE_MEMBER_PARENT_USERNAME,
+    };
+
+    // Validate the form data before submission
+
+    axios
+      .post("http://54.243.89.186:5001/assign_project", mergedData, {
+        headers,
+      })
+      .then((response) => {
+        setSelectedProject(response.data.result);
+        setIsSuccessMessageVisible(true);
+        props.refetch();
+      })
+      .catch((error) => {
+        console.error(error, "ERR");
+      });
   };
+
+  const drawerWidth = 250;
 
   return (
     <>
+        <Sidebar
+        COMPANY_ID={COMPANY_ID}
+        COMPANY_USERNAME={COMPANY_USERNAME}
+        COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+        COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+        active={2}
+      />
       <Box className="box" style={{ background: "#277099" }}>
         <EmployeeCreate
-          mainData={filterallempData}
           name={"Employee"}
-          refetch={fetchAllEmployee}
+          mainData={allempData}
+          // refetch={fetchData}
         />
 
         <MyScreen sx={{ display: "block", padding: 3 }}>
@@ -355,8 +437,8 @@ const EmployeeSrc = (props) => {
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
-           <Grid container xl={12}> 
-             <Grid item xl={6} pr={2}>
+          <Grid container xl={12}>
+            <Grid item xl={6} pr={2}>
               <Card
                 sx={{
                   display: "flex",
@@ -373,44 +455,37 @@ const EmployeeSrc = (props) => {
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <CardContent sx={{ flex: "1 0 auto" }}>
                     <Typography component="div" variant="h5">
-                      {filterData.row.EMPLOYEE_NAME}
+                      {filterData.row?.EMPLOYEE_NAME}
                     </Typography>
                     <Typography
                       variant="subtitle1"
                       color="text.secondary"
                       component="div"
                     >
-                      Username : {filterData.row.EMPLOYEE_USERNAME}
+                      Email : {filterData.row?.EMPLOYEE_EMAIL}
                     </Typography>
                     <Typography
                       variant="subtitle1"
                       color="text.secondary"
                       component="div"
                     >
-                      Email : {filterData.row.EMPLOYEE_EMAIL}
+                      Phone : {filterData.row?.EMPLOYEE_PHONE}
                     </Typography>
                     <Typography
                       variant="subtitle1"
                       color="text.secondary"
                       component="div"
                     >
-                      Phone : {filterData.row.EMPLOYEE_PHONE}
+                      Password : {filterData.row?.EMPLOYEE_PASSWORD}
                     </Typography>
                     <Typography
                       variant="subtitle1"
                       color="text.secondary"
                       component="div"
                     >
-                      Password : {filterData.row.EMPLOYEE_PASSWORD}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Address : {filterData.row.EMPLOYEE_STATE}
+                      Address : {filterData.row?.EMPLOYEE_STATE}
                       {""}
-                      {filterData.row.EMPLOYEE_CITY}
+                      {filterData.row?.EMPLOYEE_CITY}
                     </Typography>
                   </CardContent>
                 </Box>
@@ -434,28 +509,28 @@ const EmployeeSrc = (props) => {
                       color="text.secondary"
                       component="div"
                     >
-                      Employee role : {filterData.row.EMPLOYEE_ROLE}
+                      Employee role : {filterData.row?.EMPLOYEE_ROLE}
                     </Typography>
                     <Typography
                       variant="subtitle1"
                       color="text.secondary"
                       component="div"
                     >
-                      Employee type : {filterData.row.EMPLOYEE_EMPLMNTTYPE}
+                      Employee type : {filterData.row?.EMPLOYEE_EMPLMNTTYPE}
                     </Typography>
                     <Typography
                       variant="subtitle1"
                       color="text.secondary"
                       component="div"
                     >
-                      Hire Date : {filterData.row.EMPLOYEE_HIRE_DATE}
+                      Hire Date : {filterData.row?.EMPLOYEE_HIRE_DATE}
                     </Typography>
                     <Typography
                       variant="subtitle1"
                       color="text.secondary"
                       component="div"
                     >
-                      Hourly Wages : {filterData.row.EMPLOYEE_HOURLY_WAGE}
+                      Hourly Wages : {filterData.row?.EMPLOYEE_HOURLY_WAGE}
                     </Typography>
                   </CardContent>
                 </Box>
@@ -479,28 +554,28 @@ const EmployeeSrc = (props) => {
                       color="text.secondary"
                       component="div"
                     >
-                      Amount : {filterData.row.EMPLOYEE_ROLE}
+                      Amount : {filterData.row?.EMPLOYEE_ROLE}
                     </Typography>
                     <Typography
                       variant="subtitle1"
                       color="text.secondary"
                       component="div"
                     >
-                      Date : {filterData.row.EMPLOYEE_EMPLMNTTYPE}
+                      Date : {filterData.row?.EMPLOYEE_EMPLMNTTYPE}
                     </Typography>
                     <Typography
                       variant="subtitle1"
                       color="text.secondary"
                       component="div"
                     >
-                      Payment type : {filterData.row.EMPLOYEE_HIRE_DATE}
+                      Payment type : {filterData.row?.EMPLOYEE_HIRE_DATE}
                     </Typography>
                   </CardContent>
                 </Box>
               </Card>
-            </Grid> 
+            </Grid>
 
-          <Grid item xl={12} pt={2}>
+            <Grid item xl={12} pt={2}>
               <Card
                 sx={{
                   display: "flex",
@@ -509,11 +584,10 @@ const EmployeeSrc = (props) => {
                 }}
               >
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
-                
                   <h4 style={{ margin: "10px" }}>
                     Assigning Projects to{" "}
                     <span style={{ color: "tan" }}>
-                      {filterData.row.EMPLOYEE_NAME}
+                      {filterData.row?.EMPLOYEE_NAME}
                     </span>
                   </h4>
                   <Box m={2} display="flex" alignItems="center">
@@ -527,10 +601,10 @@ const EmployeeSrc = (props) => {
                         <option value="Select Project" selected>
                           Select Project
                         </option>
-                        {allProjectData.map((project, key) => {
+                        {data?.map((project, key) => {
                           return (
-                            <option value={project.PROJECT_NAME} key={key}>
-                              {project.PROJECT_NAME}
+                            <option value={project?.PROJECT_ID} key={key}>
+                              {project?.PROJECT_NAME}-{project.PROJECT_ID}
                             </option>
                           );
                         })}
@@ -546,8 +620,8 @@ const EmployeeSrc = (props) => {
 
                     <Snackbar
                       open={isSuccessMessageVisible}
-                      autoHideDuration={3000} 
-                      onClose={() => setIsSuccessMessageVisible(false)} 
+                      autoHideDuration={3000}
+                      onClose={() => setIsSuccessMessageVisible(false)}
                       message="Project assigned successfully!"
                       style={{
                         display: "flex",
@@ -562,7 +636,7 @@ const EmployeeSrc = (props) => {
                         List of Projects Assigned to Employee:
                       </Typography>
                       <List>
-                        {allProjectData.map((projects) => (
+                        {data?.map((projects) => (
                           <ListItem key={projects.PROJECT_ID}>
                             <ListItemText primary={projects.PROJECT_NAME} />
                           </ListItem>
@@ -572,10 +646,8 @@ const EmployeeSrc = (props) => {
                   </CardContent>
                 </Box>
               </Card>
-            </Grid> 
+            </Grid>
           </Grid>
-
-
         </MyScreen>
         {/* <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
@@ -642,9 +714,9 @@ const EmployeeSrc = (props) => {
             }}
           >
             <EmployeePDF
-              name={filterData.row.EMPLOYEE_NAME}
-              email={filterData.row.EMPLOYEE_EMAIL}
-              phone={filterData.row.EMPLOYEE_PHONE}
+              name={filterData.row?.EMPLOYEE_NAME}
+              email={filterData.row?.EMPLOYEE_EMAIL}
+              phone={filterData.row?.EMPLOYEE_PHONE}
             />
           </PDFViewer>
         </MyScreen>

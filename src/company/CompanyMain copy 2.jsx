@@ -140,7 +140,7 @@ const CompanyMain = () => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_projects",
+        "http://54.243.89.186:5001/get_projects",
         {
           PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
           PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,

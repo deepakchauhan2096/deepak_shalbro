@@ -45,7 +45,7 @@ const EmployeeHistory = (props) => {
   const gettimesheet = async (e) => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_employee_all_for_attendence",
+        "http://54.243.89.186:5001/get_employee_all_for_attendence",
         {
           ATTENDANCE_ADMIN_USERNAME:
             employeeData.EMPLOYEE_MEMBER_PARENT_USERNAME,

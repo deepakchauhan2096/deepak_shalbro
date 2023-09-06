@@ -1,195 +1,189 @@
-import { Box, Container, Grid } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
+import * as React from "react";
+import { styled, useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import CssBaseline from "@mui/material/CssBaseline";
+import MuiAppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-import React from "react";
-import env from "react-dotenv";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import { Link, useParams } from "react-router-dom";
 
-const CompanyDashboard = () => {
-  const data = [
-    {
-      contractname: "Contracts",
-      counts: "300",
-      description: "Lorem, ipsum dolor sit amet consectetur adipisicing",
-      url: "Learn More",
-    },
-    {
-      contractname: "Employees",
-      counts: "200",
-      description: "Lorem, ipsum dolor sit amet consectetur adipisicing",
-      url: "Learn More",
-    },
-    {
-      contractname: "Supplier",
-      counts: "200",
-      description: "Lorem, ipsum dolor sit amet consectetur adipisicing",
-      url: "Learn More",
-    },
-    {
-      contractname: "Sub-Contractors",
-      counts: "200",
-      description: "Lorem, ipsum dolor sit amet consectetur adipisicing",
-      url: "Learn More",
-    },
-    {
-      contractname: "Payments",
-      counts: "200",
-      description: "Lorem, ipsum dolor sit amet consectetur adipisicing",
-      url: "Learn More",
-    },
-    {
-      contractname: "Reminders",
-      counts: "200",
-      description: "Lorem, ipsum dolor sit amet consectetur adipisicing",
-      url: "Learn More",
-    },
-    {
-      contractname: "Reminders",
-      counts: "200",
-      description: "Lorem, ipsum dolor sit amet consectetur adipisicing",
-      url: "Learn More",
-    },
-  ];
+const drawerWidth = 240;
 
-  const data2 = [
-    {
-      Paymentstatus: "15",
-      Pending: "300",
-      Paymentcomplete: "14",
-      Approval: "Learn More",
-    },
-  ];
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
+  ({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: `-${drawerWidth}px`,
+    ...(open && {
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+  })
+);
 
-  const card = (
-    <>
-      {data.map((post) => (
-        <Grid xl={4} xs={12} item spacing={3}>
-          <Card sx={{ m: 0.5 }}>
-            <CardContent>
-              <Typography variant="h5" sx={{ mb: 0 }} color="primary">
-                {post.contractname}
-              </Typography>
-              <Typography
-                sx={{ fontSize: 14 }}
-                color="text.secondary"
-                gutterBottom
-              >
-                Total {post.contractname}: {post.counts}
-              </Typography>
-              <Typography component="div">{post.description}</Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">{post.url}</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      ))}
-    </>
-  );
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  transition: theme.transitions.create(["margin", "width"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: `${drawerWidth}px`,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
 
-  const card2 = (
-    <>
-      {data2.map((post) => (
-        <Grid xl={12} item spacing={3}>
-          <Card sx={{ m: 0.5 }}>
-            <CardContent>
-              <Typography
-                variant="h5"
-                sx={{ mb: 1, display: "inline-block" }}
-                color="primary"
-              >
-                Payment Status{" "}
-                <Typography
-                  sx={{
-                    display: "inline-block",
-                    color: "#fff",
-                    background: "red",
-                    px: 1,
-                    borderRadius: 10,
-                  }}
-                ></Typography>
-              </Typography>
-              <Typography
-                variant=""
-                sx={{ mb: 1, display: "inline-block" }}
-                color="primary"
-              >
-                Pending{" "}
-                <Typography
-                  sx={{
-                    display: "inline-block",
-                    color: "#333",
-                    background: "yellow",
-                    px: 1,
-                    borderRadius: 10,
-                  }}
-                >
-                  {post.Pending}
-                </Typography>
-              </Typography>
-              <Typography
-                variant=""
-                sx={{ mb: 1, display: "inline-block" }}
-                color="primary"
-              >
-                Payment Complete{" "}
-                <Typography
-                  sx={{
-                    display: "inline-block",
-                    color: "#fff",
-                    background: "green",
-                    px: 1,
-                    borderRadius: 10,
-                  }}
-                >
-                  {post.Paymentcomplete}
-                </Typography>
-              </Typography>
-              <Typography
-                variant=""
-                sx={{ mb: 1, display: "inline-block" }}
-                color="primary"
-              >
-                Waiting for Approval{" "}
-                <Typography
-                  sx={{
-                    display: "inline-block",
-                    color: "#fff",
-                    background: "red",
-                    px: 1,
-                    borderRadius: 10,
-                  }}
-                >
-                  {post.Paymentcomplete}
-                </Typography>
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button size="small">{post.url}</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      ))}
-    </>
-  );
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: "flex-end",
+}));
+
+export default function CompanyDashboard() {
+  
+
+  const {id} =useParams();
+  const data = id.split('&')
+  const COMPANY_ID = data[0]
+  const COMPANY_USERNAME = data[1]
+  const COMPANY_PARENT_ID = data[2]
+  const COMPANY_PARENT_USERNAME = data[3]
+
+
+
+
+
+
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
 
   return (
-    <>
-      <Box className="box" overflow={"auto"}>
-        <Grid container spacing={2} sx={{ p: 3.5 }}>
-          <Grid container item xl={9} xs={12}>
-            {card}
-          </Grid>
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <AppBar open={open} sx={{ padding: 0, bgcolor: "black" }}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ mr: 2, ...(open && { display: "none" }) }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            variant="h6"
+            sx={{ textAlign: "left" }}
+            noWrap
+            component="div"
+          >
+            Company Dashboard
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={true}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <Link style={{textDecoration:"none"}} to={`/company/projects/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}>
+          <List sx={{ py: 0, background:"#f9f9f9" }}>
+            <ListItem disablePadding>
+              <ListItemButton >
+                Project
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Link>
+        <Divider />
 
-          <Grid container item xl={3} xs={12}>
-            {card2}
-          </Grid>
-        </Grid>
-      </Box>
-    </>
+      </Drawer>
+      <Main open={open}>
+        <DrawerHeader />
+        <Typography paragraph>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
+          dolor purus non enim praesent elementum facilisis leo vel. Risus at
+          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
+          quisque non tellus. Convallis convallis tellus id interdum velit
+          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
+          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
+          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
+          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
+          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
+          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
+          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
+          faucibus et molestie ac.
+        </Typography>
+        <Typography paragraph>
+          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
+          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
+          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
+          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
+          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
+          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
+          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
+          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
+          morbi tristique senectus et. Adipiscing elit duis tristique
+          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
+          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
+          posuere sollicitudin aliquam ultrices sagittis orci a.
+        </Typography>
+      </Main>
+    </Box>
   );
-};
-
-export default CompanyDashboard;
+}

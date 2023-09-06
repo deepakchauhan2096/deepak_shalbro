@@ -58,17 +58,11 @@ export default function AddEmployee(props) {
   }, [open])
 
 
-
-  console.log(createEmployee, "check")
-
-
-
   const availableState = country?.find(
     (c) => c.name === createEmployee.EMPLOYEE_COUNTRY
   );
 
-  // console.log("all states : ===> ", availableState,"country=>",country);
-  const availableCities = availableState?.states?.find(
+ const availableCities = availableState?.states?.find(
     (s) => s.name === createEmployee.EMPLOYEE_STATE
   );
 
@@ -132,7 +126,7 @@ export default function AddEmployee(props) {
 
     setErrorMsg("");
     axios
-      .post("http://18.211.130.168:5001/create_employee", createEmployee, {
+      .post("http://54.243.89.186:5001/create_employee", createEmployee, {
         headers,
       })
       .then((response) => {
@@ -166,22 +160,22 @@ export default function AddEmployee(props) {
 
   return (
     < >
-      <Button
+      {/* <Button
         size="small"
         className="btn button border-bottom-0 bg-white"
         variant="outlined"
       >
         Employee
-      </Button>
-      <Button
+      </Button> */}
+      <button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
-        className="btn rounded-0 border-0  rounded-0 text-light"
-        variant="contained"
+        className="btn btn-sm btn-primary rounded-0 border-0  rounded-0 text-light"
+        // variant="contained"
         size="small"
       >
         + Add New Employee
-      </Button>
+      </button>
       <Modal
         open={open}
         onClose={handleClose}

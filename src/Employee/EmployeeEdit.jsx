@@ -71,7 +71,7 @@ export default function EmployeeEdit(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put("http://18.211.130.168:5001/update_employee",  
+      .put("http://54.243.89.186:5001/update_employee",  
       {EMPLOYEE_MEMBER_PARENT_USERNAME: editdata.EMPLOYEE_MEMBER_PARENT_USERNAME,
       EMPLOYEE_PARENT_ID: editdata.EMPLOYEE_PARENT_ID,
       EMPLOYEE_PARENT_USERNAME: editdata.EMPLOYEE_PARENT_USERNAME,

@@ -91,7 +91,7 @@ export default function AddEmployee(props) {
     setErrorMsg("");
 
       axios
-        .post("http://18.211.130.168:5001/create_employee", createEmployee, {
+        .post("http://54.243.89.186:5001/create_employee", createEmployee, {
           headers,
         })
         .then((response) => {

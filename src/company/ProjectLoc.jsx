@@ -34,7 +34,7 @@ const ProjectLoc = (props) => {
   const [circleRadius, setCircleRadius] = useState(500);
   const [isInsideCircle, setIsInsideCircle] = useState(false);
   const [map, setMap] = useState(null);
-  window.google = window.google || {};
+ 
 
   const [markerPosition, setMarkerPosition] = useState({
     lat: "",
@@ -56,7 +56,6 @@ const ProjectLoc = (props) => {
 
   
 
-  // console.log(filterallprojectData, "my project");
 
   const headers = {
     "Content-Type": "application/json",
@@ -66,7 +65,7 @@ const ProjectLoc = (props) => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_projects_one",
+        "http://54.243.89.186:5001/get_projects_one",
         {
           PROJECT_ID: editProjectData?.PROJECT_ID,
           PROJECT_MEMBER_PARENT_ID: editProjectData?.PROJECT_MEMBER_PARENT_ID,
@@ -76,7 +75,7 @@ const ProjectLoc = (props) => {
         { headers }
       );
       setTimeout(() => {
-      const data = response.data;
+      const data = response?.data;
       setProjectData(data?.result[0]);
       setMarkerPosition((prev) => ({
         ...prev,
@@ -125,7 +124,7 @@ const ProjectLoc = (props) => {
 
     axios
       .put(
-        "http://18.211.130.168:5001/update_projects",
+        "http://54.243.89.186:5001/update_projects",
         {
           PROJECT_ID: editProjectData.PROJECT_ID,
           PROJECT_PARENT_ID: editProjectData.PROJECT_PARENT_ID,
@@ -190,7 +189,7 @@ const ProjectLoc = (props) => {
 
       const response = await fetch(url);
       const data = await response.json();
-      const address = data.results[0].formatted_address;
+      const address = data?.results[0]?.formatted_address;
       setLocationName(address);
     } catch (error) {
       console.error("Error fetching location:", error);

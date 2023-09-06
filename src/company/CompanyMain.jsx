@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
-import DocumentUpload from "./Documentupload";
+import Documents from "../document/Documents";
 import EmployeeSrc from "../employee/EmployeeSrc";
 import CompanyDashboard from "./CompanyDashboard";
 import Project from "./Project";
@@ -133,7 +133,7 @@ const CompanyMain = () => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_projects",
+        "http://54.243.89.186:5001/get_projects",
         {
           PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
           PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
@@ -163,7 +163,7 @@ const CompanyMain = () => {
   const fetchAllEmployee = async () => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_employee",
+        "http://54.243.89.186:5001/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME:
@@ -261,7 +261,7 @@ const CompanyMain = () => {
         <Box className="box">
           <MyScreen screenIndex={true}>
             <MyScreenbox sx={{ m: 3 }}>
-              <DocumentUpload empData={location.state.props} />
+              <Documents empData={location.state.props} />
             </MyScreenbox>
           </MyScreen>
         </Box>
