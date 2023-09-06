@@ -15,40 +15,40 @@ import "../assests/css/document.css"; // Import the CSS file
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DocumentModal from "../components/DocumentModal";
+// import DocumentModal from "./components/DocumentModal";
 import DocumentCreate from "./DocumentCreate";
 // import env from "react-dotenv";
 import { Link, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import {
     Paper,
-  } from "@mui/material";
+} from "@mui/material";
 import { ViewCompact } from "@mui/icons-material";
 
-export default function ProjectUpload(props) {
+export default function Document(props) {
 
     const [selectedFileName, setSelectedFileName] = useState("");
-    const [imagesData, setImagesData] = useState({});
+    const [imagesData, setImagesData] = useState([]);
     const [totalDocuments, setTotalDocuments] = useState(0);
-    const [fileSelected, setFileSelected] = useState(false);
-    const [showAllDocuments, setShowAllDocuments] = useState(false);
+    // const [fileSelected, setFileSelected] = useState(false);
+    // const [showAllDocuments, setShowAllDocuments] = useState(false);
     const [backdrop, setBackdrop] = useState(false);
+    const [deleteItem, setDeleteItem] = useState("");
+
     const { id } = useParams();
     const param = id.split("&");
     const COMPANY_ID = param[0];
     const COMPANY_USERNAME = param[1];
     const COMPANY_PARENT_ID = param[2];
     const COMPANY_PARENT_USERNAME = param[3];
+    // console.log("DocData", DocData)
     const [open, setOpen] = React.useState(false);
-    
-    
+
+
     useEffect(() => {
         getalldocument();
-    }, []);
-    
-    const DocData = props.empData;
-    console.log("imagesData", imagesData)
-    console.log("DocData", DocData)
+    }, [deleteItem]);
+
     const headers = {
         "Content-Type": "multipart/form-data",
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
@@ -75,7 +75,7 @@ export default function ProjectUpload(props) {
         borderRadius: 0,
         Border: 0,
         display: props.screenIndex ? "block" : "none",
-      }));
+    }));
 
     const handleClick = (event) => {
         // setPostImage(event);
@@ -85,39 +85,33 @@ export default function ProjectUpload(props) {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    // Function to Fetch the uploaded documents 
-    const getalldocument = () => {
-        try {
-            var myHeaders = new Headers();
-            myHeaders.append("authorization_key", "qzOUsBmZFgMDlwGtrgYypxUz");
-            myHeaders.append("Content-Type", "application/json");
 
-            var raw = JSON.stringify({
-                DOCUMENT_REF_ID: DocData.COMPANY_ID,
-                DOCUMENT_ADMIN_USERNAME: DocData.COMPANY_PARENT_USERNAME,
+    const getalldocument = async () => {
+        const headers = {
+            "authorization_key": "qzOUsBmZFgMDlwGtrgYypxUz",
+            "Content-Type": "application/json"
+        };
+
+        const requestData = {
+            DOCUMENT_REF_ID: COMPANY_PARENT_ID,
+            DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME
+        };
+
+
+        try {
+            const response = await axios.put("http://54.243.89.186:5001/get_all_document", requestData, {
+                headers
             });
 
-            var requestOptions = {
-                method: "PUT",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-            };
+            if (!response.data) {
+                throw new Error("Response data is empty");
+            }
 
-            fetch("http://54.243.89.186:5001/get_all_document", requestOptions)
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    setImagesData(data);
-                    setTotalDocuments(data.result?.length || 0);
-                })
-                .catch((error) => {
-                    console.log("Error Fetching Data :", error);
-                });
+            const data = response.data;
+
+            setImagesData(data);
+            setTotalDocuments(data.result?.length || 0);
+            console.log("data", data.result);
         } catch (error) {
             console.log("Error Fetching Data :", error);
         }
@@ -132,7 +126,7 @@ export default function ProjectUpload(props) {
         try {
             const data = JSON.stringify({
                 DOCUMENT_ID: documentId,
-                DOCUMENT_ADMIN_USERNAME: DocData.COMPANY_PARENT_USERNAME,
+                DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME,
             });
 
             const config = {
@@ -163,7 +157,7 @@ export default function ProjectUpload(props) {
 
         let data = JSON.stringify({
             "DOCUMENT_ID": documentId,
-            "DOCUMENT_ADMIN_USERNAME": DocData.COMPANY_PARENT_USERNAME
+            "DOCUMENT_ADMIN_USERNAME": COMPANY_PARENT_USERNAME
         });
 
         let config = {
@@ -179,12 +173,12 @@ export default function ProjectUpload(props) {
 
         axios.request(config)
             .then((response) => {
+                setDeleteItem(response);
                 setBackdrop(false);
-                toast.success("Document uploaded successfully!", {
+                toast.success("Document Deleted successfully!", {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 1000,
                 });
-                getalldocument();
             })
             .catch((error) => {
                 console.log(error);
@@ -247,13 +241,13 @@ export default function ProjectUpload(props) {
                 return (
                     <Button
                         variant="contained"
-                        className="view-btn primary btn btn-success"
+                        className="view-btn "
                         style={{ padding: "2px 2px" }}
-                        onClick={(event) => {
-                            handleClick(cellValues);
+                        onClick={(e) => {
+                            handleDelDoc(e,cellValues.id);
                         }}
                     >
-                        view
+                        Delete
                     </Button>
                 );
             },
@@ -268,9 +262,9 @@ export default function ProjectUpload(props) {
                         variant="contained"
                         className="view-btn primary btn btn-success"
                         style={{ padding: "2px 8px" }}
-                    // onClick={(event) => {
-                    //   handleClick(cellValues);
-                    // }}
+                         onClick={(e) => {
+                    handleDownload(cellValues.id, cellValues.documentName);
+                }}
                     >
                         Download
                     </Button>
@@ -279,19 +273,21 @@ export default function ProjectUpload(props) {
         },
     ];
 
-  const rows = imagesData;
+    // Function to format date as dd/mm/yy
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', options).replace(/\//g, '-');
+    };
 
-    // const rows = [
-    //     { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    //     { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    //     { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    //     { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    //     { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    //     { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    //     { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    //     { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    //     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    // ];
+    const rows = imagesData?.result?.map((item) => ({
+        id: item.DOCUMENT_ID,
+        documentName: item.DOCUMENT_FILEDATA?.originalname || '', // Add conditional check here
+        documentSize: item.DOCUMENT_FILEDATA?.size || '', // Add conditional check here
+        uploadDate: formatDate(item.DOCUMENT_CREATE_DATE),
+        documentType: item.DOCUMENT_FILEDATA?.mimetype || '', // Add conditional check here
+        ExpiryDate: formatDate(item.DOCUMENT_EXP_DATE) || '', // Add conditional check here
+    })) || [];
 
     return (
         <>
@@ -307,10 +303,14 @@ export default function ProjectUpload(props) {
 
                 <DocumentCreate
                     name={"Employee"}
-                mainData={imagesData}
+                    COMPANY_USERNAME={COMPANY_USERNAME}
+                    COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+                    COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+                    update={getalldocument}
+
                 />
 
-                <MyScreen sx={{ display: "block", padding: 3 }}>
+                <MyScreen sx={{ display: "block", padding: 2 }}>
                     <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
 
                         <DataGrid
@@ -319,14 +319,15 @@ export default function ProjectUpload(props) {
                             initialState={{
                                 pagination: {
                                     paginationModel: {
-                                        pageSize: 5,
+                                        pageSize: 20,
                                     },
                                 },
                             }}
                             pageSizeOptions={[5]}
                             checkboxSelection
                             disableRowSelectionOnClick
-                            ViewCompact
+                            density="compact"
+
                         />
                     </Box>
                 </MyScreen>

@@ -20,7 +20,7 @@ import CompanyDashboard from "./company/CompanyDashboard";
 import Project from "./company/Project";
 import EmployeeSrc from "./employee/EmployeeSrc";
 import AttendanceReport from "./Attendance/AttendanceAcknowledge";
-import Document from "./Document/Documents";
+import Document from "./document/Documents";
 
 function App() {
 
