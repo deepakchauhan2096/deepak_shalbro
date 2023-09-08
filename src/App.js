@@ -8,7 +8,6 @@ import "./assests/css/graph.css";
 import { MyContext } from "./context/Mycontext";
 import AdminCreate from "./Admin/AdminCreate";
 import AdminDashboard from "./Admin/AdminDashboard";
-import CompanyMain from "./company/CompanyMain";
 import AdminLogin from "./Admin/AdminLogin";
 import EmployeeAttendance from "./employee/EmployeeAttendance";
 import EmployeeLogin from "./employee/EmployeeLogin";
@@ -21,7 +20,7 @@ import Project from "./company/Project";
 import EmployeeSrc from "./employee/EmployeeSrc";
 import AttendanceReport from "./Attendance/AttendanceAcknowledge";
 import Document from "./Document/Documents";
-import Csc from "./components/Csc";
+import Csc from "./components/Csc"
 
 function App() {
 

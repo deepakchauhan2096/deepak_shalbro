@@ -97,7 +97,7 @@ const EmployeeAttendance = (props) => {
 
       axios
         .post(
-          "http://18.211.130.168:5001/create_emp_attendence",
+          "http://54.243.89.186:5001/create_emp_attendence",
           attendanceData,
           {
             headers: {
@@ -138,7 +138,7 @@ const EmployeeAttendance = (props) => {
 
       axios
         .post(
-          "http://18.211.130.168:5001/create_emp_attendence",
+          "http://54.243.89.186:5001/create_emp_attendence",
           attendanceData,
           {
             headers: {
@@ -280,7 +280,6 @@ const EmployeeAttendance = (props) => {
           </div>
         </nav>
 
-
         <nav
           class="navbar navbar-expand-lg navbar-light bg-light"
           style={{ height: "40px" }}
@@ -290,7 +289,6 @@ const EmployeeAttendance = (props) => {
               <div class="navbar-nav">
                 <Link to="/employee" className="nav-link">My Projects</Link>
                 <a className="bg-white text-dark nav-link">Attendance - {ProjectName}</a>
-
               </div>
             </div>
           </div>
