@@ -318,6 +318,8 @@ const Project = (props) => {
 
   const drawerWidth = 250;
 
+  console.log(filterallprojectData, "filterallprojectData")
+
   return (
     <>
 
@@ -330,8 +332,11 @@ const Project = (props) => {
       />
       <Box className="box" style={{ background: "#277099" }}>
         <ProjectCreate
-          companyData={filterallprojectData}
-          refetch={fetchProjects}
+           COMPANY_ID={COMPANY_ID}
+           COMPANY_USERNAME={COMPANY_USERNAME}
+           COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+           COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+          Update={fetchProjects}
           name={"Project"}
         />
         <MyScreen sx={{ display: "block", padding: 3 }}>
