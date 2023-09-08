@@ -73,77 +73,10 @@ export default function CompanyCreate(props) {
   );
 
 const list = companytype;
-console.log("hbbbdf", create_company)
-
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (
-  //     !create_company.COMPANY_USERNAME ||
-  //     !create_company.COMPANY_NAME ||
-  //     !create_company.COMPANY_PHONE ||
-  //     !create_company.COMPANY_ADD2 ||
-  //     !create_company.COMPANY_EMAIL ||
-  //     !create_company.COMPANY_COUNTRY ||
-  //     !create_company.COMPANY_CITY ||
-  //     !create_company.COMPANY_STATE ||
-  //     !create_company.COMPANY_PARENT_ID||
-  //     !create_company.COMPANY_PARENT_USERNAME
-  //   ) {
-  //     setErrorMsg("Fill all fields");
-  //     return;
-  //   }
-  //   setErrorMsg("");
-
-  
-  //   axios
-  //   .post(`http://54.243.89.186:5001/create_company`, create_company, {
-  //     headers,
-  //   })
-  //   .then((response) => {
-      
-  //     if (response.data.operation === "failed") {
-  //       setErrorMsg(response.data.errorMsg);
-  //     } else if (response.data.operation === "successfull") {
-  //       toast.success("Company Created successfully!", {
-  //         position: toast.POSITION.TOP_CENTER,
-  //         autoClose: 1000,
-  //       });
-  //       props.Update(() => response.data.result);
-  //       setCreate_company("");
-  //       setOpen(false);
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error(error, "ERR");
-
-  //   });
-  // };
-  
 
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    // if (
-    //   !create_company.COMPANY_USERNAME ||
-    //   !create_company.COMPANY_NAME ||
-    //   !create_company.COMPANY_PHONE ||
-    //   !create_company.COMPANY_ADD2 ||
-    //   !create_company.COMPANY_EMAIL ||
-    //   !create_company.COMPANY_COUNTRY ||
-    //   !create_company.COMPANY_CITY ||
-    //   !create_company.COMPANY_STATE ||
-    //   !create_company.COMPANY_PARENT_ID ||
-    //   !create_company.COMPANY_PARENT_USERNAME
-    // ) {
-    //   setErrorMsg("Fill all fields");
-    //   toast.error("Please fill in all fields", {
-    //     position: toast.POSITION.TOP_CENTER,
-    //     autoClose: 2000,
-    //   });
-    //   return;
-    // }
-    // setErrorMsg("");
   
     axios
       .post(`http://54.243.89.186:5001/create_company`, create_company, {
