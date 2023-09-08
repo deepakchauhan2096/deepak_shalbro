@@ -4,6 +4,7 @@ import CompanyCreate from "./CompanyCreate";
 import CompanyEdit from "./CompanyEdit";
 import { Link } from "react-router-dom";
 
+
 const AdminDashboard = (props) => {
   const adminData = props.state.result;
   const [tableRows, setTableRows] = useState(adminData);

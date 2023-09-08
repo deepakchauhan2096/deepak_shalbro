@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -20,14 +20,14 @@ const style = {
     borderRadius: 4,
 };
 
-const DocumentCreate = () => {
+const DocumentCreate = ({COMPANY_PARENT_ID,COMPANY_PARENT_USERNAME,update}) => {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         selectedFile: null,
         expiryDate: "",
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-
+    const [selectedFileName, setSelectedFileName] = useState("");
     const handleOpen = () => setOpen(true);
 
     const handleClose = () => {
@@ -39,11 +39,19 @@ const DocumentCreate = () => {
     };
 
     const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
         setFormData({
             ...formData,
-            selectedFile: e.target.files[0],
+            selectedFile,
         });
+        setSelectedFileName(selectedFile ? selectedFile.name : ""); // Set the selected file name
     };
+    // const handleFileChange = (e) => {
+    //     setFormData({
+    //         ...formData,
+    //         selectedFile: e.target.files[0],
+    //     });
+    // };
 
     const handleExpiryDateChange = (e) => {
         setFormData({
@@ -69,13 +77,13 @@ const DocumentCreate = () => {
 
         const data = new FormData();
         data.append("file", formData.selectedFile);
-        data.append("DOCUMENT_REF_ID", 493);
-        data.append("DOCUMENT_ADMIN_USERNAME", "deepak2096");
+        data.append("DOCUMENT_REF_ID", COMPANY_PARENT_ID);
+        data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
         data.append("fileDOCUMENET_EXP_DATE", formData.expiryDate);
 
         try {
             const response = await axios.post(
-                "http://18.211.130.168:5001/create_document",
+                "http://54.243.89.186:5001/create_document",
                 data,
                 {
                     headers: {
@@ -87,6 +95,7 @@ const DocumentCreate = () => {
 
             if (response.status === 200) {
                 setOpen(false);
+                update();
                 toast.success("Document uploaded successfully.");
             } else {
                 toast.error("Failed to upload document.");
@@ -98,6 +107,7 @@ const DocumentCreate = () => {
             setIsSubmitting(false);
         }
     };
+  
 
     return (
         <>
@@ -138,7 +148,7 @@ const DocumentCreate = () => {
                                             onChange={handleFileChange}
                                             style={{ display: "none" }}
                                         />
-                                         {/* {selectedFileName && <p>Selected File: {selectedFileName}</p>} */}
+                                        {selectedFileName && <p className="text-success fs-7 fz-2">Selected File: {selectedFileName}</p>}
                                     </div>
                                 </div>
                                 <Button

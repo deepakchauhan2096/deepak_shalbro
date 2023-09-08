@@ -8,7 +8,6 @@ import "./assests/css/graph.css";
 import { MyContext } from "./context/Mycontext";
 import AdminCreate from "./Admin/AdminCreate";
 import AdminDashboard from "./Admin/AdminDashboard";
-import CompanyMain from "./company/CompanyMain";
 import AdminLogin from "./Admin/AdminLogin";
 import EmployeeAttendance from "./employee/EmployeeAttendance";
 import EmployeeLogin from "./employee/EmployeeLogin";
@@ -20,7 +19,8 @@ import CompanyDashboard from "./company/CompanyDashboard";
 import Project from "./company/Project";
 import EmployeeSrc from "./employee/EmployeeSrc";
 import AttendanceReport from "./Attendance/AttendanceAcknowledge";
-import Document from "./document/Documents";
+import Document from "./Document/Documents";
+import Csc from "./components/Csc"
 
 function App() {
 
@@ -73,7 +73,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <>
-
+          <Route path="/temp/*" element={<Csc />} />
             <Route path="/signup/*" element={<AdminCreate />} />
             <Route path="/login/*" element={<AdminLogin />} />
             <Route path="/*" element={<AdminLogin />} />
@@ -92,16 +92,18 @@ function App() {
             <Route path="/company/employees/:id/*" element={<EmployeeSrc/>}/>
             <Route path="/company/attendance/:id/*" element={<AttendanceReport/>}/>
             <Route path="/company/documents/:id/*" element={<Document/>}/>
-            <Route path="/temp/*" element={<Temp />} />
+            <Route path="/temp/*" element={<Csc />} />
             </> :
             <Route path="/*" element={<Navigate to="/login" />} />
           }
 
           {dataEmp ?
             <>
+
             <Route path="/employee/*" element={<EmployeeDetail state={userEmp.result} />} />
             <Route path="/employee/attendance/:id/*" element={<EmployeeAttendance state={userEmp} />} />
             <Route path="/employee/history/:*" element={<EmployeeHistory state={userEmp} />} />
+
             </> :
             // <Route path="/employee/*" element={<Navigate to="/employee/login" />} />
             ""
