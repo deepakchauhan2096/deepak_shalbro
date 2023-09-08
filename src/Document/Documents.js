@@ -27,14 +27,17 @@ import { ViewCompact } from "@mui/icons-material";
 export default function Document(props) {
 
     const [selectedFileName, setSelectedFileName] = useState("");
-    const [imagesData, setImagesData] = useState({});
+    const [imagesData, setImagesData] = useState({
+        DOCUMENT_ID: "",
+        DOCUMENT_ADMIN_USERNAME: "",
+    });
     const [totalDocuments, setTotalDocuments] = useState(0);
     const [fileSelected, setFileSelected] = useState(false);
     const [showAllDocuments, setShowAllDocuments] = useState(false);
     const [backdrop, setBackdrop] = useState(false);
     const DocData = props.empData;
 
-    
+
     const { id } = useParams();
     const param = id.split("&");
     const COMPANY_ID = param[0];
@@ -93,8 +96,8 @@ export default function Document(props) {
             myHeaders.append("Content-Type", "application/json");
 
             var raw = JSON.stringify({
-                DOCUMENT_REF_ID: DocData.COMPANY_ID,
-                DOCUMENT_ADMIN_USERNAME: DocData.COMPANY_PARENT_USERNAME,
+                DOCUMENT_REF_ID: COMPANY_ID,
+                DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME,
             });
 
             var requestOptions = {
@@ -112,8 +115,12 @@ export default function Document(props) {
                     return response.json();
                 })
                 .then((data) => {
-                    setImagesData(data);
-                    setTotalDocuments(data.result?.length || 0);
+                    // setTimeout(()=> {
+                        setImagesData(data.result);
+                    // setTotalDocuments(data.result?.length || 0);
+                    console.log(data,"data document")
+                    // }, 2000)
+                    
                 })
                 .catch((error) => {
                     console.log("Error Fetching Data :", error);
@@ -132,7 +139,7 @@ export default function Document(props) {
         try {
             const data = JSON.stringify({
                 DOCUMENT_ID: documentId,
-                DOCUMENT_ADMIN_USERNAME: DocData.COMPANY_PARENT_USERNAME,
+                DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME,
             });
 
             const config = {
@@ -163,7 +170,7 @@ export default function Document(props) {
 
         let data = JSON.stringify({
             "DOCUMENT_ID": documentId,
-            "DOCUMENT_ADMIN_USERNAME": DocData.COMPANY_PARENT_USERNAME
+            "DOCUMENT_ADMIN_USERNAME": COMPANY_PARENT_USERNAME
         });
 
         let config = {
@@ -199,7 +206,7 @@ export default function Document(props) {
 
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 90 },
+        { field: 'filename', headerName: 'ID', width: 90 },
         {
             field: 'documentName',
             headerName: 'Document Name',
@@ -279,17 +286,20 @@ export default function Document(props) {
         },
     ];
 
-    const rows = [
-        { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-        { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-        { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-        { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-        { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-        { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-        { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-        { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-        { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    ];
+    // const rows = [
+    //     { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+    //     { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+    //     { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+    //     { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+    //     { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+    //     { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+    //     { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+    //     { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+    //     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+    // ];
+
+    const rows =  imagesData.map(e => e.DOCUMENT_FILEDATA)
+    console.log(rows ,"roooo")
 
     return (
         <>
@@ -303,10 +313,10 @@ export default function Document(props) {
             />
             <Box className="box" >
 
-                <DocumentCreate
+                {/* <DocumentCreate
                     name={"Employee"}
-                // mainData={allempData}
-                />
+                mainData={allempData}
+                /> */}
 
                 <MyScreen sx={{ display: "block", padding: 3 }}>
                     <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
@@ -314,6 +324,7 @@ export default function Document(props) {
                         <DataGrid
                             rows={rows}
                             columns={columns}
+                            getRowId={(row) => row.filename}
                             initialState={{
                                 pagination: {
                                     paginationModel: {
@@ -324,7 +335,7 @@ export default function Document(props) {
                             pageSizeOptions={[5]}
                             checkboxSelection
                             disableRowSelectionOnClick
-                            ViewCompact
+                            
                         />
                     </Box>
                 </MyScreen>

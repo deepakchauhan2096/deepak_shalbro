@@ -184,7 +184,9 @@ const ProjectLoc = (props) => {
   const fetchLocationName = async (lat, lon) => {
     // fatch locatin name
     try {
+
       const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAPS_API_KEY}`;
+
       const response = await fetch(url);
       const data = await response.json();
       const address = data?.results[0]?.formatted_address;
@@ -252,7 +254,7 @@ const ProjectLoc = (props) => {
     }
   };
 
-  console.log(circleCenter, "circleCenter");
+  // console.log(circleCenter, "circleCenter");
 
   useEffect(() => {
     if (

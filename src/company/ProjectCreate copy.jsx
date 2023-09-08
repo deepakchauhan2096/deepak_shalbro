@@ -1,39 +1,14 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import AppBar from "@mui/material/AppBar";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import { Fab, Paper, styled, Skeleton } from "@mui/material";
-import { Link } from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import AddIcon from "@mui/icons-material/Add";
-import CompanyCreate from "./CompanyCreate";
-import { useNavigate, useLocation } from "react-router-dom";
-import ProjectCreate from "../company/ProjectCreate";
 import Modal from "@mui/material/Modal";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
-import { useDispatch, useSelector } from "react-redux";
-import CompanyEdit from "../Admin/CompanyEdit";
-import PlaylistPlayOutlinedIcon from '@mui/icons-material/PlaylistPlayOutlined';
-import { initAdmin_fun, initCompany_fun, selectedCompany_fun } from "../redux/action";
-import CompanyDelete from "./CompanyDelete";
-import env from "react-dotenv";
+import axios from "axios";
+import country from "../Api/countriess.json";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import {
+  Button,
+} from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -44,291 +19,335 @@ const style = {
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
+  borderRadius: 4,
 };
 
-const AdminDashboard = (props) => {
-  const location = useLocation();
-  const adminData = location.state?.data.result;
-  const [open, setOpen] = React.useState(false);
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [update, setUpdateData] = React.useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [tableRows, setTableRows] = useState(adminData);
-  const [Rows, setRows] = useState([]);
+export default function ProjectCreate(props) {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [createProject, setCreateProject] = useState({
+    PROJECT_PARENT_ID: "",
+    PROJECT_PARENT_USERNAME: "",
+    PROJECT_MEMBER_PARENT_ID: "",
+    PROJECT_MEMBER_PARENT_USERNAME: "",
+    PROJECT_NAME: "",
+    PROJECT_USERNAME: "",
+    PROJECT_ADD: "",
+    PROJECT_CITY: "",
+    PROJECT_START_DATE: "",
+    PROJECT_END_DATE: "",
+    PROJECT_SUPERVISOR: "",
+    PROJECT_COUNTRY: "",
+    PROJECT_STATE: "",
+    PROJECT_PHONE: "",
+  });
 
-  const dispatch = useDispatch()
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
+  useEffect(() => {
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_PARENT_ID: props.companyData?.COMPANY_ID }));
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME }));
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID }));
+    setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME }));
+  }, [open])
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+
+  console.log(createProject, "check")
+
+  const availableState = country?.find(
+    (c) => c.name === createProject.PROJECT_COUNTRY
+  );
+
+  // console.log("all states : ===> ", availableState,"country=>",country);
+  const availableCities = availableState?.states?.find(
+    (s) => s.name === createProject.PROJECT_STATE
+  );
 
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
-  useEffect(() => {
-    getCompanyData();
-  }, [tableRows, update]);
-
-  const getCompanyData = async () => {
-    try {
-      const response = await axios.put(
-        "http://18.211.130.168:5001/get_all_company",
-        {
-          COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
-          COMPANY_PARENT_USERNAME: tableRows?.ADMIN_USERNAME,
-        },
-        { headers }
-      );
-      setTimeout(() => {
-        // console.log("response.data : ", response.data);
-        const data = response.data;
-        setRows(data.result);
-        dispatch(initCompany_fun(data.result))
-      }, 1000);
-      setIsLoading(false);
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    }
+  const handleCreate = (e) => {
+    const { name, value } = e.target;
+    setCreateProject((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  const MyScreen = styled(Paper)((props) => ({
-    height: "100vh",
-    padding: 0,
-    paddingBottom: "0",
-    overflow: "auto",
-    borderRadius: 0,
-    Border: 0,
-    display: props.screenIndex ? "block" : "none",
-    width: "100%",
-  }));
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const requiredFields = [
+      "PROJECT_PARENT_ID",
+      "PROJECT_PARENT_USERNAME",
+      "PROJECT_MEMBER_PARENT_ID",
+      "PROJECT_MEMBER_PARENT_USERNAME",
+      "PROJECT_NAME",
+      "PROJECT_USERNAME",
+      "PROJECT_ADD",
+      "PROJECT_CITY",
+      "PROJECT_START_DATE",
+      "PROJECT_END_DATE",
+      "PROJECT_SUPERVISOR",
+      "PROJECT_COUNTRY",
+      "PROJECT_STATE",
+      "PROJECT_PHONE",
+    ];
 
-  const MyScreenbox = styled(Paper)((props) => ({
-    height: "calc(100vh - 68.5px)",
-    padding: "50px",
-    paddingBottom: "0",
-    overflow: "scroll",
-    borderRadius: 0,
-    Border: 0,
-    width: "100%",
-    position: "relative",
-    background: "#f9f9f9",
-  }));
 
-  const settings = [
-    tableRows?.ADMIN_USERNAME,
-    "Account",
-    "Dashboard",
-    "Logout",
-  ];
-  const pages = [tableRows?.ADMIN_EMAIL, tableRows?.ADMIN_ID];
-
-  //send data to company dashboard
-  const navigate = useNavigate();
-
-  const ShowCompDetail = (props) => {
-    return navigate("/company", { state: { props } });
-  };
-
-  const Animations = () => {
-    return (
-      <Box sx={{ width: "100%" }}>
-        <Skeleton animation="pulse" height={100} />
-        <Skeleton animation="pulse" height={70} />
-        <Skeleton animation="pulse" height={70} />
-        <Skeleton animation="pulse" height={50} />
-        <Skeleton animation="pulse" height={70} />
-      </Box>
+    const hasEmptyFields = requiredFields.some(
+      (field) => !createProject[field]
     );
+
+    if (hasEmptyFields) {
+      setErrorMsg("Fill all fields");
+      toast.error("Please fill in all fields", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+      return;
+    }
+
+    setErrorMsg("");
+
+    axios
+      .post("http://18.211.130.168:5001/create_project", createProject, {
+        headers,
+      })
+      .then((response) => {
+        if (response.data.operation === "failed") {
+          setErrorMsg(response.data.errorMsg);
+          toast.error(response.data.errorMsg, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+          });
+        } else if (response.data.operation === "successfull") {
+          toast.success("Project Created successfully!", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+          });
+          props.refetch();
+
+          setCreateProject({});
+          setOpen(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error, "ERR");
+        toast.error("An error occurred. Please try again later.", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 2000,
+        });
+      });
   };
 
   return (
     <>
-      <MyScreen screenIndex={true}>
-        <AppBar position="static">
-          <Container maxWidth="xl">
-            <Toolbar disableGutters>
-              <Typography
-                variant="h6"
-                noWrap
-                href="/"
-                sx={{
-                  mr: 2,
-                  display: { xs: "none", md: "flex" },
-                  fontWeight: 700,
-                  color: "inherit",
-                  textDecoration: "none",
-                }}
-              >
-                {tableRows?.ADMIN_USERNAME}
-              </Typography>
-              <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleOpenNavMenu}
-                  color="inherit"
+      <Button size="small" className="btn button border-bottom-0 bg-white" variant="outlined">
+        Project
+      </Button>
+      <Button
+        onClick={handleOpen}
+        sx={{ color: "#277099" }}
+        className="btn rounded-0 border-0  rounded-0 text-light"
+        variant="contained"
+        size="small"
+      >
+        + Add New Project
+      </Button>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <form onSubmit={handleSubmit}>
+            <div className="row py-2">
+              <div className="form-group col-xl-4">
+                <label> Project Username</label>
+                <input
+                  type="text"
+                  className="form-control form-control-2 rounded-0"
+                  placeholder="Username"
+                  value={createProject.PROJECT_USERNAME}
+                  name="PROJECT_USERNAME"
+                  onChange={handleCreate}
+                />
+              </div>
+              <div className="form-group col-xl-4">
+                <label>Project Name</label>
+                <input
+                  type="text"
+                  className="form-control form-control-2 rounded-0"
+                  id="inputname"
+                  placeholder="Project Name"
+                  value={createProject.PROJECT_NAME}
+                  name="PROJECT_NAME"
+                  onChange={handleCreate}
+                  required
+                />
+              </div>
+              <div className="form-group col-xl-4">
+                <label>Contact</label>
+                <input
+                  type="number"
+                  className="form-control form-control-2 rounded-0"
+                  id="inputPassword4"
+                  placeholder="Enter Phone Number"
+                  name="PROJECT_PHONE"
+                  value={createProject.PROJECT_PHONE}
+                  onChange={handleCreate}
+                  required
+                />
+              </div>
+            </div>
+            <div className="row py-2">
+              <div className="form-group col-xl-6">
+                <label>Project start date</label>
+                <input
+                  type="date"
+                  value={createProject.PROJECT_START_DATE}
+                  name="PROJECT_START_DATE"
+                  onChange={handleCreate}
+                  className="form-control form-control-2 rounded-0"
+                />
+              </div>
+              <div className="form-group col-xl-6">
+                <label>Project End date</label>
+                <input
+                  type="date"
+                  value={createProject.PROJECT_END_DATE}
+                  name="PROJECT_END_DATE"
+                  onChange={handleCreate}
+                  className="form-control form-control-2 rounded-0"
+                />
+              </div>
+            </div>
+            <div className="row py-2">
+              <div className="form-group col-xl-6">
+                <label>Enrollment</label>
+                <select
+                  id="inputEnroll"
+                  className="form-control form-control-2 border rounded-0"
+                  onChange={handleCreate}
+                  name="PROJECT_EMROLMNT_TYPE"
+                  value={createProject.PROJECT_EMROLMNT_TYPE}
                 >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorElNav}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "left",
-                  }}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
-                  sx={{
-                    display: { xs: "block", md: "none" },
-                  }}
+                  <option value="">Choose...</option>
+                  <option>Painter</option>
+                  <option>Fitter</option>
+                  <option>Plumber</option>
+                  <option>Engineer</option>
+                </select>
+              </div>
+
+              <div className="form-group col-md-6">
+                <label>Supervisor</label>
+                <input
+                  type="text"
+                  className="form-control form-control-2 rounded-0 "
+                  id="inputsupervisor"
+                  name="PROJECT_SUPERVISOR"
+                  value={createProject.PROJECT_SUPERVISOR}
+                  onChange={handleCreate}
+                />
+              </div>
+            </div>
+            <div className="row py-2">
+              <div className="form-group  col-md-12">
+                <label>Address</label>
+                <textarea
+                  type="text"
+                  className="form-control form-control-2 rounded-0"
+                  id="inputAddress2"
+                  placeholder="Apartment, studio, or floor"
+                  name="PROJECT_ADD"
+                  value={createProject.PROJECT_ADD}
+                  onChange={handleCreate}
+                />
+              </div>
+            </div>
+            <div className="row py-2">
+              <div className="form-group col-xl-4">
+                <label>Country</label>
+                <select
+                  className="form-control form-control-2 border rounded-0"
+                  placeholder="Country"
+                  name="PROJECT_COUNTRY"
+                  value={createProject.PROJECT_COUNTRY}
+                  onChange={handleCreate}
                 >
-                  {pages.map((page) => (
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                      <Typography textAlign="center">{page}</Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
-              <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-              <Typography
-                variant="h5"
-                noWrap
-                component="a"
-                href=""
-                sx={{
-                  mr: 2,
-                  display: { xs: "flex", md: "none" },
-                  flexGrow: 1,
-                  //   fontFamily: 'monospace',
-                  fontWeight: 700,
-                  color: "inherit",
-                  textDecoration: "none",
-                }}
-              >
-                {tableRows?.ADMIN_USERNAME}
-              </Typography>
-              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                {pages.map((page) => (
-                  <Button
-                    key={page}
-                    onClick={handleCloseNavMenu}
-                    sx={{ my: 2, color: "white", display: "block" }}
-                  >
-                    {page}
-                  </Button>
-                ))}
-              </Box>
-            </Toolbar>
-          </Container>
-        </AppBar>
-        <MyScreenbox screenIndex={true}>
-          {isLoading ? (
-            <Skeleton
-              variant="circular"
-              width={40}
-              height={40}
-              sx={{ position: "fixed", top: "80px", right: "80px" }}
-            />
-          ) : (
-            <CompanyCreate
-              ID={tableRows?.ADMIN_ID}
-              Username={tableRows?.ADMIN_USERNAME}
-              Update={(e) => setUpdateData(e)}
-            />
-          )}
-          {isLoading ? (
-            <Animations />
-          ) : (
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                {Rows?.length !== 0 ? (
-                  <TableHead>
-                    <TableRow>
-                      {[
-                        "Company Name",
-                        "Company ID",
-                        "Company username",
-                        "Phone",
-                        "Email",
-                        "Address",
-                        "State",
-                        "Detail",
-                        "Edit",
-                        //  "Delete"
-                      ].map((item) => (
-                        <TableCell size="large">{item}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                ) : (
-                  ""
-                )}
-                <TableBody>
-                  {Rows?.map((post) => (
-                    <>
-                      <TableRow
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell size="small">{post?.COMPANY_NAME}</TableCell>
-                        <TableCell size="small">{post?.COMPANY_ID}</TableCell>
-                        <TableCell size="small">
-                          {post?.COMPANY_USERNAME}
-                        </TableCell>
-                        <TableCell size="small">
-                          {post?.COMPANY_PHONE}
-                        </TableCell>
-                        <TableCell size="small">
-                          {post?.COMPANY_EMAIL}
-                        </TableCell>
-                        <TableCell size="small">{post?.COMPANY_ADD2}</TableCell>
-                        <TableCell size="small">
-                          {post?.COMPANY_STATE}
-                        </TableCell>
-                        <TableCell size="small">
-                          <Tooltip title="View Detail">
-                            <PlaylistPlayOutlinedIcon
-                              onClick={(e) => ShowCompDetail(post)}
-                              color="primary"
-                              style={{ cursor: "pointer" }}
-                            />
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell size="small">
-                       
-                            <CompanyEdit companyEDit={post} reFetchfun={getCompanyData} />
-                        
-                        </TableCell>
-                        {/* <TableCell size="small">
-                         <CompanyDelete/>
-                        </TableCell> */}
-                      </TableRow>
-                    </>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </MyScreenbox>
-      </MyScreen>
+                  <option value="">--Choose Country--</option>
+                  {country?.map((value, key) => {
+                    return (
+                      <option value={value.name} key={key}>
+                        {value.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+
+              <div className="form-group col-xl-4">
+                <label>State</label>
+                <select
+                  className="form-control form-control-2 border rounded-0"
+                  placeholder="State"
+                  name="PROJECT_STATE"
+                  value={createProject.PROJECT_STATE}
+                  onChange={handleCreate}
+                >
+                  <option value="">--Choose State--</option>
+                  {availableState?.states?.map((e, key) => {
+                    return (
+                      <option value={e.name} key={key}>
+                        {e.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+
+              <div className="form-group col-xl-4">
+                <label>City</label>
+                <select
+                  className="form-control form-control-2 border rounded-0"
+                  placeholder="City"
+                  name="PROJECT_CITY"
+                  value={createProject.PROJECT_CITY}
+                  onChange={handleCreate}
+                >
+                  <option value="">--Choose City--</option>
+                  {availableCities?.cities?.map((e, key) => {
+                    return (
+                      <option value={e.name} key={key}>
+                        {e.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="btn btn-info text-white"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>{" "}
+            <button
+              onClick={handleClose}
+              className="btn btn-danger text-white"
+            >
+              Discard
+            </button>
+          </form>
+        </Box>
+      </Modal>
     </>
   );
-};
-
-export default AdminDashboard;
+}

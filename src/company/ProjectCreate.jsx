@@ -153,11 +153,6 @@ export default function ProjectCreate(props) {
   };
 
 
-  const timeZones = moment.tz.names(); // Get the array of time zone names
-
-  const handleTimeZoneSelect = (e) => {
-    setSelectedTimeZone(e.target.value);
-  };
 
   return (
     <>

@@ -24,7 +24,7 @@ const Sidebar = ({
   active,
   toggle,
 }) => {
-  console.log(toggle, "control");
+  // console.log(toggle, "control");
 
   const drawerWidth = 0;
   return (

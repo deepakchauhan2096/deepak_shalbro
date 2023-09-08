@@ -224,6 +224,7 @@ const CompanyMain = () => {
             listname={post.listname}
             listlink={post.listlink}
             value={index}
+            className="list"
           />
         ))}
 
@@ -277,7 +278,7 @@ const CompanyMain = () => {
         <AttendanceReport mainData={allempData} />
       </NavScreen>
 
-      
+
       <NavScreen screenIndex={navIndex === 5}>
         <Vehicle mainData={allempData} />
       </NavScreen>
