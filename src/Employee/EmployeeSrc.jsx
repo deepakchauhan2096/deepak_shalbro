@@ -78,7 +78,6 @@ const EmployeeSrc = (props) => {
 
   const [filterData, setFilteredData] = useState({
     row: {
-      EMPLOYEE_ID: "",
       EMPLOYEE_DOB: "",
       EMPLOYEE_EMPLMNTTYPE: "",
       EMPLOYEE_HIRE_DATE: "",
