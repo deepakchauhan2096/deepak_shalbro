@@ -238,20 +238,22 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
               <div className="form-group col-xl-4">
                 <label>Project Type</label>
                 <select
-                  id="inputEnroll"
-                  className="form-control form-control-2 border rounded-0"
-                  onChange={handleCreate}
-                  name="PROJECT_TYPE"
-                  value={createProject.PROJECT_TYPE}
-                >
-                  <option value="">--Choose Project Type--</option>
-                  {projectList.map((projectname) => {
-                    return (
-                      <option value="Architect">{projectname}</option>
-                    )
-                  })}
-         
-                </select>
+                    id="inputEnroll"
+                    className="form-control form-control-2 border rounded-0"
+                    onChange={handleCreate}
+                    name="PROJECT_TYPE"
+                    value={createProject.PROJECT_TYPE}
+                  >
+                    <option selected>--Choose Project Type--</option>
+                    {projectList.map((e, key) => {
+                      return (
+                        <option value={e} key={key}>
+                          {e}
+                        </option>
+                      )
+                    })}
+
+           </select>
               </div>
             </div>
             <div className="row py-2">

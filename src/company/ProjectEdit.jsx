@@ -33,10 +33,10 @@ const style = {
 };
 
 export default function ProjectEdit(props) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [index, setIndex] = React.useState([]);
+  const [index, setIndex] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
 
   const editProjectData = props?.edit.row;
@@ -140,14 +140,16 @@ export default function ProjectEdit(props) {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 2000,
           });
+          
         } else if (response.data.operation === "successfull") {
-          props.refetch();
+          handleClose();
           console.log("anu", response);
           toast.success("Project Updated successfully!", {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 2000,
           });
-          setOpen(false);
+         
+         
         }
       })
       .catch((error) => {
