@@ -93,7 +93,7 @@ export default function Document(props) {
         };
 
         const requestData = {
-            DOCUMENT_REF_ID: COMPANY_PARENT_ID,
+            DOCUMENT_REF_ID: COMPANY_ID,
             DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME
         };
 
@@ -303,8 +303,7 @@ export default function Document(props) {
 
                 <DocumentCreate
                     name={"Employee"}
-                    COMPANY_USERNAME={COMPANY_USERNAME}
-                    COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+                    COMPANY_ID={COMPANY_ID}
                     COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
                     update={getalldocument}
 

@@ -358,7 +358,7 @@ const EmployeeSrc = (props) => {
 
   return (
     <>
-        <Sidebar
+      <Sidebar
         COMPANY_ID={COMPANY_ID}
         COMPANY_USERNAME={COMPANY_USERNAME}
         COMPANY_PARENT_ID={COMPANY_PARENT_ID}
@@ -367,9 +367,12 @@ const EmployeeSrc = (props) => {
       />
       <Box className="box" style={{ background: "#277099" }}>
         <EmployeeCreate
+          COMPANY_ID={COMPANY_ID}
+          COMPANY_USERNAME={COMPANY_USERNAME}
+          COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+          COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
           name={"Employee"}
-          mainData={allempData}
-          // refetch={fetchData}
+          refetch={fetchData}
         />
 
         <MyScreen sx={{ display: "block", padding: 3 }}>

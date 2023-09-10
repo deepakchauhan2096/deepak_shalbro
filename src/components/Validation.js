@@ -17,4 +17,39 @@ export function validatePhoneNumber(phoneNumber) {
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailPattern.test(email);
   }
+
+// Validate password
+export function validatePassword(password) {
+  // At least 8 characters in length
+  const lengthRegex = /^.{8,}$/;
+  
+  // At least one uppercase letter
+  const uppercaseRegex = /[A-Z]/;
+  
+  // At least one lowercase letter
+  const lowercaseRegex = /[a-z]/;
+  
+  // At least one digit
+  const digitRegex = /[0-9]/;
+  
+  // At least one special character (e.g., !@#$%^&*)
+  const specialCharacterRegex = /[!@#$%^&*]/;
+  
+  // Check all criteria
+  const isValidLength = lengthRegex.test(password);
+  const hasUppercase = uppercaseRegex.test(password);
+  const hasLowercase = lowercaseRegex.test(password);
+  const hasDigit = digitRegex.test(password);
+  const hasSpecialCharacter = specialCharacterRegex.test(password);
+
+  // Return true if all criteria are met
+  return isValidLength && hasUppercase && hasLowercase && hasDigit && hasSpecialCharacter;
+}
+
+
+
+  
+
+
+  
   
