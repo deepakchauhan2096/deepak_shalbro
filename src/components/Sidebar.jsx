@@ -147,9 +147,9 @@ const Sidebar = ({
             className="sidebar-header d-flex p-3 f-20"
             style={{ justifyContent: "space-between" }}
           >
-            <h3>{"company"}</h3>
+              <h5 className="pt-2">{COMPANY_USERNAME}</h5>
             <Tooltip title={"copany"}>
-              <Avatar>{"d"}</Avatar>
+              <Avatar>{(COMPANY_USERNAME).slice(0,1)}</Avatar>
             </Tooltip>
           </div>
           <Divider />

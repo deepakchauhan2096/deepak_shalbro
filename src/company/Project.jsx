@@ -62,13 +62,12 @@ const Project = (props) => {
       PROJECT_CURRENCY: "",
     },
   });
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(1);
   const [ProjectData, setProjectData] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true);
   const [Edit, setEdit] = useState(false);
-
+  const [openNav, setOpenNav] = useState(false);
   const [updatedata, setUpdateData] = useState(false);
   console.log("hgsvdcv", ProjectData);
 
@@ -329,8 +328,12 @@ const Project = (props) => {
         COMPANY_PARENT_ID={COMPANY_PARENT_ID}
         COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
         active={1}
+        toggle={openNav}
       />
+      
+  
       <Box className="box" style={{ background: "#277099" }}>
+      <Navbar toggle={() => setOpenNav((e) => !e)} />
         <ProjectCreate
            COMPANY_ID={COMPANY_ID}
            COMPANY_USERNAME={COMPANY_USERNAME}
@@ -396,27 +399,7 @@ const Project = (props) => {
           >
             Detail
           </Button>
-          {!Edit ? (
-            <Button
-              onClick={(e) => setEdit(true)}
-              variant={"contained"}
-              className="btn rounded-0 border-0"
-              size="small"
-              sx={{ position: "absolute", right: "0" }}
-            >
-              Edit
-            </Button>
-          ) : (
-            <Button
-              onClick={(e) => setEdit(false)}
-              variant={"contained"}
-              className="btn rounded-0 border-0"
-              size="small"
-              sx={{ position: "absolute", right: "0" }}
-            >
-              Save
-            </Button>
-          )}
+
           <Button
             onClick={(e) => setIndex(2)}
             variant={index === 2 ? "outlined" : "outlined"}
