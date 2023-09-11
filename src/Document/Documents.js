@@ -24,6 +24,7 @@ import {
     Paper,
 } from "@mui/material";
 import { ViewCompact } from "@mui/icons-material";
+import Navbar from "../components/Navbar";
 
 export default function Document(props) {
 
@@ -34,6 +35,7 @@ export default function Document(props) {
     // const [showAllDocuments, setShowAllDocuments] = useState(false);
     const [backdrop, setBackdrop] = useState(false);
     const [deleteItem, setDeleteItem] = useState("");
+    const [openNav, setOpenNav] = useState(false);
 
     const { id } = useParams();
     const param = id.split("&");
@@ -94,7 +96,8 @@ export default function Document(props) {
 
         const requestData = {
             DOCUMENT_REF_ID: COMPANY_ID,
-            DOCUMENT_COMPANY_USERNAME: COMPANY_USERNAME
+            // DOCUMENT_COMPANY_USERNAME: COMPANY_USERNAME,
+            DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME
         };
 
 
@@ -244,7 +247,7 @@ export default function Document(props) {
                         className="view-btn "
                         style={{ padding: "2px 2px" }}
                         onClick={(e) => {
-                            handleDelDoc(e,cellValues.id);
+                            handleDelDoc(e, cellValues.id);
                         }}
                     >
                         Delete
@@ -262,9 +265,9 @@ export default function Document(props) {
                         variant="contained"
                         className="view-btn primary btn btn-success"
                         style={{ padding: "2px 8px" }}
-                         onClick={(e) => {
-                    handleDownload(cellValues.id, cellValues.documentName);
-                }}
+                        onClick={(e) => {
+                            handleDownload(cellValues.id, cellValues.documentName);
+                        }}
                     >
                         Download
                     </Button>
@@ -298,13 +301,13 @@ export default function Document(props) {
                 COMPANY_PARENT_ID={COMPANY_PARENT_ID}
                 COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
                 active={4}
+                toggle={openNav}
             />
             <Box className="box" >
-
+                <Navbar toggle={() => setOpenNav((e) => !e)} />
                 <DocumentCreate
                     name={"Employee"}
-                    COMPANY_USERNAME={COMPANY_USERNAME}
-                    COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+                    COMPANY_ID={COMPANY_ID}
                     COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
                     update={getalldocument}
 

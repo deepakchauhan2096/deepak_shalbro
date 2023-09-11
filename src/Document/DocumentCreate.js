@@ -20,7 +20,7 @@ const style = {
     borderRadius: 4,
 };
 
-const DocumentCreate = ({COMPANY_ID,COMPANY_USERNAME,update}) => {
+const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         selectedFile: null,
@@ -81,7 +81,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_USERNAME,update}) => {
         const data = new FormData();
         data.append("file", formData.selectedFile);
         data.append("DOCUMENT_REF_ID", COMPANY_ID);
-        data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_USERNAME);
+        data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
         data.append("fileDOCUMENET_EXP_DATE", formData.expiryDate);
 
         try {
@@ -137,6 +137,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_USERNAME,update}) => {
                     style={{ height: "100vh", position: "relative" }}
                     maxWidth="xl"
                 >
+                    
                     <Box sx={style}>
                         <div className="container">
                             <form onSubmit={handleSubmit}>

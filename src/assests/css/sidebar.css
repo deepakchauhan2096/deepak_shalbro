@@ -33,7 +33,7 @@ display: none;
 
     .content {
       margin-left:0;
-      border:1px solid red
+      /* border:1px solid red */
     
     }
 
@@ -42,5 +42,9 @@ display: none;
       background-color: #fff;
     }
 
+
+    .box{
+      margin-left: 0;
+    }
   
   }

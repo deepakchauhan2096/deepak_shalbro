@@ -34,6 +34,7 @@ import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
 import { Link, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
 // import env from "react-dotenv";
 
 const EmployeeSrc = (props) => {
@@ -101,6 +102,7 @@ const EmployeeSrc = (props) => {
   const [index, setIndex] = useState(1);
   const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
   const [selectedProject, setSelectedProject] = useState([]);
+  const [openNav, setOpenNav] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -360,17 +362,22 @@ const EmployeeSrc = (props) => {
 
   return (
     <>
-        <Sidebar
+      <Sidebar
         COMPANY_ID={COMPANY_ID}
         COMPANY_USERNAME={COMPANY_USERNAME}
         COMPANY_PARENT_ID={COMPANY_PARENT_ID}
         COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
         active={2}
+        toggle={openNav}
       />
       <Box className="box" style={{ background: "#277099" }}>
+      <Navbar toggle={() => setOpenNav((e) => !e)} />
         <EmployeeCreate
+          COMPANY_ID={COMPANY_ID}
+          COMPANY_USERNAME={COMPANY_USERNAME}
+          COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+          COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
           name={"Employee"}
-          mainData={allempData}
           refetch={fetchData}
         />
 
