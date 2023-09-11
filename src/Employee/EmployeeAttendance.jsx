@@ -45,7 +45,7 @@ const EmployeeAttendance = (props) => {
   const [outdone, setOutdone] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(false);
   const [markerPosition, setMarkerPosition] = useState(center);
-  const [markerPosition2, setMarkerPosition2] = useState(center);
+  const [markerPosition2, setMarkerPosition2] = useState({lat: 28.4125751 , lng : 77.0440402});
   const [locationName, setLocationName] = useState("");
   const [latitude, setLatitude] = useState(Lat);
   const [longitude, setLongitude] = useState(Long);
