@@ -11,7 +11,7 @@ import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SimpleBackdrop from "../components/Backdrop";
-import "../assests/css/document.css"; // Import the CSS file
+import "../assests/css/document.css"; // Import the CSS filefileN
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -24,16 +24,17 @@ import {
     Paper,
 } from "@mui/material";
 import { ViewCompact } from "@mui/icons-material";
+import Navbar from "../components/Navbar";
 
 export default function Document(props) {
 
-    const [selectedFileName, setSelectedFileName] = useState("");
     const [imagesData, setImagesData] = useState([]);
     const [totalDocuments, setTotalDocuments] = useState(0);
     // const [fileSelected, setFileSelected] = useState(false);
     // const [showAllDocuments, setShowAllDocuments] = useState(false);
     const [backdrop, setBackdrop] = useState(false);
     const [deleteItem, setDeleteItem] = useState("");
+    const [openNav, setOpenNav] = useState(false);
 
     const { id } = useParams();
     const param = id.split("&");
@@ -41,9 +42,9 @@ export default function Document(props) {
     const COMPANY_USERNAME = param[1];
     const COMPANY_PARENT_ID = param[2];
     const COMPANY_PARENT_USERNAME = param[3];
+
     // console.log("DocData", DocData)
     const [open, setOpen] = React.useState(false);
-
 
     useEffect(() => {
         getalldocument();
@@ -61,7 +62,9 @@ export default function Document(props) {
         link.download = fileName;
         document.body.appendChild(link);
         link.click();
+
         document.body.removeChild(link);
+
     };
 
 
@@ -93,7 +96,8 @@ export default function Document(props) {
         };
 
         const requestData = {
-            DOCUMENT_REF_ID: COMPANY_PARENT_ID,
+            DOCUMENT_REF_ID: COMPANY_ID,
+            // DOCUMENT_COMPANY_USERNAME: COMPANY_USERNAME,
             DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME
         };
 
@@ -123,6 +127,7 @@ export default function Document(props) {
 
     // Function to download the uploaded documents 
     const handleDownload = async (documentId, fileName) => {
+        console.log(fileName, "filename")
         try {
             const data = JSON.stringify({
                 DOCUMENT_ID: documentId,
@@ -145,11 +150,13 @@ export default function Document(props) {
 
             downloadFile(response.data, fileName);
 
+            
         } catch (error) {
             console.log(error);
         }
-    };
 
+    };
+    
 
     // Function to Delete the uploaded documents 
     const handleDelDoc = (e, documentId) => {
@@ -244,7 +251,7 @@ export default function Document(props) {
                         className="view-btn "
                         style={{ padding: "2px 2px" }}
                         onClick={(e) => {
-                            handleDelDoc(e,cellValues.id);
+                            handleDelDoc(e, cellValues.id);
                         }}
                     >
                         Delete
@@ -262,9 +269,10 @@ export default function Document(props) {
                         variant="contained"
                         className="view-btn primary btn btn-success"
                         style={{ padding: "2px 8px" }}
-                         onClick={(e) => {
-                    handleDownload(cellValues.id, cellValues.documentName);
-                }}
+                        onClick={(e) => {
+                            handleDownload(cellValues.id, cellValues.row.documentName);
+                            // console.log("object", cellValues)
+                        }}
                     >
                         Download
                     </Button>
@@ -298,13 +306,13 @@ export default function Document(props) {
                 COMPANY_PARENT_ID={COMPANY_PARENT_ID}
                 COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
                 active={4}
+                toggle={openNav}
             />
             <Box className="box" >
-
+                <Navbar toggle={() => setOpenNav((e) => !e)} />
                 <DocumentCreate
                     name={"Employee"}
-                    COMPANY_USERNAME={COMPANY_USERNAME}
-                    COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+                    COMPANY_ID={COMPANY_ID}
                     COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
                     update={getalldocument}
 
@@ -324,8 +332,7 @@ export default function Document(props) {
                                 },
                             }}
                             pageSizeOptions={[5]}
-                            checkboxSelection
-                            disableRowSelectionOnClick
+                            disableMultipleSelection
                             density="compact"
 
                         />

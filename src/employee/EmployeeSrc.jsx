@@ -34,6 +34,7 @@ import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
 import { Link, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
 // import env from "react-dotenv";
 
 const EmployeeSrc = (props) => {
@@ -78,7 +79,6 @@ const EmployeeSrc = (props) => {
 
   const [filterData, setFilteredData] = useState({
     row: {
-      EMPLOYEE_ID: "",
       EMPLOYEE_DOB: "",
       EMPLOYEE_EMPLMNTTYPE: "",
       EMPLOYEE_HIRE_DATE: "",
@@ -102,6 +102,7 @@ const EmployeeSrc = (props) => {
   const [index, setIndex] = useState(1);
   const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
   const [selectedProject, setSelectedProject] = useState([]);
+  const [openNav, setOpenNav] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -140,6 +141,10 @@ const EmployeeSrc = (props) => {
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+  
   const fetchAllEmployees = async () => {
     try {
       const response = await axios.put(
@@ -184,9 +189,7 @@ const EmployeeSrc = (props) => {
 
   // Call the fetchData function to fetch both sets of data concurrently
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+
 
   const rows = allempData;
 
@@ -359,18 +362,23 @@ const EmployeeSrc = (props) => {
 
   return (
     <>
-        <Sidebar
+      <Sidebar
         COMPANY_ID={COMPANY_ID}
         COMPANY_USERNAME={COMPANY_USERNAME}
         COMPANY_PARENT_ID={COMPANY_PARENT_ID}
         COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
         active={2}
+        toggle={openNav}
       />
       <Box className="box" style={{ background: "#277099" }}>
+      <Navbar toggle={() => setOpenNav((e) => !e)} />
         <EmployeeCreate
+          COMPANY_ID={COMPANY_ID}
+          COMPANY_USERNAME={COMPANY_USERNAME}
+          COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+          COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
           name={"Employee"}
-          mainData={allempData}
-          // refetch={fetchData}
+          refetch={fetchData}
         />
 
         <MyScreen sx={{ display: "block", padding: 3 }}>

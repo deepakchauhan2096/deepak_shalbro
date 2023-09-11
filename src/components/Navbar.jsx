@@ -2,7 +2,7 @@ import React from 'react'
 
 const Navbar = ({toggle}) => {
   return (
-    <div className="content">
+    <div className="content display-sidebar-mobile">
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container">
             <a className="navbar-brand" href="#">

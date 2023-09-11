@@ -3,13 +3,10 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import country from "../Api/countriess.json";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import projectList from "../jsonlist/typeOfProject.json"
-import {
-  Button, MenuItem,
-  Select,
-} from "@mui/material";
+import projectList from "../jsonlist/typeOfProject.json";
+import { Button } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -23,7 +20,13 @@ const style = {
   borderRadius: 4,
 };
 
-export default function ProjectCreate(props) {
+export default function ProjectCreate({
+  COMPANY_ID,
+  COMPANY_USERNAME,
+  COMPANY_PARENT_ID,
+  COMPANY_PARENT_USERNAME,
+  Update,
+}) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -48,18 +51,62 @@ export default function ProjectCreate(props) {
     PROJECT_VALUE: "",
     PROJECT_CURRENCY: "",
   });
-  console.log("project", createProject)
+  const [starError, setStartError] = useState("");
+  const [endError, setEndError] = useState("");
+  const [nameError, setNameError] = useState("");
+
+  // random username
+
+  function generateRandomUsername() {
+    const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let username = "";
+
+    // Add the first five characters
+    for (let i = 0; i < 5; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      username += charset[randomIndex];
+    }
+
+    // Add six random digits
+    for (let i = 0; i < 6; i++) {
+      username += Math.floor(Math.random() * 10); // Generates random digits (0-9)
+    }
+
+    return username;
+  }
+
+  // Usage example: Generate a random username with 5 characters followed by 6 digits
+  const randomUsername = generateRandomUsername();
+  console.log(randomUsername);
+
+  // random username
+
+  console.log("project", createProject);
 
   useEffect(() => {
-    setCreateProject((prevState) => ({ ...prevState, PROJECT_PARENT_ID: props.companyData?.COMPANY_ID }));
-    setCreateProject((prevState) => ({ ...prevState, PROJECT_PARENT_USERNAME: props.companyData?.COMPANY_USERNAME }));
-    setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_ID: props.companyData?.COMPANY_PARENT_ID }));
-    setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_USERNAME: props.companyData?.COMPANY_PARENT_USERNAME }));
-  }, [open])
+    setCreateProject((prevState) => ({
+      ...prevState,
+      PROJECT_PARENT_ID: COMPANY_ID,
+    }));
+    setCreateProject((prevState) => ({
+      ...prevState,
+      PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
+    }));
+    setCreateProject((prevState) => ({
+      ...prevState,
+      PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+    }));
+    setCreateProject((prevState) => ({
+      ...prevState,
+      PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+    }));
+    setCreateProject((prevState) => ({
+      ...prevState,
+      PROJECT_USERNAME: randomUsername,
+    }));
+  }, [open]);
 
-
-
-  console.log(createProject, "check")
+  console.log(createProject, "check");
 
   const availableState = country?.find(
     (c) => c.name === createProject.PROJECT_COUNTRY
@@ -85,43 +132,32 @@ export default function ProjectCreate(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const requiredFields = [
-      "PROJECT_PARENT_ID",
-      "PROJECT_PARENT_USERNAME",
-      "PROJECT_MEMBER_PARENT_ID",
-      "PROJECT_MEMBER_PARENT_USERNAME",
-      "PROJECT_NAME",
-      "PROJECT_USERNAME",
-      "PROJECT_ADD",
-      "PROJECT_CITY",
-      "PROJECT_START_DATE",
-      "PROJECT_END_DATE",
-      "PROJECT_SUPERVISOR",
-      "PROJECT_COUNTRY",
-      "PROJECT_TYPE",
-      "PROJECT_STATE",
-      "PROJECT_ACCOUNT",
-      "PROJECT_VALUE",
-      "PROJECT_CURRENCY",
 
-    ];
+    // Clear previous validation errors
+    setNameError("");
+    setStartError("");
+    setEndError("");
 
+    const isValidName = createProject.PROJECT_NAME != "";
+    const isValidStart = createProject.PROJECT_START_DATE != "";
+    const isValidEnd = createProject.PROJECT_END_DATE != "";
 
-    const hasEmptyFields = requiredFields.some(
-      (field) => !createProject[field]
-    );
-
-    if (hasEmptyFields) {
-      setErrorMsg("Fill all fields");
-      toast.error("Please fill in all fields", {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 2000,
-      });
+    if (!isValidName) {
+      setNameError("Name should not be empty");
       return;
     }
 
-    setErrorMsg("");
+    if (!isValidStart) {
+      setStartError("Start Date should not be empty");
+      return;
+    }
 
+    if (!isValidEnd) {
+      setEndError("End  Date should not be empty");
+      return;
+    }
+
+    // Perform API validation and request
     axios
       .post("http://54.243.89.186:5001/create_project", createProject, {
         headers,
@@ -136,12 +172,11 @@ export default function ProjectCreate(props) {
         } else if (response.data.operation === "successfull") {
           toast.success("Project Created successfully!", {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 2000,
+            autoClose: 1000,
           });
-          props.refetch();
-
-          setCreateProject({});
+          Update();
           setOpen(false);
+          setCreateProject({});
         }
       })
       .catch((error) => {
@@ -153,15 +188,17 @@ export default function ProjectCreate(props) {
       });
   };
 
-
   // const timeZones = moment.tz.names(); // Get the array of time zone names
-
-  const handleTimeZoneSelect = (e) => {
-    setSelectedTimeZone(e.target.value);
-  };
 
   return (
     <>
+      <Button
+        size="small"
+        variant={"outlined"}
+        className={"btn button border-bottom-0 bg-white"}
+      >
+        My Projects
+      </Button>
       <button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
@@ -190,13 +227,16 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
                   onChange={handleCreate}
+                  disabled
                 />
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Name</label>
                 <input
                   type="text"
-                  className="form-control form-control-2 rounded-0"
+                  className={`form-control form-control-2 rounded-0 ${
+                    nameError ? "is-invalid" : ""
+                  }`}
                   id="inputname"
                   placeholder="Project Name"
                   value={createProject.PROJECT_NAME}
@@ -204,6 +244,9 @@ export default function ProjectCreate(props) {
                   onChange={handleCreate}
                   required
                 />
+                {nameError && (
+                  <div className="invalid-feedback">{nameError}</div>
+                )}
               </div>
               <div className="form-group col-xl-4">
                 <label>Account</label>
@@ -227,8 +270,13 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_START_DATE}
                   name="PROJECT_START_DATE"
                   onChange={handleCreate}
-                  className="form-control form-control-2 rounded-0"
+                  className={`form-control form-control-2 rounded-0 ${
+                    starError ? "is-invalid" : ""
+                  }`}
                 />
+                {starError && (
+                  <div className="invalid-feedback">{starError}</div>
+                )}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project End date</label>
@@ -237,8 +285,11 @@ export default function ProjectCreate(props) {
                   value={createProject.PROJECT_END_DATE}
                   name="PROJECT_END_DATE"
                   onChange={handleCreate}
-                  className="form-control form-control-2 rounded-0"
+                  className={`form-control form-control-2 rounded-0 ${
+                    endError ? "is-invalid" : ""
+                  }`}
                 />
+                {endError && <div className="invalid-feedback">{endError}</div>}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Type</label>
@@ -249,19 +300,18 @@ export default function ProjectCreate(props) {
                   name="PROJECT_TYPE"
                   value={createProject.PROJECT_TYPE}
                 >
-                  <option value="">--Choose Project Type--</option>
-                  {projectList.map((projectname) => {
+                  <option selected>--Choose Project Type--</option>
+                  {projectList.map((e, key) => {
                     return (
-                      <option value="Architect">{projectname}</option>
-                    )
+                      <option value={e} key={key}>
+                        {e}
+                      </option>
+                    );
                   })}
-         
                 </select>
               </div>
             </div>
             <div className="row py-2">
-
-
               <div className="form-group col-md-4">
                 <label>Supervisor</label>
                 <input
@@ -273,7 +323,6 @@ export default function ProjectCreate(props) {
                   onChange={handleCreate}
                 />
               </div>
-
 
               <div className="form-group col-md-4">
                 <label>Project Value</label>
@@ -288,7 +337,7 @@ export default function ProjectCreate(props) {
               </div>
 
               <div className="form-group col-md-4">
-                <label ></label>
+                <label></label>
                 <select
                   id="inputEnroll"
                   className="form-control form-control-2 border rounded-0"
@@ -300,7 +349,7 @@ export default function ProjectCreate(props) {
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
                   <option value="INR">INR</option>
-                
+
                   {/* <option>Plumber</option>
                   <option>Engineer</option> */}
                 </select>
@@ -382,8 +431,7 @@ export default function ProjectCreate(props) {
               </div>
             </div>
 
-            <div className="FormButtonAlign">
-
+            <div className="py-2">
               <button
                 type="submit"
                 className="btn btn-info text-white"
