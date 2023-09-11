@@ -139,6 +139,10 @@ const EmployeeSrc = (props) => {
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+  
   const fetchAllEmployees = async () => {
     try {
       const response = await axios.put(
@@ -183,9 +187,7 @@ const EmployeeSrc = (props) => {
 
   // Call the fetchData function to fetch both sets of data concurrently
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+
 
   const rows = allempData;
 
@@ -369,7 +371,7 @@ const EmployeeSrc = (props) => {
         <EmployeeCreate
           name={"Employee"}
           mainData={allempData}
-          // refetch={fetchData}
+          refetch={fetchData}
         />
 
         <MyScreen sx={{ display: "block", padding: 3 }}>

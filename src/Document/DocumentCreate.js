@@ -26,7 +26,10 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_USERNAME,update}) => {
         selectedFile: null,
         expiryDate: "",
     });
+    console.log("formData", formData);
+
     const [isSubmitting, setIsSubmitting] = useState(false);
+
     const [selectedFileName, setSelectedFileName] = useState("");
     const handleOpen = () => setOpen(true);
 
@@ -94,6 +97,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_USERNAME,update}) => {
             );
 
             if (response.status === 200) {
+                console.log("response", response)
                 setOpen(false);
                 update();
                 toast.success("Document uploaded successfully.");
