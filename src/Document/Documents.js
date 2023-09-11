@@ -11,7 +11,7 @@ import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SimpleBackdrop from "../components/Backdrop";
-import "../assests/css/document.css"; // Import the CSS file
+import "../assests/css/document.css"; // Import the CSS filefileN
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,7 +28,6 @@ import Navbar from "../components/Navbar";
 
 export default function Document(props) {
 
-    const [selectedFileName, setSelectedFileName] = useState("");
     const [imagesData, setImagesData] = useState([]);
     const [totalDocuments, setTotalDocuments] = useState(0);
     // const [fileSelected, setFileSelected] = useState(false);
@@ -43,9 +42,9 @@ export default function Document(props) {
     const COMPANY_USERNAME = param[1];
     const COMPANY_PARENT_ID = param[2];
     const COMPANY_PARENT_USERNAME = param[3];
+
     // console.log("DocData", DocData)
     const [open, setOpen] = React.useState(false);
-
 
     useEffect(() => {
         getalldocument();
@@ -63,7 +62,9 @@ export default function Document(props) {
         link.download = fileName;
         document.body.appendChild(link);
         link.click();
+
         document.body.removeChild(link);
+
     };
 
 
@@ -126,6 +127,7 @@ export default function Document(props) {
 
     // Function to download the uploaded documents 
     const handleDownload = async (documentId, fileName) => {
+        console.log(fileName, "filename")
         try {
             const data = JSON.stringify({
                 DOCUMENT_ID: documentId,
@@ -148,11 +150,13 @@ export default function Document(props) {
 
             downloadFile(response.data, fileName);
 
+            
         } catch (error) {
             console.log(error);
         }
-    };
 
+    };
+    
 
     // Function to Delete the uploaded documents 
     const handleDelDoc = (e, documentId) => {
@@ -266,7 +270,8 @@ export default function Document(props) {
                         className="view-btn primary btn btn-success"
                         style={{ padding: "2px 8px" }}
                         onClick={(e) => {
-                            handleDownload(cellValues.id, cellValues.documentName);
+                            handleDownload(cellValues.id, cellValues.row.documentName);
+                            // console.log("object", cellValues)
                         }}
                     >
                         Download

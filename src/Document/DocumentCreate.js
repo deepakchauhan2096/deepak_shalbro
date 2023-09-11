@@ -24,7 +24,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         selectedFile: null,
-        expiryDate: "",
+        DOCUMENT_EXP_DATE: "",
     });
     console.log("formData", formData);
 
@@ -37,7 +37,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
         setOpen(false);
         setFormData({
             selectedFile: null,
-            expiryDate: "",
+            DOCUMENT_EXP_DATE: "",
         });
     };
 
@@ -59,7 +59,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
     const handleExpiryDateChange = (e) => {
         setFormData({
             ...formData,
-            expiryDate: e.target.value,
+            DOCUMENT_EXP_DATE: e.target.value,
         });
     };
 
@@ -72,7 +72,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
 
         setIsSubmitting(true);
 
-        if (!formData.selectedFile || !formData.expiryDate) {
+        if (!formData.selectedFile || !formData.DOCUMENT_EXP_DATE) {
             setIsSubmitting(false);
             toast.error("Please select a file and enter an expiry date.");
             return;
@@ -82,7 +82,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
         data.append("file", formData.selectedFile);
         data.append("DOCUMENT_REF_ID", COMPANY_ID);
         data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
-        data.append("fileDOCUMENET_EXP_DATE", formData.expiryDate);
+        data.append("DOCUMENT_EXP_DATE", formData.DOCUMENT_EXP_DATE);
 
         try {
             const response = await axios.post(
@@ -174,10 +174,10 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
                                         <input
                                             type="date"
                                             className="form-control mb-2 pb-2 pt-2 form-control-2 rounded-0"
-                                            id="fileDOCUMENET_EXP_DATE"
-                                            name="fileDOCUMENET_EXP_DATE"
+                                            id="DOCUMENT_EXP_DATE"
+                                            name="DOCUMENT_EXP_DATE"
                                             onChange={handleExpiryDateChange}
-                                            value={formData.expiryDate}
+                                            value={formData.DOCUMENT_EXP_DATE}
                                             required
                                         />
                                     </div>
