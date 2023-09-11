@@ -5,12 +5,8 @@ import axios from "axios";
 import country from "../Api/countriess.json";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import projectList from "../jsonlist/typeOfProject.json"
-import {
-  validatePhoneNumber,
-  validateUsername,
-  validateEmail,
-} from "../components/Validation";
+import projectList from "../jsonlist/typeOfProject.json";
+import { Button } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -24,7 +20,13 @@ const style = {
   borderRadius: 4,
 };
 
-export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME, Update}) {
+export default function ProjectCreate({
+  COMPANY_ID,
+  COMPANY_USERNAME,
+  COMPANY_PARENT_ID,
+  COMPANY_PARENT_USERNAME,
+  Update,
+}) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -49,22 +51,62 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
     PROJECT_VALUE: "",
     PROJECT_CURRENCY: "",
   });
-  const [phoneError, setPhoneError] = useState("");
-  const [usernameError, setUsernameError] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [starError, setStartError] = useState("");
+  const [endError, setEndError] = useState("");
+  const [nameError, setNameError] = useState("");
 
-  console.log("project", createProject)
+  // random username
+
+  function generateRandomUsername() {
+    const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let username = "";
+
+    // Add the first five characters
+    for (let i = 0; i < 5; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      username += charset[randomIndex];
+    }
+
+    // Add six random digits
+    for (let i = 0; i < 6; i++) {
+      username += Math.floor(Math.random() * 10); // Generates random digits (0-9)
+    }
+
+    return username;
+  }
+
+  // Usage example: Generate a random username with 5 characters followed by 6 digits
+  const randomUsername = generateRandomUsername();
+  console.log(randomUsername);
+
+  // random username
+
+  console.log("project", createProject);
 
   useEffect(() => {
-    setCreateProject((prevState) => ({ ...prevState, PROJECT_PARENT_ID: COMPANY_ID }));
-    setCreateProject((prevState) => ({ ...prevState, PROJECT_PARENT_USERNAME: COMPANY_USERNAME }));
-    setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID }));
-    setCreateProject((prevState) => ({ ...prevState, PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME }));
-  }, [open])
+    setCreateProject((prevState) => ({
+      ...prevState,
+      PROJECT_PARENT_ID: COMPANY_ID,
+    }));
+    setCreateProject((prevState) => ({
+      ...prevState,
+      PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
+    }));
+    setCreateProject((prevState) => ({
+      ...prevState,
+      PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+    }));
+    setCreateProject((prevState) => ({
+      ...prevState,
+      PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+    }));
+    setCreateProject((prevState) => ({
+      ...prevState,
+      PROJECT_USERNAME: randomUsername,
+    }));
+  }, [open]);
 
-
-
-  console.log(createProject, "check")
+  console.log(createProject, "check");
 
   const availableState = country?.find(
     (c) => c.name === createProject.PROJECT_COUNTRY
@@ -92,32 +134,28 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
     e.preventDefault();
 
     // Clear previous validation errors
-    // setPhoneError("");
-    // setUsernameError("");
-    // setEmailError("");
-    setErrorMsg("");
+    setNameError("");
+    setStartError("");
+    setEndError("");
 
-    // Validate phone number, username, and email fields
-    const isValidPhoneNumber = validatePhoneNumber(
-      createProject.COMPANY_PHONE
-    );
-    const isValidUsername = validateUsername(createProject.COMPANY_USERNAME);
-    const isValidEmail = validateEmail(createProject.COMPANY_EMAIL);
+    const isValidName = createProject.PROJECT_NAME != "";
+    const isValidStart = createProject.PROJECT_START_DATE != "";
+    const isValidEnd = createProject.PROJECT_END_DATE != "";
 
-    // if (!isValidPhoneNumber) {
-    //   setPhoneError("Invalid phone number");
-    //   return;
-    // }
+    if (!isValidName) {
+      setNameError("Name should not be empty");
+      return;
+    }
 
-    // if (!isValidUsername) {
-    //   setUsernameError("Invalid username");
-    //   return;
-    // }
+    if (!isValidStart) {
+      setStartError("Start Date should not be empty");
+      return;
+    }
 
-    // if (!isValidEmail) {
-    //   setEmailError("Invalid email address");
-    //   return;
-    // }
+    if (!isValidEnd) {
+      setEndError("End  Date should not be empty");
+      return;
+    }
 
     // Perform API validation and request
     axios
@@ -136,8 +174,9 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
             position: toast.POSITION.TOP_CENTER,
             autoClose: 1000,
           });
-          Update()
+          Update();
           setOpen(false);
+          setCreateProject({});
         }
       })
       .catch((error) => {
@@ -151,12 +190,15 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
 
   // const timeZones = moment.tz.names(); // Get the array of time zone names
 
-  const handleTimeZoneSelect = (e) => {
-    setSelectedTimeZone(e.target.value);
-  };
-
   return (
     <>
+      <Button
+        size="small"
+        variant={"outlined"}
+        className={"btn button border-bottom-0 bg-white"}
+      >
+        My Projects
+      </Button>
       <button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
@@ -185,13 +227,16 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
                   value={createProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
                   onChange={handleCreate}
+                  disabled
                 />
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Name</label>
                 <input
                   type="text"
-                  className="form-control form-control-2 rounded-0"
+                  className={`form-control form-control-2 rounded-0 ${
+                    nameError ? "is-invalid" : ""
+                  }`}
                   id="inputname"
                   placeholder="Project Name"
                   value={createProject.PROJECT_NAME}
@@ -199,6 +244,9 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
                   onChange={handleCreate}
                   required
                 />
+                {nameError && (
+                  <div className="invalid-feedback">{nameError}</div>
+                )}
               </div>
               <div className="form-group col-xl-4">
                 <label>Account</label>
@@ -222,8 +270,13 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
                   value={createProject.PROJECT_START_DATE}
                   name="PROJECT_START_DATE"
                   onChange={handleCreate}
-                  className="form-control form-control-2 rounded-0"
+                  className={`form-control form-control-2 rounded-0 ${
+                    starError ? "is-invalid" : ""
+                  }`}
                 />
+                {starError && (
+                  <div className="invalid-feedback">{starError}</div>
+                )}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project End date</label>
@@ -232,33 +285,33 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
                   value={createProject.PROJECT_END_DATE}
                   name="PROJECT_END_DATE"
                   onChange={handleCreate}
-                  className="form-control form-control-2 rounded-0"
+                  className={`form-control form-control-2 rounded-0 ${
+                    endError ? "is-invalid" : ""
+                  }`}
                 />
+                {endError && <div className="invalid-feedback">{endError}</div>}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Type</label>
                 <select
-                    id="inputEnroll"
-                    className="form-control form-control-2 border rounded-0"
-                    onChange={handleCreate}
-                    name="PROJECT_TYPE"
-                    value={createProject.PROJECT_TYPE}
-                  >
-                    <option selected>--Choose Project Type--</option>
-                    {projectList.map((e, key) => {
-                      return (
-                        <option value={e} key={key}>
-                          {e}
-                        </option>
-                      )
-                    })}
-
-           </select>
+                  id="inputEnroll"
+                  className="form-control form-control-2 border rounded-0"
+                  onChange={handleCreate}
+                  name="PROJECT_TYPE"
+                  value={createProject.PROJECT_TYPE}
+                >
+                  <option selected>--Choose Project Type--</option>
+                  {projectList.map((e, key) => {
+                    return (
+                      <option value={e} key={key}>
+                        {e}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
             </div>
             <div className="row py-2">
-
-
               <div className="form-group col-md-4">
                 <label>Supervisor</label>
                 <input
@@ -270,7 +323,6 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
                   onChange={handleCreate}
                 />
               </div>
-
 
               <div className="form-group col-md-4">
                 <label>Project Value</label>
@@ -285,7 +337,7 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
               </div>
 
               <div className="form-group col-md-4">
-                <label ></label>
+                <label></label>
                 <select
                   id="inputEnroll"
                   className="form-control form-control-2 border rounded-0"
@@ -297,7 +349,7 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
                   <option value="INR">INR</option>
-                
+
                   {/* <option>Plumber</option>
                   <option>Engineer</option> */}
                 </select>
@@ -379,8 +431,7 @@ export default function ProjectCreate({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARE
               </div>
             </div>
 
-            <div className="FormButtonAlign">
-
+            <div className="py-2">
               <button
                 type="submit"
                 className="btn btn-info text-white"

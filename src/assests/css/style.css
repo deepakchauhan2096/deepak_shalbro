@@ -85,14 +85,11 @@ p,b{
 }
 
 
-@media (max-width:991px){
-  .box {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: calc(100% - 50px);
-    height: 100vh;
-    background: #fff;
-    margin-left: 50px;
-  }
-}
+@media only screen and (max-width:993.333px) {
+
+   .box{
+     margin-left: 0;
+     width: 100%;
+   }
+ 
+ }

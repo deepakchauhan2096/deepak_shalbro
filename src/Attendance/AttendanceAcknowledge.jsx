@@ -28,6 +28,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import SalaryPDF from "../Invoices/SalaryPDF";
 import Sidebar from "../components/Sidebar";
 import { useParams } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 let MyDateCurrent = new Date();
 let MyDateStringCurrent;
@@ -122,8 +123,8 @@ const AttendanceReport = (props) => {
     COMPANY_PARENT_ID: "",
     COMPANY_PARENT_USERNAME: "",
   });
+  const [openNav, setOpenNav] = useState(false);
   const  mainData  = allempData;
-
   console.log(mainData, "mainData");
 
   const headers = {
@@ -336,8 +337,10 @@ const AttendanceReport = (props) => {
         COMPANY_PARENT_ID={COMPANY_PARENT_ID}
         COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
         active={3}
+        toggle={openNav}
       />
       <Box className="box" style={{ background: "#277099" }}>
+      <Navbar toggle={() => setOpenNav((e) => !e)} />
         <Button
           size="small"
           variant={show ? "outlined" : "outlined"}
