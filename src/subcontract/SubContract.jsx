@@ -4,7 +4,7 @@ import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Skeleton, Paper } from "@mui/material";
-import CreateSubcontract from "../subcontract/CreateSubcontract";
+import CreateSubcontract from "./CreateSubcontract";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
 import EditSubcontract from "./EditSubContract";
@@ -62,7 +62,7 @@ const SubContract = (props) => {
   const fetchsubcontracts = async (e) => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_subcontractor",
+        "http://54.243.89.186:5001/get_subcontractor",
         {
           SUBCONTRACTOR_PARENT_ID: subcontractData?.COMPANY_ID,
           SUBCONTRACTOR_PARENT_USERNAME: subcontractData?.COMPANY_USERNAME,

@@ -123,7 +123,7 @@ export default function ProjectCreate(props) {
     setErrorMsg("");
 
     axios
-      .post("http://18.211.130.168:5001/create_project", createProject, {
+      .post("http://54.243.89.186:5001/create_project", createProject, {
         headers,
       })
       .then((response) => {
@@ -162,18 +162,15 @@ export default function ProjectCreate(props) {
 
   return (
     <>
-      <Button size="small" className="btn button border-bottom-0 bg-white" variant="outlined">
-        Project
-      </Button>
-      <Button
+      <button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
-        className="btn rounded-0 border-0  rounded-0 text-light"
-        variant="contained"
+        className="btn rounded-0 border-0  rounded-0 text-light btn-primary btn-sm"
+        // variant="contained"
         size="small"
       >
         + Add New Project
-      </Button>
+      </button>
 
       <Modal
         open={open}

@@ -97,7 +97,7 @@ const EmployeeAttendance = (props) => {
 
       axios
         .post(
-          "http://18.211.130.168:5001/create_emp_attendence",
+          "http://54.243.89.186:5001/create_emp_attendence",
           attendanceData,
           {
             headers: {
@@ -138,7 +138,7 @@ const EmployeeAttendance = (props) => {
 
       axios
         .post(
-          "http://18.211.130.168:5001/create_emp_attendence",
+          "http://54.243.89.186:5001/create_emp_attendence",
           attendanceData,
           {
             headers: {

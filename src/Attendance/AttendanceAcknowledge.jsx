@@ -26,6 +26,8 @@ import AttendancePunch from "./AttendancePunch";
 import SimpleBackdrop from "../components/Backdrop";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import SalaryPDF from "../Invoices/SalaryPDF";
+import Sidebar from "../components/Sidebar";
+import { useParams } from "react-router-dom";
 
 let MyDateCurrent = new Date();
 let MyDateStringCurrent;
@@ -98,6 +100,14 @@ function getDatesBetween(startDate, endDate) {
 }
 
 const AttendanceReport = (props) => {
+  const { id } = useParams();
+
+  const param = id.split("&");
+  const COMPANY_ID = param[0];
+  const COMPANY_USERNAME = param[1];
+  const COMPANY_PARENT_ID = param[2];
+  const COMPANY_PARENT_USERNAME = param[3];
+
   const [employees, getReport] = useState();
   const [foundUsers, setFoundUsers] = useState([]);
   const [filterMethod, setFilterMethod] = useState("Date wise");
@@ -108,9 +118,64 @@ const AttendanceReport = (props) => {
   const [showDetail, setShowDetail] = useState(true);
   const [show, setshow] = useState(true);
   const [employeeName, setEmployeeName] = useState([]);
-  const { mainData } = props;
+  const [allempData, setAllempData] = useState({
+    COMPANY_PARENT_ID: "",
+    COMPANY_PARENT_USERNAME: "",
+  });
+  const  mainData  = allempData;
 
   console.log(mainData, "mainData");
+
+  const headers = {
+    "Content-Type": "application/json",
+    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  };
+
+
+  const fetchAllEmployees = async () => {
+    try {
+      const response = await axios.put(
+        "http://54.243.89.186:5001/get_employee",
+        {
+          EMPLOYEE_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+          EMPLOYEE_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+          EMPLOYEE_PARENT_USERNAME: COMPANY_USERNAME,
+          EMPLOYEE_PARENT_ID: COMPANY_ID,
+        },
+        { headers }
+      );
+
+      const data = response.data;
+
+      console.log("Employee Data: =>", data);
+      return data;
+    } catch (err) {
+      console.log("Something Went Wrong: =>", err);
+      throw err;
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const [employeeData] = await Promise.all([
+        fetchAllEmployees(),
+      ]);
+
+      // Both requests have completed here
+      // setIsLoading(false);
+      setAllempData(employeeData.result);
+      console.log("Both requests completed", employeeData);
+
+      // Now you can access employeeData and projectsData for further processing if needed
+    } catch (err) {
+      console.log("An error occurred:", err);
+    }
+  };
+
+   useEffect(() => {
+    fetchData();
+  }, []);
+
 
   // loader
   const Animations = () => {
@@ -138,7 +203,7 @@ const AttendanceReport = (props) => {
     let config = {
       method: "put",
       maxBodyLength: Infinity,
-      url: "http://18.211.130.168:5001/get_employee_details_for_attendence",
+      url: "http://54.243.89.186:5001/get_employee_details_for_attendence",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
@@ -166,9 +231,9 @@ const AttendanceReport = (props) => {
       mainData[0]?.EMPLOYEE_MEMBER_PARENT_USERNAME,
       mainData[0]?.EMPLOYEE_PARENT_USERNAME
     );
-  }, []);
+  }, [allempData]);
 
-  console.log(employees, "report");
+  console.log(mainData, "report");
 
   // date array function call
 
@@ -261,8 +326,17 @@ const AttendanceReport = (props) => {
     filename: "Doc.csv",
   };
 
+  console.log(processedData,"processedData")
+
   return (
     <>
+      <Sidebar
+        COMPANY_ID={COMPANY_ID}
+        COMPANY_USERNAME={COMPANY_USERNAME}
+        COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+        COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+        active={3}
+      />
       <Box className="box" style={{ background: "#277099" }}>
         <Button
           size="small"
@@ -434,8 +508,8 @@ const AttendanceReport = (props) => {
               </Grid>
 
               <table className="table table-hover table-sm table-fixed">
-                {show ? (
-                  <>
+                {show ?  (
+                  !processedData ? "Loading..." : <>
                     <thead
                       style={{
                         position: "sticky",
@@ -446,10 +520,10 @@ const AttendanceReport = (props) => {
                         <th scope="col" colSpan={7} style={{ gap: 2 }}>
                           {/* <button className="btn btn-primary btn-sm" onClick={window.print()}>
                       Print Preview
-                    </button>{" "} */}
+                      </button>{" "} */}
                           {/* <button className="btn btn-secondary btn-sm">
                       Export(PDF)
-                    </button>{" "} */}
+                      </button>{" "} */}
                           <button className="btn btn-secondary btn-sm">
                             <CSVLink className="sub-nav-text" {...csvReport}>
                               ↓ Export(CSV)
