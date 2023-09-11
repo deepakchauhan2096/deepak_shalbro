@@ -552,7 +552,6 @@ const Project = (props) => {
         <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
           <ProjectAssigned projectData={filterData} />
         </MyScreen>
-        <MyScreen screenIndex={index === 10} sx={{ padding: 3 }}></MyScreen>
 
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
           <ProjectLoc projectData={filterData} />

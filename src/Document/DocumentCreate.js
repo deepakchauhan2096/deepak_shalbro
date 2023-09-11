@@ -133,6 +133,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
                     style={{ height: "100vh", position: "relative" }}
                     maxWidth="xl"
                 >
+                    
                     <Box sx={style}>
                         <div className="container">
                             <form onSubmit={handleSubmit}>
