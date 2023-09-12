@@ -294,6 +294,7 @@ const SalaryPDF = (props) => {
   return (
     <Document>
       {/** Page defines a single page of content. */}
+      {/* NEW */}
 
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
