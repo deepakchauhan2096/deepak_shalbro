@@ -143,7 +143,7 @@ export default function CompanyCreate(props) {
     <>
       <button
         onClick={handleOpen}
-        className="btn btn-primary btn-sm"
+        className="btn btn-primary btn-sm my-2"
         style={{ width: "fit-content" }}
       >
         <AddIcon /> Add Company
