@@ -52,27 +52,27 @@ const SalaryPDF = (props) => {
         width: '20%',
         borderRightColor: borderColor,
         borderRightWidth: 1,
-        fontSize:"12px"
+        fontSize: "12px"
       },
       qty: {
         width: '20%',
         borderRightColor: borderColor,
         borderRightWidth: 1,
-        fontSize:"12px"
+        fontSize: "12px"
       },
       rate: {
         width: '20%',
         borderRightColor: borderColor,
         borderRightWidth: 1,
-        fontSize:"12px"
+        fontSize: "12px"
       },
       amount: {
         width: '20%',
-        fontSize:"12px"
+        fontSize: "12px"
       },
       status: {
         width: '20%',
-        fontSize:"12px"
+        fontSize: "12px"
       },
     });
 
@@ -100,50 +100,50 @@ const SalaryPDF = (props) => {
         alignItems: 'center',
         height: 20,
         fontStyle: 'bold',
-        fontSize:"12px"
+        fontSize: "12px"
       },
       description: {
         width: '20%',
         textAlign: 'center',
         borderRightColor: borderColor,
         borderRightWidth: 1,
-        fontSize:"12px"
+        fontSize: "12px"
       },
       qty: {
         width: '20%',
         borderRightColor: borderColor,
         borderRightWidth: 1,
         textAlign: 'center',
-        fontSize:"12px"
+        fontSize: "12px"
       },
       rate: {
         width: '20%',
         borderRightColor: borderColor,
         borderRightWidth: 1,
         textAlign: 'center',
-        fontSize:"12px"
+        fontSize: "12px"
       },
       amount: {
         width: '20%',
         textAlign: 'center',
-        fontSize:"12px"
+        fontSize: "12px"
       },
       status: {
         width: '20%',
         textAlign: 'center',
-        fontSize:"12px"
+        fontSize: "12px"
       },
     });
 
-     // time calculation
+    // time calculation
 
-  const timeValueHours = (x, y) => {
-    return Math.abs(new Date(x).getUTCHours() - new Date(y).getUTCHours());
-  };
+    const timeValueHours = (x, y) => {
+      return Math.abs(new Date(x).getUTCHours() - new Date(y).getUTCHours());
+    };
 
-  const timeValueMinutes = (x, y) => {
-    return Math.abs(new Date(x).getUTCMinutes() - new Date(y).getUTCMinutes());
-  };
+    const timeValueMinutes = (x, y) => {
+      return Math.abs(new Date(x).getUTCMinutes() - new Date(y).getUTCMinutes());
+    };
 
     const rows = items.map(item =>
       <View style={styles.row} >
@@ -151,15 +151,15 @@ const SalaryPDF = (props) => {
         <Text style={styles.qty}>{moment(item.ATTENDANCE_IN).format("LT")}</Text>
         <Text style={styles.rate}>{moment(item.ATTENDANCE_OUT).format("LT")}</Text>
         <Text style={styles.amount}>
-        {timeValueHours(item.ATTENDANCE_OUT, item.ATTENDANCE_IN)}{" "}
-                  hours{" "}
-                  {timeValueMinutes(item.ATTENDANCE_OUT, item.ATTENDANCE_IN)}{" "}
-                  mins
+          {timeValueHours(item.ATTENDANCE_OUT, item.ATTENDANCE_IN)}{" "}
+          hours{" "}
+          {timeValueMinutes(item.ATTENDANCE_OUT, item.ATTENDANCE_IN)}{" "}
+          mins
         </Text>
         <Text style={styles.status}>
-        {item.ATTENDANCE_IN && item.ATTENDANCE_OUT
-                    ? "present"
-                    : "absent"}
+          {item.ATTENDANCE_IN && item.ATTENDANCE_OUT
+            ? "present"
+            : "absent"}
         </Text>
       </View>
     )
@@ -183,45 +183,45 @@ const SalaryPDF = (props) => {
         alignItems: 'center',
         height: 20,
         fontStyle: 'bold',
-        fontSize:"12px"
+        fontSize: "12px"
       },
       description: {
         width: '20%',
         textAlign: 'center',
         // borderRightColor: borderColor,
         // borderRightWidth: 1,
-        fontSize:"12px"
+        fontSize: "12px"
       },
       qty: {
         width: '20%',
         // borderRightColor: borderColor,
         // borderRightWidth: 1,
         textAlign: 'center',
-        fontSize:"12px"
+        fontSize: "12px"
       },
       rate: {
         width: '20%',
         // borderRightColor: borderColor,
         // borderRightWidth: 1,
         textAlign: 'center',
-        fontSize:"12px"
+        fontSize: "12px"
       },
       amount: {
         width: '20%',
         textAlign: 'center',
-        fontSize:"12px"
+        fontSize: "12px"
       },
       status: {
         width: '20%',
         textAlign: 'center',
-        fontSize:"12px"
+        fontSize: "12px"
       },
-       });
+    });
 
 
 
 
-    const rows = 
+    const rows =
       <View style={styles.row} >
         <Text style={styles.description}>{"Total Hours -"}</Text>
         <Text style={styles.qty}>{props.workingHours}</Text>
@@ -229,7 +229,7 @@ const SalaryPDF = (props) => {
         <Text style={styles.amount}>{"Total Income -"}</Text>
         <Text style={styles.status}>$ {props.totalIncome}/-</Text>
       </View>
-    
+
 
     return (
       <>{rows}</>
@@ -297,18 +297,18 @@ const SalaryPDF = (props) => {
 
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
-          <Text style={styles.text}>Name: <Text style={{textDecoration:"underline"}}>{props.name}</Text></Text>
+          <Text style={styles.text}>Name: <Text style={{ textDecoration: "underline" }}>{props.name}</Text></Text>
           <Text style={styles.text}>Address: {props.address}</Text>
           <Text style={styles.text}>Email: {props.email}</Text>
           <Text style={styles.text}>Phone No: {props.phone}</Text>
           <Text style={styles.text}>Salary Date {day}-{month}-{year}</Text>
-          
+
 
           <View style={Table.tableContainer}>
-          <TableHeader />
-          <TableRow items={props.mapvalue} />
-          <TableBottom />
-        </View>
+            <TableHeader />
+            <TableRow items={props.mapvalue} />
+            <TableBottom />
+          </View>
         </View>
       </Page>
     </Document>
