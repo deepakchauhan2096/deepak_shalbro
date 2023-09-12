@@ -38,6 +38,7 @@ export default function CompanyCreate(props) {
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  
   const [create_company, setCreate_company] = useState({
     COMPANY_PARENT_ID: props.ID,
     COMPANY_PARENT_USERNAME: props.Username,

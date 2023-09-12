@@ -285,7 +285,7 @@ const CompanyMain = () => {
 
       <NavScreen screenIndex={navIndex === 3}>
         <EmployeeSrc
-          empData={location.state.props}
+         recieveData={location.state.props} 
           AssignProjectData={projectData}
         />
       </NavScreen>
