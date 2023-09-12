@@ -265,7 +265,7 @@ const AttendanceReport = (props) => {
 
   //modify data
   let processedData = foundUsers?.map((employee) => {
-    console.log(employee, "aditional");
+    console.log(employee, "additional");
     let filterByDate;
     filterByDate = employee.AttendanceData.filter((item) => {
       return (filterMethod === "By Pay Period"
@@ -273,9 +273,9 @@ const AttendanceReport = (props) => {
         : [keyword]
       ).includes(item.ATTENDANCE_DATE_ID);
     });
-
+  
     console.log(filterByDate, arrayDate, "filter");
-
+  
     const totalHours = filterByDate.reduce((acc, attendance) => {
       const attendanceIn = new Date(attendance.ATTENDANCE_IN);
       const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
@@ -283,17 +283,26 @@ const AttendanceReport = (props) => {
         Math.abs(attendanceOut - attendanceIn) / (1000 * 60 * 60); // Convert milliseconds to hours
       return acc + hoursWorked;
     }, 0);
-
+  
+    // Define a threshold for regular hours (e.g., 40 hours per week)
+    const regularHoursThreshold = 8;
+    let overtimeHours = 0;
+  
+    if (totalHours > regularHoursThreshold) {
+      overtimeHours = totalHours - regularHoursThreshold;
+    }
+  
     const modifiedEmployee = {
       ...employee._doc,
       TOTAL_HOURS: totalHours.toFixed(2),
+      OVERTIME_HOURS: overtimeHours.toFixed(2), // Add overtime hours here
       PUNCH: employee,
       EMPLOYEE_ATTENDANCE: filterByDate?.map((attendance) => {
         const attendanceIn = new Date(attendance.ATTENDANCE_IN);
         const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
         const hoursWorked =
           Math.abs(attendanceOut - attendanceIn) / (1000 * 60 * 60); // Convert milliseconds to hours
-
+  
         return {
           ...attendance,
           HOURS: hoursWorked.toFixed(2),
@@ -301,9 +310,10 @@ const AttendanceReport = (props) => {
         };
       }),
     };
-
+  
     return modifiedEmployee;
   });
+  
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
@@ -527,12 +537,11 @@ const AttendanceReport = (props) => {
                           {/* <button className="btn btn-secondary btn-sm">
                       Export(PDF)
                       </button>{" "} */}
-                          <button className="btn btn-secondary btn-sm">
+                          {/* <button className="btn btn-secondary btn-sm">
                             <CSVLink className="sub-nav-text" {...csvReport}>
                               ↓ Export(CSV)
                             </CSVLink>
-                            {/* Export(CSV) */}
-                          </button>{" "}
+                          </button>{" "} */}
                           <button className="btn btn-sm" disabled>
                             No of Employee: {processedData?.length}
                           </button>{" "}
@@ -570,7 +579,7 @@ const AttendanceReport = (props) => {
                                 {post.TOTAL_HOURS} Total
                               </span>
                             </td>
-                            <td></td>
+                            <td>{post.OVERTIME_HOURS}</td>
                             <td></td>
                             <td>
                                 <PDFDownloadLink
@@ -584,7 +593,7 @@ const AttendanceReport = (props) => {
                                       wages={post.EMPLOYEE_HOURLY_WAGE}
                                       totalIncome={post.TOTAL_HOURS}
                                       workingHours={post.TOTAL_HOURS}
-                                      mapvalue={post.PUNCH.AttendanceData}
+                                      mapvalue={post.EMPLOYEE_ATTENDANCE}
                                     />
                                   }
                                   fileName={`${post.EMPLOYEE_NAME}.pdf`}
