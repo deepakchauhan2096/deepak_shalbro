@@ -12,11 +12,6 @@ import SimpleBackdrop from "../components/Backdrop";
 import { faListSquares } from "@fortawesome/free-solid-svg-icons";
 import { Fab, Paper } from "@mui/material";
 import companytype from "../jsonlist/typeOfCompany.json";
-import {
-  validatePhoneNumber,
-  validateUsername,
-  validateEmail,
-} from "../components/Validation";
 
 const style = {
   position: "absolute",
@@ -38,7 +33,7 @@ export default function CompanyCreate(props) {
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  
+
   const [create_company, setCreate_company] = useState({
     COMPANY_PARENT_ID: props.ID,
     COMPANY_PARENT_USERNAME: props.Username,
@@ -51,10 +46,12 @@ export default function CompanyCreate(props) {
     COMPANY_STATE: "",
     COMPANY_CITY: "",
     COMPANY_COUNTRY: "",
+    COMPANY_SUBSCRIPTION: "",
+    COMPANY_STATUS: "",
   });
-  const [phoneError, setPhoneError] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [companynameError, setCompanynameError] = useState("");
 
   const handleCreate = (e) => {
     setCreate_company({ ...create_company, [e.target.name]: e.target.value });
@@ -82,32 +79,33 @@ export default function CompanyCreate(props) {
     e.preventDefault();
 
     // Clear previous validation errors
-    setPhoneError("");
     setUsernameError("");
+    setCompanynameError("");
     setEmailError("");
     setErrorMsg("");
 
     // Validate phone number, username, and email fields
-    const isValidPhoneNumber = validatePhoneNumber(
-      create_company.COMPANY_PHONE
-    );
-    const isValidUsername = validateUsername(create_company.COMPANY_USERNAME);
-    const isValidEmail = validateEmail(create_company.COMPANY_EMAIL);
+    const isValidUsername = create_company.COMPANY_USERNAME !== "";
+    const isValidCompanyname = create_company.COMPANY_NAME !== "";
+    const isValidEmail = create_company.COMPANY_EMAIL !== "";
 
-    if (!isValidPhoneNumber) {
-      setPhoneError("Invalid phone number");
+
+    if (!isValidCompanyname) {
+      setCompanynameError("Name should not be empty");
       return;
     }
-
     if (!isValidUsername) {
       setUsernameError("Invalid username");
       return;
     }
 
     if (!isValidEmail) {
-      setEmailError("Invalid email address");
+      setEmailError("Invalid email address or should not be empty");
       return;
     }
+
+
+
 
     // Perform API validation and request
     axios
@@ -167,22 +165,25 @@ export default function CompanyCreate(props) {
                   <label>Company name</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${companynameError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter company name"
                     value={create_company.COMPANY_NAME}
                     name="COMPANY_NAME"
                     onChange={handleCreate}
                     label=""
                   />
+                  {companynameError && (
+                    <div className="invalid-feedback">{companynameError}</div>
+                  )}
                 </div>
                 {/* Username */}
                 <div className="form-group py-2 col-xl-6">
                   <label>Company username</label>
                   <input
                     type="text"
-                    className={`form-control form-control-2 rounded-0 ${
-                      usernameError ? "is-invalid" : ""
-                    }`}
+                    className={`form-control form-control-2 rounded-0 ${usernameError ? "is-invalid" : ""
+                      }`}
                     placeholder="Username"
                     value={create_company.COMPANY_USERNAME}
                     name="COMPANY_USERNAME"
@@ -200,18 +201,14 @@ export default function CompanyCreate(props) {
                   <label>Phone Number</label>
                   <input
                     type="number"
-                    className={`form-control form-control-2 rounded-0 ${
-                      phoneError ? "is-invalid" : ""
-                    }`}
+                    className="form-control form-control-2 rounded-0 "
                     placeholder="Enter Number"
                     value={create_company.COMPANY_PHONE}
                     name="COMPANY_PHONE"
                     onChange={handleCreate}
                     label="Phone Number"
                   />
-                  {phoneError && (
-                    <div className="invalid-feedback">{phoneError}</div>
-                  )}
+
                 </div>
 
                 {/* Email */}
@@ -219,9 +216,8 @@ export default function CompanyCreate(props) {
                   <label>Company Email</label>
                   <input
                     type="text"
-                    className={`form-control form-control-2 rounded-0 ${
-                      emailError ? "is-invalid" : ""
-                    }`}
+                    className={`form-control form-control-2 rounded-0 ${emailError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter company email"
                     name="COMPANY_EMAIL"
                     value={create_company.COMPANY_EMAIL}
@@ -234,7 +230,7 @@ export default function CompanyCreate(props) {
                 </div>
               </div>
               <div className="row py-2">
-                <div className="form-group col-xl-12">
+                <div className="form-group col-xl-4">
                   <label>Company Type</label>
                   <select
                     className="form-control form-control-2 border  rounded-0"
@@ -253,7 +249,38 @@ export default function CompanyCreate(props) {
                     })}
                   </select>
                 </div>
+
+
+                <div className="form-group col-xl-4">
+                  <label>Subscription Type</label>
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    name="COMPANY_SUBSCRIPTION"
+                    value={create_company.COMPANY_SUBSCRIPTION}
+                    onChange={handleCreate}
+                  >
+                    <option selected>--Select Subscription--</option>
+                    <option selected>Monthly</option>
+                    <option selected> Annual</option>
+                  </select>
+                </div>
+                
+                <div className="form-group col-xl-4">
+                  <label>Company Status</label>
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    name="COMPANY_STATUS"
+                    value={create_company.COMPANY_STATUS}
+                    onChange={handleCreate}
+                  >
+                    <option selected>--Select Status--</option>
+                    <option selected>Active</option>
+                    <option selected> Inactive</option>
+                  </select>
+                </div>
               </div>
+
+
               <div className="row py-2">
                 <div className="form-group col-xl-4">
                   <label>Country</label>
