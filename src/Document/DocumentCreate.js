@@ -101,6 +101,8 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
                 setOpen(false);
                 update();
                 toast.success("Document uploaded successfully.");
+                setSelectedFileName("")
+                setFormData("")
             } else {
                 toast.error("Failed to upload document.");
             }
