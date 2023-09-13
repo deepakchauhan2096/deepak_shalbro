@@ -215,7 +215,7 @@ export default function ProjectCreate({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box className="modal-content">
           <form onSubmit={handleSubmit}>
             <div className="row py-2">
               <div className="form-group col-xl-4">
@@ -360,7 +360,7 @@ export default function ProjectCreate({
                 <label>Address</label>
                 <textarea
                   type="text"
-                  className="form-control form-control-2 rounded-0"
+                  className="form-control rounded-0"
                   id="inputAddress2"
                   placeholder="Apartment, studio, or floor"
                   name="PROJECT_ADD"

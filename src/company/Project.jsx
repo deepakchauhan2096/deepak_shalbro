@@ -290,7 +290,7 @@ const Project = (props) => {
   const filterData = data?.row;
 
   const MyScreen = styled(Paper)((props) => ({
-    height: "calc(100vh - 32px)",
+    height: "calc(100vh - 29px)",
     padding: 0,
     background: "#fff",
     paddingBottom: "0",
@@ -333,7 +333,7 @@ const Project = (props) => {
       
   
       <Box className="box" style={{ background: "#277099" }}>
-      <Navbar toggle={() => setOpenNav((e) => !e)} />
+      <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} />
         <ProjectCreate
            COMPANY_ID={COMPANY_ID}
            COMPANY_USERNAME={COMPANY_USERNAME}
@@ -372,9 +372,12 @@ const Project = (props) => {
       <Box
         style={{
           display: open ? "block" : "none",
+          height:"100vh"
         }}
-        className="box position-absolute overflow-auto"
+        className="box position-absolute"
       >
+      <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} />
+      
         <div
           className="container-fluid pb-0 g-0"
           style={{ background: "#277099" }}
@@ -426,7 +429,7 @@ const Project = (props) => {
           </Button>
         </div>
 
-        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
+        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }} >
           <div className="container-fluid g-0">
             <div className="row">
               <div className="col-md-2">

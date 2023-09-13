@@ -86,7 +86,11 @@ const AdminDashboard = (props) => {
         <button
           key={i}
           onClick={() => handleClick(i)}
-          className={currentPage === i ? "active btn btn-secondary btn-sm" : "btn btn-secondary btn-sm"}
+          className={
+            currentPage === i
+              ? "active btn btn-secondary btn-sm"
+              : "btn btn-secondary btn-sm"
+          }
         >
           {i}
         </button>
@@ -111,22 +115,11 @@ const AdminDashboard = (props) => {
               {tableRows?.ADMIN_USERNAME} (Admin)
             </a>
             <button
-              class="btn btn-outline-primary my-2 my-sm-0"
+              class="btn btn-outline-primary my-2 my-sm-0 btn-sm"
               type="submit"
               onClick={logout}
             >
               Logout
-            </button>
-            <button
-              class="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarNavAltMarkup"
-              aria-controls="navbarNavAltMarkup"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="navbar-toggler-icon"></span>
             </button>
           </div>
         </nav>
@@ -151,34 +144,32 @@ const AdminDashboard = (props) => {
               <div className="col-12 overflow-auto pt-2">
                 {/* <h5 className="py-4 text-underline">My Companies</h5> */}
                 <div className="justify-between">
-
-           
-                <CompanyCreate
-                  ID={adminData?.ADMIN_ID}
-                  Username={adminData?.ADMIN_USERNAME}
-                  Update={getCompanyData}
-                />
-                <div style={{gap:5,display:"flex"}} >
-                  <button
-                    onClick={() => handleClick(Math.max(currentPage - 1, 1))}
-                    disabled={currentPage === 1}
-                    className="btn btn-primary btn-sm"
-                  >
-                    Previous
-                  </button>
-                  {renderPageButtons()}
-                  <button
-                    onClick={() =>
-                      handleClick(Math.min(currentPage + 1, maxPage))
-                    }
-                    disabled={currentPage === maxPage}
-                    className="btn btn-primary btn-sm"
-                  >
-                    Next
-                  </button>
+                  <CompanyCreate
+                    ID={adminData?.ADMIN_ID}
+                    Username={adminData?.ADMIN_USERNAME}
+                    Update={getCompanyData}
+                  />
+                  <div style={{ gap: 5, display: "flex" }}>
+                    <button
+                      onClick={() => handleClick(Math.max(currentPage - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="btn btn-primary btn-sm"
+                    >
+                      Previous
+                    </button>
+                    {renderPageButtons()}
+                    <button
+                      onClick={() =>
+                        handleClick(Math.min(currentPage + 1, maxPage))
+                      }
+                      disabled={currentPage === maxPage}
+                      className="btn btn-primary btn-sm"
+                    >
+                      Next
+                    </button>
+                  </div>
                 </div>
-                </div>
-                <table class="table table-striped table-sm pt-4">
+                <table class="table table-striped table-sm pt-4 table-fixed display">
                   <thead>
                     <tr>
                       <th>S.no.</th>
@@ -195,10 +186,9 @@ const AdminDashboard = (props) => {
                   </thead>
 
                   <tbody>
-                    {displayData.map((post,index) => (
-                      
+                    {displayData.map((post, index) => (
                       <tr key={post.COMPANY_ID}>
-                        <td>{index+1}</td>
+                        <td>{index + 1}</td>
                         <td>{post.COMPANY_NAME}</td>
                         <td>{post.COMPANY_ID}</td>
                         <td>{post.COMPANY_USERNAME}</td>
@@ -224,8 +214,39 @@ const AdminDashboard = (props) => {
                     ))}
                   </tbody>
                 </table>
-
-                
+                <div className="mobile-display">
+                  {displayData.map((post, index) => (
+                    <div
+                      class="card my-1"
+                      style={{
+                        width: "100%",
+                        background: index % 2 == 0 ? "#f3f3f3" : "#fffff",
+                      }}
+                      key={index}
+                    >
+                      <div class="card-body ">
+                        <h6 class="card-title">
+                          {post.COMPANY_NAME} - {post.COMPANY_ID}
+                        </h6>
+                        <div class="d-flex space-between">
+                          <div className="w-100">{post.COMPANY_EMAIL} </div>
+                          <div className="d-flex">
+                            <CompanyEdit
+                              companyEDit={post}
+                              reFetchfun={getCompanyData}
+                            />
+                            <Link
+                              to={`/company/${post.COMPANY_ID}&${post.COMPANY_USERNAME}&${post.COMPANY_PARENT_ID}&${post.COMPANY_PARENT_USERNAME}`}
+                              className="text-primary"
+                            >
+                              Visit
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
