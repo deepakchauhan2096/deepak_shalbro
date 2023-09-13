@@ -7,11 +7,13 @@ const SalaryPDF = (props) => {
     page: {
       flexDirection: "column",
       backgroundColor: "white",
+
     },
     section: {
       margin: 10,
       padding: "20px",
       flexGrow: 1,
+      border: "1px solid black"
     },
     text: {
       fontSize: "12px",
@@ -98,9 +100,12 @@ const SalaryPDF = (props) => {
         borderBottomColor: '#f9f9f9',
         borderBottomWidth: 1,
         alignItems: 'center',
-        height: 20,
+        height: 40,
         fontStyle: 'bold',
-        fontSize: "12px"
+        fontSize: "12px",
+        padding: "5px"
+
+
       },
       description: {
         width: '20%',
@@ -181,9 +186,12 @@ const SalaryPDF = (props) => {
         borderBottomColor: '#f9f9f9',
         borderBottomWidth: 1,
         alignItems: 'center',
-        height: 20,
+        height: 40,
         fontStyle: 'bold',
-        fontSize: "12px"
+        fontSize: "12px",
+        padding: '5px',
+        marginLeft: '5px',
+        backgroundColor: '#f9f9f9',
       },
       description: {
         width: '20%',
@@ -270,6 +278,7 @@ const SalaryPDF = (props) => {
         width: '15%',
       },
 
+
     });
 
     const blankRows = Array(rowsCount).fill(0)
@@ -296,22 +305,50 @@ const SalaryPDF = (props) => {
       {/** Page defines a single page of content. */}
       {/* NEW */}
 
+
+
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
-          <Text style={styles.text}>Name: <Text style={{ textDecoration: "underline" }}>{props.name}</Text></Text>
-          <Text style={styles.text}>Address: {props.address}</Text>
-          <Text style={styles.text}>Email: {props.email}</Text>
-          <Text style={styles.text}>Phone No: {props.phone}</Text>
-          <Text style={styles.text}>Salary Date {day}-{month}-{year}</Text>
 
+          <Text style={[styles.text, { margin: '20px 0px', textAlign: 'center', fontSize: '20px', fontWeight: 'bold' }]}>
+            Shalbro Construction
+          </Text>
+
+          <Text style={[styles.text, { marginTop: '10px' }]}>Name: <Text style={{ textDecoration: "underline" }}>{props.name}</Text></Text>
+          <Text style={[styles.text, { marginTop: '10px' }]}>Address: {props.address}</Text>
+          <Text style={[styles.text, { marginTop: '10px' }]}>Email: {props.email}</Text>
+          <Text style={[styles.text, { marginTop: '10px' }]}>Phone No: {props.phone}</Text>
+          <Text style={[styles.text, { marginTop: '10px' }]}>Salary Date {day}-{month}-{year}</Text>
+
+          <Text
+            style={{
+              fontSize: '16px',
+              fontWeight: 'bold',
+              marginTop: '20px',
+              textAlign: 'center'
+            }}
+          >
+            Salary Details
+          </Text>
 
           <View style={Table.tableContainer}>
             <TableHeader />
             <TableRow items={props.mapvalue} />
             <TableBottom />
           </View>
+
+          <Text style={[styles.text, { marginTop: '10px', textDecoration: "underline", fontSize: '16px', fontWeight: 'bold', position: 'absolute', left: '10px', bottom: '50px' }]}>
+            Employee Signature :
+          </Text>
+
+
+
         </View>
       </Page>
+
+
+
+
     </Document>
   );
 };
