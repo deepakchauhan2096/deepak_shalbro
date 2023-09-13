@@ -2,14 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CompanyCreate from "./CompanyCreate";
 import CompanyEdit from "./CompanyEdit";
-import { Link } from "react-router-dom";
-
+import Cookies from "js-cookie";
+import { Link, useNavigate } from "react-router-dom";
+const itemsPerPage = 8;
 
 const AdminDashboard = (props) => {
   const adminData = props.state.result;
   const [tableRows, setTableRows] = useState(adminData);
   const [Rows, setRows] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getCompanyData();
@@ -41,27 +45,81 @@ const AdminDashboard = (props) => {
     }
   };
 
+  const logout = () => {
+    // Clear a cookie by specifying its name
+    Cookies.remove("myResponseData");
+    navigate("/login");
+  };
+
+  const displayData = Rows.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const maxPage = Math.ceil(displayData.length / itemsPerPage);
+
+  const handleClick = (page) => {
+    setCurrentPage(page);
+  };
+
+  const renderPageButtons = () => {
+    const pageButtons = [];
+    const totalPages = Math.ceil(Rows.length / itemsPerPage);
+
+    const maxButtons = 3; // Maximum of 3 page buttons
+
+    let startPage = currentPage - 1;
+    let endPage = currentPage + 1;
+
+    if (startPage < 1) {
+      startPage = 1;
+      endPage = Math.min(totalPages, startPage + maxButtons - 1);
+    }
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageButtons.push(
+        <button
+          key={i}
+          onClick={() => handleClick(i)}
+          className={
+            currentPage === i
+              ? "active btn btn-secondary btn-sm"
+              : "btn btn-secondary btn-sm"
+          }
+        >
+          {i}
+        </button>
+      );
+    }
+
+    return pageButtons;
+  };
+
   return (
     <>
       <div className="container-fluid g-0">
         <nav
-          class="navbar navbar-expand-lg navbar-dark bg-dark"
+          class="navbar navbar-expand-lg navbar-dark bg-dark position-sticky top-0"
           style={{ marginBottom: 0 }}
         >
-          <div className="container">
-            <a class="navbar-brand" href="#">
+          <div className="container justify-content-between">
+            <a
+              href="#"
+              className="text-white text-decoration-none navbar-brand"
+            >
               {tableRows?.ADMIN_USERNAME} (Admin)
             </a>
             <button
-              class="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarNavAltMarkup"
-              aria-controls="navbarNavAltMarkup"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
+              class="btn btn-outline-primary my-2 my-sm-0 btn-sm"
+              type="submit"
+              onClick={logout}
             >
-              <span class="navbar-toggler-icon"></span>
+              Logout
             </button>
           </div>
         </nav>
@@ -73,8 +131,8 @@ const AdminDashboard = (props) => {
           <div className="container">
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
-                <a className="bg-white text-dark nav-link">My profile</a>
-                <a className="bg-light text-dark nav-link">Companies</a>
+                <a className="bg-white text-dark nav-link ">My Companies</a>
+                {/* <a className="bg-light text-dark nav-link">Companies</a> */}
               </div>
             </div>
           </div>
@@ -83,16 +141,38 @@ const AdminDashboard = (props) => {
         {Rows ? (
           <div className="container">
             <div className="row">
-              <div className="col-12 overflow-auto">
-                <h5 className="py-4 text-underline">My Companies</h5>
-                <CompanyCreate
-                  ID={adminData?.ADMIN_ID}
-                  Username={adminData?.ADMIN_USERNAME}
-                  Update={getCompanyData}
-                />
-                <table class="table table-striped table-sm pt-4">
+              <div className="col-12 overflow-auto pt-2">
+                {/* <h5 className="py-4 text-underline">My Companies</h5> */}
+                <div className="justify-between">
+                  <CompanyCreate
+                    ID={adminData?.ADMIN_ID}
+                    Username={adminData?.ADMIN_USERNAME}
+                    Update={getCompanyData}
+                  />
+                  <div style={{ gap: 5, display: "flex" }}>
+                    <button
+                      onClick={() => handleClick(Math.max(currentPage - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="btn btn-primary btn-sm"
+                    >
+                      Previous
+                    </button>
+                    {renderPageButtons()}
+                    <button
+                      onClick={() =>
+                        handleClick(Math.min(currentPage + 1, maxPage))
+                      }
+                      disabled={currentPage === maxPage}
+                      className="btn btn-primary btn-sm"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+                <table class="table table-striped table-sm pt-4 table-fixed display">
                   <thead>
                     <tr>
+                      <th>S.no.</th>
                       <th>Name</th>
                       <th>ID</th>
                       <th>Username</th>
@@ -102,13 +182,13 @@ const AdminDashboard = (props) => {
                       <th>State</th>
                       <th>Edit</th>
                       <th>Detail</th>
-                     
                     </tr>
                   </thead>
 
                   <tbody>
-                    {Rows.map((post) => (
+                    {displayData.map((post, index) => (
                       <tr key={post.COMPANY_ID}>
+                        <td>{index + 1}</td>
                         <td>{post.COMPANY_NAME}</td>
                         <td>{post.COMPANY_ID}</td>
                         <td>{post.COMPANY_USERNAME}</td>
@@ -122,11 +202,51 @@ const AdminDashboard = (props) => {
                             reFetchfun={getCompanyData}
                           />
                         </td>
-                        <td><Link to={`/company/${post.COMPANY_ID}&${post.COMPANY_USERNAME}&${post.COMPANY_PARENT_ID}&${post.COMPANY_PARENT_USERNAME}`} className="text-dark">Visit</Link></td>
+                        <td>
+                          <Link
+                            to={`/company/${post.COMPANY_ID}&${post.COMPANY_USERNAME}&${post.COMPANY_PARENT_ID}&${post.COMPANY_PARENT_USERNAME}`}
+                            className="text-dark"
+                          >
+                            Visit
+                          </Link>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+                <div className="mobile-display">
+                  {displayData.map((post, index) => (
+                    <div
+                      class="card my-1"
+                      style={{
+                        width: "100%",
+                        background: index % 2 == 0 ? "#f3f3f3" : "#fffff",
+                      }}
+                      key={index}
+                    >
+                      <div class="card-body ">
+                        <h6 class="card-title">
+                          {post.COMPANY_NAME} - {post.COMPANY_ID}
+                        </h6>
+                        <div class="d-flex space-between">
+                          <div className="w-100">{post.COMPANY_EMAIL} </div>
+                          <div className="d-flex">
+                            <CompanyEdit
+                              companyEDit={post}
+                              reFetchfun={getCompanyData}
+                            />
+                            <Link
+                              to={`/company/${post.COMPANY_ID}&${post.COMPANY_USERNAME}&${post.COMPANY_PARENT_ID}&${post.COMPANY_PARENT_USERNAME}`}
+                              className="text-primary"
+                            >
+                              Visit
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

@@ -195,7 +195,7 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
           style={{ height: "100vh", position: "relative" }}
           maxWidth="xl"
         >
-          <Box sx={style}>
+          <Box className="modal-content">
             <form onSubmit={handleSubmit}>
               <div className="row py-1">
                 <div className="form-group col-xl-6">
@@ -441,7 +441,7 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
                 </div>
               </div>
 
-              <div className="FormButtonAlign">
+              <div className="py-2">
 
                 <button
                   type="submit"

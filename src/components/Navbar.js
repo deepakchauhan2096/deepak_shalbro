@@ -1,12 +1,12 @@
 import React from 'react'
 
-const Navbar = ({toggle}) => {
+const Navbar = ({toggle, name}) => {
   return (
     <div className="content display-sidebar-mobile">
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container">
             <a className="navbar-brand" href="#">
-              Dashboard
+              {name}
             </a>
             <button
               className="navbar-toggler"
@@ -15,7 +15,7 @@ const Navbar = ({toggle}) => {
             >
               <span className="navbar-toggler-icon"></span>
             </button>
-            <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+            {/* <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav">
                 <a className="nav-item nav-link active" href="#">
                   Home <span className="sr-only">(current)</span>
@@ -30,7 +30,7 @@ const Navbar = ({toggle}) => {
                   Disabled
                 </a>
               </div>
-            </div>
+            </div> */}
           </div>
         </nav>
         </div>
