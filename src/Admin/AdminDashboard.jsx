@@ -180,6 +180,8 @@ const AdminDashboard = (props) => {
                       <th>Email</th>
                       <th>Address</th>
                       <th>State</th>
+                      <th>Subscription</th>
+                      <th>Status</th>
                       <th>Edit</th>
                       <th>Detail</th>
                     </tr>
@@ -196,6 +198,8 @@ const AdminDashboard = (props) => {
                         <td>{post.COMPANY_EMAIL}</td>
                         <td>{post.COMPANY_ADD2}</td>
                         <td>{post.COMPANY_STATE}</td>
+                        <td>{post.COMPANY_STATUS}</td>
+                        <td>{post.COMPANY_SUBSCRIPTION}</td>
                         <td>
                           <CompanyEdit
                             companyEDit={post}
