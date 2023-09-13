@@ -520,7 +520,7 @@ const AttendanceReport = (props) => {
                 </Grid>
               </Grid>
 
-              <table className="table table-hover table-sm table-fixed">
+              <table className="table table-hover table-sm table-fixed table-responsive">
                 {show ?  (
                   !processedData ? "Loading..." : <>
                     <thead
@@ -548,6 +548,7 @@ const AttendanceReport = (props) => {
                         </th>
                       </tr>
                       <tr className="table-light">
+                      <th scope="col">Employee Id</th>
                         <th scope="col">Employee</th>
                         <th scope="col">Total</th>
                         <th scope="col">Regular</th>
@@ -562,6 +563,7 @@ const AttendanceReport = (props) => {
                       {processedData?.map((post) => {
                         return (
                           <tr className="table table-striped">
+                              <td>{post.EMPLOYEE_ID}</td>
                             <td>{post.EMPLOYEE_NAME}</td>
                             <td>
                               <span

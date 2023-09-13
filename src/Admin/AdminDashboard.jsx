@@ -86,7 +86,7 @@ const AdminDashboard = (props) => {
         <button
           key={i}
           onClick={() => handleClick(i)}
-          className={currentPage === i ? "active btn btn-secondary" : "btn btn-secondary btn-sm"}
+          className={currentPage === i ? "active btn btn-secondary btn-sm" : "btn btn-secondary btn-sm"}
         >
           {i}
         </button>
@@ -158,11 +158,11 @@ const AdminDashboard = (props) => {
                   Username={adminData?.ADMIN_USERNAME}
                   Update={getCompanyData}
                 />
-                <div className="pagination" style={{gap:5}}>
+                <div style={{gap:5,display:"flex"}} >
                   <button
                     onClick={() => handleClick(Math.max(currentPage - 1, 1))}
                     disabled={currentPage === 1}
-                    className="btn btn-secondary btn-sm"
+                    className="btn btn-primary btn-sm"
                   >
                     Previous
                   </button>
@@ -172,7 +172,7 @@ const AdminDashboard = (props) => {
                       handleClick(Math.min(currentPage + 1, maxPage))
                     }
                     disabled={currentPage === maxPage}
-                    className="btn btn-secondary btn-sm"
+                    className="btn btn-primary btn-sm"
                   >
                     Next
                   </button>
@@ -181,6 +181,7 @@ const AdminDashboard = (props) => {
                 <table class="table table-striped table-sm pt-4">
                   <thead>
                     <tr>
+                      <th>S.no.</th>
                       <th>Name</th>
                       <th>ID</th>
                       <th>Username</th>
@@ -194,8 +195,10 @@ const AdminDashboard = (props) => {
                   </thead>
 
                   <tbody>
-                    {displayData.map((post) => (
+                    {displayData.map((post,index) => (
+                      
                       <tr key={post.COMPANY_ID}>
+                        <td>{index+1}</td>
                         <td>{post.COMPANY_NAME}</td>
                         <td>{post.COMPANY_ID}</td>
                         <td>{post.COMPANY_USERNAME}</td>
