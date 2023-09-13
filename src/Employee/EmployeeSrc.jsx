@@ -144,7 +144,7 @@ const EmployeeSrc = (props) => {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   const fetchAllEmployees = async () => {
     try {
       const response = await axios.put(
@@ -188,8 +188,6 @@ const EmployeeSrc = (props) => {
   };
 
   // Call the fetchData function to fetch both sets of data concurrently
-
-
 
   const rows = allempData;
 
@@ -292,7 +290,7 @@ const EmployeeSrc = (props) => {
   };
 
   const MyScreen = styled(Paper)((props) => ({
-    height: "calc(100vh - 32px)",
+    height: "calc(100vh - 29px)",
     padding: 0,
     paddingBottom: "0",
     overflow: "auto",
@@ -371,7 +369,7 @@ const EmployeeSrc = (props) => {
         toggle={openNav}
       />
       <Box className="box" style={{ background: "#277099" }}>
-      <Navbar toggle={() => setOpenNav((e) => !e)} />
+        <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} />
         <EmployeeCreate
           COMPANY_ID={COMPANY_ID}
           COMPANY_USERNAME={COMPANY_USERNAME}
@@ -412,10 +410,11 @@ const EmployeeSrc = (props) => {
         style={{
           display: open ? "block" : "none",
         }}
-        className="box position-absolute overflow-auto"
+        className="box position-absolute"
       >
+        <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} />
         <div
-          className="container-fluid pb-0 g-0 position-sticky top-0 "
+          className="container-fluid pb-0 g-0"
           style={{ background: "#277099" }}
         >
           <Button
@@ -445,218 +444,143 @@ const EmployeeSrc = (props) => {
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
-          <Grid container xl={12}>
-            <Grid item xl={6} pr={2}>
-              <Card
-                sx={{
-                  display: "flex",
-                  height: "250px",
-                  backgroundColor: "#f5f5f5",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  sx={{ width: 200 }}
-                  image={teamImg1}
-                  alt="Live from space album cover"
-                />
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <CardContent sx={{ flex: "1 0 auto" }}>
-                    <Typography component="div" variant="h5">
-                      {filterData.row?.EMPLOYEE_NAME}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Email : {filterData.row?.EMPLOYEE_EMAIL}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Phone : {filterData.row?.EMPLOYEE_PHONE}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Password : {filterData.row?.EMPLOYEE_PASSWORD}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Address : {filterData.row?.EMPLOYEE_STATE}
-                      {""}
-                      {filterData.row?.EMPLOYEE_CITY}
-                    </Typography>
-                  </CardContent>
-                </Box>
-              </Card>
-            </Grid>
-            <Grid item xl={3} pl={2} screenIndex={index === 1}>
-              <Card
-                sx={{
-                  display: "flex",
-                  height: "250px",
-                  backgroundColor: "#f5f5f5",
-                }}
-              >
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <CardContent sx={{ flex: "1 0 auto" }}>
-                    <Typography component="div" variant="h5">
-                      Work detail
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Employee role : {filterData.row?.EMPLOYEE_ROLE}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Employee type : {filterData.row?.EMPLOYEE_EMPLMNTTYPE}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Hire Date : {filterData.row?.EMPLOYEE_HIRE_DATE}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Hourly Wages : {filterData.row?.EMPLOYEE_HOURLY_WAGE}
-                    </Typography>
-                  </CardContent>
-                </Box>
-              </Card>
-            </Grid>
-            <Grid item xl={3} pl={2}>
-              <Card
-                sx={{
-                  display: "flex",
-                  height: "250px",
-                  backgroundColor: "#f5f5f5",
-                }}
-              >
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <CardContent sx={{ flex: "1 0 auto" }}>
-                    <Typography component="div" variant="h5">
-                      Salary detail
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Amount : {filterData.row?.EMPLOYEE_ROLE}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Date : {filterData.row?.EMPLOYEE_EMPLMNTTYPE}
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      Payment type : {filterData.row?.EMPLOYEE_HIRE_DATE}
-                    </Typography>
-                  </CardContent>
-                </Box>
-              </Card>
-            </Grid>
-
-            <Grid item xl={12} pt={2}>
-              <Card
-                sx={{
-                  display: "flex",
-                  height: "250px",
-                  backgroundColor: "#f5f5f5",
-                }}
-              >
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                  <h4 style={{ margin: "10px" }}>
-                    Assigning Projects to{" "}
-                    <span style={{ color: "tan" }}>
-                      {filterData.row?.EMPLOYEE_NAME}
-                    </span>
-                  </h4>
-                  <Box m={2} display="flex" alignItems="center">
-                    <div class="select">
-                      <select
-                        value={selectedProject}
-                        onChange={(e) => setSelectedProject(e.target.value)}
-                        name="format"
-                        id="format"
-                      >
-                        <option value="Select Project" selected>
-                          Select Project
-                        </option>
-                        {data?.map((project, key) => {
-                          return (
-                            <option value={project?.PROJECT_ID} key={key}>
-                              {project?.PROJECT_NAME}-{project.PROJECT_ID}
-                            </option>
-                          );
-                        })}
-                      </select>
+          <div className="container mt-1">
+            {/* <h1 className="text-center">Employee Detail Dashboard</h1> */}
+            <div className="row">
+              <div className="col-xl-6">
+                <div className="row mt-2">
+                  <div className="col-12">
+                    <div className="card">
+                      <div className="card-body">
+                        <h5 className="card-title">Employee Information</h5>
+                        <p className="card-text">
+                          Name: {filterData.row?.EMPLOYEE_NAME}
+                        </p>
+                        <p className="card-text">
+                          Email: {filterData.row?.EMPLOYEE_EMAIL}
+                        </p>
+                        <p className="card-text">
+                          Phone: {filterData.row?.EMPLOYEE_PHONE}
+                        </p>
+                        <p className="card-text">
+                          Password: {filterData.row?.EMPLOYEE_PASSWORD}
+                        </p>
+                        <p className="card-text">
+                          Address: {filterData.row?.EMPLOYEE_STATE}{" "}
+                          {filterData.row?.EMPLOYEE_CITY}
+                        </p>
+                        {/* Add more employee information here */}
+                      </div>
                     </div>
-                    <button
-                      variant="contained"
-                      onClick={handleAssignProject}
-                      className="assignBtn"
-                    >
-                      Assign Project
-                    </button>
+                  </div>
 
-                    <Snackbar
-                      open={isSuccessMessageVisible}
-                      autoHideDuration={3000}
-                      onClose={() => setIsSuccessMessageVisible(false)}
-                      message="Project assigned successfully!"
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    />
-                  </Box>
-                  <CardContent sx={{ flex: "1 0 auto" }}>
-                    <Box>
-                      <Typography variant="div" color="text.secondary">
-                        List of Projects Assigned to Employee:
-                      </Typography>
-                      <List>
-                        {data?.map((projects) => (
-                          <ListItem key={projects.PROJECT_ID}>
-                            <ListItemText primary={projects.PROJECT_NAME} />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Box>
-                  </CardContent>
-                </Box>
-              </Card>
-            </Grid>
-          </Grid>
+                  <div className="col-12 mt-2">
+                    <div className="card">
+                      <div className="card-body">
+                        <h5 className="card-title">Work Details</h5>
+                        <p className="card-text">
+                          Role: {filterData.row?.EMPLOYEE_ROLE}
+                        </p>
+                        <p className="card-text">
+                          Employee type: {filterData.row?.EMPLOYEE_EMPLMNTTYPE}
+                        </p>
+                        <p className="card-text">
+                          Hire Date: {filterData.row?.EMPLOYEE_HIRE_DATE}
+                        </p>
+                        <p className="card-text">
+                          Hourly Wages: {filterData.row?.EMPLOYEE_HOURLY_WAGE}
+                        </p>
+                        {/* Add more work-related details here */}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-12 mt-2">
+                    <div className="card">
+                      <div className="card-body">
+                        <h5 className="card-title">Salary Information</h5>
+                        <p className="card-text">Salary: $60,000 per year</p>
+                        <p className="card-text">
+                          Payment Type: Direct Deposit
+                        </p>
+                        {/* Add more salary-related details here */}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-6">
+                <div className="row">
+                  <div className="col-xl-12 mt-2">
+                    <div
+                      className="card"
+                      style={{ backgroundColor: "#f5f5f5" }}
+                    >
+                      <div className="card-body d-flex flex-column">
+                        <h5 style={{ margin: "10px" }}>
+                          Assigning Projects to{" "}
+                          <span style={{ color: "tan" }}>
+                            {filterData.row?.EMPLOYEE_NAME}
+                          </span>
+                        </h5>
+                        <div className="d-flex align-items-center" style={{gap:4}}>
+                          <select
+                            className="form-select form-control-2"
+                            value={selectedProject}
+                            onChange={(e) => setSelectedProject(e.target.value)}
+                          >
+                            <option value="Select Project">
+                              Select Project
+                            </option>
+                            {data?.map((project, key) => (
+                              <option value={project?.PROJECT_ID} key={key}>
+                                {project?.PROJECT_NAME}-{project.PROJECT_ID}
+                              </option>
+                            ))}
+                          </select>
+                          <button
+                            className="btn btn-primary btn-sm"
+                            onClick={handleAssignProject}
+                          >
+                            Assign Project
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 mt-2">
+                    <div className="card">
+                      <div className="card-body">
+                        <h5>List of Projects Assigned to Employee:</h5>
+                        <table className="table table-sm overflow-scroll">
+                          <thead>
+                            <tr>
+                            <th scope="col">S.No</th>
+                              <th scope="col">Project ID</th>
+                              <th scope="col">Project Name</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {data?.map((project,index) => (
+                              <tr key={project.PROJECT_ID} >
+                                 <td style={{backgroundColor:index%2 == 0 ? "#f2f2f2" : "#fffff"}}>{index+1}</td>
+                                <td style={{backgroundColor:index%2 == 0 ? "#f2f2f2" : "#fffff"}}>{project.PROJECT_ID}</td>
+                                <td style={{backgroundColor:index%2 == 0 ? "#f2f2f2" : "#fffff"}}>{project.PROJECT_NAME}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+
+                        {/* Add more salary-related details here */}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </MyScreen>
+
         {/* <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
           <div

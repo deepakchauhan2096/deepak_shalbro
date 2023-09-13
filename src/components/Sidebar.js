@@ -36,7 +36,7 @@ const Sidebar = ({
             flexShrink: 0,
             "& .MuiDrawer-paper": {
               width: drawerWidth,
-              boxSizing: "border-box",
+              boxSizing: "border-box"
             },
           }}
           variant="permanent"
@@ -133,8 +133,8 @@ const Sidebar = ({
             flexShrink: 0,
             "& .MuiDrawer-paper": {
               width: drawerWidth,
-              boxSizing: "border-box",
-            },
+              boxSizing: "border-box"
+            }
           }}
           variant="persistent"
           anchor="left"
