@@ -9,6 +9,7 @@ import { Fab } from "@mui/material";
 import country from "../Api/countriess.json";
 import { ToastContainer, toast } from "react-toastify";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
+import companytype from "../jsonlist/typeOfCompany.json";
 
 import SimpleBackdrop from "../components/Backdrop";
 
@@ -42,7 +43,10 @@ export default function CompanyEdit(props) {
     COMPANY_STATE: companyData.COMPANY_STATE,
     COMPANY_CITY: companyData.COMPANY_CITY,
     COMPANY_COUNTRY: companyData.COMPANY_COUNTRY,
+    COMPANY_SUBSCRIPTION: companyData.COMPANY_SUBSCRIPTION,
+    COMPANY_STATUS: companyData.COMPANY_SUBSCRIPTION,
     COMPANY_USERNAME: companyData.COMPANY_USERNAME,
+  
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -54,11 +58,12 @@ export default function CompanyEdit(props) {
     COMPANY_STATE: "",
     COMPANY_CITY: "",
     COMPANY_ADD2: "",
+    
   });
 
   // ... rest of your code
   
-
+const list = companytype;
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
@@ -127,12 +132,12 @@ export default function CompanyEdit(props) {
           // setLoader(true)
 
           props.reFetchfun()
+          setOpen(false);
           toast.success("Fields are updated successfully!", {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 1000
           });
           props.companyEDit.update(true);
-          setOpen(true);
         }
       })
       .catch((error) => {
@@ -225,6 +230,59 @@ export default function CompanyEdit(props) {
                   />
                 </div>
               </div>
+              <div className="row py-2">
+                <div className="form-group col-xl-4">
+                  <label>Company Type</label>
+                  <select
+                    className="form-control form-control-2 border  rounded-0"
+                    name="COMPANY_ROLE"
+                    value={edit_company.COMPANY_ROLE}
+                    onChange={handleCreate}
+                  >
+                    <option selected>Choose...</option>
+
+                    {list.map((e, key) => {
+                      return (
+                        <option value={e} key={key}>
+                          {e}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+
+                <div className="form-group col-xl-4">
+                  <label>Subscription Type</label>
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    name="COMPANY_SUBSCRIPTION"
+                    value={edit_company.COMPANY_SUBSCRIPTION}
+                    onChange={handleCreate}
+                  >
+                    <option selected>--Select Subscription--</option>
+                    <option selected>Monthly</option>
+                    <option selected> Annual</option>
+                  </select>
+                </div>
+                
+                <div className="form-group col-xl-4">
+                  <label>Company Status</label>
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    name="COMPANY_STATUS"
+                    value={edit_company.COMPANY_STATUS}
+                    onChange={handleCreate}
+                  >
+                    <option selected>--Select Status--</option>
+                    <option selected>Active</option>
+                    <option selected> Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+
+
               <div className="row py-2">
                 <div className="form-group col-xl-4">
                   <label>Country</label>
