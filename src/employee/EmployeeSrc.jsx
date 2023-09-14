@@ -358,6 +358,8 @@ const EmployeeSrc = (props) => {
 
   const drawerWidth = 250;
 
+  console.log(filterData.row,"filterData.row")
+
   return (
     <>
       <Sidebar
@@ -561,7 +563,7 @@ const EmployeeSrc = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-                            {data?.map((project,index) => (
+                            {filterData.row?.EMPLOYEE_ASSIGN?.map((project,index) => (
                               <tr key={project.PROJECT_ID} >
                                  <td style={{backgroundColor:index%2 == 0 ? "#f2f2f2" : "#fffff"}}>{index+1}</td>
                                 <td style={{backgroundColor:index%2 == 0 ? "#f2f2f2" : "#fffff"}}>{project.PROJECT_ID}</td>
