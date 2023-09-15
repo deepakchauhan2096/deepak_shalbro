@@ -427,7 +427,7 @@ const EmployeeSrc = (props) => {
           >
             <ArrowBackIcon style={{ fontSize: "22.5px" }} />
           </Button>
-          {["Employee Details", "Timesheet", "Worksheet", "Acknowledge"].map(
+          {["Employee Details", "Timesheet"].map(
             (item, value) => (
               <Button
                 onClick={(e, index) => setIndex(value)}

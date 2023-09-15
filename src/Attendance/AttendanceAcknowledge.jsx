@@ -57,30 +57,6 @@ MyDateStringAfter =
 
 //date array previous 30
 
-function DateArray() {
-  let array = [];
-  let MyDateAfter = new Date();
-  let MyDateStringAfter;
-
-  for (let i = 0; i < 8; i++) {
-    MyDateAfter.setDate(MyDateAfter.getDate() - 1);
-    MyDateStringAfter =
-      MyDateAfter.getFullYear() +
-      "-" +
-      ("0" + (MyDateAfter.getMonth() + 1)).slice(-2) +
-      "-" +
-      ("0" + MyDateAfter.getDate()).slice(-2);
-    array.push(MyDateStringAfter); // Add the date to the array
-  }
-
-  return array; // Return the generated array of dates
-}
-
-const result = DateArray();
-//////////////////
-
-// date range array
-
 function formatDate(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -102,6 +78,135 @@ function getDatesBetween(startDate, endDate) {
 }
 
 const AttendanceReport = (props) => {
+  // Generate an array of week options for the select element
+  const generateWeekOptions = () => {
+    const options = [];
+    const today = new Date();
+    const currentWeek = getWeekNumber(today);
+
+    for (let i = 0; i < 5; i++) {
+      // Generate options for the current week and the four previous weeks
+      const weekStartDate = new Date(today);
+      weekStartDate.setDate(today.getDate() - today.getDay() - i * 7);
+      const weekEndDate = new Date(weekStartDate);
+      weekEndDate.setDate(weekStartDate.getDate() + 6);
+
+      // Find the start of the week (Monday) and end of the week (Sunday)
+      weekStartDate.setDate(
+        weekStartDate.getDate() - weekStartDate.getDay() + 1
+      );
+      weekEndDate.setDate(weekEndDate.getDate() - weekEndDate.getDay() + 7);
+
+      const weekLabel = `${formatDates(
+        weekStartDate
+      )} - ${formatDates(weekEndDate)}`;
+
+      const originalDate = new Date(weekEndDate);
+      const year = originalDate.getFullYear();
+      const month = String(originalDate.getMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1 and pad with 0 if needed
+      const day = String(originalDate.getDate()).padStart(2, "0");
+
+      const formattedDate = `${year}-${month}-${day}`;
+      // console.log(formattedDate);
+
+      options.push(
+        <option key={i} value={formattedDate}>
+          {weekLabel}
+        </option>
+      );
+    }
+
+    return options;
+  };
+
+  const [selectedWeek, setSelectedWeek] = useState(""); // State to store the selected week
+
+  // Helper function to get the week number of a date
+  const getWeekNumber = (date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+    const yearStart = new Date(d.getFullYear(), 0, 1);
+    const weekNumber = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+    return weekNumber;
+  };
+
+  // Helper function to format a date as "YYYY-MM-DD"
+  const formatDates = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // Handle the change event when the user selects a week
+  const handleWeekSelect = (e) => {
+    setSelectedWeek(e.target.value);
+  };
+
+  // date array
+  function DateArray(eventDate) {
+    let array = [];
+    let date = eventDate;
+    let MyDateAfter = new Date(date);
+    let MyDateStringAfter;
+
+    for (let i = 0; i < 6; i++) {
+      MyDateAfter.setDate(MyDateAfter.getDate() - 1);
+      MyDateStringAfter =
+        MyDateAfter.getFullYear() +
+        "-" +
+        ("0" + (MyDateAfter.getMonth() + 1)).slice(-2) +
+        "-" +
+        ("0" + MyDateAfter.getDate()).slice(-2);
+      array.push(MyDateStringAfter); // Add the date to the array
+    }
+    array.unshift(date);
+    return array; // Return the generated array of dates
+  }
+
+  console.log(selectedWeek, "selectedWeek");
+
+  const result = DateArray(selectedWeek);
+
+  console.log(result," currentWeekDatesFormatted")
+  
+  // current week
+  function getCurrentWeekDatesFormattedMondayToSunday() {
+    const currentDate = new Date();
+    const currentDay = currentDate.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+    const startDate = new Date(currentDate); // Clone the current date
+  
+    // Calculate the start of the week (Monday) by subtracting the appropriate number of days
+    startDate.setDate(currentDate.getDate() - currentDay + (currentDay === 0 ? -6 : 1));
+  
+    // Create an array to store the formatted dates of the current week (Monday to Sunday)
+    const currentWeekDatesFormatted = [];
+  
+    // Populate the array with formatted dates for the current week (Monday to Sunday)
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+  
+      // Manually construct the "YYYY-MM-DD" formatted date string
+      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+  
+      currentWeekDatesFormatted.push(formattedDate);
+    }
+  
+    return currentWeekDatesFormatted;
+  }
+  
+  // Get the current week's dates in "YYYY-MM-DD" format (Monday to Sunday)
+  const currentWeekDatesFormatted = getCurrentWeekDatesFormattedMondayToSunday();
+  
+  // Print the array of formatted dates
+  console.log(currentWeekDatesFormatted,"current week");
+  
+  //current week
+
+  // date range array
+
   const { id } = useParams();
 
   const param = id.split("&");
@@ -235,9 +340,9 @@ const AttendanceReport = (props) => {
 
   // date array function call
 
-  const startDate = new Date(startDateString);
-  const endDate = new Date(endDateString);
-  const dateArray = getDatesBetween(startDate, endDate);
+  // const startDate = new Date(startDateString);
+  // const endDate = new Date(endDateString);
+  const dateArray = getDatesBetween(currentWeekDatesFormatted[0], currentWeekDatesFormatted[currentWeekDatesFormatted.length - 1]);
 
   //filter by different param
 
@@ -258,7 +363,9 @@ const AttendanceReport = (props) => {
   };
 
   var arrayDate = [];
-  arrayDate.push(keyword);
+  arrayDate.push(...result);
+
+  console.log(selectedWeek, "selectedWeek");
 
   //modify data
   let processedData = foundUsers?.map((employee) => {
@@ -267,7 +374,7 @@ const AttendanceReport = (props) => {
     filterByDate = employee.AttendanceData.filter((item) => {
       return (filterMethod === "By Pay Period"
         ? dateArray
-        : [keyword]
+        : arrayDate
       ).includes(item.ATTENDANCE_DATE_ID);
     });
 
@@ -294,6 +401,7 @@ const AttendanceReport = (props) => {
       TOTAL_HOURS: totalHours.toFixed(2),
       OVERTIME_HOURS: overtimeHours.toFixed(2), // Add overtime hours here
       PUNCH: employee,
+
       EMPLOYEE_ATTENDANCE: filterByDate?.map((attendance) => {
         const attendanceIn = new Date(attendance.ATTENDANCE_IN);
         const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
@@ -382,129 +490,126 @@ const AttendanceReport = (props) => {
                 overflowY: "scroll",
               }}
             >
-              <div className="container">
-                {/* <WeekSelect /> */}
-                <div className="row sticky-top bg-white">
-                  <div className="col-xl-6">
-                    <div className="row justify-content-between">
-                      <div className="col-xl-12">
-                        <div className="row py-1">
-                          <div className="col">
-                            <label>Date filter by</label>
-                          </div>
-                          <div className="col">
-                            <select
-                              className="form-control form-control-2 border"
-                              onChange={(e) => setFilterMethod(e.target.value)}
-                              value={filterMethod}
-                            >
-                              <option>Date wise</option>
-                              <option>By Pay Period</option>
-                            </select>
-                          </div>
-                        </div>
-                        {filterMethod === "By Pay Period" && (
-                          <div className="row py-1">
-                            <div className="col">
-                              <label>Period</label>
-                            </div>
-                            <div className="col">
-                              <div className="row">
-                                <div className="col">
-                                  <input
-                                    type="date"
-                                    className="form-control form-control-2"
-                                    value={startDateString}
-                                    onChange={(e) =>
-                                      setstartDateString(e.target.value)
-                                    }
-                                  />
-                                </div>
-                                <div className="col">
-                                  <input
-                                    type="date"
-                                    className="form-control form-control-2"
-                                    value={endDateString}
-                                    onChange={(e) =>
-                                      setendDateString(e.target.value)
-                                    }
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                        {filterMethod === "Date wise" && (
-                          <div className="row py-1">
-                            <div className="col">
-                              <label>Date filter by</label>
-                            </div>
-                            <div className="col">
-                              <select
-                                value={keyword}
-                                className="form-control form-control-2 border"
-                                onChange={(e) => setKeyword(e.target.value)}
-                              >
-                                <option selected>{MyDateStringCurrent}</option>
-                                {result?.map((item) => (
-                                  <option>{item}</option>
-                                ))}
-                              </select>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-xl-6">
-                    <div className="row py-1">
-                      <div className="col">
-                        <label>Employee</label>
-                      </div>
-                      <div className="col">
-                        <select
-                          className="form-control form-control-2 border"
-                          onChange={(e) => filtered(e, "EMPLOYEE_NAME")}
-                          value={name}
-                        >
-                          <option selected>All</option>
-                          {employees?.map((e) => (
-                            <option>{e._doc.EMPLOYEE_NAME}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    <div className="row py-1">
-                      <div className="col">
-                        <label>Department</label>
-                      </div>
-                      <div className="col">
-                        <select
-                          className="form-control form-control-2 border"
-                          onChange={(e) => filtered(e, "EMPLOYEE_ROLE")}
-                          value={name}
-                        >
-                          <option selected>All</option>
-                          {employees?.map((e) => (
-                            <option>{e._doc.EMPLOYEE_ROLE}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <table className="table table-hover table-sm table-fixed table-responsive">
+             
                 {show ? (
                   !processedData ? (
                     "Loading..."
                   ) : (
                     <>
+                      <div className="container">
+                        {/* <WeekSelect /> */}
+                        <div className="row sticky-top bg-white">
+                          <div className="col-xl-6">
+                            <div className="row justify-content-between">
+                              <div className="col-xl-12">
+                                <div className="row py-1">
+                                  <div className="col">
+                                    <label>Date filter by</label>
+                                  </div>
+                                  <div className="col">
+                                    <select
+                                      className="form-control form-control-2 border"
+                                      onChange={(e) =>
+                                        setFilterMethod(e.target.value)
+                                      }
+                                      value={filterMethod}
+                                    >
+                                      <option>Date wise</option>
+                                      <option>By Pay Period</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                {filterMethod === "By Pay Period" && (
+                                  <div className="row py-1">
+                                    <div className="col">
+                                      <label>Period</label>
+                                    </div>
+                                    <div className="col">
+                                      <div className="row">
+                                        <div className="col">
+                                          <input
+                                            type="date"
+                                            className="form-control form-control-2 border"
+                                            value={result[result.length - 1] != "NaN-aN-aN" ? result[result.length - 1] : currentWeekDatesFormatted[0]}
+                                            onChange={(e) =>
+                                              setstartDateString(e.target.value)
+                                            }
+                                          />
+                                        </div>
+                                        <div className="col">
+                                          <input
+                                            type="date"
+                                            className="form-control form-control-2 border"
+                                            value={result[result.length - 1] != "NaN-aN-aN" ? result[0] : currentWeekDatesFormatted[currentWeekDatesFormatted.length - 1]}
+                                            onChange={(e) =>
+                                              setendDateString(e.target.value)
+                                            }
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                                {filterMethod === "Date wise" && (
+                                  <div className="row py-1">
+                                    <div className="col">
+                                      <label>Date filter by</label>
+                                    </div>
+                                    <div className="col">
+                                      <select
+                                        className="form-control form-control-2 border"
+                                        value={selectedWeek}
+                                        onChange={handleWeekSelect}
+                                      >
+                                        <option value="">Select a week</option>
+                                        {generateWeekOptions()}
+                                      </select>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-xl-6">
+                            <div className="row py-1">
+                              <div className="col">
+                                <label>Employee</label>
+                              </div>
+                              <div className="col">
+                                <select
+                                  className="form-control form-control-2 border"
+                                  onChange={(e) => filtered(e, "EMPLOYEE_NAME")}
+                                  value={name}
+                                >
+                                  <option selected>All</option>
+                                  {employees?.map((e) => (
+                                    <option>{e._doc.EMPLOYEE_NAME}</option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                            <div className="row py-1">
+                              <div className="col">
+                                <label>Department</label>
+                              </div>
+                              <div className="col">
+                                <select
+                                  className="form-control form-control-2 border"
+                                  onChange={(e) => filtered(e, "EMPLOYEE_ROLE")}
+                                  value={name}
+                                >
+                                  <option selected>All</option>
+                                  {employees?.map((e) => (
+                                    <option>{e._doc.EMPLOYEE_ROLE}</option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <table className="table table-hover table-sm table-fixed table-responsive">
                       <thead
-                        style={{
-                          position: "sticky",
-                          top: "85px",
-                        }}
                       >
                         <tr className="table-light">
                           <th scope="col" colSpan={7} style={{ gap: 2 }}>
@@ -519,7 +624,6 @@ const AttendanceReport = (props) => {
                           <th scope="col">Total</th>
                           <th scope="col">Regular</th>
                           <th scope="col">Overtime</th>
-                          <th scope="col">PTO</th>
                           <th scope="col">Acknowledge</th>
                           <th scope="col">Action</th>
                         </tr>
@@ -533,40 +637,35 @@ const AttendanceReport = (props) => {
                               <td>{post.EMPLOYEE_NAME}</td>
                               <td>
                                 <span
-                                  className="bg-success rounded-2 px-1 text-light"
-                                  style={{ width: "content-fit" }}
+                                  className="rounded-2 px-1 text-light"
+                                  style={{ width: "content-fit", backgroundColor:"#12AD2B"  }}
                                 >
-                                  {post.TOTAL_HOURS} Total
+                                  {post.TOTAL_HOURS} hours
                                 </span>
                               </td>
                               <td>
                                 <span
-                                  className="bg-success rounded-2 px-1 text-light"
-                                  style={{ width: "content-fit" }}
+                                  className="rounded-2 px-1 text-light"
+                                  style={{ width: "content-fit", backgroundColor:"#12AD2B" }}
                                 >
-                                  {post.TOTAL_HOURS} Total
+                                  {post.TOTAL_HOURS} hours
                                 </span>
                               </td>
                               <td>{post.OVERTIME_HOURS}</td>
-                              <td></td>
                               <td>
                                 <PDFDownloadLink
-                                  className="btn btn-dark btn-sm"
+                                  className="btn btn-info btn-sm"
                                   document={
                                     <SalaryPDF
                                       name={post.EMPLOYEE_NAME}
-                                      email={post.EMPLOYEE_EMAIL}
-                                      phone={post.EMPLOYEE_PHONE}
-                                      address={post.EMPLOYEE_ADD}
-                                      wages={post.EMPLOYEE_HOURLY_WAGE}
-                                      totalIncome={post.TOTAL_HOURS}
-                                      workingHours={post.TOTAL_HOURS}
-                                      mapvalue={post.EMPLOYEE_ATTENDANCE}
+                                      date={MyDateStringCurrent}
+                                      startdate={result[result.length - 1] != "NaN-aN-aN" ? result[result.length - 1] : currentWeekDatesFormatted[0]}
+                                      enddate={result[result.length - 1] != "NaN-aN-aN" ? result[0] : currentWeekDatesFormatted[currentWeekDatesFormatted.length - 1]}
                                     />
                                   }
                                   fileName={`${post.EMPLOYEE_NAME}.pdf`}
                                 >
-                                  Download
+                                   Download
                                 </PDFDownloadLink>
                               </td>
                               <td>
@@ -582,12 +681,13 @@ const AttendanceReport = (props) => {
                           );
                         })}
                       </tbody>
+                      </table>
                     </>
                   )
                 ) : (
                   showDetail
                 )}
-              </table>
+             
             </Box>
           </MyScreen>
         ) : (
