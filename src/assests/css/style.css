@@ -16,6 +16,10 @@ p,b{
   font-size: 12px;
 }
 
+td{
+  white-space: nowrap;
+}
+
 .fw-light {
   font-size: 12px;
   margin-bottom: 0;

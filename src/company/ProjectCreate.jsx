@@ -216,7 +216,8 @@ export default function ProjectCreate({
         aria-describedby="modal-modal-description"
       >
         <Box className="modal-content">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="overflow-auto">
+          <h5>Create project</h5>
             <div className="row py-2">
               <div className="form-group col-xl-4">
                 <label> Project Username</label>

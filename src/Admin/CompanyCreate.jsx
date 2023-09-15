@@ -160,8 +160,9 @@ export default function CompanyCreate(props) {
           style={{ height: "100vh", position: "relative" }}
           maxWidth="xl"
         >
-          <Box sx={style}>
-            <form className="p-4">
+          <Box className="modal-content">
+            <form className="p-4 overflow-auto">
+            <h5>Create company</h5>
               <div className="row">
                 <div className="form-group py-2 col-xl-6">
                   <label>Company name</label>
@@ -341,7 +342,7 @@ export default function CompanyCreate(props) {
                 onClick={handleClose}
                 className="btn text-white rounded-2 mt-2"
               >
-                Discard
+                Cancel
               </Button>
               {/* <center>
               {errorMsg && (
