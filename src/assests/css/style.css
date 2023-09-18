@@ -16,9 +16,10 @@ p,b{
   font-size: 12px;
 }
 
-td{
-  white-space: nowrap;
-}
+/* .tableWidth{
+  width: 100% !important;
+
+} */
 
 .fw-light {
   font-size: 12px;

@@ -60,7 +60,7 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
   const [passwordError, setPasswordError] = useState("");
   const [nameError, setNameError] = useState("");
 
-
+  
 
 
   useEffect(() => {
