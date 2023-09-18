@@ -278,6 +278,50 @@ const Project = (props) => {
     },
   ];
 
+  const columnsMobile = [
+    { field: "PROJECT_ID", headerName: "ID", width: 60 },
+    {
+      field: "PROJECT_NAME",
+      headerName: "Name",
+      width: 120,
+    },
+    {
+      field: "action",
+      headerName: "Detail",
+      width: 80,
+      renderCell: (cellValues) => {
+        return (
+          <Button
+            variant="contained"
+            className="view-btn primary btn btn-success"
+            style={{ padding: "2px 2px" }}
+            onClick={(event) => {
+              handleClick(cellValues);
+            }}
+          >
+            view
+          </Button>
+        );
+      },
+    },
+    {
+      field: "edit",
+      headerName: "Edit",
+      width: 80,
+      renderCell: (cellValues) => {
+        return (
+          <Button
+          // onClick={(event) => {
+          //   handleEdit(cellValues);
+          // }}
+          >
+            <ProjectEdit edit={cellValues} refetch={fetchProjects} />
+          </Button>
+        );
+      },
+    },
+  ];
+
   const rows = ProjectData;
   // console.log("Project Data : =>", ProjectData);
 
@@ -317,11 +361,10 @@ const Project = (props) => {
 
   const drawerWidth = 250;
 
-  console.log(filterallprojectData, "filterallprojectData")
+  console.log(filterallprojectData, "filterallprojectData");
 
   return (
     <>
-
       <Sidebar
         COMPANY_ID={COMPANY_ID}
         COMPANY_USERNAME={COMPANY_USERNAME}
@@ -330,15 +373,14 @@ const Project = (props) => {
         active={1}
         toggle={openNav}
       />
-      
-  
+
       <Box className="box" style={{ background: "#277099" }}>
-      <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} />
+        <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} />
         <ProjectCreate
-           COMPANY_ID={COMPANY_ID}
-           COMPANY_USERNAME={COMPANY_USERNAME}
-           COMPANY_PARENT_ID={COMPANY_PARENT_ID}
-           COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+          COMPANY_ID={COMPANY_ID}
+          COMPANY_USERNAME={COMPANY_USERNAME}
+          COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+          COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
           Update={fetchProjects}
           name={"Project"}
         />
@@ -347,23 +389,47 @@ const Project = (props) => {
             {isLoading ? (
               <Animations />
             ) : (
-              <DataGrid
-                sx={{ border: "none" }}
-                rows={rows}
-                columns={columns}
-                getRowId={(row) => row.PROJECT_ID}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 20,
-                    },
-                  },
-                }}
-                density="compact"
-                pageSizeOptions={[5]}
-                checkboxSelection={false}
-                disableRowSelectionOnClick
-              />
+              <>
+                <div className="display">
+                  <DataGrid
+                    sx={{ border: "none" }}
+                    rows={rows}
+                    columns={columns}
+                    getRowId={(row) => row.PROJECT_ID}
+                    initialState={{
+                      pagination: {
+                        paginationModel: {
+                          pageSize: 20,
+                        },
+                      },
+                    }}
+                    density="compact"
+                    pageSizeOptions={[5]}
+                    checkboxSelection={false}
+                    disableRowSelectionOnClick
+                  />
+                </div>
+                <div className="mobile-display">
+                  <DataGrid
+                    sx={{ border: "none" }}
+                    className="mobile-display"
+                    rows={rows}
+                    columns={columnsMobile}
+                    getRowId={(row) => row.PROJECT_ID}
+                    initialState={{
+                      pagination: {
+                        paginationModel: {
+                          pageSize: 20,
+                        },
+                      },
+                    }}
+                    density="compact"
+                    pageSizeOptions={[5]}
+                    checkboxSelection={false}
+                    disableRowSelectionOnClick
+                  />
+                </div>
+              </>
             )}
           </Box>
         </MyScreen>
@@ -372,12 +438,12 @@ const Project = (props) => {
       <Box
         style={{
           display: open ? "block" : "none",
-          height:"100vh"
+          height: "100vh",
         }}
         className="box position-absolute"
       >
-      <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} />
-      
+        <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} />
+
         <div
           className="container-fluid pb-0 g-0"
           style={{ background: "#277099" }}
@@ -429,7 +495,7 @@ const Project = (props) => {
           </Button>
         </div>
 
-        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }} >
+        <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <div className="container-fluid g-0">
             <div className="row">
               <div className="col-md-2">

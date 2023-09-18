@@ -182,8 +182,9 @@ export default function ProjectEdit(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <form onSubmit={handleSubmit}>
+        <Box  className="modal-content">
+          <form onSubmit={handleSubmit} className="overflow-auto">
+          <h5>Edit project</h5>
             <div className="row py-2">
               <div className="form-group col-xl-4">
                 <label> Project Username</label>
@@ -339,7 +340,7 @@ export default function ProjectEdit(props) {
                 <label>Address</label>
                 <textarea
                   type="text"
-                  className="form-control form-control-2 rounded-0"
+                  className="form-control rounded-0"
                   id="inputAddress2"
                   placeholder="Apartment, studio, or floor"
                   name="PROJECT_ADD"

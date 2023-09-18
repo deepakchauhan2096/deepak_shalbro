@@ -121,8 +121,9 @@ export default function EmployeeEdit(props) {
           style={{ height: "100vh", position: "relative" }}
           maxWidth="xl"
         >
-          <Box sx={style}>
-            <form onSubmit={handleSubmit}>
+          <Box className="modal-content">
+            <form onSubmit={handleSubmit} className="overflow-auto">
+            <h5>Edit Employee</h5>
               <div className="row py-1">
                 <div className="form-group col-xl-6">
                   <label for="inputqual">Employee Username</label>
@@ -235,13 +236,12 @@ export default function EmployeeEdit(props) {
                     <label for="inputAddress">Address</label>
                     <textarea
                       type="text"
-                      className="form-control form-control-2 rounded-0"
+                      className="form-control rounded-0 "
                       id="inputAddress"
                       placeholder="Enter Address"
                       value={editEmployee.EMPLOYEE_ADD}
                       name="EMPLOYEE_ADD"
                       onChange={handleCreate}
-                      required
                     />
                   </div>
                 </div>
@@ -332,7 +332,7 @@ export default function EmployeeEdit(props) {
                   )}
                 </center>
                 </div>
-                <div className="FormButtonAlign">
+                <div className="py-2">
 
                   <button
                     type="submit"
