@@ -13,6 +13,11 @@ import companytype from "../jsonlist/typeOfCompany.json";
 
 import SimpleBackdrop from "../components/Backdrop";
 
+import {
+  validatePhoneNumber,
+} from "../components/Validation";
+
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -32,6 +37,11 @@ export default function CompanyEdit(props) {
   const [loader, setLoader] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState("");
+
+  const [usernameError, setUsernameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [companyphoneError, setCompanyPhoneError] = useState("");
+  const [companynameError, setCompanynameError] = useState("");
 
   const [edit_company, setEdit_company] = useState({
     COMPANY_PARENT_ID: companyData.COMPANY_PARENT_ID,
@@ -58,7 +68,7 @@ export default function CompanyEdit(props) {
     COMPANY_STATE: "",
     COMPANY_CITY: "",
     COMPANY_ADD2: "",
-    
+
   });
 
   // ... rest of your code
@@ -104,6 +114,41 @@ const list = companytype;
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Clear previous validation errors
+    setUsernameError("");
+    setCompanynameError("");
+    setCompanyPhoneError("")
+    setEmailError("");
+    setErrorMsg("");
+
+    // Validate phone number, username, and email fields
+    const isValidUsername = edit_company.COMPANY_USERNAME !== "";
+    const isValidCompanyname = edit_company.COMPANY_NAME !== "";
+    const isValidPhone = validatePhoneNumber(edit_company.COMPANY_PHONE);
+    const isValidEmail = edit_company.COMPANY_EMAIL !== "";
+
+
+    if (!isValidCompanyname) {
+      setCompanynameError("Name should not be empty");
+      return;
+    }
+    if (!isValidUsername) {
+      setUsernameError("Invalid username");
+      return;
+    }
+
+    if (!isValidPhone) {
+      setCompanyPhoneError("Invalid phone number or feild should not be empty");
+      return;
+    }
+
+    if (!isValidEmail) {
+      setEmailError("Invalid email address or should not be empty");
+      return;
+    }
+
+
 
     const hasErrors = Object.values(formErrors).some((error) => error !== "");
 
@@ -174,24 +219,28 @@ const list = companytype;
           <Box sx={style}>
             <form className="p-4">
               <div className="row">
-                <div className="form-group py-2 col-xl-6">
+              <div className="form-group py-2 col-xl-6">
                   <label>Company name</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${companynameError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter company name"
                     value={edit_company.COMPANY_NAME}
                     name="COMPANY_NAME"
                     onChange={handleCreate}
-                    label="Company name"
-                    required
+                    label=""
                   />
+                  {companynameError && (
+                    <div className="invalid-feedback">{companynameError}</div>
+                  )}
                 </div>
                 <div className="form-group py-2 col-xl-6">
                   <label>Company username</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${usernameError ? "is-invalid" : ""
+                  }`}
                     placeholder="Username"
                     value={edit_company.COMPANY_USERNAME}
                     name="COMPANY_USERNAME"
@@ -203,31 +252,39 @@ const list = companytype;
               </div>
 
               <div className="row">
+                  {/* Phone Number */}
                 <div className="form-group py-2 col-xl-6">
                   <label>Phone Number</label>
                   <input
                     type="number"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${companyphoneError ? "is-invalid" : ""
+                  }`}
                     placeholder="Enter Number"
                     value={edit_company.COMPANY_PHONE}
                     name="COMPANY_PHONE"
                     onChange={handleCreate}
                     label="Phone Number"
-                    required
                   />
+                    {companyphoneError && (
+                    <div className="invalid-feedback">{companyphoneError}</div>
+                  )}
+
                 </div>
                 <div className="form-group py-2 col-xl-6">
                   <label>Company Email</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${emailError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter company email"
                     name="COMPANY_EMAIL"
                     value={edit_company.COMPANY_EMAIL}
                     onChange={handleCreate}
                     label="Company Email"
-                    required
                   />
+                  {emailError && (
+                    <div className="invalid-feedback">{emailError}</div>
+                  )}
                 </div>
               </div>
               <div className="row py-2">

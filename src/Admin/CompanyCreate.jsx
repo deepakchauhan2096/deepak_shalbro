@@ -12,7 +12,9 @@ import SimpleBackdrop from "../components/Backdrop";
 import { faListSquares } from "@fortawesome/free-solid-svg-icons";
 import { Fab, Paper } from "@mui/material";
 import companytype from "../jsonlist/typeOfCompany.json";
-
+import {
+  validatePhoneNumber,
+} from "../components/Validation";
 const style = {
   position: "absolute",
   top: "50%",
@@ -51,6 +53,7 @@ export default function CompanyCreate(props) {
   });
   const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [companyphoneError, setCompanyPhoneError] = useState("");
   const [companynameError, setCompanynameError] = useState("");
 
   const handleCreate = (e) => {
@@ -81,12 +84,14 @@ export default function CompanyCreate(props) {
     // Clear previous validation errors
     setUsernameError("");
     setCompanynameError("");
+    setCompanyPhoneError("")
     setEmailError("");
     setErrorMsg("");
 
     // Validate phone number, username, and email fields
     const isValidUsername = create_company.COMPANY_USERNAME !== "";
     const isValidCompanyname = create_company.COMPANY_NAME !== "";
+    const isValidPhone = validatePhoneNumber(create_company.COMPANY_PHONE);
     const isValidEmail = create_company.COMPANY_EMAIL !== "";
 
 
@@ -96,6 +101,11 @@ export default function CompanyCreate(props) {
     }
     if (!isValidUsername) {
       setUsernameError("Invalid username");
+      return;
+    }
+
+    if (!isValidPhone) {
+      setCompanyPhoneError("Invalid phone number or feild should not be empty");
       return;
     }
 
@@ -201,13 +211,17 @@ export default function CompanyCreate(props) {
                   <label>Phone Number</label>
                   <input
                     type="number"
-                    className="form-control form-control-2 rounded-0 "
+                    className={`form-control form-control-2 rounded-0 ${companyphoneError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter Number"
                     value={create_company.COMPANY_PHONE}
                     name="COMPANY_PHONE"
                     onChange={handleCreate}
                     label="Phone Number"
                   />
+                    {companyphoneError && (
+                    <div className="invalid-feedback">{companyphoneError}</div>
+                  )}
 
                 </div>
 
