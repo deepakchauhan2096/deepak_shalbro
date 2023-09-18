@@ -173,10 +173,7 @@ const list = companytype;
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
         } else if (response.data.operation === "successfull") {
-          // setLoader(false)
-          // setLoader(true)
-
-          props.reFetchfun()
+          // props.reFetchfun()
           setOpen(false);
           toast.success("Fields are updated successfully!", {
             position: toast.POSITION.TOP_CENTER,

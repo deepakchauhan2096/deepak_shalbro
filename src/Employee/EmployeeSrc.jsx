@@ -4,35 +4,23 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import EmployeeCreate from "./EmployeeCreate";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import teamImg1 from "../assests/images/team-1.jpg";
+// import teamImg1 from "../assests/images/team-1.jpg";
 import { styled } from "@mui/material/styles";
-import Snackbar from "@mui/material/Snackbar";
+// import Snackbar from "@mui/material/Snackbar";
 import "../assests/css/employeesrc.css";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 import {
   Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
   Paper,
   Skeleton,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Drawer,
-  Toolbar,
-  Divider,
-  ListItemButton,
 } from "@mui/material";
 import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
-import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
+import { PDFViewer } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 // import env from "react-dotenv";
@@ -631,9 +619,9 @@ const EmployeeSrc = (props) => {
                           <tbody>
                             {filterData.row?.EMPLOYEE_ASSIGN?.map((project,index) => (
                               <tr key={project.PROJECT_ID} >
-                                 <td style={{backgroundColor:index%2 == 0 ? "#f2f2f2" : "#fffff"}}>{index+1}</td>
-                                <td style={{backgroundColor:index%2 == 0 ? "#f2f2f2" : "#fffff"}}>{project.PROJECT_ID}</td>
-                                <td style={{backgroundColor:index%2 == 0 ? "#f2f2f2" : "#fffff"}}>{project.PROJECT_NAME}</td>
+                                 <td style={{backgroundColor:index%2 === 0 ? "#f2f2f2" : "#fffff"}}>{index+1}</td>
+                                <td style={{backgroundColor:index%2 === 0 ? "#f2f2f2" : "#fffff"}}>{project.PROJECT_ID}</td>
+                                <td style={{backgroundColor:index%2 === 0 ? "#f2f2f2" : "#fffff"}}>{project.PROJECT_NAME}</td>
                               </tr>
                             ))}
                           </tbody>

@@ -271,7 +271,10 @@ const Project = (props) => {
           //   handleEdit(cellValues);
           // }}
           >
-            <ProjectEdit edit={cellValues} refetch={fetchProjects} />
+            <ProjectEdit edit={cellValues} 
+            refetch={fetchProjects} 
+            
+            />
           </Button>
         );
       },

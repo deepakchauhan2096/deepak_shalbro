@@ -100,30 +100,24 @@ export default function ProjectEdit(props) {
     // Validate the "Project Username" field
     if (!EditProject.PROJECT_USERNAME) {
       setUsernameError("Project Username is required.");
+      return;
+
     }
 
     // Validate the "Project Name" field
     if (!EditProject.PROJECT_NAME) {
       setNameError("Project Name is required.");
+      return;
+
     }
 
     // Validate the "Account" field
     if (!EditProject.PROJECT_ACCOUNT) {
       setAccountError("Account is required.");
-    }
-
-    // Check if any validation errors occurred
-    if (usernameError || nameError || accountError) {
-      // Display a toast message indicating that all required fields must be filled
-      toast.error("Please fill in all required fields", {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 2000,
-      });
       return;
     }
 
-    setErrorMsg("");
-
+  
     axios
       .put(
         "http://54.243.89.186:5001/update_projects",
@@ -148,12 +142,15 @@ export default function ProjectEdit(props) {
             autoClose: 2000,
           });
         } else if (response.data.operation === "successfull") {
+          props.refetch()
           handleClose();
           console.log("anu", response);
+
           toast.success("Project Updated successfully!", {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 2000,
           });
+
         }
       })
       .catch((error) => {
@@ -228,7 +225,8 @@ export default function ProjectEdit(props) {
                     accountError ? "is-invalid" : ""
                   }`}
                   id="inputPassword4"
-                  placeholder="Enter Phone Number"
+                  placeholder="Enter Account
+                   Number"
                   name="PROJECT_ACCOUNT"
                   value={EditProject.PROJECT_ACCOUNT}
                   onChange={handleEdit}

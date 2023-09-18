@@ -169,9 +169,9 @@ const AdminDashboard = (props) => {
                     </button>
                   </div>
                 </div>
-                <table class="table table-striped table-sm pt-4 table-fixed display">
-                  <thead>
-                    <tr>
+                <table   className="table table-striped table-sm w-100 pt-4 table-fixed mt-2 " >
+                  <thead className="  border border-danger">
+                    <tr  className="  border border-success w-100">
                       <th>S.no.</th>
                       <th>Name</th>
                       <th>ID</th>
@@ -187,7 +187,7 @@ const AdminDashboard = (props) => {
                     </tr>
                   </thead>
 
-                  <tbody>
+                  <tbody className="  border border-success w-100">
                     {displayData.map((post, index) => (
                       <tr key={post.COMPANY_ID}>
                         <td>{index + 1}</td>
@@ -196,7 +196,7 @@ const AdminDashboard = (props) => {
                         <td>{post.COMPANY_USERNAME}</td>
                         <td>{post.COMPANY_PHONE}</td>
                         <td>{post.COMPANY_EMAIL}</td>
-                        <td>{post.COMPANY_ADD2}</td>
+                        <td > {post.COMPANY_ADD2}</td>
                         <td>{post.COMPANY_STATE}</td>
                         <td>{post.COMPANY_STATUS}</td>
                         <td>{post.COMPANY_SUBSCRIPTION}</td>
@@ -224,7 +224,7 @@ const AdminDashboard = (props) => {
                       class="card my-1"
                       style={{
                         width: "100%",
-                        background: index % 2 == 0 ? "#f3f3f3" : "#fffff",
+                        background: index % 2 === 0 ? "#f3f3f3" : "#fffff",
                       }}
                       key={index}
                     >

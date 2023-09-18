@@ -134,7 +134,7 @@ export default function CompanyCreate(props) {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 1000,
           });
-          props.Update(() => response.data.result);
+          // props.Update(() => response.data.result);
           setOpen(false);
         }
       })
