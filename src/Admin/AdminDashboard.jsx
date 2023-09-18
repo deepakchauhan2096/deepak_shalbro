@@ -51,10 +51,18 @@ const AdminDashboard = (props) => {
     navigate("/login");
   };
 
-  const displayData = Rows.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // const displayData = Rows.slice(
+  //   (currentPage - 1) * itemsPerPage,
+  //   currentPage * itemsPerPage
+  // );
+
+  const displayData = [];
+const startIndex = (currentPage - 1) * itemsPerPage;
+const endIndex = Math.min(startIndex + itemsPerPage, Rows.length);
+
+for (let i = startIndex; i < endIndex; i++) {
+  displayData.push(Rows[i]);
+}
 
   const maxPage = Math.ceil(displayData.length / itemsPerPage);
 
