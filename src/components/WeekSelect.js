@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function WeekSelect() {
+function WeekSelect(props) {
   // Generate an array of week options for the select element
   const generateWeekOptions = () => {
     const options = [];
@@ -13,10 +13,23 @@ function WeekSelect() {
       weekStartDate.setDate(today.getDate() - today.getDay() - i * 7);
       const weekEndDate = new Date(weekStartDate);
       weekEndDate.setDate(weekStartDate.getDate() + 6);
-      const weekLabel = `Week ${currentWeek - i}: ${formatDate(weekStartDate)} - ${formatDate(weekEndDate)}`;
+
+      // Find the start of the week (Monday) and end of the week (Sunday)
+      weekStartDate.setDate(weekStartDate.getDate() - weekStartDate.getDay() + 1);
+      weekEndDate.setDate(weekEndDate.getDate() - weekEndDate.getDay() + 7);
+
+      const weekLabel = `Week ${currentWeek - i}: ${formatDates(weekStartDate)} - ${formatDates(weekEndDate)}`;
+
+      const originalDate = new Date(weekEndDate);
+      const year = originalDate.getFullYear();
+      const month = String(originalDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so add 1 and pad with 0 if needed
+      const day = String(originalDate.getDate()).padStart(2, '0');
+
+      const formattedDate = `${year}-${month}-${day}`;
+      // console.log(formattedDate);
 
       options.push(
-        <option key={i} value={currentWeek - i}>
+        <option key={i} value={formattedDate}>
           {weekLabel}
         </option>
       );
@@ -38,7 +51,7 @@ function WeekSelect() {
   };
 
   // Helper function to format a date as "YYYY-MM-DD"
-  const formatDate = (date) => {
+  const formatDates = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
@@ -49,6 +62,34 @@ function WeekSelect() {
   const handleWeekSelect = (e) => {
     setSelectedWeek(e.target.value);
   };
+
+
+  // date array
+  function DateArray(eventDate) {
+    let array = [];
+    let date = eventDate
+    let MyDateAfter = new Date(date);
+    let MyDateStringAfter;
+
+    for (let i = 0; i < 6; i++) {
+      MyDateAfter.setDate(MyDateAfter.getDate() - 1);
+      MyDateStringAfter =
+        MyDateAfter.getFullYear() +
+        "-" +
+        ("0" + (MyDateAfter.getMonth() + 1)).slice(-2) +
+        "-" +
+        ("0" + MyDateAfter.getDate()).slice(-2);
+      array.push(MyDateStringAfter); // Add the date to the array
+    }
+    array.unshift(date)
+    return array; // Return the generated array of dates
+  }
+
+  console.log(selectedWeek, "selectedWeek")
+
+  const result = DateArray(selectedWeek);
+  console.log(result, "selected result")
+
 
   return (
     <div>

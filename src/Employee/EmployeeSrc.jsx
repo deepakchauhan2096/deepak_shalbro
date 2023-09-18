@@ -275,6 +275,47 @@ const EmployeeSrc = (props) => {
     },
   ];
 
+  const columnsMobile = [
+    { field: "EMPLOYEE_ID", headerName: "ID", width: 60 },
+    {
+      field: "EMPLOYEE_USERNAME",
+      headerName: "Username",
+      width: 120,
+      // editable: true,
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 80,
+      renderCell: (cellValues) => {
+        return (
+          <Button
+            variant="contained"
+            className="view-btn primary btn btn-success"
+            style={{ padding: "2px 2px" }}
+            onClick={(event) => {
+              handleClick(cellValues);
+            }}
+          >
+            view
+          </Button>
+        );
+      },
+    },
+    {
+      field: "edit",
+      headerName: "Edit",
+      width: 80,
+      renderCell: (cellValues) => {
+        return (
+          <Button>
+            <EmployeeEdit edit={cellValues} refetch={fetchData} />
+          </Button>
+        );
+      },
+    },
+  ];
+
   function downloadPDF(pdf) {
     const linkSource = `data:application/pdf;base64,${pdf}`;
     const downloadLink = document.createElement("a");
@@ -386,6 +427,8 @@ const EmployeeSrc = (props) => {
             {isLoading ? (
               <Animations />
             ) : (
+              <>
+              <div className="display">
               <DataGrid
                 sx={{ border: "none" }}
                 rows={rows}
@@ -403,6 +446,29 @@ const EmployeeSrc = (props) => {
                 // checkboxSelection
                 disableRowSelectionOnClick
               />
+              </div>
+              <div className="mo">
+              <DataGrid
+                sx={{ border: "none" }}
+                rows={rows}
+                columns={columnsMobile}
+                getRowId={(row) => row.EMPLOYEE_ID}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 20,
+                    },
+                  },
+                }}
+                density="compact"
+                pageSizeOptions={[5]}
+                // checkboxSelection
+                disableRowSelectionOnClick
+              />
+              </div>
+              </>
+            
+
             )}
           </Box>
         </MyScreen>
@@ -427,7 +493,7 @@ const EmployeeSrc = (props) => {
           >
             <ArrowBackIcon style={{ fontSize: "22.5px" }} />
           </Button>
-          {["Employee Details", "Timesheet", "Worksheet", "Acknowledge"].map(
+          {["Employee Details", "Timesheet"].map(
             (item, value) => (
               <Button
                 onClick={(e, index) => setIndex(value)}

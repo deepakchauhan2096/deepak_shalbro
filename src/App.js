@@ -67,6 +67,8 @@ function App() {
 
   }, [])
 
+  console.log(user,"datawind")
+
   return (
     <div className="wrapper" style={{ overflowX: "scroll", overflow: "hidden" }}>
       <ToastContainer />
@@ -93,8 +95,12 @@ function App() {
             <Route path="/company/attendance/:id/*" element={<AttendanceReport/>}/>
             <Route path="/company/documents/:id/*" element={<Document/>}/>
             <Route path="/temp/*" element={<Csc />} />
+
+            {user.ADMIN_COMPANIES?.map((e)=> <Route path={`/company/${e.COMPANY_ID}&${e.COMPANY_USERNAME}&${e.COMPANY_PARENT_ID}&${e.COMPANY_PARENT_USERNAME}`} element={<Navigate to="/admin" />}/>)}
+
             </> :
             <Route path="/*" element={<Navigate to="/login" />} />
+
           }
 
           {dataEmp ?
