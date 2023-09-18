@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import { ViewCompact } from "@mui/icons-material";
 import Navbar from "../components/Navbar";
+import ExpiryReminder from "../components/ExpiryReminder";
 
 export default function Document(props) {
 
@@ -233,6 +234,11 @@ export default function Document(props) {
             sortable: false,
             width: 160,
             editable: false,
+            renderCell:(cellValues) =>{
+                return (
+                    <ExpiryReminder expiryDate={cellValues} /> 
+                )
+            }
 
         },
         {
