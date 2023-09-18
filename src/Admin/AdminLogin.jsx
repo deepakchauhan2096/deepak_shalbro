@@ -1,14 +1,14 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
 import InputControl from "../components/InputControl";
 import styles from "../assests/css/Login.module.css";
-import SimpleBackdrop from "../components/Backdrop"; 
-import { useContext } from 'react';
+import SimpleBackdrop from "../components/Backdrop";
+import { useContext } from "react";
 import { MyContext } from "../context/Mycontext";
 import Cookies from "js-cookie";
 
-function AdminLogin({onDataFetched}) {
+function AdminLogin({ onDataFetched }) {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     ADMIN_USERNAME: "",
@@ -17,9 +17,8 @@ function AdminLogin({onDataFetched}) {
   const [errorMsg, setErrorMsg] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
+  const [showpassword, setShowpassword] = useState(true)
   const { auth, setAuth } = useContext(MyContext);
-  
-
 
   const handleSubmission = () => {
     if (!values.ADMIN_USERNAME || !values.ADMIN_PASSWORD) {
@@ -49,7 +48,7 @@ function AdminLogin({onDataFetched}) {
         const data = response.data;
         if (data.operation === "successfull") {
           Cookies.set("myResponseData", JSON.stringify(data), { expires: 7 }); // Cookie will expire in 7 days
-          window.location.replace("/admin")
+          window.location.replace("/admin");
         }
       })
       .catch((error) => {
@@ -75,16 +74,21 @@ function AdminLogin({onDataFetched}) {
           }
           placeholder="Enter Username"
         />
-        <InputControl
-          label="Password"
-          onChange={(event) =>
-            setValues((prev) => ({
-              ...prev,
-              ADMIN_PASSWORD: event.target.value,
-            }))
-          }
-          placeholder="Enter Password"
-        />
+        <span style={{position:"relative"}}>
+          <InputControl
+            label="Password"
+            type={showpassword ? "password" : "text"}
+            onChange={(event) =>
+              setValues((prev) => ({
+                ...prev,
+                ADMIN_PASSWORD: event.target.value,
+              }))
+            }
+            placeholder="Enter Password"
+            
+          />
+            <span style={{position:"absolute", right:"10px", top:"50%"}}><i class="fa fa-eye" onClick={() => setShowpassword(e => !e)}></i></span>
+        </span>
 
         <div className={styles.footer}>
           <center>

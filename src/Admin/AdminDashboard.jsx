@@ -141,8 +141,7 @@ const AdminDashboard = (props) => {
         {Rows ? (
           <div className="container">
             <div className="row">
-              <div className="col-12 overflow-auto pt-2">
-                {/* <h5 className="py-4 text-underline">My Companies</h5> */}
+              <div className="col-xl-12 overflow-auto pt-2">
                 <div className="justify-between">
                   <CompanyCreate
                     ID={adminData?.ADMIN_ID}

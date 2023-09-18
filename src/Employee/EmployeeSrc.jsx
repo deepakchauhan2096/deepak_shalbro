@@ -416,8 +416,8 @@ const EmployeeSrc = (props) => {
               <Animations />
             ) : (
               <>
-              <div className="display">
               <DataGrid
+               className="display"
                 sx={{ border: "none" }}
                 rows={rows}
                 columns={columns}
@@ -434,26 +434,6 @@ const EmployeeSrc = (props) => {
                 // checkboxSelection
                 disableRowSelectionOnClick
               />
-              </div>
-              <div className="mo">
-              <DataGrid
-                sx={{ border: "none" }}
-                rows={rows}
-                columns={columnsMobile}
-                getRowId={(row) => row.EMPLOYEE_ID}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 20,
-                    },
-                  },
-                }}
-                density="compact"
-                pageSizeOptions={[5]}
-                // checkboxSelection
-                disableRowSelectionOnClick
-              />
-              </div>
               </>
             
 
