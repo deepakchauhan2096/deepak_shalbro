@@ -4,6 +4,7 @@ import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 
 
+
 // Create a PDF component
 const SalaryPDF = (props) => {
 
@@ -16,39 +17,47 @@ const SalaryPDF = (props) => {
       fontSize: 12,
       fontWeight: 'bold',
       marginTop: 10,
-      textAlign: "center"
+      textAlign: "center",
+      fontFamily:"Times-Roman"
     },
     date: {
       fontSize: 12,
-      textAlign: "left"
+      textAlign: "left",
+      fontFamily:"Times-Roman"
     },
     para: {
       fontSize: 12,
       textAlign: "center",
       marginTop: 5,
+      fontFamily:"Times-Roman"
     },
     sign: {
       marginTop: 20,
       fontSize: 12,
       textAlign: "right",
+      fontFamily:"Times-Roman"
     },
     rightAlignedText: {
       flexDirection: 'row',
       justifyContent: "flex-end",
       alignItems: 'center',
       marginTop: 20,
+      fontFamily:"Times-Roman"
     },
     label: {
       fontSize: 12,
       marginRight: 0,
+      fontFamily:"Times-Roman"
     },
     week: {
       fontSize: 12,
       marginTop: 20,
+      fontFamily:"Times-Roman"
     },
     value: {
       fontSize: 12,
-      textDecoration: "underline"
+      textDecoration: "underline",
+      fontFamily:"Times-Roman"
     },
 
   });
@@ -82,6 +91,9 @@ const SalaryPDF = (props) => {
 
         {/* Week */}
         <Text style={styles.week}>Week {props.startdate} to {props.enddate}</Text>
+        <View style={{width:"100%", borderBottom:"1px solid black", margin:"2px 0"}}></View>
+        {/* Date */}
+        <Text style={styles.date}>Date: {props.date}</Text>
 
         {/* Spanish version */}
         <Text style={styles.header}>RECONOCIMIENTO DE HORAS TRABAJADAS</Text>

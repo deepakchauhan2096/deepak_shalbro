@@ -390,7 +390,6 @@ const Project = (props) => {
               <Animations />
             ) : (
               <>
-                <div className="display">
                   <DataGrid
                     sx={{ border: "none" }}
                     rows={rows}
@@ -408,27 +407,6 @@ const Project = (props) => {
                     checkboxSelection={false}
                     disableRowSelectionOnClick
                   />
-                </div>
-                <div className="mobile-display">
-                  <DataGrid
-                    sx={{ border: "none" }}
-                    className="mobile-display"
-                    rows={rows}
-                    columns={columnsMobile}
-                    getRowId={(row) => row.PROJECT_ID}
-                    initialState={{
-                      pagination: {
-                        paginationModel: {
-                          pageSize: 20,
-                        },
-                      },
-                    }}
-                    density="compact"
-                    pageSizeOptions={[5]}
-                    checkboxSelection={false}
-                    disableRowSelectionOnClick
-                  />
-                </div>
               </>
             )}
           </Box>
