@@ -83,4 +83,9 @@
     padding: 25px;
     border-radius: 10px;
   }
+
+  td{
+    white-space: nowrap;
+  }
+  
 }
