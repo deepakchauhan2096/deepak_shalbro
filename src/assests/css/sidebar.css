@@ -1,187 +1,91 @@
-
-/*
-    DEMO STYLE
-*/
-
-@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
-body {
-    font-family: 'Poppins', sans-serif;
-    background: #fafafa;
-    /* user-select: none; */
-}
-
-p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9em;
-    font-weight: 300;
-    /* line-height: 1.5em; */
-    color: #999;
-}
-
-a,
-a:hover,
-a:focus {
-    color: inherit;
-    text-decoration: none !important;
-    transition: all 0.3s;
-    color: #fff;
-}
-
-.navbar {
-    padding: 15px 10px;
-    background: #fff;
-    border: none;
-    border-radius: 0;
-    margin-bottom: 40px;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-btn {
-    box-shadow: none;
-    outline: none !important;
-    border: none;
-}
-
-.line {
-    width: 100%;
-    height: 1px;
-    border-bottom: 1px dashed #ddd;
-    margin: 40px 0;
-}
-
-/* ---------------------------------------------------
-    SIDEBAR STYLE
------------------------------------------------------ */
-
-.wrapper {
-    display: flex;
-    width: 100%;
-}
+/* App.css */
 
 .sidebar {
-    min-width: 250px;
-    max-width: 250px;
-    background: #277099 !important;
-    color: #fff;
-    transition: all 0.3s;
+  width: 250px;
+  /* background-color: #333; */
+  /* color: white; */
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(0);
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999999;
+  overflow-x: hidden;
 }
 
-.sidebar.active {
-    margin-left: -250px;
+.content {
+  margin-left: 250px;
+  /* border:1px solid red */
 }
 
-.sidebar .sidebar-header {
-    padding: 20px;
-    background: #3596d9;
-    position: relative;
+.display-sidebar-mobile {
+  display: none;
 }
 
-.sidebar .sidebar_footer {
-    padding: 15px;
-    background: #3596d9;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    position: absolute;
-    width: 250px;
-    color: #ddd;
-}
-.logout_icon{
-    cursor: pointer;
+.display {
+  display: block;
 }
 
-#sidebar ul.components {
-    padding: 20px 0;
-    border-bottom: 1px solid #3596d9;
+.mobile-display {
+  display: none;
 }
 
-.sidebar ul p {
-    color: #fff;
-    padding: 10px;
+.modal-content {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
+  width: 60% ;
+  background-color: #fff;
+  box-shadow: 24;
+  padding: 25px;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.sidebar ul li a {
-    padding: 10px;
-    font-size: 1em;
+@media only screen and (max-width: 993.333px) {
+  .sidebar {
+    display: none;
+  }
+
+  .content {
+    margin-left: 0;
+    /* border:1px solid red */
+  }
+
+  .display-sidebar-mobile {
     display: block;
-    color: #ddd;
-}
+    background-color: #fff;
+  }
 
-.sidebar ul li a:hover {
-    color: #a8b8f8;
-    background: #fff;
-}
+  .box {
+    margin-left: 0;
+  }
 
-.sidebar ul li.active>a,
-a[aria-expanded="true"] {
-    color: #fff;
-    background: #3596d9;
-}
+  .display {
+    display: none;
+  }
 
-a[data-toggle="collapse"] {
-    position: relative;
-}
-
-.dropdown-toggle::after {
+  .mobile-display {
     display: block;
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-}
+  }
 
-ul ul a {
-    font-size: 0.8em !important;
-    padding-left: 30px !important;
-    background: #3596d9;
-}
+  .modal-content {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%);
+    width: 90% ;
+    height: 80vh;
+    background-color: #fff;
+    box-shadow: 24;
+    padding: 25px;
+    border-radius: 10px;
+  }
 
-ul.CTAs {
-    padding: 20px;
-}
-
-ul.CTAs a {
-    text-align: center;
-    font-size: 0.9em !important;
-    display: block;
-    border-radius: 5px;
-    margin-bottom: 5px;
-}
-
-a.download {
-    background: #fff;
-    color: #3596d9;
-}
-
-a.article,
-a.article:hover {
-    background: #6d7fcc !important;
-    color: #fff !important;
-}
-
-/* ---------------------------------------------------
-    CONTENT STYLE
------------------------------------------------------ */
-
-#content {
-    width: 100%;
-    padding: 20px;
-    min-height: 100vh;
-    transition: all 0.3s;
-}
-
-/* ---------------------------------------------------
-    MEDIAQUERIES
------------------------------------------------------ */
-
-@media (max-width: 768px) {
-    #sidebar {
-        margin-left: -250px;
-    }
-    #sidebar.active {
-        margin-left: 0;
-    }
-    #sidebarCollapse span {
-        display: none;
-    }
+  td{
+    white-space: nowrap;
+  }
+  
 }

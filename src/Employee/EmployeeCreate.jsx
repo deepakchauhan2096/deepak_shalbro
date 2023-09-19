@@ -4,12 +4,16 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { ToastContainer, toast } from "react-toastify";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
 import env from "react-dotenv";
 import country from "../Api/countriess.json";
 import employeeRole from "../jsonlist/employeeRole.json"
+import {
+  validatePhoneNumber,
+  validateUsername,
+  validateEmail,
+  validatePassword
+} from "../components/Validation";
 const style = {
   position: "absolute",
   top: "50%",
@@ -22,9 +26,9 @@ const style = {
   borderRadius: 4,
 };
 
-export default function AddEmployee(props) {
+
+export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME, refetch}) {
   const [open, setOpen] = React.useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -49,26 +53,29 @@ export default function AddEmployee(props) {
     EMPLOYEE_MEMBER_PARENT_ID: "",
   });
 
+  const [errorMsg, setErrorMsg] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [nameError, setNameError] = useState("");
+
+  
+
 
   useEffect(() => {
-    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_MEMBER_PARENT_USERNAME: props.mainData.COMPANY_PARENT_USERNAME }));
-    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_PARENT_ID: props.mainData.COMPANY_ID }));
-    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_PARENT_USERNAME: props.mainData.COMPANY_USERNAME }));
-    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_MEMBER_PARENT_ID: props.mainData.COMPANY_PARENT_ID }));
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME }));
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_PARENT_ID: COMPANY_ID }));
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_PARENT_USERNAME: COMPANY_USERNAME }));
+    setCreateEmployee((prevState) => ({ ...prevState, EMPLOYEE_MEMBER_PARENT_ID: COMPANY_PARENT_ID }));
   }, [open])
-
-
-
-  console.log(createEmployee, "check")
-
 
 
   const availableState = country?.find(
     (c) => c.name === createEmployee.EMPLOYEE_COUNTRY
   );
 
-  // console.log("all states : ===> ", availableState,"country=>",country);
-  const availableCities = availableState?.states?.find(
+ const availableCities = availableState?.states?.find(
     (s) => s.name === createEmployee.EMPLOYEE_STATE
   );
 
@@ -96,70 +103,65 @@ export default function AddEmployee(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const requiredFields = [
-      "EMPLOYEE_NAME",
-      "EMPLOYEE_EMAIL",
-      "EMPLOYEE_COUNTRY",
-      "EMPLOYEE_STATE",
-      "EMPLOYEE_CITY",
-      "EMPLOYEE_PHONE",
-      "EMPLOYEE_HOURLY_WAGE",
-      "EMPLOYEE_ROLE",
-      "EMPLOYEE_EMPLMNTTYPE",
-      "EMPLOYEE_DOB",
-      "EMPLOYEE_HIRE_DATE",
-      "EMPLOYEE_ADD",
-      "EMPLOYEE_USERNAME",
-      "EMPLOYEE_PASSWORD",
-      "EMPLOYEE_MEMBER_PARENT_USERNAME",
-      "EMPLOYEE_PARENT_ID",
-      "EMPLOYEE_PARENT_USERNAME",
-      "EMPLOYEE_MEMBER_PARENT_ID"
-    ];
+    // Clear previous validation errors
+    setPhoneError("");
+    setUsernameError("");
+    setEmailError("");
+    setPasswordError("");
 
-    const hasEmptyFields = requiredFields.some(
-      (field) => !createEmployee[field]
-    );
+    // Validate phone number, username, and email fields
+    const isValidPhoneNumber = validatePhoneNumber(createEmployee.EMPLOYEE_PHONE);
+    const isValidUsername = validateUsername(createEmployee.EMPLOYEE_USERNAME);
+    const isValidEmail = validateEmail(createEmployee.EMPLOYEE_EMAIL);
+    const isValidPassword = validatePassword(createEmployee.EMPLOYEE_PASSWORD);
+    const isValidName = createEmployee.EMPLOYEE_NAME != "";
 
-    if (hasEmptyFields) {
-      setErrorMsg("Fill all fields");
-      toast.error("Please fill in all fields", {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 2000,
-      });
+    if (!isValidPhoneNumber) {
+      setPhoneError("Invalid phone number");
       return;
     }
 
-    setErrorMsg("");
+    if (!isValidUsername) {
+      setUsernameError("Invalid username");
+      return;
+    }
+
+    if (!isValidEmail) {
+      setEmailError("Invalid email address");
+      return;
+    }
+
+    if (!isValidPassword) {
+      setPasswordError("Invalid password");
+      return;
+    }
+
+    if (!isValidName) {
+      setNameError("Name should not be empty");
+      return;
+    }
+
+    // Perform API validation and request
     axios
-      .post("http://18.211.130.168:5001/create_employee", createEmployee, {
+      .post("http://54.243.89.186:5001/create_employee", createEmployee, {
         headers,
       })
       .then((response) => {
         if (response.data.operation === "failed") {
-          setErrorMsg(response.data.errorMsg);
-          toast.error(response.data.errorMsg, {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: 2000,
-          });
+          setUsernameError(response.data.errorMsg)
         } else if (response.data.operation === "successfull") {
-          toast.success("Form submitted successfully!", {
+          toast.success("Project Created successfully!", {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 2000
+            autoClose: 1000,
+            
           });
-          props.refetch();
-          // setOpen(false);
-          // setCreateEmployee('')
-          setCreateEmployee({});
+          refetch()
           setOpen(false);
+
         }
       })
       .catch((error) => {
-        console.error(error);
-        toast.error("An error occurred. Please try again later.", {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 2000,
-        });
+        console.error(error, "ERR");
       });
   };
 
@@ -168,20 +170,20 @@ export default function AddEmployee(props) {
     < >
       <Button
         size="small"
-        className="btn button border-bottom-0 bg-white"
-        variant="outlined"
+        variant={"outlined"}
+        className={"btn button border-bottom-0 bg-white"}
       >
-        Employee
+        My Employees
       </Button>
-      <Button
+      <button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
-        className="btn rounded-0 border-0  rounded-0 text-light"
-        variant="contained"
+        className="btn btn-sm btn-primary rounded-0 border-0  rounded-0 text-light"
+        // variant="contained"
         size="small"
       >
         + Add New Employee
-      </Button>
+      </button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -193,34 +195,43 @@ export default function AddEmployee(props) {
           style={{ height: "100vh", position: "relative" }}
           maxWidth="xl"
         >
-          <Box sx={style}>
-            <form onSubmit={handleSubmit}>
+          <Box className="modal-content">
+            <form onSubmit={handleSubmit} className="overflow-auto">
+              <h5>Create Employee</h5>
               <div className="row py-1">
                 <div className="form-group col-xl-6">
                   <label for="inputqual">Employee Username</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${
+                      usernameError ? "is-invalid" : ""
+                    }`}
                     placeholder="Enter Employee Username"
-                    id="inputZip"
                     value={createEmployee.EMPLOYEE_USERNAME}
                     name="EMPLOYEE_USERNAME"
                     onChange={handleCreate}
-                    required
+                    label="Company username"
                   />
+                   {usernameError && (
+                    <div className="invalid-feedback">{usernameError}</div>
+                  )}
                 </div>
                 <div className="form-group col-xl-6">
                   <label>Employee Name</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${
+                      nameError ? "is-invalid" : ""
+                    }`}
                     id="empName"
                     placeholder="Enter Employee name"
                     value={createEmployee.EMPLOYEE_NAME}
                     name="EMPLOYEE_NAME"
                     onChange={handleCreate}
-                    required
                   />
+                   {nameError && (
+                    <div className="invalid-feedback">{nameError}</div>
+                  )}
                 </div>
               </div>
               <div className="row">
@@ -228,14 +239,19 @@ export default function AddEmployee(props) {
                   <label>E-mail</label>
                   <input
                     type="email"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${
+                      emailError ? "is-invalid" : ""
+                    }`}
                     id="email"
                     placeholder="Enter Email add..."
                     value={createEmployee.EMPLOYEE_EMAIL}
                     name="EMPLOYEE_EMAIL"
                     onChange={handleCreate}
-                    required
+                    label="email"
                   />
+                   {emailError && (
+                    <div className="invalid-feedback">{emailError}</div>
+                  )}
                 </div>
                 <div className="form-group col-xl-6 py-1">
 
@@ -255,31 +271,38 @@ export default function AddEmployee(props) {
                   <label>Phone</label>
                   <input
                     type="number"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${
+                      phoneError ? "is-invalid" : ""
+                    }`}
                     id="phone"
                     placeholder="Enter Your Number"
                     value={createEmployee.EMPLOYEE_PHONE}
                     name="EMPLOYEE_PHONE"
                     onChange={handleCreate}
-                    required
                   />
+                     {phoneError && (
+                    <div className="invalid-feedback">{phoneError}</div>
+                  )}
                 </div>
                 <div className="form-group col-xl-6 py-1">
                   <label>Employee Password</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${
+                      passwordError ? "is-invalid" : ""
+                    }`}
                     placeholder="Enter Employee password"
                     value={createEmployee.EMPLOYEE_PASSWORD}
                     name="EMPLOYEE_PASSWORD"
                     onChange={handleCreate}
-                    required
                   />
+                    {passwordError && (
+                    <div className="invalid-feedback">{passwordError}</div>
+                  )}
                 </div>
                 <div className="form-group col-xl-6 py-1">
 
                   <label>Country</label>
-
 
                   <select
                     className="form-control form-control-2 border rounded-0"
@@ -290,7 +313,7 @@ export default function AddEmployee(props) {
                   >
                     <option value="">--Choose Country--</option>
                     {country?.map((value, key) => {
-                      console.log("hhh", value.name)
+                      // console.log("hhh", value.name)
                       return (
                         <option value={value.name} key={key}>
                           {value.name}
@@ -302,7 +325,6 @@ export default function AddEmployee(props) {
                 </div>
                 <div className="form-group col-xl-6 py-1">
                   <label>State</label>
-
                   <select
                     className="form-control form-control-2 border rounded-0"
                     placeholder="State"
@@ -328,13 +350,12 @@ export default function AddEmployee(props) {
                     <label for="inputAddress">Address</label>
                     <textarea
                       type="text"
-                      className="form-control form-control-2 rounded-0"
+                      className="form-control rounded-0 w-100"
                       id="inputAddress"
                       placeholder="Enter Address"
                       value={createEmployee.EMPLOYEE_ADD}
                       name="EMPLOYEE_ADD"
                       onChange={handleCreate}
-                      required
                     />
                   </div>
                 </div>
@@ -367,7 +388,6 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_HOURLY_WAGE}
                     name="EMPLOYEE_HOURLY_WAGE"
                     onChange={handleCreate}
-                    required
                   />
                 </div>
                 <div className="form-group col-xl-4 py-1">
@@ -378,7 +398,6 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_ROLE}
                     name="EMPLOYEE_ROLE"
                     onChange={handleCreate}
-                    required
                   >
                     <option selected>Choose role...</option>
                     {employeeRole.map((roles, index) => {
@@ -400,7 +419,6 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_EMPLMNTTYPE}
                     name="EMPLOYEE_EMPLMNTTYPE"
                     onChange={handleCreate}
-                    required
                   >
                     <option selected>Choose type...</option>
                     <option>Permanent</option>
@@ -420,12 +438,11 @@ export default function AddEmployee(props) {
                     value={createEmployee.EMPLOYEE_HIRE_DATE}
                     name="EMPLOYEE_HIRE_DATE"
                     onChange={handleCreate}
-                    required
                   />
                 </div>
               </div>
 
-              <div className="FormButtonAlign">
+              <div className="py-2">
 
                 <button
                   type="submit"

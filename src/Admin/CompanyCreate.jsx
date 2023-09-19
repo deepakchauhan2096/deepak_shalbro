@@ -10,9 +10,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SimpleBackdrop from "../components/Backdrop";
 import { faListSquares } from "@fortawesome/free-solid-svg-icons";
-import { Fab, Paper, } from "@mui/material";
-import companytype from "../jsonlist/typeOfCompany.json"
-
+import { Fab, Paper } from "@mui/material";
+import companytype from "../jsonlist/typeOfCompany.json";
+import {
+  validatePhoneNumber,
+} from "../components/Validation";
 const style = {
   position: "absolute",
   top: "50%",
@@ -33,6 +35,7 @@ export default function CompanyCreate(props) {
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+
   const [create_company, setCreate_company] = useState({
     COMPANY_PARENT_ID: props.ID,
     COMPANY_PARENT_USERNAME: props.Username,
@@ -40,12 +43,18 @@ export default function CompanyCreate(props) {
     COMPANY_USERNAME: "",
     COMPANY_PHONE: "",
     COMPANY_EMAIL: "",
-    COMPANY_ROLE:"",
+    COMPANY_ROLE: "",
     COMPANY_ADD2: "",
     COMPANY_STATE: "",
     COMPANY_CITY: "",
     COMPANY_COUNTRY: "",
+    COMPANY_SUBSCRIPTION: "",
+    COMPANY_STATUS: "",
   });
+  const [usernameError, setUsernameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [companyphoneError, setCompanyPhoneError] = useState("");
+  const [companynameError, setCompanynameError] = useState("");
 
   const handleCreate = (e) => {
     setCreate_company({ ...create_company, [e.target.name]: e.target.value });
@@ -55,98 +64,62 @@ export default function CompanyCreate(props) {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
- 
 
-  // Finding the states and cities of the individaul country 
+  // Finding the states and cities of the individaul country
 
   const availableState = country?.find(
     (c) => c.name === create_company.COMPANY_COUNTRY
   );
 
+  const availableCities = availableState?.states?.find((s) => {
+    return s.name === create_company.COMPANY_STATE;
+  });
 
-  const availableCities = availableState?.states?.find(
-
-    (s) => {
-
-      return s.name === create_company.COMPANY_STATE
-    }
-  );
-
-const list = companytype;
-console.log("hbbbdf", list)
-
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (
-  //     !create_company.COMPANY_USERNAME ||
-  //     !create_company.COMPANY_NAME ||
-  //     !create_company.COMPANY_PHONE ||
-  //     !create_company.COMPANY_ADD2 ||
-  //     !create_company.COMPANY_EMAIL ||
-  //     !create_company.COMPANY_COUNTRY ||
-  //     !create_company.COMPANY_CITY ||
-  //     !create_company.COMPANY_STATE ||
-  //     !create_company.COMPANY_PARENT_ID||
-  //     !create_company.COMPANY_PARENT_USERNAME
-  //   ) {
-  //     setErrorMsg("Fill all fields");
-  //     return;
-  //   }
-  //   setErrorMsg("");
-
-  
-  //   axios
-  //   .post(`http://18.211.130.168:5001/create_company`, create_company, {
-  //     headers,
-  //   })
-  //   .then((response) => {
-      
-  //     if (response.data.operation === "failed") {
-  //       setErrorMsg(response.data.errorMsg);
-  //     } else if (response.data.operation === "successfull") {
-  //       toast.success("Company Created successfully!", {
-  //         position: toast.POSITION.TOP_CENTER,
-  //         autoClose: 1000,
-  //       });
-  //       props.Update(() => response.data.result);
-  //       setCreate_company("");
-  //       setOpen(false);
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error(error, "ERR");
-
-  //   });
-  // };
-  
+  const list = companytype;
+  console.log("hbbbdf", create_company);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    if (
-      !create_company.COMPANY_USERNAME ||
-      !create_company.COMPANY_NAME ||
-      !create_company.COMPANY_PHONE ||
-      !create_company.COMPANY_ADD2 ||
-      !create_company.COMPANY_EMAIL ||
-      !create_company.COMPANY_COUNTRY ||
-      !create_company.COMPANY_CITY ||
-      !create_company.COMPANY_STATE ||
-      !create_company.COMPANY_PARENT_ID ||
-      !create_company.COMPANY_PARENT_USERNAME
-    ) {
-      setErrorMsg("Fill all fields");
-      toast.error("Please fill in all fields", {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 2000,
-      });
+
+    // Clear previous validation errors
+    setUsernameError("");
+    setCompanynameError("");
+    setCompanyPhoneError("")
+    setEmailError("");
+    setErrorMsg("");
+
+    // Validate phone number, username, and email fields
+    const isValidUsername = create_company.COMPANY_USERNAME !== "";
+    const isValidCompanyname = create_company.COMPANY_NAME !== "";
+    const isValidPhone = validatePhoneNumber(create_company.COMPANY_PHONE);
+    const isValidEmail = create_company.COMPANY_EMAIL !== "";
+
+
+    if (!isValidCompanyname) {
+      setCompanynameError("Name should not be empty");
       return;
     }
-    setErrorMsg("");
-  
+    if (!isValidUsername) {
+      setUsernameError("Invalid username");
+      return;
+    }
+
+    if (!isValidPhone) {
+      setCompanyPhoneError("Invalid phone number or feild should not be empty");
+      return;
+    }
+
+    if (!isValidEmail) {
+      setEmailError("Invalid email address or should not be empty");
+      return;
+    }
+
+
+
+
+    // Perform API validation and request
     axios
-      .post(`http://18.211.130.168:5001/create_company`, create_company, {
+      .post(`http://54.243.89.186:5001/create_company`, create_company, {
         headers,
       })
       .then((response) => {
@@ -161,21 +134,7 @@ console.log("hbbbdf", list)
             position: toast.POSITION.TOP_CENTER,
             autoClose: 1000,
           });
-          props.Update(() => response.data.result);
-          setCreate_company({
-            // Reset your state after successful submission
-            COMPANY_PARENT_ID: props.ID,
-            COMPANY_PARENT_USERNAME: props.Username,
-            COMPANY_NAME: "",
-            COMPANY_USERNAME: "",
-            COMPANY_PHONE: "",
-            COMPANY_EMAIL: "",
-            COMPANY_ROLE: "",
-            COMPANY_ADD2: "",
-            COMPANY_STATE: "",
-            COMPANY_CITY: "",
-            COMPANY_COUNTRY: "",
-          });
+          // props.Update(() => response.data.result);
           setOpen(false);
         }
       })
@@ -187,19 +146,16 @@ console.log("hbbbdf", list)
         });
       });
   };
-  const StyledFab = styled(Fab)({
 
-    position: "fixed",
-    top: "80px",
-    right: "80px",
-
-
-  });
   return (
     <>
-      <StyledFab onClick={handleOpen} size="medium" color="secondary" aria-label="add" style={props.btnstyle}>
-        <AddIcon />
-      </StyledFab>
+      <button
+        onClick={handleOpen}
+        className="btn btn-primary btn-sm my-2"
+        style={{ width: "fit-content" }}
+      >
+        <AddIcon /> Add Company
+      </button>
 
       <Modal
         open={open}
@@ -212,65 +168,84 @@ console.log("hbbbdf", list)
           style={{ height: "100vh", position: "relative" }}
           maxWidth="xl"
         >
-          <Box sx={style}>
-
-            <form className="p-4">
+          <Box className="modal-content">
+            <form className="p-4 overflow-auto">
+            <h5>Create company</h5>
               <div className="row">
                 <div className="form-group py-2 col-xl-6">
                   <label>Company name</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${companynameError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter company name"
                     value={create_company.COMPANY_NAME}
                     name="COMPANY_NAME"
                     onChange={handleCreate}
                     label=""
                   />
+                  {companynameError && (
+                    <div className="invalid-feedback">{companynameError}</div>
+                  )}
                 </div>
+                {/* Username */}
                 <div className="form-group py-2 col-xl-6">
                   <label>Company username</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${usernameError ? "is-invalid" : ""
+                      }`}
                     placeholder="Username"
                     value={create_company.COMPANY_USERNAME}
                     name="COMPANY_USERNAME"
                     onChange={handleCreate}
                     label="Company username"
                   />
+                  {usernameError && (
+                    <div className="invalid-feedback">{usernameError}</div>
+                  )}
                 </div>
               </div>
-
               <div className="row">
+                {/* Phone Number */}
                 <div className="form-group py-2 col-xl-6">
                   <label>Phone Number</label>
                   <input
                     type="number"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${companyphoneError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter Number"
                     value={create_company.COMPANY_PHONE}
                     name="COMPANY_PHONE"
                     onChange={handleCreate}
                     label="Phone Number"
                   />
+                    {companyphoneError && (
+                    <div className="invalid-feedback">{companyphoneError}</div>
+                  )}
+
                 </div>
+
+                {/* Email */}
                 <div className="form-group py-2 col-xl-6">
                   <label>Company Email</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${emailError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter company email"
                     name="COMPANY_EMAIL"
                     value={create_company.COMPANY_EMAIL}
                     onChange={handleCreate}
                     label="Company Email"
                   />
+                  {emailError && (
+                    <div className="invalid-feedback">{emailError}</div>
+                  )}
                 </div>
               </div>
-
               <div className="row py-2">
-              <div className="form-group col-xl-4">
+                <div className="form-group col-xl-4">
                   <label>Company Type</label>
                   <select
                     className="form-control form-control-2 border  rounded-0"
@@ -282,13 +257,46 @@ console.log("hbbbdf", list)
 
                     {list.map((e, key) => {
                       return (
-                        <option value={e} key={key}>{e}</option>
-                      )
+                        <option value={e} key={key}>
+                          {e}
+                        </option>
+                      );
                     })}
-
                   </select>
                 </div>
 
+
+                <div className="form-group col-xl-4">
+                  <label>Subscription Type</label>
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    name="COMPANY_SUBSCRIPTION"
+                    value={create_company.COMPANY_SUBSCRIPTION}
+                    onChange={handleCreate}
+                  >
+                    <option selected>--Select Subscription--</option>
+                    <option selected>Monthly</option>
+                    <option selected> Annual</option>
+                  </select>
+                </div>
+                
+                <div className="form-group col-xl-4">
+                  <label>Company Status</label>
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    name="COMPANY_STATUS"
+                    value={create_company.COMPANY_STATUS}
+                    onChange={handleCreate}
+                  >
+                    <option selected>--Select Status--</option>
+                    <option selected>Active</option>
+                    <option selected> Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+
+              <div className="row py-2">
                 <div className="form-group col-xl-4">
                   <label>Country</label>
                   <select
@@ -297,14 +305,15 @@ console.log("hbbbdf", list)
                     value={create_company.COMPANY_COUNTRY}
                     onChange={handleCreate}
                   >
-                    <option selected>Choose...</option>
+                    <option selected>--Choose Country--</option>
 
                     {country.map((e, key) => {
                       return (
-                        <option value={e.name} key={key}>{e.name}</option>
-                      )
+                        <option value={e.name} key={key}>
+                          {e.name}
+                        </option>
+                      );
                     })}
-
                   </select>
                 </div>
 
@@ -316,7 +325,6 @@ console.log("hbbbdf", list)
                     value={create_company.COMPANY_STATE}
                     onChange={handleCreate}
                   >
-
                     <option>--Choose State--</option>
                     {availableState?.states?.map((e, key) => {
                       return (
@@ -325,14 +333,9 @@ console.log("hbbbdf", list)
                         </option>
                       );
                     })}
-
                   </select>
                 </div>
-
-              </div>
-             
-               <div className="row py-2">
-               <div className="form-group col-xl-4">
+                <div className="form-group col-xl-4">
                   <label>City</label>
                   <select
                     className="form-control form-control-2 border rounded-0"
@@ -340,33 +343,32 @@ console.log("hbbbdf", list)
                     value={create_company.COMPANY_CITY}
                     onChange={handleCreate}
                   >
-                    <option selected>Choose City...</option>
+                    <option selected>--Choose City--</option>
                     {availableCities?.cities?.map((e, key) => {
                       return (
-                        <option value={e.name} key={key}>{e.name}</option>
-                      )
+                        <option value={e.name} key={key}>
+                          {e.name}
+                        </option>
+                      );
                     })}
-
                   </select>
                 </div>
-              <div className="form-group col-xl-8">
-                <label>Address</label>
-                <textarea
-                  type="text"
-                  className="form-control form-control-2 rounded-0"
-                  placeholder="Apartment, studio, or floor"
-                  name="COMPANY_ADD2"
-                  value={create_company.COMPANY_ADD2}
-                  onChange={handleCreate}
-                // rows="4"
-                // cols="50"
-                />
               </div>
-               </div>
-            
-   
-
-
+              <div className="row py-2">
+                <div className="form-group col-xl-12">
+                  <label>Address</label>
+                  <textarea
+                    type="text"
+                    className="form-control rounded-0"
+                    placeholder="Apartment, studio, or floor"
+                    name="COMPANY_ADD2"
+                    value={create_company.COMPANY_ADD2}
+                    onChange={handleCreate}
+                    rows="3"
+                    cols="50"
+                  />
+                </div>
+              </div>
               <Button
                 type="submit"
                 variant="contained"
@@ -381,7 +383,7 @@ console.log("hbbbdf", list)
                 onClick={handleClose}
                 className="btn text-white rounded-2 mt-2"
               >
-                Discard
+                Cancel
               </Button>
               {/* <center>
               {errorMsg && (
@@ -389,7 +391,6 @@ console.log("hbbbdf", list)
               )}
             </center> */}
             </form>
-           
           </Box>
         </Container>
       </Modal>

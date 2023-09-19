@@ -9,8 +9,14 @@ import { Fab } from "@mui/material";
 import country from "../Api/countriess.json";
 import { ToastContainer, toast } from "react-toastify";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
+import companytype from "../jsonlist/typeOfCompany.json";
 
 import SimpleBackdrop from "../components/Backdrop";
+
+import {
+  validatePhoneNumber,
+} from "../components/Validation";
+
 
 const style = {
   position: "absolute",
@@ -32,6 +38,11 @@ export default function CompanyEdit(props) {
 
   const [errorMsg, setErrorMsg] = useState("");
 
+  const [usernameError, setUsernameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [companyphoneError, setCompanyPhoneError] = useState("");
+  const [companynameError, setCompanynameError] = useState("");
+
   const [edit_company, setEdit_company] = useState({
     COMPANY_PARENT_ID: companyData.COMPANY_PARENT_ID,
     COMPANY_PARENT_USERNAME: companyData.COMPANY_PARENT_USERNAME,
@@ -42,7 +53,10 @@ export default function CompanyEdit(props) {
     COMPANY_STATE: companyData.COMPANY_STATE,
     COMPANY_CITY: companyData.COMPANY_CITY,
     COMPANY_COUNTRY: companyData.COMPANY_COUNTRY,
+    COMPANY_SUBSCRIPTION: companyData.COMPANY_SUBSCRIPTION,
+    COMPANY_STATUS: companyData.COMPANY_SUBSCRIPTION,
     COMPANY_USERNAME: companyData.COMPANY_USERNAME,
+  
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -54,11 +68,12 @@ export default function CompanyEdit(props) {
     COMPANY_STATE: "",
     COMPANY_CITY: "",
     COMPANY_ADD2: "",
+
   });
 
   // ... rest of your code
   
-
+const list = companytype;
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
@@ -100,6 +115,41 @@ export default function CompanyEdit(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Clear previous validation errors
+    setUsernameError("");
+    setCompanynameError("");
+    setCompanyPhoneError("")
+    setEmailError("");
+    setErrorMsg("");
+
+    // Validate phone number, username, and email fields
+    const isValidUsername = edit_company.COMPANY_USERNAME !== "";
+    const isValidCompanyname = edit_company.COMPANY_NAME !== "";
+    const isValidPhone = validatePhoneNumber(edit_company.COMPANY_PHONE);
+    const isValidEmail = edit_company.COMPANY_EMAIL !== "";
+
+
+    if (!isValidCompanyname) {
+      setCompanynameError("Name should not be empty");
+      return;
+    }
+    if (!isValidUsername) {
+      setUsernameError("Invalid username");
+      return;
+    }
+
+    if (!isValidPhone) {
+      setCompanyPhoneError("Invalid phone number or feild should not be empty");
+      return;
+    }
+
+    if (!isValidEmail) {
+      setEmailError("Invalid email address or should not be empty");
+      return;
+    }
+
+
+
     const hasErrors = Object.values(formErrors).some((error) => error !== "");
 
     if (hasErrors) {
@@ -111,7 +161,7 @@ export default function CompanyEdit(props) {
     }
 
     axios
-    .put("http://18.211.130.168:5001/update_company", {
+    .put("http://54.243.89.186:5001/update_company", {
       COMPANY_ID: companyData.COMPANY_ID,
       COMPANY_USERNAME: companyData.COMPANY_USERNAME,
       COMPANY_ADMIN_USERNAME: companyData.COMPANY_PARENT_USERNAME,
@@ -123,16 +173,13 @@ export default function CompanyEdit(props) {
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
         } else if (response.data.operation === "successfull") {
-          // setLoader(false)
-          // setLoader(true)
-
-          props.reFetchfun()
+          // props.reFetchfun()
+          setOpen(false);
           toast.success("Fields are updated successfully!", {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 1000
           });
           props.companyEDit.update(true);
-          setOpen(true);
         }
       })
       .catch((error) => {
@@ -166,27 +213,32 @@ export default function CompanyEdit(props) {
           style={{ height: "100vh", position: "relative" }}
           maxWidth="xl"
         >
-          <Box sx={style}>
-            <form className="p-4">
+          <Box  className="modal-content">
+            <form className="p-4 overflow-auto">
+              <h5>Edit company</h5>
               <div className="row">
-                <div className="form-group py-2 col-xl-6">
+              <div className="form-group py-2 col-xl-6">
                   <label>Company name</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${companynameError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter company name"
                     value={edit_company.COMPANY_NAME}
                     name="COMPANY_NAME"
                     onChange={handleCreate}
-                    label="Company name"
-                    required
+                    label=""
                   />
+                  {companynameError && (
+                    <div className="invalid-feedback">{companynameError}</div>
+                  )}
                 </div>
                 <div className="form-group py-2 col-xl-6">
                   <label>Company username</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${usernameError ? "is-invalid" : ""
+                  }`}
                     placeholder="Username"
                     value={edit_company.COMPANY_USERNAME}
                     name="COMPANY_USERNAME"
@@ -198,33 +250,94 @@ export default function CompanyEdit(props) {
               </div>
 
               <div className="row">
+                  {/* Phone Number */}
                 <div className="form-group py-2 col-xl-6">
                   <label>Phone Number</label>
                   <input
                     type="number"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${companyphoneError ? "is-invalid" : ""
+                  }`}
                     placeholder="Enter Number"
                     value={edit_company.COMPANY_PHONE}
                     name="COMPANY_PHONE"
                     onChange={handleCreate}
                     label="Phone Number"
-                    required
                   />
+                    {companyphoneError && (
+                    <div className="invalid-feedback">{companyphoneError}</div>
+                  )}
+
                 </div>
                 <div className="form-group py-2 col-xl-6">
                   <label>Company Email</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${emailError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter company email"
                     name="COMPANY_EMAIL"
                     value={edit_company.COMPANY_EMAIL}
                     onChange={handleCreate}
                     label="Company Email"
-                    required
                   />
+                  {emailError && (
+                    <div className="invalid-feedback">{emailError}</div>
+                  )}
                 </div>
               </div>
+              <div className="row py-2">
+                <div className="form-group col-xl-4">
+                  <label>Company Type</label>
+                  <select
+                    className="form-control form-control-2 border  rounded-0"
+                    name="COMPANY_ROLE"
+                    value={edit_company.COMPANY_ROLE}
+                    onChange={handleCreate}
+                  >
+                    <option selected>Choose...</option>
+
+                    {list.map((e, key) => {
+                      return (
+                        <option value={e} key={key}>
+                          {e}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+
+                <div className="form-group col-xl-4">
+                  <label>Subscription Type</label>
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    name="COMPANY_SUBSCRIPTION"
+                    value={edit_company.COMPANY_SUBSCRIPTION}
+                    onChange={handleCreate}
+                  >
+                    <option selected>--Select Subscription--</option>
+                    <option selected>Monthly</option>
+                    <option selected> Annual</option>
+                  </select>
+                </div>
+                
+                <div className="form-group col-xl-4">
+                  <label>Company Status</label>
+                  <select
+                    className="form-control form-control-2 border rounded-0"
+                    name="COMPANY_STATUS"
+                    value={edit_company.COMPANY_STATUS}
+                    onChange={handleCreate}
+                  >
+                    <option selected>--Select Status--</option>
+                    <option selected>Active</option>
+                    <option selected> Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+
+
               <div className="row py-2">
                 <div className="form-group col-xl-4">
                   <label>Country</label>
@@ -314,7 +427,7 @@ export default function CompanyEdit(props) {
                 onClick={handleClose}
                 className="btn text-white rounded-2 mt-2"
               >
-                Discard
+                Cancel
               </Button>
             </form>
           </Box>

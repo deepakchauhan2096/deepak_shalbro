@@ -4,8 +4,6 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { ToastContainer, toast } from "react-toastify";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../firebase";
 import { Button, Container } from "@mui/material";
 import env from "react-dotenv";
 
@@ -71,7 +69,7 @@ export default function EmployeeEdit(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put("http://18.211.130.168:5001/update_employee",  
+      .put("http://54.243.89.186:5001/update_employee",  
       {EMPLOYEE_MEMBER_PARENT_USERNAME: editdata.EMPLOYEE_MEMBER_PARENT_USERNAME,
       EMPLOYEE_PARENT_ID: editdata.EMPLOYEE_PARENT_ID,
       EMPLOYEE_PARENT_USERNAME: editdata.EMPLOYEE_PARENT_USERNAME,
@@ -123,8 +121,9 @@ export default function EmployeeEdit(props) {
           style={{ height: "100vh", position: "relative" }}
           maxWidth="xl"
         >
-          <Box sx={style}>
-            <form onSubmit={handleSubmit}>
+          <Box className="modal-content">
+            <form onSubmit={handleSubmit} className="overflow-auto">
+            <h5>Edit Employee</h5>
               <div className="row py-1">
                 <div className="form-group col-xl-6">
                   <label for="inputqual">Employee Username</label>
@@ -237,13 +236,12 @@ export default function EmployeeEdit(props) {
                     <label for="inputAddress">Address</label>
                     <textarea
                       type="text"
-                      className="form-control form-control-2 rounded-0"
+                      className="form-control rounded-0 "
                       id="inputAddress"
                       placeholder="Enter Address"
                       value={editEmployee.EMPLOYEE_ADD}
                       name="EMPLOYEE_ADD"
                       onChange={handleCreate}
-                      required
                     />
                   </div>
                 </div>
@@ -334,7 +332,7 @@ export default function EmployeeEdit(props) {
                   )}
                 </center>
                 </div>
-                <div className="FormButtonAlign">
+                <div className="py-2">
 
                   <button
                     type="submit"

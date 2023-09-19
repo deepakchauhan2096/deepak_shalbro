@@ -10,10 +10,22 @@ import { MyContext } from "../context/Mycontext";
 import ProjectEdit from "./ProjectEdit";
 import ProjectLoc from "./ProjectLoc";
 import ProjectAssigned from "./ProjectAssigned";
+import { useParams } from "react-router-dom";
 // import { useDispatch, useSelector } from "react-redux";
 // import { initProject_fun } from "../redux/action";
 
 const Project = (props) => {
+
+
+   const { id } = useParams();
+   
+  const param = id.split("&");
+  const COMPANY_ID = param[0];
+  const COMPANY_USERNAME = param[1];
+  const COMPANY_PARENT_ID = param[2];
+  const COMPANY_PARENT_USERNAME = param[3];
+
+
   const [data, setData] = useState({
     row: {
       PROJECT_ID: "",
@@ -21,7 +33,6 @@ const Project = (props) => {
       PROJECT_PARENT_USERNAME: "",
       PROJECT_MEMBER_PARENT_ID: "",
       PROJECT_MEMBER_PARENT_USERNAME: "",
-      // PROJECT_ROLE: "",
       PROJECT_TYPE: "",
       PROJECT_NAME: "",
       PROJECT_ACCOUNT: "",
@@ -31,11 +42,14 @@ const Project = (props) => {
       PROJECT_SUPERVISOR: "",
       PROJECT_PROGRESS: "",
       PROJECT_ADD: "",
-      PROJECT_VALUE:"",
-      PROJECT_CURRENCY:"",
+      PROJECT_VALUE: "",
+      PROJECT_COUNTRY: "",
+      PROJECT_STATE: "",
+      PROJECT_CITY: "",
+      PROJECT_CURRENCY: "",
+
     },
   });
-  // const dispatch = useDispatch() ;
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
   const [ProjectData, setProjectData] = useState([]);
@@ -44,7 +58,7 @@ const Project = (props) => {
   const [Edit, setEdit] = useState(false);
 
   const [updatedata, setUpdateData] = useState(false);
-  console.log("hgsvdcv",ProjectData)
+  console.log("hgsvdcv", ProjectData)
 
   // modal
   const handleOpen = () => setOpen(true);
@@ -52,11 +66,7 @@ const Project = (props) => {
   const { alldata, setText } = useContext(MyContext);
   const { projectcreatedata } = useContext(MyContext);
 
-  //update data
-
-  useEffect(() => {
-    fetchProjects();
-  }, [updatedata]);
+ 
 
   const filterallprojectData = props.recieveData;
 
@@ -70,13 +80,12 @@ const Project = (props) => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        "http://18.211.130.168:5001/get_projects",
+        "http://54.243.89.186:5001/get_projects",
         {
-          PROJECT_PARENT_ID: filterallprojectData?.COMPANY_ID,
-          PROJECT_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
-          PROJECT_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
-          PROJECT_MEMBER_PARENT_USERNAME:
-            filterallprojectData?.COMPANY_PARENT_USERNAME,
+          PROJECT_PARENT_ID: COMPANY_ID,
+          PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
+          PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+          PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
         },
         { headers }
       );
@@ -92,6 +101,13 @@ const Project = (props) => {
       console.log("Something Went Wrong: =>", err);
     }
   };
+
+
+   //update data
+
+   useEffect(() => {
+    fetchProjects();
+  }, []);
 
   // console.log(ProjectData, "projectdata");
 
@@ -142,7 +158,7 @@ const Project = (props) => {
         );
       },
     },
-   
+
     {
       field: "PROJECT_TYPE",
       headerName: "Project Type",
@@ -338,36 +354,61 @@ const Project = (props) => {
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <div className="container-fluid g-0">
             <div className="row">
-              <div className="col-4">
+              <div className="col-md-2">
                 <b>Project Name</b>
                 <p className="bg-light text-dark p-2 rounded-2">
                   {filterData.PROJECT_NAME}
                 </p>
               </div>
-              <div className="col-4">
-                <b>Phone</b>
+              <div className="col-md-2">
+                <b>Account</b>
                 <p className="bg-light text-dark p-2 rounded-2">
-                  {filterData.PROJECT_PHONE}
+                  {filterData.PROJECT_ACCOUNT}
                 </p>
               </div>
-              <div className="col-4">
+              <div className="col-md-2">
                 <b>Username</b>
                 <p className="bg-light text-dark p-2 rounded-2">
                   {filterData.PROJECT_USERNAME}
                 </p>
               </div>
-              <div className="col-4">
+              <div className="col-md-2">
                 <b>Supervisor</b>
                 <p className="bg-light text-dark p-2 rounded-2">
                   {filterData.PROJECT_SUPERVISOR}
                 </p>
               </div>
-              <div className="col-4">
+              <div className="col-2">
+                <b>Project Value</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {`${filterData.PROJECT_VALUE} ${filterData.PROJECT_CURRENCY}`}
+                </p>
+              </div>
+              <div className="col-2">
                 <b>Employement Type</b>
                 <p className="bg-light text-dark p-2 rounded-2">
                   {filterData.PROJECT_TYPE}
                 </p>
               </div>
+              <div className="col-2">
+                <b>Country</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_COUNTRY}
+                </p>
+              </div>
+              <div className="col-2">
+                <b>State</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_STATE}
+                </p>
+              </div>
+              <div className="col-2">
+                <b>City</b>
+                <p className="bg-light text-dark p-2 rounded-2">
+                  {filterData.PROJECT_CITY}
+                </p>
+              </div>
+
               <div className="col-4">
                 <b>Location</b>
                 <p className="bg-light text-dark p-2 rounded-2">
@@ -437,11 +478,11 @@ const Project = (props) => {
           <ProjectAssigned projectData={filterData} />
         </MyScreen>
         <MyScreen screenIndex={index === 10} sx={{ padding: 3 }}>
-       
+
         </MyScreen>
 
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
-                <ProjectLoc />
+          <ProjectLoc projectData={filterData} />
         </MyScreen>
       </Box>
     </>
