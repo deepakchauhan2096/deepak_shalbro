@@ -241,7 +241,7 @@ export default function Document(props) {
             editable: false,
             renderCell:(cellValues) =>{
                 return (
-                    <ExpiryReminder expiryDate={cellValues} /> 
+                    <ExpiryReminder data={cellValues.value} /> 
                 )
             }
 

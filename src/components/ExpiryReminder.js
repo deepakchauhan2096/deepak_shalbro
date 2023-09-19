@@ -2,7 +2,25 @@
 import React, { useState, useEffect } from 'react';
 
 function ExpiryReminder(props) {
-  const { expiryDate } = props;
+
+
+
+
+
+
+  const { data } = props;
+
+  const breakdate =  data?.split("-")
+  const day = breakdate[0]
+  const month = breakdate[1]
+  const year = breakdate[2]
+
+  const expiryDate = `${year}-${month}-${day}`
+
+  console.log(expiryDate, "expiryDate")
+  
+
+  
   const [daysRemaining, setDaysRemaining] = useState(null);
 
   useEffect(() => {
@@ -19,11 +37,11 @@ function ExpiryReminder(props) {
   if (daysRemaining !== null) {
     return (
       <div>
-        <button className="bg-warning rounded-4 text white btn">Expires in {daysRemaining} days</button>
+        <button className="bg-warning rounded-4 text white border-0">Expires in {daysRemaining} days</button>
       </div>
     );
   } else {
-    return <button className="bg-danger rounded-2 text-white" title={expiryDate}>Expired <i className="fa fa-warning"></i></button>;
+    return <button className="bg-danger rounded-4 text-white border-0" >Expired <i className="fa fa-warning"></i></button>;
   }
 }
 
