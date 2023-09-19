@@ -33,37 +33,46 @@ function App() {
 
   useEffect(() => {
     let cookdata;
+    let isAuthenticated;
+    
     const cookieData = Cookies.get("myResponseData");
     if (cookieData) {
       const parsedData = JSON.parse(cookieData);
       cookdata = parsedData
       userData(parsedData)
+      isAuthenticated = cookdata?.operation === "successfull";
+      setData(isAuthenticated)
     } else {
-      console.log("Cookie data not found.");
+      console.log("myResponseData Cookie data not found.");
     }
 
-    let isAuthenticated = cookdata?.operation === "successfull";
-    setData(isAuthenticated)
+    // let isAuthenticated = cookdata?.operation === "successfull";
+    // setData(isAuthenticated)
 
   }, [])
 
 
   useEffect(() => {
     let cookdataEmp;
+    let isAuthenticated;
 
     const cookieData = Cookies.get("myResponseEmployee");
-
+    console.log("cookieData", cookieData)
     if (cookieData) {
       const parsedData = JSON.parse(cookieData);
       cookdataEmp = parsedData
       userDataEmp(parsedData)
+      
+      console.log(cookdataEmp?.operation, "stored data emp")
+      isAuthenticated = cookdataEmp?.operation === "successfull";
+      setDataEmp(isAuthenticated)
     } else {
-      console.log("Cookie data not found.");
+      console.log("myResponseEmployee Cookie data not found.");
     }
 
-    console.log(cookdataEmp?.operation, "stored data emp")
-    let isAuthenticated = cookdataEmp?.operation === "successfull";
-    setDataEmp(isAuthenticated)
+    // console.log(cookdataEmp?.operation, "stored data emp")
+    // let isAuthenticated = cookdataEmp?.operation === "successfull";
+    // setDataEmp(isAuthenticated)
 
   }, [])
 
