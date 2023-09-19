@@ -275,7 +275,8 @@ export default function Document(props) {
                         onClick={(e) => {
                             handleDelDoc(e, cellValues.id);
                         }}
-                        color="error"
+                        color="error
+                        "
                     >
                         Delete
                     </Button>
