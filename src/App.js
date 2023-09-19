@@ -5,13 +5,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./assests/css/sidebar.css";
 import "./assests/css/style.css";
 import "./assests/css/graph.css";
-import { MyContext } from "./context/Mycontext";
 import AdminCreate from "./Admin/AdminCreate";
 import AdminDashboard from "./Admin/AdminDashboard";
 import AdminLogin from "./Admin/AdminLogin";
 import EmployeeAttendance from "./employee/EmployeeAttendance";
 import EmployeeLogin from "./employee/EmployeeLogin";
-import Temp from "./Attendance/Temp";
 import Cookies from "js-cookie";
 import EmployeeHistory from "./employee/EmployeeHistory";
 import EmployeeDetail from "./employee/EmployeeDetail";
@@ -33,46 +31,37 @@ function App() {
 
   useEffect(() => {
     let cookdata;
-    let isAuthenticated;
-    
     const cookieData = Cookies.get("myResponseData");
     if (cookieData) {
       const parsedData = JSON.parse(cookieData);
       cookdata = parsedData
       userData(parsedData)
-      isAuthenticated = cookdata?.operation === "successfull";
-      setData(isAuthenticated)
     } else {
-      console.log("myResponseData Cookie data not found.");
+      console.log("Cookie data not found.");
     }
 
-    // let isAuthenticated = cookdata?.operation === "successfull";
-    // setData(isAuthenticated)
+    let isAuthenticated = cookdata?.operation === "successfull";
+    setData(isAuthenticated)
 
   }, [])
 
 
   useEffect(() => {
     let cookdataEmp;
-    let isAuthenticated;
 
     const cookieData = Cookies.get("myResponseEmployee");
-    console.log("cookieData", cookieData)
+
     if (cookieData) {
       const parsedData = JSON.parse(cookieData);
       cookdataEmp = parsedData
       userDataEmp(parsedData)
-      
-      console.log(cookdataEmp?.operation, "stored data emp")
-      isAuthenticated = cookdataEmp?.operation === "successfull";
-      setDataEmp(isAuthenticated)
     } else {
-      console.log("myResponseEmployee Cookie data not found.");
+      console.log("Cookie data not found.");
     }
 
-    // console.log(cookdataEmp?.operation, "stored data emp")
-    // let isAuthenticated = cookdataEmp?.operation === "successfull";
-    // setDataEmp(isAuthenticated)
+    console.log(cookdataEmp?.operation, "stored data emp")
+    let isAuthenticated = cookdataEmp?.operation === "successfull";
+    setDataEmp(isAuthenticated)
 
   }, [])
 
@@ -129,4 +118,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
