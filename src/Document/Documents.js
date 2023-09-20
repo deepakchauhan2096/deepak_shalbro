@@ -330,6 +330,7 @@ export default function Document(props) {
                         <DataGrid
                             rows={rows}
                             columns={columns}
+                            sx={{ border: "none" }}
                             initialState={{
                                 pagination: {
                                     paginationModel: {

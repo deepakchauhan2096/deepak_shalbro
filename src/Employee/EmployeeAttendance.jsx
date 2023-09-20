@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 import {
   GoogleMap,
   Autocomplete,
@@ -15,7 +16,7 @@ import SimpleBackdrop from "../components/Backdrop";
 import locationIcon from "../assests/images/location.png";
 import placeholder from "../assests/images/placeholder.png";
 import { styled } from "@mui/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const containerStyle = {
   width: "100%",
@@ -23,18 +24,32 @@ const containerStyle = {
 };
 
 const EmployeeAttendance = (props) => {
+  const navigate = useNavigate();
   // get data by param
 
-  const { id } = useParams();
-  const data = id.split("&");
-  const Lat = parseFloat(data[0]);
-  const Long = parseFloat(data[1]);
-  const Area = parseInt(data[2]);
-  const LocName = data[3];
-  const Name = data[4];
-  const ProjectName = data[5];
+  const {latt , lngi ,areas , loca , employees ,projects ,projectids } = useParams();
+  // const data = id.split("&");
+  // const Lat = parseFloat(data[0]);
+  // const Long = parseFloat(data[1]);
+  // const Area = parseInt(data[2]);
+  // const LocName = data[3];
+  // const Name = data[4];
+  // const ProjectName = data[5];
+  // const Project_Id = data[6];
 
-  console.log(Lat, "Lat");
+
+  // const data = id.split("&");
+  const Lat = parseFloat(latt);
+  const Long = parseFloat(lngi);
+  const Area = parseInt(areas);
+  const LocName = loca;
+  const Name = employees;
+  const ProjectName = projects;
+  const Project_Id = projectids;
+
+
+
+  console.table(latt , lngi ,areas , loca , employees ,projects ,projectids , "Lat");
 
   const center = {
     lat: Lat,
@@ -77,6 +92,13 @@ const EmployeeAttendance = (props) => {
 
   console.log(formattedDate, "for");
 
+
+  const logout = () => {
+    // Clear a cookie by specifying its name
+    Cookies.remove("myResponseData");
+    navigate("/employee/login");
+  };
+
   const handleSubmitIn = (event) => {
     event.preventDefault();
 
@@ -91,6 +113,7 @@ const EmployeeAttendance = (props) => {
         ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
         ATTENDANCE_DATE_ID: formattedDate,
         ATTENDANCE_IN: new Date(),
+        ATTENDANCE_PROJECT_ID: Project_Id
       };
 
       setShowBackdrop(true);
@@ -132,6 +155,7 @@ const EmployeeAttendance = (props) => {
         ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
         ATTENDANCE_DATE_ID: formattedDate,
         ATTENDANCE_OUT: new Date(),
+        ATTENDANCE_PROJECT_ID: Project_Id
       };
 
       setShowBackdrop(true);
@@ -240,7 +264,7 @@ const EmployeeAttendance = (props) => {
 
   useEffect(() => {
     getLocation();
-  }, [id]);
+  }, [latt , lngi ,areas , loca , employees ,projects ,projectids  ]);
 
   useEffect(() => {
     if (latitude && longitude && circleCenter[0] && circleCenter[1]) {
@@ -262,21 +286,17 @@ const EmployeeAttendance = (props) => {
           class="navbar navbar-expand-lg navbar-dark bg-dark"
           style={{ marginBottom: 0 }}
         >
-          <div className="container">
-            <a class="navbar-brand" href="#">
+          <div className="container justify-content-between">
+            <a class="text-white text-decoration-none navbar-brand" href="#">
               {Name} (Employee)
             </a>
-            {/* <button
-              class="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarNavAltMarkup"
-              aria-controls="navbarNavAltMarkup"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
+            <button
+              class="btn btn-outline-primary my-2 my-sm-0 btn-sm"
+              type="submit"
+              onClick={logout}
             >
-              <span class="navbar-toggler-icon"></span>
-            </button> */}
+              Logout
+            </button>
           </div>
         </nav>
 
@@ -310,6 +330,12 @@ const EmployeeAttendance = (props) => {
                       <b>Employee ID :</b>
                     </td>
                     <td>{employeeData?.EMPLOYEE_ID}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>Project ID :</b>
+                    </td>
+                    <td>{projectids}</td>
                   </tr>
                   <tr>
                     <td>

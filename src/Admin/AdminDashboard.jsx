@@ -12,6 +12,15 @@ const AdminDashboard = (props) => {
   const [Rows, setRows] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [displayType, setDisplayType] = useState(true);
+
+  const displayTab = () => {
+    setDisplayType(false);
+  };
+
+  const displayTable = () => {
+    setDisplayType(true);
+  };
 
   const navigate = useNavigate();
 
@@ -143,11 +152,37 @@ const AdminDashboard = (props) => {
             <div className="row">
               <div className="col-xl-12 overflow-auto pt-2">
                 <div className="justify-between">
-                  <CompanyCreate
-                    ID={adminData?.ADMIN_ID}
-                    Username={adminData?.ADMIN_USERNAME}
-                    Update={getCompanyData}
-                  />
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between",padding:"10px 5px" }}
+                  >
+                    <CompanyCreate
+                      ID={adminData?.ADMIN_ID}
+                      Username={adminData?.ADMIN_USERNAME}
+                      Update={getCompanyData}
+                    />
+                    
+                    <div
+                      class="btn-group btn-sm display"
+                      role="group"
+                      aria-label="Basic example"
+                    >
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        onClick={displayTable}
+                      >
+                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        onClick={displayTab}
+                      >
+                        <i class="fa fa-th-large" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+
                   <div style={{ gap: 5, display: "flex" }}>
                     <button
                       onClick={() => handleClick(Math.max(currentPage - 1, 1))}
@@ -172,51 +207,106 @@ const AdminDashboard = (props) => {
             </div>
             <div className="row">
               <div className="col-xl-12 overflow-auto pt-2">
-                <table class="table table-striped table-sm pt-4 table-fixed display">
-                  <thead>
-                    <tr>
-                      <th>S.no.</th>
-                      <th>Name</th>
-                      <th>ID</th>
-                      <th>Username</th>
-                      <th>Phone</th>
-                      <th>Email</th>
-                      <th>Address</th>
-                      <th>State</th>
-                      <th>Edit</th>
-                      <th>Detail</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {displayData.map((post, index) => (
-                      <tr key={post.COMPANY_ID}>
-                        <td>{index + 1}</td>
-                        <td>{post.COMPANY_NAME}</td>
-                        <td>{post.COMPANY_ID}</td>
-                        <td>{post.COMPANY_USERNAME}</td>
-                        <td>{post.COMPANY_PHONE}</td>
-                        <td>{post.COMPANY_EMAIL}</td>
-                        <td>{post.COMPANY_ADD2}</td>
-                        <td>{post.COMPANY_STATE}</td>
-                        <td>
-                          <CompanyEdit
-                            companyEDit={post}
-                            reFetchfun={getCompanyData}
-                          />
-                        </td>
-                        <td>
-                          <Link
-                            to={`/company/${post.COMPANY_ID}&${post.COMPANY_USERNAME}&${post.COMPANY_PARENT_ID}&${post.COMPANY_PARENT_USERNAME}`}
-                            className="text-dark"
-                          >
-                            Visit
-                          </Link>
-                        </td>
+                {displayType ? (
+                  <table class="table table-striped table-sm pt-4 table-fixed display">
+                    <thead>
+                      <tr>
+                        {/* <th>S.no.</th> */}
+                        <th>Name</th>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>State</th>
+                        <th>Edit</th>
+                        <th>Detail</th>
                       </tr>
+                    </thead>
+
+                    <tbody>
+                      {displayData.map((post, index) => (
+                        <tr key={post.COMPANY_ID}>
+                          {/* <td>{index + 1}</td> */}
+                          <td>{post.COMPANY_NAME}</td>
+                          <td>{post.COMPANY_ID}</td>
+                          <td>{post.COMPANY_USERNAME}</td>
+                          <td>{post.COMPANY_PHONE}</td>
+                          <td>{post.COMPANY_EMAIL}</td>
+                          <td>{post.COMPANY_ADD2}</td>
+                          <td>{post.COMPANY_STATE}</td>
+                          <td>
+                            <CompanyEdit
+                              companyEDit={post}
+                              reFetchfun={getCompanyData}
+                            />
+                          </td>
+                          <td>
+                            <Link
+                              to={`/company/${post.COMPANY_ID}&${post.COMPANY_USERNAME}&${post.COMPANY_PARENT_ID}&${post.COMPANY_PARENT_USERNAME}`}
+                              className="text-dark btn btn-info btn-sm"
+                            >
+                              Visit
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="row">
+                    {displayData.map((post, index) => (
+                      // <div className="row">
+                      <div className="col-xl-2 col-sm-6">
+                        <div
+                          class="card my-1"
+                          style={{
+                            width: "100%",
+                            height: "150px"
+                          }}
+                          key={index}
+                        >
+                          <div
+
+                            class="card-body postion-relative"
+                            style={{
+                              textOverflow: "ellipsis",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <h6 class="card-title">
+                              {post.COMPANY_NAME} - {post.COMPANY_ID}
+                            </h6>
+
+                            <div className="w-100">{post.COMPANY_EMAIL} </div>
+                            <div
+                              className="position-absolute d-flex"
+                              style={{
+                                right: "10px",
+                                bottom: "10px",
+                                overflow: "hidden",
+                                gap:2
+                              }}
+                            >
+                              <CompanyEdit
+                                companyEDit={post}
+                                reFetchfun={getCompanyData}
+                              />
+                              {" "}
+                              <Link
+                                to={`/company/${post.COMPANY_ID}&${post.COMPANY_USERNAME}&${post.COMPANY_PARENT_ID}&${post.COMPANY_PARENT_USERNAME}`}
+                                className="text-primary btn btn-info btn-sm"
+                              >
+                                Visit
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      // </div>
                     ))}
-                  </tbody>
-                </table>
+                  </div>
+                )}
                 <div className="mobile-display">
                   {displayData.map((post, index) => (
                     <div
@@ -238,6 +328,7 @@ const AdminDashboard = (props) => {
                               companyEDit={post}
                               reFetchfun={getCompanyData}
                             />
+                            {" "}
                             <Link
                               to={`/company/${post.COMPANY_ID}&${post.COMPANY_USERNAME}&${post.COMPANY_PARENT_ID}&${post.COMPANY_PARENT_USERNAME}`}
                               className="text-primary"
