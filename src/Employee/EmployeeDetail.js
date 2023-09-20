@@ -2,14 +2,8 @@ import React from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  GoogleMap,
-  Autocomplete,
-  LoadScript,
-  MarkerF,
-  CircleF,
-} from "@react-google-maps/api";
+import Cookies from "js-cookie";
+import { Link , useNavigate} from "react-router-dom";
 
 const containerStyle = {
   width: "100%",
@@ -24,6 +18,7 @@ const center = {
 window.google = window.google || {};
 
 const EmployeeDetail = ({ state }) => {
+  const navigate = useNavigate();
   const [circleCenter, setCircleCenter] = useState([0, 0]);
   const [circleRadius, setCircleRadius] = useState(100);
   const [markerPosition, setMarkerPosition] = useState(center);
@@ -99,6 +94,13 @@ const EmployeeDetail = ({ state }) => {
     console.log(myproject, "myproject");
   };
 
+  
+  const logout = () => {
+    // Clear a cookie by specifying its name
+    Cookies.remove("myResponseData");
+    navigate("/employee/login");
+  };
+
   return (
     <>
       <div className="container-fluid g-0">
@@ -111,15 +113,11 @@ const EmployeeDetail = ({ state }) => {
               {state.EMPLOYEE_NAME} (Employee)
             </a>
             <button
-              class="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarNavAltMarkup"
-              aria-controls="navbarNavAltMarkup"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
+              class="btn btn-outline-primary my-2 my-sm-0 btn-sm"
+              type="submit"
+              onClick={logout}
             >
-              <span class="navbar-toggler-icon"></span>
+              Logout
             </button>
           </div>
         </nav>
@@ -163,9 +161,11 @@ const EmployeeDetail = ({ state }) => {
                       <td>{item?.PROJECT_START_DATE}</td>
                       <td>{item?.PROJECT_END_DATE}</td>
                       <td>
-                        <Link
+                        <Link to={`/employee/attendance/${item?.LATITUDE}/${item?.LONGITUDE}/${item?.AREA}/${item?.LOCATION_NAME}/${state.EMPLOYEE_NAME}/${item?.PROJECT_NAME}/${item?.PROJECT_ID}`}
                           className="btn btn-sm btn-primary"
-                          to={`/employee/attendance/${item?.LATITUDE}&${item?.LONGITUDE}&${item?.AREA}&${item?.LOCATION_NAME}&${state.EMPLOYEE_NAME}&${item?.PROJECT_NAME}`}
+                          // to={`/employee/attendance/${item?.LATITUDE}&${item?.LONGITUDE}&${item?.AREA}&${item?.LOCATION_NAME}&${state.EMPLOYEE_NAME}&${item?.PROJECT_NAME}&${item?.PROJECT_ID}`}
+                         
+
                         >
                           Visit
                         </Link>

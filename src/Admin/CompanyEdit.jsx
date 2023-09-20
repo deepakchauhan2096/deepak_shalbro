@@ -72,13 +72,10 @@ export default function CompanyEdit(props) {
   });
 
   // ... rest of your code
-  
-const list = companytype;
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
-
 
   const handleCreate = (e) => {
     const { name, value } = e.target;
@@ -97,20 +94,14 @@ const list = companytype;
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-
-  // Finding the states and cities of the individaul country 
+  // Finding the states and cities of the individaul country
   const availableState = country?.find(
     (c) => c.name === edit_company.COMPANY_COUNTRY
   );
 
-
-  const availableCities = availableState?.states?.find(
-
-    (s) => {
-
-      return s.name === edit_company.COMPANY_STATE
-    }
-  );
+  const availableCities = availableState?.states?.find((s) => {
+    return s.name === edit_company.COMPANY_STATE;
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -161,23 +152,29 @@ const list = companytype;
     }
 
     axios
-    .put("http://54.243.89.186:5001/update_company", {
-      COMPANY_ID: companyData.COMPANY_ID,
-      COMPANY_USERNAME: companyData.COMPANY_USERNAME,
-      COMPANY_ADMIN_USERNAME: companyData.COMPANY_PARENT_USERNAME,
-      COMPANY_DETAILS_FOR_UPDATE: { ...edit_company }
-    }, {
-      headers,
-    })
+      .put(
+        "http://54.243.89.186:5001/update_company",
+        {
+          COMPANY_ID: companyData.COMPANY_ID,
+          COMPANY_USERNAME: companyData.COMPANY_USERNAME,
+          COMPANY_ADMIN_USERNAME: companyData.COMPANY_PARENT_USERNAME,
+          COMPANY_DETAILS_FOR_UPDATE: { ...edit_company },
+        },
+        {
+          headers,
+        }
+      )
       .then((response) => {
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
         } else if (response.data.operation === "successfull") {
-          // props.reFetchfun()
-          setOpen(false);
+          // setLoader(false)
+          // setLoader(true)
+
+          props.reFetchfun();
           toast.success("Fields are updated successfully!", {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 1000
+            autoClose: 1000,
           });
           props.companyEDit.update(true);
         }
@@ -196,11 +193,13 @@ const list = companytype;
   return (
     <>
       <Tooltip title="Edit Details">
-        <EditNoteOutlinedIcon
-          onClick={handleOpen}
-          color="success"
-          style={{ cursor: "pointer" }}
-        />
+        <button className="btn btn-success btn-sm">
+          <EditNoteOutlinedIcon
+            onClick={handleOpen}
+            color="success"
+            style={{ cursor: "pointer",fontSize:"18px",color:"#fff" }}
+          />
+        </button>
       </Tooltip>
       <Modal
         open={open}
@@ -213,7 +212,7 @@ const list = companytype;
           style={{ height: "100vh", position: "relative" }}
           maxWidth="xl"
         >
-          <Box  className="modal-content">
+          <Box className="modal-content">
             <form className="p-4 overflow-auto">
               <h5>Edit company</h5>
               <div className="row">
@@ -248,7 +247,6 @@ const list = companytype;
                   />
                 </div>
               </div>
-
               <div className="row">
                   {/* Phone Number */}
                 <div className="form-group py-2 col-xl-6">
@@ -296,7 +294,7 @@ const list = companytype;
                   >
                     <option selected>Choose...</option>
 
-                    {list.map((e, key) => {
+                    {companytype.map((e, key) => {
                       return (
                         <option value={e} key={key}>
                           {e}
@@ -352,10 +350,11 @@ const list = companytype;
 
                     {country.map((e, key) => {
                       return (
-                        <option value={e.name} key={key} selected>{e.name}</option>
-                      )
+                        <option value={e.name} key={key} selected>
+                          {e.name}
+                        </option>
+                      );
                     })}
-
                   </select>
                 </div>
 
@@ -367,13 +366,14 @@ const list = companytype;
                     value={edit_company.COMPANY_STATE}
                     onChange={handleCreate}
                   >
-                    <option selected >Choose... States</option>
+                    <option selected>Choose... States</option>
                     {availableState?.states?.map((state, key) => {
                       return (
-                        <option value={state.name} key={key} >{state.name}</option>
-                      )
+                        <option value={state.name} key={key}>
+                          {state.name}
+                        </option>
+                      );
                     })}
-
                   </select>
                 </div>
 
@@ -389,28 +389,26 @@ const list = companytype;
                     <option selected>Choose City...</option>
                     {availableCities?.cities?.map((e, key) => {
                       return (
-                        <option value={e.name} key={key}>{e.name}</option>
-                      )
+                        <option value={e.name} key={key}>
+                          {e.name}
+                        </option>
+                      );
                     })}
-
                   </select>
                 </div>
-
-
-
               </div>
               <div className="form-group col-xl-12">
                 <label>Address</label>
                 <textarea
                   type="text"
-                  className="form-control form-control-2 rounded-0"
+                  className="form-control rounded-0"
                   placeholder="Apartment, studio, or floor"
                   name="COMPANY_ADD2"
                   value={edit_company.COMPANY_ADD2}
                   onChange={handleCreate}
                   required
-                // rows="4"
-                // cols="50"
+                  // rows="4"
+                  // cols="50"
                 />
               </div>
               <Button

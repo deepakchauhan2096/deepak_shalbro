@@ -1,8 +1,9 @@
 
 
-::placeholder, label, option,select{
-  font-size: 12px;
+::placeholder, label, option,select, textarea{
+  font-size: 12px !important;
 }
+
 
 *{
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
