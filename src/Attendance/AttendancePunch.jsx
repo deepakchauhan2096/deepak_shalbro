@@ -10,12 +10,15 @@ const AttendancePunch = (props) => {
   };
 
   console.log(props, "props-data");
+
+  
   return (
     <>
       {props.attendance.length == 0 ? "No record available for this week" : <table className="table table-hover table-sm table-fixed table-responsive">
       <thead>
             <tr className="table-light">
               <th scope="col">Employee Id</th>
+              <th scope="col">Project Id</th>
               <th scope="col">Employee</th>
               <th scope="col">Date</th>
               <th scope="col">In</th>
@@ -28,12 +31,13 @@ const AttendancePunch = (props) => {
           {props.attendance.map((post) => (
             <tr className="table table-striped">
               <td>{props.data._doc.EMPLOYEE_ID}</td>
+              <td>{post.ATTENDANCE_PROJECT_ID}</td>
               <td>{props.data._doc.EMPLOYEE_NAME}</td>
               <td>{post.ATTENDANCE_DATE_ID}</td>
               <td>{moment(post.ATTENDANCE_IN).format("LT")}</td>
               <td>{moment(post.ATTENDANCE_OUT).format("LT")}</td>
               <td>
-                {TotalWorkHours(post.ATTENDANCE_IN, post.ATTENDANCE_OUT)} hours
+                {TotalWorkHours(post.ATTENDANCE_IN, post.ATTENDANCE_OUT)} h
               </td>
               {/* <td>{post.LOCATION}</td> */}
             </tr>

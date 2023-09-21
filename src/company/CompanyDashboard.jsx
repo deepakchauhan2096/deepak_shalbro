@@ -91,6 +91,8 @@ export default function CompanyDashboard() {
       />
 
       <Navbar toggle={() => setOpen((e) => !e)} />
+
+      
     </>
   );
 }

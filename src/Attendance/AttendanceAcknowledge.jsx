@@ -629,7 +629,7 @@ const AttendanceReport = (props) => {
                     </div>
                     <div className="container">
                       <div className="row">
-                        <div className="col-xl-12 col-lg-6 overflow-auto">
+                        <div className="col-xl-12 col-lg-12 overflow-auto">
                           <table className="table table-hover table-sm table-fixed table-responsive">
                             <thead>
                               <tr className="table-light">
@@ -642,7 +642,7 @@ const AttendanceReport = (props) => {
                               <tr className="table-light">
                                 <th scope="col">Employee Id</th>
                                 <th scope="col">Employee</th>
-                                <th scope="col">Total</th>
+                                <th scope="col">Total()</th>
                                 <th scope="col">Regular</th>
                                 <th scope="col">Overtime</th>
                                 <th scope="col">Acknowledge</th>
@@ -664,7 +664,7 @@ const AttendanceReport = (props) => {
                                           backgroundColor: "#12AD2B",
                                         }}
                                       >
-                                        {post.TOTAL_HOURS} hours
+                                        {post.TOTAL_HOURS} h
                                       </span>
                                     </td>
                                     <td>
@@ -675,7 +675,7 @@ const AttendanceReport = (props) => {
                                           backgroundColor: "#12AD2B",
                                         }}
                                       >
-                                        {post.TOTAL_HOURS} hours
+                                        {post.TOTAL_HOURS} h
                                       </span>
                                     </td>
                                     <td>{post.OVERTIME_HOURS}</td>
