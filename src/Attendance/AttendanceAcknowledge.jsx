@@ -526,65 +526,66 @@ const AttendanceReport = (props) => {
                                 </div>
                               </div>
                               {filterMethod === "By Pay Period" && (
-                                <div className="row py-1">
-                                  <div className="col">
-                                    <label>Period</label>
-                                  </div>
-                                  <div className="col">
-                                    <div className="row">
-                                      <div className="col">
-                                        <input
-                                          type="date"
-                                          className="form-control form-control-2 border"
-                                          value={
-                                            result[result.length - 1] !=
-                                            "NaN-aN-aN"
-                                              ? result[result.length - 1]
-                                              : currentWeekDatesFormatted[0]
-                                          }
-                                          onChange={(e) =>
-                                            setstartDateString(e.target.value)
-                                          }
-                                        />
-                                      </div>
-                                      <div className="col">
-                                        <input
-                                          type="date"
-                                          className="form-control form-control-2 border"
-                                          value={
-                                            result[result.length - 1] !=
-                                            "NaN-aN-aN"
-                                              ? result[0]
-                                              : currentWeekDatesFormatted[
-                                                  currentWeekDatesFormatted.length -
-                                                    1
-                                                ]
-                                          }
-                                          onChange={(e) =>
-                                            setendDateString(e.target.value)
-                                          }
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                                 <div className="row py-1">
+                                 <div className="col">
+                                   <label>Date filter by</label>
+                                 </div>
+                                 <div className="col">
+                                   <select
+                                     className="form-control form-control-2 border"
+                                     value={selectedWeek}
+                                     onChange={handleWeekSelect}
+                                   >
+                                     <option value="">Select a week</option>
+                                     {generateWeekOptions()}
+                                   </select>
+                                 </div>
+                               </div>
+                               
                               )}
                               {filterMethod === "Date wise" && (
                                 <div className="row py-1">
-                                  <div className="col">
-                                    <label>Date filter by</label>
-                                  </div>
-                                  <div className="col">
-                                    <select
-                                      className="form-control form-control-2 border"
-                                      value={selectedWeek}
-                                      onChange={handleWeekSelect}
-                                    >
-                                      <option value="">Select a week</option>
-                                      {generateWeekOptions()}
-                                    </select>
+                                <div className="col">
+                                  <label>Period</label>
+                                </div>
+                                <div className="col">
+                                  <div className="row">
+                                    <div className="col">
+                                      <input
+                                        type="date"
+                                        className="form-control form-control-2 border"
+                                        value={
+                                          result[result.length - 1] !=
+                                          "NaN-aN-aN"
+                                            ? result[result.length - 1]
+                                            : currentWeekDatesFormatted[0]
+                                        }
+                                        onChange={(e) =>
+                                          setstartDateString(e.target.value)
+                                        }
+                                      />
+                                    </div>
+                                    <div className="col">
+                                      <input
+                                        type="date"
+                                        className="form-control form-control-2 border"
+                                        value={
+                                          result[result.length - 1] !=
+                                          "NaN-aN-aN"
+                                            ? result[0]
+                                            : currentWeekDatesFormatted[
+                                                currentWeekDatesFormatted.length -
+                                                  1
+                                              ]
+                                        }
+                                        onChange={(e) =>
+                                          setendDateString(e.target.value)
+                                        }
+                                      />
+                                    </div>
                                   </div>
                                 </div>
+                              </div>
                               )}
                             </div>
                           </div>
@@ -629,7 +630,7 @@ const AttendanceReport = (props) => {
                     </div>
                     <div className="container">
                       <div className="row">
-                        <div className="col-xl-12 col-lg-12 overflow-auto">
+                        <div className="col-xl-12 col-lg-6 overflow-auto">
                           <table className="table table-hover table-sm table-fixed table-responsive">
                             <thead>
                               <tr className="table-light">
@@ -642,7 +643,7 @@ const AttendanceReport = (props) => {
                               <tr className="table-light">
                                 <th scope="col">Employee Id</th>
                                 <th scope="col">Employee</th>
-                                <th scope="col">Total()</th>
+                                <th scope="col">Total</th>
                                 <th scope="col">Regular</th>
                                 <th scope="col">Overtime</th>
                                 <th scope="col">Acknowledge</th>
@@ -664,7 +665,7 @@ const AttendanceReport = (props) => {
                                           backgroundColor: "#12AD2B",
                                         }}
                                       >
-                                        {post.TOTAL_HOURS} h
+                                        {post.TOTAL_HOURS} hours
                                       </span>
                                     </td>
                                     <td>
@@ -675,7 +676,7 @@ const AttendanceReport = (props) => {
                                           backgroundColor: "#12AD2B",
                                         }}
                                       >
-                                        {post.TOTAL_HOURS} h
+                                        {post.TOTAL_HOURS} hours
                                       </span>
                                     </td>
                                     <td>{post.OVERTIME_HOURS}</td>
