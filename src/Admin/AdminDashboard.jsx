@@ -210,7 +210,7 @@ const AdminDashboard = (props) => {
                 {displayType ? (
                   <table class="table table-striped table-sm pt-4 table-fixed display">
                     <thead>
-                      <tr>
+                      <tr style={{width:"100%"}}>
                         {/* <th>S.no.</th> */}
                         <th>Name</th>
                         <th>ID</th>
@@ -323,7 +323,7 @@ const AdminDashboard = (props) => {
                         </h6>
                         <div class="d-flex space-between">
                           <div className="w-100">{post.COMPANY_EMAIL} </div>
-                          <div className="d-flex">
+                          <div className="d-flex" style={{gap:2}}>
                             <CompanyEdit
                               companyEDit={post}
                               reFetchfun={getCompanyData}
@@ -331,7 +331,7 @@ const AdminDashboard = (props) => {
                             {" "}
                             <Link
                               to={`/company/${post.COMPANY_ID}&${post.COMPANY_USERNAME}&${post.COMPANY_PARENT_ID}&${post.COMPANY_PARENT_USERNAME}`}
-                              className="text-primary"
+                              className="text-primary btn btn-info"
                             >
                               Visit
                             </Link>

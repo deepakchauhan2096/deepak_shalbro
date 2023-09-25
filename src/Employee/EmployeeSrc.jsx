@@ -401,6 +401,8 @@ const EmployeeSrc = (props) => {
 
   console.log(filterData.row,"filterData.row")
 
+  // const filterProjects =
+
   return (
     <>
       <Sidebar
@@ -538,12 +540,11 @@ const EmployeeSrc = (props) => {
                         <p className="card-text">
                           Hourly Wages: {filterData.row?.EMPLOYEE_HOURLY_WAGE}
                         </p>
-                        {/* Add more work-related details here */}
                       </div>
                     </div>
                   </div>
 
-                  <div className="col-12 mt-2">
+                  {/* <div className="col-12 mt-2">
                     <div className="card">
                       <div className="card-body">
                         <h5 className="card-title">Salary Information</h5>
@@ -551,10 +552,9 @@ const EmployeeSrc = (props) => {
                         <p className="card-text">
                           Payment Type: Direct Deposit
                         </p>
-                        {/* Add more salary-related details here */}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="col-xl-6">
