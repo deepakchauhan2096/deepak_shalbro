@@ -222,8 +222,17 @@ const AttendanceReport = (props) => {
   const [employees, getReport] = useState();
   const [foundUsers, setFoundUsers] = useState([]);
   const [filterMethod, setFilterMethod] = useState("Date wise");
-  const [startDateString, setstartDateString] = useState(MyDateStringAfter);
-  const [endDateString, setendDateString] = useState(MyDateStringCurrent);
+  const [startDateString, setstartDateString] = useState( result[result.length - 1] !=
+    "NaN-aN-aN"
+      ? result[result.length - 1]
+      : currentWeekDatesFormatted[0]);
+  const [endDateString, setendDateString] = useState(result[result.length - 1] !=
+    "NaN-aN-aN"
+      ? result[0]
+      : currentWeekDatesFormatted[
+          currentWeekDatesFormatted.length -
+            1
+        ]);
   const [keyword, setKeyword] = useState(MyDateStringCurrent);
   const [name, setName] = useState("All");
   const [showDetail, setShowDetail] = useState(true);
@@ -555,10 +564,7 @@ const AttendanceReport = (props) => {
                                         type="date"
                                         className="form-control form-control-2 border"
                                         value={
-                                          result[result.length - 1] !=
-                                          "NaN-aN-aN"
-                                            ? result[result.length - 1]
-                                            : currentWeekDatesFormatted[0]
+                                         startDateString
                                         }
                                         onChange={(e) =>
                                           setstartDateString(e.target.value)
@@ -570,13 +576,7 @@ const AttendanceReport = (props) => {
                                         type="date"
                                         className="form-control form-control-2 border"
                                         value={
-                                          result[result.length - 1] !=
-                                          "NaN-aN-aN"
-                                            ? result[0]
-                                            : currentWeekDatesFormatted[
-                                                currentWeekDatesFormatted.length -
-                                                  1
-                                              ]
+                                          endDateString
                                         }
                                         onChange={(e) =>
                                           setendDateString(e.target.value)
