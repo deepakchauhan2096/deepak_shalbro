@@ -52,6 +52,7 @@ const AdminDashboard = (props) => {
       setIsLoading(false);
     } catch (error) {
       console.log("Error fetching data:", error);
+      
     }
   };
 

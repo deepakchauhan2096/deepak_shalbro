@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
+/* eslint-disable */
 import "./assests/css/sidebar.css";
 import "./assests/css/style.css";
 import "./assests/css/graph.css";
@@ -9,7 +10,7 @@ import AdminCreate from "./Admin/AdminCreate";
 import AdminDashboard from "./Admin/AdminDashboard";
 import AdminLogin from "./Admin/AdminLogin";
 import EmployeeAttendance from "./employee/EmployeeAttendance";
-import EmployeeLogin from "./employee/EmployeeLogin";
+import EmployeeLogin from "./employee/EmployeeLogin"
 import Cookies from "js-cookie";
 import EmployeeHistory from "./employee/EmployeeHistory";
 import EmployeeDetail from "./employee/EmployeeDetail";
