@@ -222,18 +222,15 @@ const AttendanceReport = (props) => {
   const [employees, getReport] = useState();
   const [foundUsers, setFoundUsers] = useState([]);
   const [filterMethod, setFilterMethod] = useState("Date wise");
-  const [startDateString, setstartDateString] = useState( result[result.length - 1] !=
-    "NaN-aN-aN"
+  const [startDateString, setstartDateString] = useState(
+    result[result.length - 1] != "NaN-aN-aN"
       ? result[result.length - 1]
-      : currentWeekDatesFormatted[0]);
-  const [endDateString, setendDateString] = useState(result[result.length - 1] !=
-    "NaN-aN-aN"
-      ? result[0]
-      : currentWeekDatesFormatted[
-          currentWeekDatesFormatted.length -
-            1
-        ]);
-  const [keyword, setKeyword] = useState(MyDateStringCurrent);
+      : currentWeekDatesFormatted[0]
+  );
+  const [endDateString, setendDateString] = useState(result[result.length - 1] != "NaN-aN-aN"
+  ? result[0]
+  : currentWeekDatesFormatted[currentWeekDatesFormatted.length - 1]);
+  const [keyword, setKeyword] = useState();
   const [name, setName] = useState("All");
   const [showDetail, setShowDetail] = useState(true);
   const [show, setshow] = useState(true);
@@ -388,10 +385,9 @@ const AttendanceReport = (props) => {
     console.log(employee, "additional");
     let filterByDate;
     filterByDate = employee.AttendanceData.filter((item) => {
-      return (filterMethod === "By Pay Period"
-        ? dateArray
-        : arrayDate
-      ).includes(item.ATTENDANCE_DATE_ID);
+      return (filterMethod === "Date Wise" ? dateArray : arrayDate).includes(
+        item.ATTENDANCE_DATE_ID
+      );
     });
 
     console.log(filterByDate, arrayDate, "filter");
@@ -535,57 +531,73 @@ const AttendanceReport = (props) => {
                                 </div>
                               </div>
                               {filterMethod === "By Pay Period" && (
-                                 <div className="row py-1">
-                                 <div className="col">
-                                   <label>Date filter by</label>
-                                 </div>
-                                 <div className="col">
-                                   <select
-                                     className="form-control form-control-2 border"
-                                     value={selectedWeek}
-                                     onChange={handleWeekSelect}
-                                   >
-                                     <option value="">Select a week</option>
-                                     {generateWeekOptions()}
-                                   </select>
-                                 </div>
-                               </div>
-                               
+                                <div className="row py-1">
+                                  <div className="col">
+                                    <label>Date filter by</label>
+                                  </div>
+                                  <div className="col">
+                                    <select
+                                      className="form-control form-control-2 border"
+                                      value={selectedWeek}
+                                      onChange={handleWeekSelect}
+                                    >
+                                      <option value="">Select a week</option>
+                                      {generateWeekOptions()}
+                                    </select>
+                                  </div>
+                                </div>
                               )}
                               {filterMethod === "Date wise" && (
                                 <div className="row py-1">
-                                <div className="col">
-                                  <label>Period</label>
-                                </div>
-                                <div className="col">
-                                  <div className="row">
-                                    <div className="col">
-                                      <input
-                                        type="date"
-                                        className="form-control form-control-2 border"
-                                        value={
-                                         startDateString
-                                        }
-                                        onChange={(e) =>
-                                          setstartDateString(e.target.value)
-                                        }
-                                      />
-                                    </div>
-                                    <div className="col">
-                                      <input
-                                        type="date"
-                                        className="form-control form-control-2 border"
-                                        value={
-                                          endDateString
-                                        }
-                                        onChange={(e) =>
-                                          setendDateString(e.target.value)
-                                        }
-                                      />
+                                  <div className="col">
+                                    <label>Period</label>
+                                  </div>
+                                  <div className="col">
+                                    <div className="row">
+                                      <div className="col">
+                                        <form>
+                                          <input
+                                            type="date"
+                                            className="form-control form-control-2 border"
+                                            // value={
+                                            //   result[result.length - 1] !=
+                                            //   "NaN-aN-aN"
+                                            //     ? result[result.length - 1]
+                                            //     : currentWeekDatesFormatted[0]
+                                            // }
+
+                                            value={startDateString}
+                                            onChange={(e) =>
+                                              setstartDateString(e.target.value)
+                                            }
+                                          />
+                                        </form>
+                                      </div>
+                                      <div className="col">
+                                        <form>
+                                          <input
+                                            type="date"
+                                            className="form-control form-control-2 border"
+                                            // value={
+                                            //   result[result.length - 1] !=
+                                            //   "NaN-aN-aN"
+                                            //     ? result[0]
+                                            //     : currentWeekDatesFormatted[
+                                            //         currentWeekDatesFormatted.length -
+                                            //           1
+                                            //       ]
+                                            // }
+
+                                            value={endDateString}
+                                            onChange={(e) =>
+                                              setendDateString(e.target.value)
+                                            }
+                                          />
+                                        </form>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
                               )}
                             </div>
                           </div>

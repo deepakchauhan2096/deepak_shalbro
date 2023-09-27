@@ -26,6 +26,7 @@ import {
 import { ViewCompact } from "@mui/icons-material";
 import Navbar from "../components/Navbar";
 import ExpiryReminder from "../components/ExpiryReminder";
+import Alert from "../components/Alert";
 
 export default function Document(props) {
 
@@ -161,6 +162,8 @@ export default function Document(props) {
 
     // Function to Delete the uploaded documents 
     const handleDelDoc = (e, documentId) => {
+       
+        
         setBackdrop(true);
 
         let data = JSON.stringify({
@@ -252,16 +255,17 @@ export default function Document(props) {
             width: 100,
             renderCell: (cellValues) => {
                 return (
-                    <Button
-                        variant="contained"
-                        className="view-btn "
-                        style={{ padding: "2px 2px" }}
-                        onClick={(e) => {
-                            handleDelDoc(e, cellValues.id);
-                        }}
-                    >
-                        Delete
-                    </Button>
+                    <Alert />
+                    // <Button
+                    //     variant="contained"
+                    //     className="view-btn "
+                    //     style={{ padding: "2px 2px" }}
+                    //     onClick={(e) => {
+                    //         handleDelDoc(e, cellValues.id);
+                    //     }}
+                    // >
+                    //     Delete
+                    // </Button>
                 );
             },
         },

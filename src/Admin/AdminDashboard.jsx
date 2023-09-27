@@ -9,10 +9,22 @@ const itemsPerPage = 8;
 const AdminDashboard = (props) => {
   const adminData = props.state.result;
   const [tableRows, setTableRows] = useState(adminData);
-  const [Rows, setRows] = useState("");
+  const [RowsData, setRows] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [displayType, setDisplayType] = useState(true);
+
+  function reverseArray(arr) {
+    let reversed = [];
+    for (let i = arr.length - 1; i >= 0; i--) {
+      reversed.push(arr[i]);
+    }
+    return reversed;
+  }
+  let Rows = reverseArray(RowsData);
+
+  
+  
 
   const displayTab = () => {
     setDisplayType(false);
@@ -65,7 +77,7 @@ const AdminDashboard = (props) => {
     currentPage * itemsPerPage
   );
 
-  const maxPage = Math.ceil(displayData.length / itemsPerPage);
+  const maxPage = Math.ceil(Rows.length / itemsPerPage);
 
   const handleClick = (page) => {
     setCurrentPage(page);
@@ -209,7 +221,7 @@ const AdminDashboard = (props) => {
               <div className="col-xl-12 overflow-auto pt-2">
                 {displayType ? (
                   <table class="table table-striped table-sm pt-4 table-fixed display">
-                    <thead>
+                    {displayData.length > 0 ? <thead>
                       <tr style={{width:"100%"}}>
                         {/* <th>S.no.</th> */}
                         <th>Name</th>
@@ -222,7 +234,7 @@ const AdminDashboard = (props) => {
                         <th>Edit</th>
                         <th>Detail</th>
                       </tr>
-                    </thead>
+                    </thead> :"loading..."}
 
                     <tbody>
                       {displayData.map((post, index) => (
