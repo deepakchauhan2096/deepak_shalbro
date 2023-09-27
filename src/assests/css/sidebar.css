@@ -41,7 +41,7 @@
   box-shadow: 24;
   padding: 25px;
   border-radius: 10px;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 
 @media only screen and (max-width: 993.333px) {
@@ -81,8 +81,11 @@
     background-color: #fff;
     box-shadow: 24;
     padding: 25px;
-    border-radius: 0;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    border-radius: 10px;
   }
+
+  /* td{
+    white-space: nowrap;
+  } */
+  
 }

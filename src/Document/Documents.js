@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import { ViewCompact } from "@mui/icons-material";
 import Navbar from "../components/Navbar";
+import ExpiryReminder from "../components/ExpiryReminder";
 
 export default function Document(props) {
 
@@ -233,27 +234,14 @@ export default function Document(props) {
             sortable: false,
             width: 160,
             editable: false,
+            renderCell:(cellValues) =>{
+                return (
+                    <ExpiryReminder data={cellValues.value} /> 
+                )
+            }
 
         },
-        {
-            field: "view",
-            headerName: "Detail",
-            width: 100,
-            renderCell: (cellValues) => {
-                return (
-                    <Button
-                        variant="contained"
-                        className="view-btn "
-                        style={{ padding: "2px 2px" }}
-                        onClick={(e) => {
-                            handleDelDoc(e, cellValues.id);
-                        }}
-                    >
-                        Delete
-                    </Button>
-                );
-            },
-        },
+       
         {
             field: "download",
             headerName: "Download",
@@ -270,6 +258,27 @@ export default function Document(props) {
                         }}
                     >
                         Download
+                    </Button>
+                );
+            },
+        },
+        {
+            field: "view",
+            headerName: "Delete",
+            width: 100,
+            renderCell: (cellValues) => {
+                return (
+                    <Button
+                        variant="contained"
+                        className="view-btn"
+                        style={{ padding: "2px 2px" }}
+                        onClick={(e) => {
+                            handleDelDoc(e, cellValues.id);
+                        }}
+                        color="error
+                        "
+                    >
+                        Delete
                     </Button>
                 );
             },
@@ -323,6 +332,7 @@ export default function Document(props) {
                         <DataGrid
                             rows={rows}
                             columns={columns}
+                            sx={{ border: "none" }}
                             initialState={{
                                 pagination: {
                                     paginationModel: {

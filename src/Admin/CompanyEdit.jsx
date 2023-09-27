@@ -13,6 +13,11 @@ import companytype from "../jsonlist/typeOfCompany.json";
 
 import SimpleBackdrop from "../components/Backdrop";
 
+import {
+  validatePhoneNumber,
+} from "../components/Validation";
+
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -32,6 +37,11 @@ export default function CompanyEdit(props) {
   const [loader, setLoader] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState("");
+
+  const [usernameError, setUsernameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [companyphoneError, setCompanyPhoneError] = useState("");
+  const [companynameError, setCompanynameError] = useState("");
 
   const [edit_company, setEdit_company] = useState({
     COMPANY_PARENT_ID: companyData.COMPANY_PARENT_ID,
@@ -58,17 +68,14 @@ export default function CompanyEdit(props) {
     COMPANY_STATE: "",
     COMPANY_CITY: "",
     COMPANY_ADD2: "",
-    
+
   });
 
   // ... rest of your code
-  
-const list = companytype;
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
-
 
   const handleCreate = (e) => {
     const { name, value } = e.target;
@@ -87,23 +94,52 @@ const list = companytype;
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-
-  // Finding the states and cities of the individaul country 
+  // Finding the states and cities of the individaul country
   const availableState = country?.find(
     (c) => c.name === edit_company.COMPANY_COUNTRY
   );
 
-
-  const availableCities = availableState?.states?.find(
-
-    (s) => {
-
-      return s.name === edit_company.COMPANY_STATE
-    }
-  );
+  const availableCities = availableState?.states?.find((s) => {
+    return s.name === edit_company.COMPANY_STATE;
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Clear previous validation errors
+    setUsernameError("");
+    setCompanynameError("");
+    setCompanyPhoneError("")
+    setEmailError("");
+    setErrorMsg("");
+
+    // Validate phone number, username, and email fields
+    const isValidUsername = edit_company.COMPANY_USERNAME !== "";
+    const isValidCompanyname = edit_company.COMPANY_NAME !== "";
+    const isValidPhone = validatePhoneNumber(edit_company.COMPANY_PHONE);
+    const isValidEmail = edit_company.COMPANY_EMAIL !== "";
+
+
+    if (!isValidCompanyname) {
+      setCompanynameError("Name should not be empty");
+      return;
+    }
+    if (!isValidUsername) {
+      setUsernameError("Invalid username");
+      return;
+    }
+
+    if (!isValidPhone) {
+      setCompanyPhoneError("Invalid phone number or feild should not be empty");
+      return;
+    }
+
+    if (!isValidEmail) {
+      setEmailError("Invalid email address or should not be empty");
+      return;
+    }
+
+
 
     const hasErrors = Object.values(formErrors).some((error) => error !== "");
 
@@ -116,14 +152,18 @@ const list = companytype;
     }
 
     axios
-    .put("http://54.243.89.186:5001/update_company", {
-      COMPANY_ID: companyData.COMPANY_ID,
-      COMPANY_USERNAME: companyData.COMPANY_USERNAME,
-      COMPANY_ADMIN_USERNAME: companyData.COMPANY_PARENT_USERNAME,
-      COMPANY_DETAILS_FOR_UPDATE: { ...edit_company }
-    }, {
-      headers,
-    })
+      .put(
+        "http://54.243.89.186:5001/update_company",
+        {
+          COMPANY_ID: companyData.COMPANY_ID,
+          COMPANY_USERNAME: companyData.COMPANY_USERNAME,
+          COMPANY_ADMIN_USERNAME: companyData.COMPANY_PARENT_USERNAME,
+          COMPANY_DETAILS_FOR_UPDATE: { ...edit_company },
+        },
+        {
+          headers,
+        }
+      )
       .then((response) => {
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
@@ -131,11 +171,10 @@ const list = companytype;
           // setLoader(false)
           // setLoader(true)
 
-          props.reFetchfun()
-          setOpen(false);
+          props.reFetchfun();
           toast.success("Fields are updated successfully!", {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 1000
+            autoClose: 1000,
           });
           props.companyEDit.update(true);
         }
@@ -154,11 +193,13 @@ const list = companytype;
   return (
     <>
       <Tooltip title="Edit Details">
-        <EditNoteOutlinedIcon
-          onClick={handleOpen}
-          color="success"
-          style={{ cursor: "pointer" }}
-        />
+        <button className="btn btn-success btn-sm">
+          <EditNoteOutlinedIcon
+            onClick={handleOpen}
+            color="success"
+            style={{ cursor: "pointer",fontSize:"18px",color:"#fff" }}
+          />
+        </button>
       </Tooltip>
       <Modal
         open={open}
@@ -171,27 +212,32 @@ const list = companytype;
           style={{ height: "100vh", position: "relative" }}
           maxWidth="xl"
         >
-          <Box sx={style}>
-            <form className="p-4">
+          <Box className="modal-content">
+            <form className="p-4 overflow-auto">
+              <h5>Edit company</h5>
               <div className="row">
-                <div className="form-group py-2 col-xl-6">
+              <div className="form-group py-2 col-xl-6">
                   <label>Company name</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${companynameError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter company name"
                     value={edit_company.COMPANY_NAME}
                     name="COMPANY_NAME"
                     onChange={handleCreate}
-                    label="Company name"
-                    required
+                    label=""
                   />
+                  {companynameError && (
+                    <div className="invalid-feedback">{companynameError}</div>
+                  )}
                 </div>
                 <div className="form-group py-2 col-xl-6">
                   <label>Company username</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${usernameError ? "is-invalid" : ""
+                  }`}
                     placeholder="Username"
                     value={edit_company.COMPANY_USERNAME}
                     name="COMPANY_USERNAME"
@@ -201,33 +247,40 @@ const list = companytype;
                   />
                 </div>
               </div>
-
               <div className="row">
+                  {/* Phone Number */}
                 <div className="form-group py-2 col-xl-6">
                   <label>Phone Number</label>
                   <input
                     type="number"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${companyphoneError ? "is-invalid" : ""
+                  }`}
                     placeholder="Enter Number"
                     value={edit_company.COMPANY_PHONE}
                     name="COMPANY_PHONE"
                     onChange={handleCreate}
                     label="Phone Number"
-                    required
                   />
+                    {companyphoneError && (
+                    <div className="invalid-feedback">{companyphoneError}</div>
+                  )}
+
                 </div>
                 <div className="form-group py-2 col-xl-6">
                   <label>Company Email</label>
                   <input
                     type="text"
-                    className="form-control form-control-2 rounded-0"
+                    className={`form-control form-control-2 rounded-0 ${emailError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter company email"
                     name="COMPANY_EMAIL"
                     value={edit_company.COMPANY_EMAIL}
                     onChange={handleCreate}
                     label="Company Email"
-                    required
                   />
+                  {emailError && (
+                    <div className="invalid-feedback">{emailError}</div>
+                  )}
                 </div>
               </div>
               <div className="row py-2">
@@ -241,7 +294,7 @@ const list = companytype;
                   >
                     <option selected>Choose...</option>
 
-                    {list.map((e, key) => {
+                    {companytype.map((e, key) => {
                       return (
                         <option value={e} key={key}>
                           {e}
@@ -297,10 +350,11 @@ const list = companytype;
 
                     {country.map((e, key) => {
                       return (
-                        <option value={e.name} key={key} selected>{e.name}</option>
-                      )
+                        <option value={e.name} key={key} selected>
+                          {e.name}
+                        </option>
+                      );
                     })}
-
                   </select>
                 </div>
 
@@ -312,13 +366,14 @@ const list = companytype;
                     value={edit_company.COMPANY_STATE}
                     onChange={handleCreate}
                   >
-                    <option selected >Choose... States</option>
+                    <option selected>Choose... States</option>
                     {availableState?.states?.map((state, key) => {
                       return (
-                        <option value={state.name} key={key} >{state.name}</option>
-                      )
+                        <option value={state.name} key={key}>
+                          {state.name}
+                        </option>
+                      );
                     })}
-
                   </select>
                 </div>
 
@@ -334,28 +389,26 @@ const list = companytype;
                     <option selected>Choose City...</option>
                     {availableCities?.cities?.map((e, key) => {
                       return (
-                        <option value={e.name} key={key}>{e.name}</option>
-                      )
+                        <option value={e.name} key={key}>
+                          {e.name}
+                        </option>
+                      );
                     })}
-
                   </select>
                 </div>
-
-
-
               </div>
               <div className="form-group col-xl-12">
                 <label>Address</label>
                 <textarea
                   type="text"
-                  className="form-control form-control-2 rounded-0"
+                  className="form-control rounded-0"
                   placeholder="Apartment, studio, or floor"
                   name="COMPANY_ADD2"
                   value={edit_company.COMPANY_ADD2}
                   onChange={handleCreate}
                   required
-                // rows="4"
-                // cols="50"
+                  // rows="4"
+                  // cols="50"
                 />
               </div>
               <Button
@@ -372,7 +425,7 @@ const list = companytype;
                 onClick={handleClose}
                 className="btn text-white rounded-2 mt-2"
               >
-                Discard
+                Cancel
               </Button>
             </form>
           </Box>

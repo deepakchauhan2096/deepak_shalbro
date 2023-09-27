@@ -4,35 +4,23 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import EmployeeCreate from "./EmployeeCreate";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import teamImg1 from "../assests/images/team-1.jpg";
+// import teamImg1 from "../assests/images/team-1.jpg";
 import { styled } from "@mui/material/styles";
-import Snackbar from "@mui/material/Snackbar";
+// import Snackbar from "@mui/material/Snackbar";
 import "../assests/css/employeesrc.css";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 import {
   Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
   Paper,
   Skeleton,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Drawer,
-  Toolbar,
-  Divider,
-  ListItemButton,
 } from "@mui/material";
 import Snippet from "./Snippet";
 import EmployeePDF from "../Invoices/EmployeePDF";
-import { PDFViewer, ReactPDF, PDFDownloadLink } from "@react-pdf/renderer";
+import { PDFViewer } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 // import env from "react-dotenv";
@@ -275,6 +263,47 @@ const EmployeeSrc = (props) => {
     },
   ];
 
+  const columnsMobile = [
+    { field: "EMPLOYEE_ID", headerName: "ID", width: 60 },
+    {
+      field: "EMPLOYEE_USERNAME",
+      headerName: "Username",
+      width: 120,
+      // editable: true,
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 80,
+      renderCell: (cellValues) => {
+        return (
+          <Button
+            variant="contained"
+            className="view-btn primary btn btn-success"
+            style={{ padding: "2px 2px" }}
+            onClick={(event) => {
+              handleClick(cellValues);
+            }}
+          >
+            view
+          </Button>
+        );
+      },
+    },
+    {
+      field: "edit",
+      headerName: "Edit",
+      width: 80,
+      renderCell: (cellValues) => {
+        return (
+          <Button>
+            <EmployeeEdit edit={cellValues} refetch={fetchData} />
+          </Button>
+        );
+      },
+    },
+  ];
+
   function downloadPDF(pdf) {
     const linkSource = `data:application/pdf;base64,${pdf}`;
     const downloadLink = document.createElement("a");
@@ -386,7 +415,9 @@ const EmployeeSrc = (props) => {
             {isLoading ? (
               <Animations />
             ) : (
+              <>
               <DataGrid
+               className="display"
                 sx={{ border: "none" }}
                 rows={rows}
                 columns={columns}
@@ -403,6 +434,9 @@ const EmployeeSrc = (props) => {
                 // checkboxSelection
                 disableRowSelectionOnClick
               />
+              </>
+            
+
             )}
           </Box>
         </MyScreen>
@@ -427,7 +461,7 @@ const EmployeeSrc = (props) => {
           >
             <ArrowBackIcon style={{ fontSize: "22.5px" }} />
           </Button>
-          {["Employee Details", "Timesheet", "Worksheet", "Acknowledge"].map(
+          {["Employee Details", "Timesheet"].map(
             (item, value) => (
               <Button
                 onClick={(e, index) => setIndex(value)}
@@ -565,9 +599,9 @@ const EmployeeSrc = (props) => {
                           <tbody>
                             {filterData.row?.EMPLOYEE_ASSIGN?.map((project,index) => (
                               <tr key={project.PROJECT_ID} >
-                                 <td style={{backgroundColor:index%2 == 0 ? "#f2f2f2" : "#fffff"}}>{index+1}</td>
-                                <td style={{backgroundColor:index%2 == 0 ? "#f2f2f2" : "#fffff"}}>{project.PROJECT_ID}</td>
-                                <td style={{backgroundColor:index%2 == 0 ? "#f2f2f2" : "#fffff"}}>{project.PROJECT_NAME}</td>
+                                 <td style={{backgroundColor:index%2 === 0 ? "#f2f2f2" : "#fffff"}}>{index+1}</td>
+                                <td style={{backgroundColor:index%2 === 0 ? "#f2f2f2" : "#fffff"}}>{project.PROJECT_ID}</td>
+                                <td style={{backgroundColor:index%2 === 0 ? "#f2f2f2" : "#fffff"}}>{project.PROJECT_NAME}</td>
                               </tr>
                             ))}
                           </tbody>

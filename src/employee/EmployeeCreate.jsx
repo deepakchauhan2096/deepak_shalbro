@@ -60,7 +60,7 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
   const [passwordError, setPasswordError] = useState("");
   const [nameError, setNameError] = useState("");
 
-
+  
 
 
   useEffect(() => {
@@ -196,7 +196,8 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
           maxWidth="xl"
         >
           <Box className="modal-content">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="overflow-auto">
+              <h5>Create Employee</h5>
               <div className="row py-1">
                 <div className="form-group col-xl-6">
                   <label for="inputqual">Employee Username</label>
@@ -349,7 +350,7 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
                     <label for="inputAddress">Address</label>
                     <textarea
                       type="text"
-                      className="form-control form-control-2 rounded-0"
+                      className="form-control rounded-0 w-100"
                       id="inputAddress"
                       placeholder="Enter Address"
                       value={createEmployee.EMPLOYEE_ADD}
