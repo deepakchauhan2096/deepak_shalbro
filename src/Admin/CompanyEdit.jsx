@@ -153,7 +153,7 @@ export default function CompanyEdit(props) {
 
     axios
       .put(
-        "http://54.243.89.186:5001/update_company",
+        "/api/data/update_company",
         {
           COMPANY_ID: companyData.COMPANY_ID,
           COMPANY_USERNAME: companyData.COMPANY_USERNAME,

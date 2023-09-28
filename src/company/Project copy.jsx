@@ -80,7 +80,7 @@ const Project = (props) => {
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
-        "http://54.243.89.186:5001/get_projects",
+        "/api/data/get_projects",
         {
           PROJECT_PARENT_ID: COMPANY_ID,
           PROJECT_PARENT_USERNAME: COMPANY_USERNAME,

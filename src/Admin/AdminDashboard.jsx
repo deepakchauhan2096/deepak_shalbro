@@ -10,10 +10,22 @@ const itemsPerPage = 8;
 const AdminDashboard = (props) => {
   const adminData = props.state.result;
   const [tableRows, setTableRows] = useState(adminData);
-  const [Rows, setRows] = useState("");
+  const [RowsData, setRows] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [displayType, setDisplayType] = useState(true);
+
+  function reverseArray(arr) {
+    let reversed = [];
+    for (let i = arr.length - 1; i >= 0; i--) {
+      reversed.push(arr[i]);
+    }
+    return reversed;
+  }
+  let Rows = reverseArray(RowsData);
+
+  
+  
 
   const displayTab = () => {
     setDisplayType(false);
@@ -37,7 +49,7 @@ const AdminDashboard = (props) => {
   const getCompanyData = async () => {
     try {
       const response = await axios.put(
-        "http://54.243.89.186:5001/get_all_company",
+        "/api/data/get_all_company",
         {
           COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
           COMPANY_PARENT_USERNAME: tableRows?.ADMIN_USERNAME,
@@ -75,7 +87,7 @@ for (let i = startIndex; i < endIndex; i++) {
   displayData.push(Rows[i]);
 }
 
-  const maxPage = Math.ceil(displayData.length / itemsPerPage);
+  const maxPage = Math.ceil(Rows.length / itemsPerPage);
 
   const handleClick = (page) => {
     setCurrentPage(page);
@@ -219,7 +231,7 @@ for (let i = startIndex; i < endIndex; i++) {
               <div className="col-xl-12 overflow-auto pt-2">
                 {displayType ? (
                   <table class="table table-striped table-sm pt-4 table-fixed display">
-                    <thead>
+                    {displayData.length > 0 ? <thead>
                       <tr style={{width:"100%"}}>
                         {/* <th>S.no.</th> */}
                         <th>Name</th>
@@ -232,7 +244,7 @@ for (let i = startIndex; i < endIndex; i++) {
                         <th>Edit</th>
                         <th>Detail</th>
                       </tr>
-                    </thead>
+                    </thead> :"loading..."}
 
                     <tbody>
                       {displayData.map((post, index) => (

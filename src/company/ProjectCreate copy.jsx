@@ -156,7 +156,7 @@ export default function ProjectCreate({
 
     // Perform API validation and request
     axios
-      .post("http://54.243.89.186:5001/create_project", createProject, {
+      .post("/api/data/create_project", createProject, {
         headers,
       })
       .then((response) => {

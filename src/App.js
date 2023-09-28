@@ -22,6 +22,8 @@ import Document from "./Document/Documents";
 import Csc from "./components/Csc"
 import axios from "axios";
 import Page404 from "./pages/Page404";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
 
 function App() {
 
@@ -91,7 +93,7 @@ function App() {
           };
 
           return axios.put(
-            "http://54.243.89.186:5001/get_projects_one",
+            "/api/data/get_projects_one",
             data,
             {
               headers: {
@@ -128,6 +130,8 @@ function App() {
             <Route path="/login/*" element={<AdminLogin />} />
             <Route path="/*" element={<AdminLogin />} />
             <Route path="/employee/login/*" element={<EmployeeLogin />} />
+            <Route path="/fsignup/*" element={<Signup />} />
+            <Route path="/flogin/*" element={<Login />} />
           </>
 
           {data ?

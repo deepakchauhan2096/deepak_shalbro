@@ -26,6 +26,7 @@ import {
 import { ViewCompact } from "@mui/icons-material";
 import Navbar from "../components/Navbar";
 import ExpiryReminder from "../components/ExpiryReminder";
+import Alert from "../components/Alert";
 
 export default function Document(props) {
 
@@ -99,7 +100,7 @@ export default function Document(props) {
 
 
         try {
-            const response = await axios.put("http://54.243.89.186:5001/get_all_document", requestData, {
+            const response = await axios.put("/api/data/get_all_document", requestData, {
                 headers
             });
 
@@ -133,7 +134,7 @@ export default function Document(props) {
             const config = {
                 method: "put",
                 maxBodyLength: Infinity,
-                url: "http://54.243.89.186:5001/download_document",
+                url: "/api/data/download_document",
                 headers: {
                     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
                     "Content-Type": "application/json",
@@ -156,6 +157,8 @@ export default function Document(props) {
 
     // Function to Delete the uploaded documents 
     const handleDelDoc = (e, documentId) => {
+       
+        
         setBackdrop(true);
 
         let data = JSON.stringify({
@@ -166,7 +169,7 @@ export default function Document(props) {
         let config = {
             method: 'delete',
             maxBodyLength: Infinity,
-            url: `http://54.243.89.186:5001/delete_document/${documentId}`,
+            url: `/api/data/delete_document/${documentId}`,
             headers: {
                 'authorization_key': 'qzOUsBmZFgMDlwGtrgYypxUz',
                 'Content-Type': 'application/json'

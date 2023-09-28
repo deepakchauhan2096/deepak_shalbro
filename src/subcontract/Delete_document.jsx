@@ -7,7 +7,7 @@
 //   const [responseMessage, setResponseMessage] = useState('');
 
 //   const handleDelete = () => {
-//     axios.delete("http://54.243.89.186:5001/delete_document/${documentId}")
+//     axios.delete("/api/data/delete_document/${documentId}")
 //       .then(response => {
 //         if (response.data.operation === "success") {
 //           setResponseMessage("Document successfully deleted!");

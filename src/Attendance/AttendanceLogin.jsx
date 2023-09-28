@@ -26,7 +26,7 @@ function AdminLogin() {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://54.243.89.186:5001/login",
+      url: "/api/data/login",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",

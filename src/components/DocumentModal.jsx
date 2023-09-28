@@ -47,7 +47,7 @@ export default function DocumentModal(props) {
     e.preventDefault();
     setBackdrop(true);
     const response = await axios
-      .post("http://54.243.89.186:5001/create_document", postImage.myFile, {
+      .post("/api/data/create_document", postImage.myFile, {
         headers,
       })
       .then((response) => {

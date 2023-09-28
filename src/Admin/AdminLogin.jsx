@@ -21,6 +21,7 @@ function AdminLogin({ onDataFetched }) {
   const { auth, setAuth } = useContext(MyContext);
 
   const handleSubmission = () => {
+
     if (!values.ADMIN_USERNAME || !values.ADMIN_PASSWORD) {
       setErrorMsg("Fill all fields");
       return;
@@ -31,7 +32,7 @@ function AdminLogin({ onDataFetched }) {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://54.243.89.186:5001/login",
+      url: "/api/data/login",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",

@@ -50,7 +50,7 @@ const EmployeeDetail = ({ state }) => {
           };
 
           return axios.put(
-            "http://54.243.89.186:5001/get_projects_one",
+            "/api/data/get_projects_one",
             data,
             {
               headers: {

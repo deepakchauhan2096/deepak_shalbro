@@ -9,7 +9,7 @@ const ProjectAssigned = (props) => {
   // const fetchAllEmployee = async () => {
   //   try {
   //     const response = await axios.put(
-  //       "http://54.243.89.186:5001/get_employee",
+  //       "/api/data/get_employee",
   //       {
   //         EMPLOYEE_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
   //         EMPLOYEE_MEMBER_PARENT_USERNAME:
