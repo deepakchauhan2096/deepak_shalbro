@@ -121,7 +121,7 @@ const EmployeeSrc = (props) => {
   const fetchProject = async () => {
     try {
       const response = await axios.put(
-        "http://54.243.89.186:5001/get_projects",
+        "/get_projects",
         {
           PROJECT_PARENT_ID: COMPANY_ID,
           PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
@@ -148,7 +148,7 @@ const EmployeeSrc = (props) => {
   const fetchAllEmployees = async () => {
     try {
       const response = await axios.put(
-        "http://54.243.89.186:5001/get_employee",
+        "/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
@@ -384,7 +384,7 @@ const EmployeeSrc = (props) => {
     // Validate the form data before submission
 
     axios
-      .post("http://54.243.89.186:5001/assign_project", mergedData, {
+      .post("/assign_project", mergedData, {
         headers,
       })
       .then((response) => {

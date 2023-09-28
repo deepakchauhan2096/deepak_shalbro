@@ -46,7 +46,7 @@ const AllDocument = () => {
  
 
     const response = await axios
-      .put("http://54.243.89.186:5001/get_all_document",
+      .put("/get_all_document",
        {
         "DOCUMENT_REF_ID": 12,
         "DOCUMENT_ADMIN_USERNAME": "deepanshu1"

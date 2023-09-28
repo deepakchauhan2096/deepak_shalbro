@@ -29,7 +29,7 @@ function EmployeeLogin() {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://54.243.89.186:5001/emplogin",
+      url: "/emplogin",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",

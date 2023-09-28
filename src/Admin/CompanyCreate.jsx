@@ -111,7 +111,7 @@ export default function CompanyCreate(props) {
 
     // Perform API validation and request
     axios
-      .post(`http://54.243.89.186:5001/create_company`, create_company, {
+      .post(`/create_company`, create_company, {
         headers,
       })
       .then((response) => {

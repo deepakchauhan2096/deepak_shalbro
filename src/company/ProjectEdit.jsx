@@ -119,7 +119,7 @@ export default function ProjectEdit(props) {
 
     axios
       .put(
-        "http://54.243.89.186:5001/update_projects",
+        "/update_projects",
         {
           PROJECT_ID: editProjectData.PROJECT_ID,
           PROJECT_PARENT_ID: editProjectData.PROJECT_PARENT_ID,

@@ -251,7 +251,7 @@ const AttendanceReport = (props) => {
   const fetchAllEmployees = async () => {
     try {
       const response = await axios.put(
-        "http://54.243.89.186:5001/get_employee",
+        "/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
@@ -316,7 +316,7 @@ const AttendanceReport = (props) => {
     let config = {
       method: "put",
       maxBodyLength: Infinity,
-      url: "http://54.243.89.186:5001/get_employee_details_for_attendence",
+      url: "/get_employee_details_for_attendence",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
