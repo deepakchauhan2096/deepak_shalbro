@@ -86,7 +86,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
 
         try {
             const response = await axios.post(
-                "/create_document",
+                "http://54.243.89.186:5001/create_document",
                 data,
                 {
                     headers: {
@@ -101,6 +101,8 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
                 setOpen(false);
                 update();
                 toast.success("Document uploaded successfully.");
+                setSelectedFileName("")
+                setFormData("")
             } else {
                 toast.error("Failed to upload document.");
             }
