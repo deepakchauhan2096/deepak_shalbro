@@ -114,7 +114,7 @@ export default function SubcontractCreate(props) {
     setErrorMsg("");
 
     axios
-      .post("/api/data/create_subcontractor", createSubcontract, {
+      .post("/create_subcontractor", createSubcontract, {
         headers,
       })
       .then((response) => {

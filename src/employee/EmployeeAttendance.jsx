@@ -120,7 +120,7 @@ const EmployeeAttendance = (props) => {
 
       axios
         .post(
-          "/api/data/create_emp_attendence",
+          "/create_emp_attendence",
           attendanceData,
           {
             headers: {
@@ -162,7 +162,7 @@ const EmployeeAttendance = (props) => {
 
       axios
         .post(
-          "/api/data/create_emp_attendence",
+          "/create_emp_attendence",
           attendanceData,
           {
             headers: {

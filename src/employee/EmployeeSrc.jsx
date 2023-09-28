@@ -109,7 +109,7 @@ const EmployeeSrc = (props) => {
   const fetchProject = async () => {
     try {
       const response = await axios.put(
-        "/api/data/get_projects",
+        "/get_projects",
         {
           PROJECT_PARENT_ID: COMPANY_ID,
           PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
@@ -136,7 +136,7 @@ const EmployeeSrc = (props) => {
   const fetchAllEmployees = async () => {
     try {
       const response = await axios.put(
-        "/api/data/get_employee",
+        "/get_employee",
         {
           EMPLOYEE_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
           EMPLOYEE_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
@@ -372,7 +372,7 @@ const EmployeeSrc = (props) => {
     // Validate the form data before submission
 
     axios
-      .post("/api/data/assign_project", mergedData, {
+      .post("/assign_project", mergedData, {
         headers,
       })
       .then((response) => {

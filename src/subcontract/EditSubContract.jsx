@@ -132,7 +132,7 @@ export default function EditSubcontract(props) {
   
             setErrorMsg("");
             axios
-                .put("/api/data/update_subcontructor",
+                .put("/update_subcontructor",
                     {
                         SUBCONTRACTOR_ID: editsubcontracts.SUBCONTRACTOR_ID,
                         SUBCONTRACTOR_PARENT_ID: editsubcontracts.SUBCONTRACTOR_PARENT_ID,

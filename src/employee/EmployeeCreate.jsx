@@ -143,7 +143,7 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
 
     // Perform API validation and request
     axios
-      .post("/api/data/create_employee", createEmployee, {
+      .post("/create_employee", createEmployee, {
         headers,
       })
       .then((response) => {

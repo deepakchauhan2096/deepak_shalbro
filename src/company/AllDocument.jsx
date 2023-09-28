@@ -46,7 +46,7 @@ const AllDocument = () => {
  
 
     const response = await axios
-      .put("/api/data/get_all_document",
+      .put("/get_all_document",
        {
         "DOCUMENT_REF_ID": 12,
         "DOCUMENT_ADMIN_USERNAME": "deepanshu1"

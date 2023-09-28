@@ -86,7 +86,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
 
         try {
             const response = await axios.post(
-                "/api/data/create_document",
+                "/create_document",
                 data,
                 {
                     headers: {

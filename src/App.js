@@ -93,7 +93,7 @@ function App() {
           };
 
           return axios.put(
-            "/api/data/get_projects_one",
+            "/get_projects_one",
             data,
             {
               headers: {

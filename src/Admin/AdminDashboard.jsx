@@ -49,7 +49,7 @@ const AdminDashboard = (props) => {
   const getCompanyData = async () => {
     try {
       const response = await axios.put(
-        "/api/data/get_all_company",
+        "/get_all_company",
         {
           COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
           COMPANY_PARENT_USERNAME: tableRows?.ADMIN_USERNAME,

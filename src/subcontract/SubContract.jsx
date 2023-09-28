@@ -62,7 +62,7 @@ const SubContract = (props) => {
   const fetchsubcontracts = async (e) => {
     try {
       const response = await axios.put(
-        "/api/data/get_subcontractor",
+        "/get_subcontractor",
         {
           SUBCONTRACTOR_PARENT_ID: subcontractData?.COMPANY_ID,
           SUBCONTRACTOR_PARENT_USERNAME: subcontractData?.COMPANY_USERNAME,

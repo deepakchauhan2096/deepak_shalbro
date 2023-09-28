@@ -7,7 +7,7 @@
 //   const [responseMessage, setResponseMessage] = useState('');
 
 //   const handleDelete = () => {
-//     axios.delete("/api/data/delete_document/${documentId}")
+//     axios.delete("/delete_document/${documentId}")
 //       .then(response => {
 //         if (response.data.operation === "success") {
 //           setResponseMessage("Document successfully deleted!");

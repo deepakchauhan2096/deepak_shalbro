@@ -100,7 +100,7 @@ export default function Document(props) {
 
 
         try {
-            const response = await axios.put("/api/data/get_all_document", requestData, {
+            const response = await axios.put("/get_all_document", requestData, {
                 headers
             });
 
@@ -134,7 +134,7 @@ export default function Document(props) {
             const config = {
                 method: "put",
                 maxBodyLength: Infinity,
-                url: "/api/data/download_document",
+                url: "/download_document",
                 headers: {
                     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
                     "Content-Type": "application/json",
@@ -169,7 +169,7 @@ export default function Document(props) {
         let config = {
             method: 'delete',
             maxBodyLength: Infinity,
-            url: `/api/data/delete_document/${documentId}`,
+            url: `/delete_document/${documentId}`,
             headers: {
                 'authorization_key': 'qzOUsBmZFgMDlwGtrgYypxUz',
                 'Content-Type': 'application/json'
@@ -346,7 +346,6 @@ export default function Document(props) {
                             pageSizeOptions={[5]}
                             disableMultipleSelection
                             density="compact"
-                            sx={{ '&, [class^=MuiDataGrid]': { border: 'none' } }}
                         />
                     </Box>
                 </MyScreen>

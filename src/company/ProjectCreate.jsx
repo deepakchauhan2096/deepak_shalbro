@@ -130,7 +130,7 @@ export default function ProjectCreate({
 
     // Perform API validation and request
     axios
-      .post("/api/data/create_project", createProject, {
+      .post("/create_project", createProject, {
         headers,
       })
       .then((response) => {

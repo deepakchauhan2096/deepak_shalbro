@@ -29,7 +29,7 @@ function EmployeeLogin() {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "/api/data/emplogin",
+      url: "/emplogin",
       headers: {
         authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
         "Content-Type": "application/json",
