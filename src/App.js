@@ -20,9 +20,12 @@ import Project from "./company/Project";
 import EmployeeSrc from "./employee/EmployeeSrc";
 import AttendanceReport from "./Attendance/AttendanceAcknowledge";
 import Document from "./Document/Documents";
-import Csc from "./components/Csc"
 import axios from "axios";
 import Page404 from "./pages/Page404";
+import Check from "./components/Check";
+import BankAccount from "./checkwriter/BankAccount";
+import CreateBill from "./checkwriter/CreateBill";
+import Screen1 from "./checkwriter/Screen1";
 
 function App() {
 
@@ -120,11 +123,11 @@ function App() {
 
   return (
     <div className="wrapper" style={{ overflowX: "scroll", overflow: "hidden" }}>
+      
       <ToastContainer />
       <BrowserRouter>
         <Routes>
           <>
-            <Route path="/temp/*" element={<Csc />} />
             <Route path="/signup/*" element={<AdminCreate />} />
             <Route path="/login/*" element={<AdminLogin />} />
             <Route path="/*" element={<AdminLogin />} />
@@ -143,7 +146,19 @@ function App() {
               <Route path="/company/employees/:id/*" element={<EmployeeSrc />} />
               <Route path="/company/attendance/:id/*" element={<AttendanceReport />} />
               <Route path="/company/documents/:id/*" element={<Document />} />
-              <Route path="/temp/*" element={<Csc />} />
+              {/* <Route path="/company/Checks/:id/*" element={<Check/>} /> */}
+              {/* <Route path="/company/bankaccount/:id/*" element={<BankAccount/>} /> */}
+
+
+
+
+              <Route path="/company/bankaccount/:id/*" element={<BankAccount />}>
+              {/* Submenus for Bank Account */}
+              <Route path="details" element={<CreateBill />} />
+              <Route path="settings" element={<Screen1 />} />
+            </Route>
+
+
 
               {user.ADMIN_COMPANIES?.map((e) => <Route path={`/company/${e.COMPANY_ID}&${e.COMPANY_USERNAME}&${e.COMPANY_PARENT_ID}&${e.COMPANY_PARENT_USERNAME}`} element={<Navigate to="/admin" />} />)}
 

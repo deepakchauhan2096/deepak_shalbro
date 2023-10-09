@@ -4,7 +4,8 @@ import CompanyCreate from "./CompanyCreate";
 import CompanyEdit from "./CompanyEdit";
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
-const itemsPerPage = 8;
+import SimpleBackdrop from "../components/Backdrop";
+const itemsPerPage = 10;
 
 const AdminDashboard = (props) => {
   const adminData = props.state.result;
@@ -83,6 +84,8 @@ const AdminDashboard = (props) => {
     setCurrentPage(page);
   };
 
+  // function for the pagination on admindashboard 
+  
   const renderPageButtons = () => {
     const pageButtons = [];
     const totalPages = Math.ceil(Rows.length / itemsPerPage);
@@ -129,14 +132,14 @@ const AdminDashboard = (props) => {
           style={{ marginBottom: 0 }}
         >
           <div className="container justify-content-between">
-            <a
-              href="#"
+            <Link
+              href="/admin"
               className="text-white text-decoration-none navbar-brand"
             >
-              {tableRows?.ADMIN_USERNAME} (Admin)
-            </a>
+              {tableRows?.ADMIN_USERNAME} -(Rootuser)
+            </Link>
             <button
-              class="btn btn-outline-primary my-2 my-sm-0 btn-sm"
+              class="btn btn-outline-light my-2 my-sm-0 btn-sm"
               type="submit"
               onClick={logout}
             >
@@ -234,7 +237,7 @@ const AdminDashboard = (props) => {
                         <th>Edit</th>
                         <th>Detail</th>
                       </tr>
-                    </thead> :"loading..."}
+                    </thead> : <SimpleBackdrop open={isLoading} />}
 
                     <tbody>
                       {displayData.map((post, index) => (
@@ -325,7 +328,7 @@ const AdminDashboard = (props) => {
                       class="card my-1"
                       style={{
                         width: "100%",
-                        background: index % 2 == 0 ? "#f3f3f3" : "#fffff",
+                        background: index % 2 === 0 ? "#f3f3f3" : "#fffff",
                       }}
                       key={index}
                     >
@@ -357,7 +360,7 @@ const AdminDashboard = (props) => {
             </div>
           </div>
         ) : (
-          <div className="container">loading...</div>
+          <div className="container"> <SimpleBackdrop open={isLoading} /></div>
         )}
       </div>
     </>

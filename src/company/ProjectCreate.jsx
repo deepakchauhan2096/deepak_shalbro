@@ -138,9 +138,9 @@ export default function ProjectCreate({
     setStartError("");
     setEndError("");
 
-    const isValidName = createProject.PROJECT_NAME != "";
-    const isValidStart = createProject.PROJECT_START_DATE != "";
-    const isValidEnd = createProject.PROJECT_END_DATE != "";
+    const isValidName = createProject.PROJECT_NAME !== "";
+    const isValidStart = createProject.PROJECT_START_DATE !== "";
+    const isValidEnd = createProject.PROJECT_END_DATE !== "";
 
     if (!isValidName) {
       setNameError("Name should not be empty");

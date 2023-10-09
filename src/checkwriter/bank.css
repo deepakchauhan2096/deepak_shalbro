@@ -1,0 +1,36 @@
+
+.card{
+   
+    height: 350px;
+}
+.card:hover{
+    transform: scale(1.01);
+ box-shadow: 0 10px 20px rgba(0,0,0,.10), 0 4px 8px rgba(0,0,0,.06);
+}
+
+
+
+/* bank details  */
+/* Add these styles to your CSS file */
+.file-button {
+    display: inline-block;
+    padding:  10px 50px ;
+    border: 1px solid #ccc;
+    /* border-radius: 5px; */
+    background-color: #fff;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .file-button.active {
+    background-color: #ccc;
+  }
+  .file-button:hover{
+    background-color: rgb(235, 233, 233);
+  }
+  
+  .input-file {
+    display: none;
+  }
+  

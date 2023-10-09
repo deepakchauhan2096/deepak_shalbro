@@ -31,6 +31,7 @@ import Navbar from "../components/Navbar";
 // import { initProject_fun } from "../redux/action";
 
 const Project = (props) => {
+
   const { id } = useParams();
 
   const param = id.split("&");
