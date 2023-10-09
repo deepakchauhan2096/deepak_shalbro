@@ -154,7 +154,7 @@ export default function ProjectEdit(props) {
 
     axios
       .put(
-        "/api/data/update_projects",
+        "/update_projects",
         {
           PROJECT_ID: editProjectData.PROJECT_ID,
           PROJECT_PARENT_ID: editProjectData.PROJECT_PARENT_ID,

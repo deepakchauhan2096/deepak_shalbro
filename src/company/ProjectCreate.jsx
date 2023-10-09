@@ -23,8 +23,8 @@ const style = {
 export default function ProjectCreate({
   COMPANY_ID,
   COMPANY_USERNAME,
-  COMPANY_PARENT_ID,
-  COMPANY_PARENT_USERNAME,
+  COMPANY_ROOT_ID,
+  COMPANY_ROOT_USERNAME,
   Update,
 }) {
   const [open, setOpen] = useState(false);
@@ -68,11 +68,11 @@ export default function ProjectCreate({
     }));
     setCreateProject((prevState) => ({
       ...prevState,
-      PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+      PROJECT_MEMBER_PARENT_ID: COMPANY_ROOT_ID,
     }));
     setCreateProject((prevState) => ({
       ...prevState,
-      PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+      PROJECT_MEMBER_PARENT_USERNAME: COMPANY_ROOT_USERNAME,
     }));
 
   }, [open]);

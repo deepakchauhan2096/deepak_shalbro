@@ -8,9 +8,23 @@ import CreateSubcontract from "./CreateSubcontract";
 import { styled } from "@mui/material/styles";
 import { MyContext } from "../context/Mycontext";
 import EditSubcontract from "./EditSubContract";
+import Sidebar from "../components/Sidebar";
+import { useParams } from "react-router-dom";
+
 // import env from "react-dotenv";
 
 const SubContract = (props) => {
+
+  const { id } = useParams();
+  const param = id.split("&");
+  const COMPANY_ID = param[0];
+  const COMPANY_USERNAME = param[1];
+  const COMPANY_PARENT_ID = param[2];
+  const COMPANY_PARENT_USERNAME = param[3];
+
+
+
+
   const [data, setData] = useState({
     row: {
       SUBCONTRACTOR_PARENT_ID: "",
@@ -36,6 +50,7 @@ const SubContract = (props) => {
   const [ProjectData, setProjectData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [Edit, setEdit] = useState(false);
+  const [openNav, setOpenNav] = useState(false);
   const [updatedata, setUpdateData] = useState(false);
 
   // modal
@@ -64,10 +79,10 @@ const SubContract = (props) => {
       const response = await axios.put(
         "/get_subcontractor",
         {
-          SUBCONTRACTOR_PARENT_ID: subcontractData?.COMPANY_ID,
-          SUBCONTRACTOR_PARENT_USERNAME: subcontractData?.COMPANY_USERNAME,
-          SUBCONTRACTOR_MEMBER_PARENT_ID: subcontractData?.COMPANY_PARENT_ID,
-          SUBCONTRACTOR_MEMBER_PARENT_USERNAME: subcontractData?.COMPANY_PARENT_USERNAME,
+          SUBCONTRACTOR_PARENT_ID: COMPANY_ID,
+          SUBCONTRACTOR_PARENT_USERNAME: COMPANY_USERNAME,
+          SUBCONTRACTOR_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+          SUBCONTRACTOR_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
         },
         { headers }
       );
@@ -88,7 +103,7 @@ const SubContract = (props) => {
     setEditedSubcontract(subcontract);
     handleOpen();
   };
- 
+
   const columns = [
     { field: "SUBCONTRACTOR_ID", headerName: "ID", width: 90 },
     {
@@ -198,13 +213,21 @@ const SubContract = (props) => {
 
   return (
     <>
+       <Sidebar
+                COMPANY_ID={COMPANY_ID}
+                COMPANY_USERNAME={COMPANY_USERNAME}
+                COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+                COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+                active={6}
+                toggle={openNav}
+            />
       <Box className="box" style={{ background: "#277099" }}>
         <CreateSubcontract
           companyData={subcontractData}
           refetch={fetchsubcontracts}
           name={"Project"}
         />
-     
+
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (

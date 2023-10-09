@@ -3,30 +3,22 @@ import axios from "axios";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
-import pdf from "../assests/images/pdf.png";
-import jpg from "../assests/images/jpg.png";
-import png from "../assests/images/png.png";
-import AddIcon from "@mui/icons-material/Add";
-import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import ViewListIcon from "@mui/icons-material/ViewList";
-import DeleteIcon from "@mui/icons-material/Delete";
+
 import SimpleBackdrop from "../components/Backdrop";
 import "../assests/css/document.css"; // Import the CSS filefileN
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { ToastContainer, toast } from "react-toastify";
+import { DataGrid} from '@mui/x-data-grid';
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import DocumentModal from "./components/DocumentModal";
 import DocumentCreate from "./DocumentCreate";
 // import env from "react-dotenv";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import {
     Paper,
 } from "@mui/material";
-import { ViewCompact } from "@mui/icons-material";
 import Navbar from "../components/Navbar";
 import ExpiryReminder from "../components/ExpiryReminder";
-import Alert from "../components/Alert";
 
 export default function Document(props) {
 
@@ -112,19 +104,19 @@ export default function Document(props) {
 
             setImagesData(data);
             setTotalDocuments(data.result?.length || 0);
-            console.log("data", data.result);
+            // console.log("data", data.result);
         } catch (error) {
             console.log("Error Fetching Data :", error);
         }
     };
 
-    const Demo = styled("div")(({ theme }) => ({
-        backgroundColor: theme.palette.background.paper,
-    }));
+    // const Demo = styled("div")(({ theme }) => ({
+    //     backgroundColor: theme.palette.background.paper,
+    // }));
 
     // Function to download the uploaded documents 
     const handleDownload = async (documentId, fileName) => {
-        console.log(fileName, "filename")
+        // console.log(fileName, "filename")
         try {
             const data = JSON.stringify({
                 DOCUMENT_ID: documentId,
@@ -157,8 +149,6 @@ export default function Document(props) {
 
     // Function to Delete the uploaded documents 
     const handleDelDoc = (e, documentId) => {
-       
-        
         setBackdrop(true);
 
         let data = JSON.stringify({
@@ -228,7 +218,6 @@ export default function Document(props) {
             type: 'number',
             width: 150,
             editable: false,
-
         },
         {
             field: 'ExpiryDate',
@@ -244,7 +233,6 @@ export default function Document(props) {
             }
 
         },
-       
         {
             field: "download",
             headerName: "Download",
@@ -266,26 +254,28 @@ export default function Document(props) {
             },
         },
         {
-            field: "view",
+            field: "delete",
             headerName: "Delete",
             width: 100,
+          
+
             renderCell: (cellValues) => {
                 return (
                     <Button
                         variant="contained"
-                        className="view-btn"
+                        className="view-btn "
+                        color="error"
                         style={{ padding: "2px 2px" }}
                         onClick={(e) => {
                             handleDelDoc(e, cellValues.id);
                         }}
-                        color="error
-                        "
                     >
                         Delete
                     </Button>
                 );
             },
         },
+       
     ];
 
     // Function to format date as dd/mm/yy
@@ -354,6 +344,6 @@ export default function Document(props) {
 
             <SimpleBackdrop open={backdrop} />
 
-        </>
-    );
+</>
+);
 }

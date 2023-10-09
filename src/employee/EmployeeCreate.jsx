@@ -3,17 +3,21 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Button, Container } from "@mui/material";
 import env from "react-dotenv";
 import country from "../Api/countriess.json";
 import employeeRole from "../jsonlist/employeeRole.json"
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import {
   validatePhoneNumber,
   validateUsername,
   validateEmail,
   validatePassword
 } from "../components/Validation";
+import { auth } from "../firebase";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -27,7 +31,9 @@ const style = {
 };
 
 
-export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME, refetch}) {
+export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME, refetch }) {
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -60,7 +66,7 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
   const [passwordError, setPasswordError] = useState("");
   const [nameError, setNameError] = useState("");
 
-  
+
 
 
   useEffect(() => {
@@ -75,7 +81,7 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
     (c) => c.name === createEmployee.EMPLOYEE_COUNTRY
   );
 
- const availableCities = availableState?.states?.find(
+  const availableCities = availableState?.states?.find(
     (s) => s.name === createEmployee.EMPLOYEE_STATE
   );
 
@@ -140,6 +146,7 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
       setNameError("Name should not be empty");
       return;
     }
+    
 
     // Perform API validation and request
     axios
@@ -150,11 +157,12 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
         if (response.data.operation === "failed") {
           setUsernameError(response.data.errorMsg)
         } else if (response.data.operation === "successfull") {
-          toast.success("Project Created successfully!", {
+          toast.success("Employee Created successfully!", {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 1000,
             
           });
+          // handleSubmission()
           refetch()
           setOpen(false);
 
@@ -164,6 +172,38 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
         console.error(error, "ERR");
       });
   };
+
+
+  const handleSubmission = (e) => {
+    e.preventDefault();
+
+    // if (!createEmployee.EMPLOYEE_USERNAME || !createEmployee.EMPLOYEE_EMAIL || !createEmployee.EMPLOYEE_PASSWORD) {
+    //   setErrorMsg("Fill all fields");
+    //   return;
+    // }
+    // setErrorMsg("");
+
+    setSubmitButtonDisabled(true);
+    createUserWithEmailAndPassword(auth, createEmployee.EMPLOYEE_EMAIL, createEmployee.EMPLOYEE_PASSWORD)
+      .then(async (res) => {
+        setSubmitButtonDisabled(false);
+        const user = res.user;
+        await updateProfile(user, {
+          displayName: createEmployee.EMPLOYEE_USERNAME,
+        });
+        handleSubmit()
+        // navigate("/dashboard");
+      })
+      .catch((err) => {
+        setSubmitButtonDisabled(false);
+        setErrorMsg(err.message);
+        setEmailError(err.message)
+      });
+  };
+
+
+
+
 
 
   return (
@@ -203,16 +243,15 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
                   <label for="inputqual">Employee Username</label>
                   <input
                     type="text"
-                    className={`form-control form-control-2 rounded-0 ${
-                      usernameError ? "is-invalid" : ""
-                    }`}
+                    className={`form-control form-control-2 rounded-0 ${usernameError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter Employee Username"
                     value={createEmployee.EMPLOYEE_USERNAME}
                     name="EMPLOYEE_USERNAME"
                     onChange={handleCreate}
                     label="Company username"
                   />
-                   {usernameError && (
+                  {usernameError && (
                     <div className="invalid-feedback">{usernameError}</div>
                   )}
                 </div>
@@ -220,16 +259,15 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
                   <label>Employee Name</label>
                   <input
                     type="text"
-                    className={`form-control form-control-2 rounded-0 ${
-                      nameError ? "is-invalid" : ""
-                    }`}
+                    className={`form-control form-control-2 rounded-0 ${nameError ? "is-invalid" : ""
+                      }`}
                     id="empName"
                     placeholder="Enter Employee name"
                     value={createEmployee.EMPLOYEE_NAME}
                     name="EMPLOYEE_NAME"
                     onChange={handleCreate}
                   />
-                   {nameError && (
+                  {nameError && (
                     <div className="invalid-feedback">{nameError}</div>
                   )}
                 </div>
@@ -239,9 +277,8 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
                   <label>E-mail</label>
                   <input
                     type="email"
-                    className={`form-control form-control-2 rounded-0 ${
-                      emailError ? "is-invalid" : ""
-                    }`}
+                    className={`form-control form-control-2 rounded-0 ${emailError ? "is-invalid" : ""
+                      }`}
                     id="email"
                     placeholder="Enter Email add..."
                     value={createEmployee.EMPLOYEE_EMAIL}
@@ -249,7 +286,7 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
                     onChange={handleCreate}
                     label="email"
                   />
-                   {emailError && (
+                  {emailError && (
                     <div className="invalid-feedback">{emailError}</div>
                   )}
                 </div>
@@ -271,16 +308,15 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
                   <label>Phone</label>
                   <input
                     type="number"
-                    className={`form-control form-control-2 rounded-0 ${
-                      phoneError ? "is-invalid" : ""
-                    }`}
+                    className={`form-control form-control-2 rounded-0 ${phoneError ? "is-invalid" : ""
+                      }`}
                     id="phone"
                     placeholder="Enter Your Number"
                     value={createEmployee.EMPLOYEE_PHONE}
                     name="EMPLOYEE_PHONE"
                     onChange={handleCreate}
                   />
-                     {phoneError && (
+                  {phoneError && (
                     <div className="invalid-feedback">{phoneError}</div>
                   )}
                 </div>
@@ -288,15 +324,14 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
                   <label>Employee Password</label>
                   <input
                     type="text"
-                    className={`form-control form-control-2 rounded-0 ${
-                      passwordError ? "is-invalid" : ""
-                    }`}
+                    className={`form-control form-control-2 rounded-0 ${passwordError ? "is-invalid" : ""
+                      }`}
                     placeholder="Enter Employee password"
                     value={createEmployee.EMPLOYEE_PASSWORD}
                     name="EMPLOYEE_PASSWORD"
                     onChange={handleCreate}
                   />
-                    {passwordError && (
+                  {passwordError && (
                     <div className="invalid-feedback">{passwordError}</div>
                   )}
                 </div>
@@ -447,7 +482,7 @@ export default function AddEmployee({COMPANY_ID,COMPANY_USERNAME, COMPANY_PARENT
                 <button
                   type="submit"
                   className="btn btn-info text-white "
-                  onClick={handleSubmit}
+                  onClick={handleSubmission}
                 >
                   Create Employee
                 </button>{" "}

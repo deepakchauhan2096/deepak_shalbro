@@ -112,6 +112,17 @@ const Sidebar = ({
                 </ListItemButton>
               </ListItem>
             </Link>
+            <Link
+              to={`/company/contractor/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              className="nav-link"
+              style={{ background: active == 6 ? "#f3f3f3" : "" }}
+            >
+              <ListItem disablePadding>
+                <ListItemButton sx={{ fontSize: "16px" }}>
+                  My contractors
+                </ListItemButton>
+              </ListItem>
+            </Link>
           </List>
           <Divider />
           <div
@@ -207,6 +218,17 @@ const Sidebar = ({
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
                   Documents
+                </ListItemButton>
+              </ListItem>
+            </Link>
+            <Link
+              to={`/company/contractor/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              className="nav-link"
+              style={{ background: active == 6 ? "#f3f3f3" : "" }}
+            >
+              <ListItem disablePadding>
+                <ListItemButton sx={{ fontSize: "16px" }}>
+                  My contractors
                 </ListItemButton>
               </ListItem>
             </Link>

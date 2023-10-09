@@ -74,8 +74,8 @@ export default function CompanyDashboard() {
   const data = id.split("&");
   const COMPANY_ID = data[0];
   const COMPANY_USERNAME = data[1];
-  const COMPANY_PARENT_ID = data[2];
-  const COMPANY_PARENT_USERNAME = data[3];
+  const COMPANY_ROOT_ID = data[2];
+  const COMPANY_ROOT_USERNAME = data[3];
   const [open, setOpen] = React.useState(false);
 
   console.log(open, "open");
@@ -84,8 +84,8 @@ export default function CompanyDashboard() {
       <Sidebar
         COMPANY_ID={COMPANY_ID}
         COMPANY_USERNAME={COMPANY_USERNAME}
-        COMPANY_PARENT_ID={COMPANY_PARENT_ID}
-        COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+        COMPANY_PARENT_ID={COMPANY_ROOT_ID}
+        COMPANY_PARENT_USERNAME={COMPANY_ROOT_USERNAME}
         active={0}
         toggle={open}
       />
