@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
-import country from "../Api/countriess.json";
+import country from "../Api/countryCityState.json";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import projectList from "../jsonlist/typeOfProject.json";
