@@ -1,13 +1,11 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useState, useEffect, useContext } from "react";
+import { useState } from "react";
 import axios from "axios";
-import country from "../Api/countryCityState.json";
-// import states from "../Api/states.json"
+import country from "../Api/countriess.json"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import env from "react-dotenv";
 
 import {
   Button,
@@ -36,7 +34,6 @@ export default function ProjectEdit(props) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [index, setIndex] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
 
   const editProjectData = props?.edit.row;
@@ -53,7 +50,7 @@ export default function ProjectEdit(props) {
     PROJECT_SUPERVISOR: editProjectData.PROJECT_SUPERVISOR,
     PROJECT_COUNTRY: editProjectData.PROJECT_COUNTRY,
     PROJECT_STATE: editProjectData.PROJECT_STATE,
-    PROJECT_ACCOUNT: editProjectData.PROJECT_PHONE,
+    PROJECT_ACCOUNT: editProjectData.PROJECT_ACCOUNT,
     PROJECT_CURRENCY: editProjectData.PROJECT_CURRENCY,
     PROJECT_VALUE: editProjectData.PROJECT_VALUE,
     PROJECT_TYPE: editProjectData.PROJECT_TYPE,
@@ -66,57 +63,61 @@ export default function ProjectEdit(props) {
   });
 
   console.log("EditProject", EditProject);
+
   // city-country-logic
 
   const availableState = country?.find(
     (c) => c.name === EditProject.PROJECT_COUNTRY
   );
 
-  // console.log("all states : ===> ", availableState,"country=>",country);
   const availableCities = availableState?.states?.find(
     (s) => s.name === EditProject.PROJECT_STATE
   );
 
-  //api header
+  // Validation error states
+  const [usernameError, setUsernameError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [accountError, setAccountError] = useState("");
+
+  // const headers = {
+  //   "Content-Type": "application/json",
+  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  // };
+
   const handleEdit = (e) => {
     setEditProject({ ...EditProject, [e.target.name]: e.target.value });
-    console.log("heello world", EditProject);
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      !EditProject.PROJECT_USERNAME ||
-      !EditProject.PROJECT_NAME ||
-      !EditProject.PROJECT_ACCOUNT ||
-      !EditProject.PROJECT_PARENT_ID ||
-      !EditProject.PROJECT_PARENT_USERNAME ||
-      !EditProject.PROJECT_MEMBER_PARENT_ID ||
-      !EditProject.PROJECT_MEMBER_PARENT_USERNAME ||
-      !EditProject.PROJECT_ADD ||
-      !EditProject.PROJECT_START_DATE ||
-      !EditProject.PROJECT_END_DATE ||
-      !EditProject.PROJECT_SUPERVISOR ||
-      !EditProject.PROJECT_COUNTRY ||
-      !EditProject.PROJECT_CITY ||
-      !EditProject.PROJECT_STATE ||
-      !EditProject.PROJECT_VALUE ||
-      !EditProject.PROJECT_CURRENCY
-    ) {
-      setErrorMsg("Fill all fields");
-      toast.error("Please fill in all fields", {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 2000,
-      });
-      return;
-    }
+
+    // Clear previous validation errors
+    setUsernameError("");
+    setNameError("");
+    setAccountError("");
     setErrorMsg("");
 
+    // Validate the "Project Username" field
+    if (!EditProject.PROJECT_USERNAME) {
+      setUsernameError("Project Username is required.");
+      return;
+
+    }
+
+    // Validate the "Project Name" field
+    if (!EditProject.PROJECT_NAME) {
+      setNameError("Project Name is required.");
+      return;
+
+    }
+
+    // Validate the "Account" field
+    if (!EditProject.PROJECT_ACCOUNT) {
+      setAccountError("Account is required.");
+      return;
+    }
+
+  
     axios
       .put(
         "/update_projects",
@@ -129,9 +130,7 @@ export default function ProjectEdit(props) {
             editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
           PROJECT_DETAILS_FOR_UPDATES: { ...EditProject },
         },
-        {
-          headers,
-        }
+
       )
       .then((response) => {
         if (response.data.operation === "failed") {
@@ -140,16 +139,16 @@ export default function ProjectEdit(props) {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 2000,
           });
-          
         } else if (response.data.operation === "successfull") {
+          props.refetch()
           handleClose();
           console.log("anu", response);
+
           toast.success("Project Updated successfully!", {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 2000,
           });
-         
-         
+
         }
       })
       .catch((error) => {
@@ -186,18 +185,25 @@ export default function ProjectEdit(props) {
                 <label> Project Username</label>
                 <input
                   type="text"
-                  className="form-control form-control-2 rounded-0"
+                  className={`form-control form-control-2 rounded-0 ${
+                    usernameError ? "is-invalid" : ""
+                  }`}
                   placeholder="Username"
                   value={EditProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
                   onChange={handleEdit}
                 />
+                {usernameError && (
+                  <div className="invalid-feedback">{usernameError}</div>
+                )}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Name</label>
                 <input
                   type="text"
-                  className="form-control form-control-2 rounded-0"
+                  className={`form-control form-control-2 rounded-0 ${
+                    nameError ? "is-invalid" : ""
+                  }`}
                   id="inputname"
                   placeholder="Project Name"
                   value={EditProject.PROJECT_NAME}
@@ -205,19 +211,28 @@ export default function ProjectEdit(props) {
                   onChange={handleEdit}
                   required
                 />
+                {nameError && (
+                  <div className="invalid-feedback">{nameError}</div>
+                )}
               </div>
               <div className="form-group col-xl-4">
                 <label>Account</label>
                 <input
                   type="number"
-                  className="form-control form-control-2 rounded-0"
+                  className={`form-control form-control-2 rounded-0 ${
+                    accountError ? "is-invalid" : ""
+                  }`}
                   id="inputPassword4"
-                  placeholder="Enter Phone Number"
+                  placeholder="Enter Account
+                   Number"
                   name="PROJECT_ACCOUNT"
                   value={EditProject.PROJECT_ACCOUNT}
                   onChange={handleEdit}
                   required
                 />
+                {accountError && (
+                  <div className="invalid-feedback">{accountError}</div>
+                )}
               </div>
             </div>
             <div className="row py-2">

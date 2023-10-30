@@ -1,23 +1,21 @@
 import {
   Avatar,
-  Collapse,
   CssBaseline,
   Divider,
   Drawer,
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
   Toolbar,
   Tooltip,
 } from "@mui/material";
 import React, { useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "bootstrap";
 import Navbar from "./Navbar";
-import { ExpandLess, ExpandMore, Settings, StarBorder } from "@mui/icons-material";
+import { auth } from "../firebase";
 
 const Sidebar = ({
   COMPANY_ID,
@@ -28,14 +26,20 @@ const Sidebar = ({
   toggle,
 }) => {
   // console.log(toggle, "control");
+  const navigate = useNavigate()
+
+
+  const Logout = async () => {
+    try {
+      await auth.signOut();
+      navigate("/company/login")
+    } catch (error) {
+      // Handle any errors here
+      console.error('Error logging out: ', error);
+    }
+  };
 
   const drawerWidth = 0;
-
-  const [open, setOpen] = React.useState(true);
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
   return (
     <>
       <div>
@@ -60,7 +64,7 @@ const Sidebar = ({
           >
             <h5 className="pt-2">{COMPANY_USERNAME}</h5>
             <Tooltip title={"copany"}>
-              <Avatar>{(COMPANY_USERNAME).slice(0, 1)}</Avatar>
+              <Avatar>{(COMPANY_USERNAME)?.slice(0, 1)}</Avatar>
             </Tooltip>
           </div>
           <Divider />
@@ -69,7 +73,7 @@ const Sidebar = ({
             <Link
               to={`/company/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 0 ? "#f3f3f3" : "" }}
+              style={{ background: active == 0 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -80,7 +84,7 @@ const Sidebar = ({
             <Link
               to={`/company/projects/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 1 ? "#f3f3f3" : "" }}
+              style={{ background: active == 1 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -91,7 +95,7 @@ const Sidebar = ({
             <Link
               to={`/company/employees/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 2 ? "#f3f3f3" : "" }}
+              style={{ background: active == 2 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -102,7 +106,7 @@ const Sidebar = ({
             <Link
               to={`/company/attendance/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 3 ? "#f3f3f3" : "" }}
+              style={{ background: active == 3 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -113,7 +117,7 @@ const Sidebar = ({
             <Link
               to={`/company/documents/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 4 ? "#f3f3f3" : "" }}
+              style={{ background: active == 4 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -121,73 +125,17 @@ const Sidebar = ({
                 </ListItemButton>
               </ListItem>
             </Link>
-
             <Link
-              to={`/company/bankaccount/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/contractor/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 4 ? "#f3f3f3" : "" }}
+              style={{ background: active == 6 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
-                  Bank Account
+                  My contractors
                 </ListItemButton>
               </ListItem>
             </Link>
-
-            <Link
-              to={`/company/checks/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
-              className="nav-link"
-              style={{ background: active === 5 ? "#f3f3f3" : "" }}
-            >
-              <ListItemButton onClick={handleClick}>
-                <ListItemText primary="Check Creation" />
-                {open ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-
-                
-                {/* <List sx={{ paddingLeft: 2 }}>
-              <Collapse in={open} timeout="auto" unmountOnExit>
-                  <Link
-                    to={`/company/bankaccount/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}/details`}
-                    className="nav-link"
-                    style={{ background: active === 6 ? "#f3f3f3" : "" }}
-                  >
-                    <ListItem disablePadding>
-                      <ListItemButton sx={{ fontSize: "14px" }}>
-                        Bank Account Details
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                  <Link
-                    to={`/company/bankaccount/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}/transactions`}
-                    className="nav-link"
-                    style={{ background: active === 7 ? "#f3f3f3" : "" }}
-                  >
-                    <ListItem disablePadding>
-                      <ListItemButton sx={{ fontSize: "14px" }}>
-                        Bank Account Transactions
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                  <Link
-                    to={`/company/bankaccount/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}/settings`}
-                    className="nav-link"
-                    style={{ background: active === 8 ? "#f3f3f3" : "" }}
-                  >
-                    <ListItem disablePadding>
-                      <ListItemButton sx={{ fontSize: "14px" }}>
-                        Bank Account Settings
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-              </Collapse>
-                </List> */}
-              {/* </ListItem> */}
-            </Link>
-
-
-
-
           </List>
           <Divider />
           <div
@@ -195,12 +143,17 @@ const Sidebar = ({
             style={{ bottom: "0" }}
           >
             <div className="logout_icon ">
-              <Link className="text-dark text-uppercase" to="/admin">
-                <LogoutIcon style={{ display: "inline" }} /> Exit
-              </Link>
+              <button
+                class="text-dark text-uppercase btn-link border-0 bg-white"
+                type="submit"
+                onClick={Logout}
+              >
+                <LogoutIcon style={{ display: "inline" }} onClick={Logout} />  Logout
+              </button>
             </div>
           </div>
           <Divider />
+         
         </Drawer>
 
         <Drawer
@@ -225,7 +178,7 @@ const Sidebar = ({
           >
             <h5 className="pt-2">{COMPANY_USERNAME}</h5>
             <Tooltip title={"copany"}>
-              <Avatar>{(COMPANY_USERNAME).slice(0, 1)}</Avatar>
+              <Avatar>{(COMPANY_USERNAME)?.slice(0, 1)}</Avatar>
             </Tooltip>
           </div>
           <Divider />
@@ -234,7 +187,7 @@ const Sidebar = ({
             <Link
               to={`/company/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 0 ? "#f3f3f3" : "" }}
+              style={{ background: active == 0 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -245,7 +198,7 @@ const Sidebar = ({
             <Link
               to={`/company/projects/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 1 ? "#f3f3f3" : "" }}
+              style={{ background: active == 1 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -256,7 +209,7 @@ const Sidebar = ({
             <Link
               to={`/company/employees/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 2 ? "#f3f3f3" : "" }}
+              style={{ background: active == 2 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -267,7 +220,7 @@ const Sidebar = ({
             <Link
               to={`/company/attendance/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 3 ? "#f3f3f3" : "" }}
+              style={{ background: active == 3 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -278,11 +231,22 @@ const Sidebar = ({
             <Link
               to={`/company/documents/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 4 ? "#f3f3f3" : "" }}
+              style={{ background: active == 4 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
                   Documents
+                </ListItemButton>
+              </ListItem>
+            </Link>
+            <Link
+              to={`/company/contractor/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              className="nav-link"
+              style={{ background: active == 6 ? "#f3f3f3" : "" }}
+            >
+              <ListItem disablePadding>
+                <ListItemButton sx={{ fontSize: "16px" }}>
+                  My contractors
                 </ListItemButton>
               </ListItem>
             </Link>
@@ -293,9 +257,13 @@ const Sidebar = ({
             style={{ bottom: "0" }}
           >
             <div className="logout_icon ">
-              <Link className="text-dark text-uppercase" to="/admin">
-                <LogoutIcon style={{ display: "inline" }} /> Exit
-              </Link>
+            <button
+                class="text-dark text-uppercase btn-link border-0 bg-white"
+                type="submit"
+                onClick={Logout}
+              >
+                <LogoutIcon style={{ display: "inline" }} onClick={Logout} />  Logout
+              </button>
             </div>
           </div>
           <Divider />

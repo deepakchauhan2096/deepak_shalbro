@@ -10,7 +10,7 @@ import { Link, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 // import { useDispatch, useSelector } from "react-redux";
 // import { initProject_fun } from "../redux/action
-import country from "../Api/countryCityState.json";
+import country from "../countryCityState.json";
 
 const BankAccount = (props) => {
   const [screen, setScreen] = useState(1);

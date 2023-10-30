@@ -1,26 +1,9 @@
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import { Link, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -69,13 +52,19 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function CompanyDashboard() {
-  const { id } = useParams();
-  const data = id.split("&");
+export default function CompanyDashboard(props) {
+  // const { id } = useParams();
+  // const data = id.split("&");
+
+  // const { id } = useParams();
+  const mydata = useLocation()
+  console.log(mydata, "mydata")
+  const data = props?.data;
+  console.log(data,"lala")
   const COMPANY_ID = data[0];
   const COMPANY_USERNAME = data[1];
-  const COMPANY_PARENT_ID = data[2];
-  const COMPANY_PARENT_USERNAME = data[3];
+  const COMPANY_ROOT_ID = data[2];
+  const COMPANY_ROOT_USERNAME = data[3];
   const [open, setOpen] = React.useState(false);
 
   console.log(open, "open");
@@ -84,8 +73,8 @@ export default function CompanyDashboard() {
       <Sidebar
         COMPANY_ID={COMPANY_ID}
         COMPANY_USERNAME={COMPANY_USERNAME}
-        COMPANY_PARENT_ID={COMPANY_PARENT_ID}
-        COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+        COMPANY_PARENT_ID={COMPANY_ROOT_ID}
+        COMPANY_PARENT_USERNAME={COMPANY_ROOT_USERNAME}
         active={0}
         toggle={open}
       />

@@ -149,7 +149,7 @@ export default function ProjectUpload(props) {
       const config = {
         method: "put",
         maxBodyLength: Infinity,
-        url: "http://3.84.137.243:5001/download_document",
+        url: "/download_document",
         headers: {
           authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
           "Content-Type": "application/json",

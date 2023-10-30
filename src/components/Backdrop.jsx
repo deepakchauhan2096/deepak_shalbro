@@ -7,7 +7,7 @@ export default function SimpleBackdrop({ open }) {
     <div>
       <Backdrop
         sx={{
-          backgroundColor: "inherit",
+          backgroundColor: "#f0f0f0",
           color: "#00008B",
           zIndex: (theme) => theme.zIndex.drawer + 1,
           position:"absolute",

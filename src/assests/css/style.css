@@ -1,7 +1,7 @@
 
 
 ::placeholder, label, option,select, textarea{
-  font-size: 12px !important;
+  font-size: 13px !important;
 }
 
 
@@ -14,9 +14,17 @@
 
 
 p,b{
-  font-size: 12px;
+  font-size: 13px;
 }
 
+/* .tableWidth{
+  width: 100% !important;
+
+} */
+
+.table-hover:hover{
+  background: #555555;
+}
 
 .fw-light {
   font-size: 12px;
@@ -85,6 +93,42 @@ p,b{
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555555;
+}
+
+
+/*hover like radio button */
+.buttons {
+  float: left;
+  margin: 0 5px 0 0;
+  width: 100px;
+  height: 40px;
+  position: relative;
+}
+
+.buttons label,
+.buttons input {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.buttons input[type="radio"] {
+  opacity: 0.011;
+  z-index: 100;
+}
+
+.buttons input[type="radio"]:checked + label {
+  background: #20b8be;
+  border-radius: 4px;
+}
+
+.buttons label {
+  cursor: pointer;
+  z-index: 90;
+  line-height: 1.8em;
 }
 
 

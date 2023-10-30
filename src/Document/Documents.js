@@ -24,8 +24,6 @@ export default function Document(props) {
 
     const [imagesData, setImagesData] = useState([]);
     const [totalDocuments, setTotalDocuments] = useState(0);
-    // const [fileSelected, setFileSelected] = useState(false);
-    // const [showAllDocuments, setShowAllDocuments] = useState(false);
     const [backdrop, setBackdrop] = useState(false);
     const [deleteItem, setDeleteItem] = useState("");
     const [openNav, setOpenNav] = useState(false);
@@ -75,8 +73,6 @@ export default function Document(props) {
     }));
 
     const handleClick = (event) => {
-        // setPostImage(event);
-        // dispatch(initProject_fun(event))
         handleOpen();
     };
     const handleOpen = () => setOpen(true);
@@ -91,7 +87,6 @@ export default function Document(props) {
 
         const requestData = {
             DOCUMENT_REF_ID: COMPANY_ID,
-            // DOCUMENT_COMPANY_USERNAME: COMPANY_USERNAME,
             DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME
         };
 
@@ -144,13 +139,13 @@ export default function Document(props) {
 
             downloadFile(response.data, fileName);
 
-            
+
         } catch (error) {
             console.log(error);
         }
 
     };
-    
+
 
     // Function to Delete the uploaded documents 
     const handleDelDoc = (e, documentId) => {
@@ -223,7 +218,6 @@ export default function Document(props) {
             type: 'number',
             width: 150,
             editable: false,
-
         },
         {
             field: 'ExpiryDate',
@@ -302,7 +296,6 @@ export default function Document(props) {
 
     return (
         <>
-
             <Sidebar
                 COMPANY_ID={COMPANY_ID}
                 COMPANY_USERNAME={COMPANY_USERNAME}
@@ -312,6 +305,11 @@ export default function Document(props) {
                 toggle={openNav}
             />
             <Box className="box" >
+                <Button
+                 sx={{ color: "#277099" }}
+                 className="btn"
+                >Company Documents</Button>
+
                 <Navbar toggle={() => setOpenNav((e) => !e)} />
                 <DocumentCreate
                     name={"Employee"}
@@ -338,7 +336,6 @@ export default function Document(props) {
                             pageSizeOptions={[5]}
                             disableMultipleSelection
                             density="compact"
-
                         />
                     </Box>
                 </MyScreen>

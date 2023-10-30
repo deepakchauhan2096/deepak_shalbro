@@ -31,7 +31,6 @@ import Navbar from "../components/Navbar";
 // import { initProject_fun } from "../redux/action";
 
 const Project = (props) => {
-
   const { id } = useParams();
 
   const param = id.split("&");
@@ -80,10 +79,10 @@ const Project = (props) => {
 
   // console.log(filterallprojectData, "my project");
 
-  const headers = {
-    "Content-Type": "application/json",
-    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  };
+  // const headers = {
+  //   "Content-Type": "application/json",
+  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  // };
 
   const fetchProjects = async (e) => {
     try {
@@ -94,8 +93,7 @@ const Project = (props) => {
           PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
           PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
           PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
-        },
-        { headers }
+        }
       );
       // setTimeout(() => {
       const data = response.data;
@@ -126,7 +124,7 @@ const Project = (props) => {
           PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
           PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
         },
-        { headers }
+  
       );
 
       const data = response.data;
@@ -148,8 +146,7 @@ const Project = (props) => {
           EMPLOYEE_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
           EMPLOYEE_PARENT_USERNAME: COMPANY_USERNAME,
           EMPLOYEE_PARENT_ID: COMPANY_ID,
-        },
-        { headers }
+        }
       );
 
       const data = response.data;
@@ -272,7 +269,10 @@ const Project = (props) => {
           //   handleEdit(cellValues);
           // }}
           >
-            <ProjectEdit edit={cellValues} refetch={fetchProjects} />
+            <ProjectEdit edit={cellValues} 
+            refetch={fetchProjects} 
+            
+            />
           </Button>
         );
       },

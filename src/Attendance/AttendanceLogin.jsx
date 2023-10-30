@@ -27,10 +27,7 @@ function AdminLogin() {
       method: "post",
       maxBodyLength: Infinity,
       url: "/login",
-      headers: {
-        authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-        "Content-Type": "application/json",
-      },
+
       data: values,
     };
 

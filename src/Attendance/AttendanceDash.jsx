@@ -75,17 +75,17 @@ const AttendanceDash = (props) => {
     getAdminData();
   }, [props.user]);
 
-  const headers = {
-    "Content-Type": "application/json",
-    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  };
+  // const headers = {
+  //   "Content-Type": "application/json",
+  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  // };
 
   const getAdminData = async () => {
     try {
       const response = await axios.put(
-        "http://3.84.137.243:5001/get_admin",
+        "/get_admin",
         { ADMIN_EMAIL: props?.email, ADMIN_USERNAME: props?.user },
-        { headers }
+      
       );
       setTimeout(() => {
         console.log("response.data : ", response.data);
@@ -102,12 +102,12 @@ const AttendanceDash = (props) => {
   const getCompanyData = async () => {
     try {
       const response = await axios.put(
-        "http://3.84.137.243:5001/get_all_company",
+        "/get_all_company",
         {
           COMPANY_PARENT_ID: tableRows?.ADMIN_ID,
           COMPANY_PARENT_USERNAME: props.user,
         },
-        { headers }
+    
       );
       setTimeout(() => {
         console.log("response.data : ", response.data);

@@ -35,10 +35,10 @@ function generate(element) {
 const Demo = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }));
-const headers = {
-  "Content-Type": "application/json",
-  authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-};
+// const headers = {
+//   "Content-Type": "application/json",
+//   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+// };
 
 const AllDocument = () => {
 
@@ -50,9 +50,7 @@ const AllDocument = () => {
        {
         "DOCUMENT_REF_ID": 12,
         "DOCUMENT_ADMIN_USERNAME": "deepanshu1"
-    }, {
-        headers,
-      })
+    })
       .then((response) => {
         // console.log("response data:", response.data);
       })

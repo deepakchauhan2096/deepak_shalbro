@@ -37,8 +37,8 @@ const ProjectLoc = (props) => {
  
 
   const [markerPosition, setMarkerPosition] = useState({
-    lat: "",
-    lng: "",
+    lat: 0,
+    lng: 0,
   });
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -50,17 +50,17 @@ const ProjectLoc = (props) => {
   });
 
   
-  useEffect(() => {
-    fetchProjects();
-  }, []);
+  // useEffect(() => {
+  //   fetchProjects();
+  // }, []);
 
   
 
 
-  const headers = {
-    "Content-Type": "application/json",
-    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  };
+  // const headers = {
+  //   "Content-Type": "application/json",
+  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  // };
 
   const fetchProjects = async (e) => {
     try {
@@ -72,7 +72,7 @@ const ProjectLoc = (props) => {
           PROJECT_MEMBER_PARENT_USERNAME:
             editProjectData?.PROJECT_MEMBER_PARENT_USERNAME,
         },
-        { headers }
+     
       );
       setTimeout(() => {
       const data = response?.data;
@@ -134,9 +134,7 @@ const ProjectLoc = (props) => {
             editProjectData.PROJECT_MEMBER_PARENT_USERNAME,
           PROJECT_DETAILS_FOR_UPDATES: { ...EditProject },
         },
-        {
-          headers,
-        }
+        
       )
       .then((response) => {
         if (response.data.operation === "failed") {
@@ -176,16 +174,16 @@ const ProjectLoc = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   getLocation();
-  // }, []);
+  useEffect(() => {
+    getLocation();
+  }, []);
    // Run only once when component mounts
 
   const fetchLocationName = async (lat, lon) => {
     // fatch locatin name
     try {
 
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAPS_API_KEY}`;
+      const url = `https://maps.googleapis.com/maps/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAPS_API_KEY}`;
 
       const response = await fetch(url);
       const data = await response.json();

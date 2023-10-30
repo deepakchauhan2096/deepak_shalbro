@@ -10,7 +10,7 @@ import { Link, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 // import { useDispatch, useSelector } from "react-redux";
 // import { initProject_fun } from "../redux/action
-import country from "../Api/countryCityState.json";
+import country from "../countryCityState.json";
 
 const BankAccount = (props) => {
   const [screen, setScreen] = useState(1);
@@ -217,7 +217,7 @@ const BankAccount = (props) => {
   const handleSubmit = async () => {
     try {
       // Simulate saving data to the server (replace with your actual API endpoint)
-      await axios.post("/api/save_bank_account", formValues);
+      await axios.post("/save_bank_account", formValues);
 
       // Reset the form or show a success message
       alert("Bank account saved successfully!");

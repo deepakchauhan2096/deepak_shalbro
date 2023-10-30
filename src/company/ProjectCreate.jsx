@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
-import country from "../Api/countryCityState.json";
+import country from "../Api/countriess.json";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import projectList from "../jsonlist/typeOfProject.json";
@@ -51,35 +51,9 @@ export default function ProjectCreate({
     PROJECT_VALUE: "",
     PROJECT_CURRENCY: "",
   });
-  const [starError, setStartError] = useState("");
-  const [endError, setEndError] = useState("");
+  const [usernameErr, setUsernameError] = useState("");
+  const [companyaccError, setCompanyAccError] = useState("");
   const [nameError, setNameError] = useState("");
-
-  // random username
-
-  function generateRandomUsername() {
-    const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let username = "";
-
-    // Add the first five characters
-    for (let i = 0; i < 5; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      username += charset[randomIndex];
-    }
-
-    // Add six random digits
-    for (let i = 0; i < 6; i++) {
-      username += Math.floor(Math.random() * 10); // Generates random digits (0-9)
-    }
-
-    return username;
-  }
-
-  // Usage example: Generate a random username with 5 characters followed by 6 digits
-  const randomUsername = generateRandomUsername();
-  console.log(randomUsername);
-
-  // random username
 
   console.log("project", createProject);
 
@@ -100,10 +74,7 @@ export default function ProjectCreate({
       ...prevState,
       PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
     }));
-    setCreateProject((prevState) => ({
-      ...prevState,
-      PROJECT_USERNAME: randomUsername,
-    }));
+
   }, [open]);
 
   console.log(createProject, "check");
@@ -117,10 +88,10 @@ export default function ProjectCreate({
     (s) => s.name === createProject.PROJECT_STATE
   );
 
-  const headers = {
-    "Content-Type": "application/json",
-    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  };
+  // const headers = {
+  //   "Content-Type": "application/json",
+  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  // };
 
   const handleCreate = (e) => {
     const { name, value } = e.target;
@@ -135,33 +106,31 @@ export default function ProjectCreate({
 
     // Clear previous validation errors
     setNameError("");
-    setStartError("");
-    setEndError("");
+    setUsernameError("");
+    setCompanyAccError("");
 
     const isValidName = createProject.PROJECT_NAME !== "";
-    const isValidStart = createProject.PROJECT_START_DATE !== "";
-    const isValidEnd = createProject.PROJECT_END_DATE !== "";
+    const isValidUsername = createProject.PROJECT_USERNAME !== "";
+    const isValidCompAccount = createProject.PROJECT_ACCOUNT !== "";
+    
+    if (!isValidUsername) {
+      setUsernameError("Username should not be empty");
+      return;
+    }
 
     if (!isValidName) {
       setNameError("Name should not be empty");
       return;
     }
 
-    if (!isValidStart) {
-      setStartError("Start Date should not be empty");
-      return;
-    }
-
-    if (!isValidEnd) {
-      setEndError("End  Date should not be empty");
+    if (!isValidCompAccount) {
+      setCompanyAccError("Company Account should not be empty");
       return;
     }
 
     // Perform API validation and request
     axios
-      .post("/create_project", createProject, {
-        headers,
-      })
+      .post("/create_project", createProject)
       .then((response) => {
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
@@ -223,27 +192,29 @@ export default function ProjectCreate({
                 <label> Project Username</label>
                 <input
                   type="text"
-                  className="form-control form-control-2 rounded-0"
+                  className={`form-control form-control-2 rounded-0 ${usernameErr ? "is-invalid" : ""
+                    }`}
                   placeholder="Username"
                   value={createProject.PROJECT_USERNAME}
                   name="PROJECT_USERNAME"
                   onChange={handleCreate}
-                  disabled
                 />
+                {usernameErr && (
+                  <div className="invalid-feedback">{usernameErr}</div>
+                )}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Name</label>
                 <input
                   type="text"
-                  className={`form-control form-control-2 rounded-0 ${
-                    nameError ? "is-invalid" : ""
-                  }`}
+                  className={`form-control form-control-2 rounded-0 ${nameError ? "is-invalid" : ""
+                    }`}
                   id="inputname"
                   placeholder="Project Name"
                   value={createProject.PROJECT_NAME}
                   name="PROJECT_NAME"
                   onChange={handleCreate}
-                  required
+     
                 />
                 {nameError && (
                   <div className="invalid-feedback">{nameError}</div>
@@ -253,14 +224,18 @@ export default function ProjectCreate({
                 <label>Account</label>
                 <input
                   type="number"
-                  className="form-control form-control-2 rounded-0"
+                  className={`form-control form-control-2 rounded-0 ${companyaccError ? "is-invalid" : ""
+                    }`}
                   id="inputPassword4"
                   placeholder="Enter your Account"
                   name="PROJECT_ACCOUNT"
                   value={createProject.PROJECT_ACCOUNT}
                   onChange={handleCreate}
-                  required
+       
                 />
+                {companyaccError && (
+                  <div className="invalid-feedback">{companyaccError}</div>
+                )}
               </div>
             </div>
             <div className="row py-2">
@@ -271,13 +246,9 @@ export default function ProjectCreate({
                   value={createProject.PROJECT_START_DATE}
                   name="PROJECT_START_DATE"
                   onChange={handleCreate}
-                  className={`form-control form-control-2 rounded-0 ${
-                    starError ? "is-invalid" : ""
-                  }`}
+                  className="form-control form-control-2 rounded-0 "
                 />
-                {starError && (
-                  <div className="invalid-feedback">{starError}</div>
-                )}
+
               </div>
               <div className="form-group col-xl-4">
                 <label>Project End date</label>
@@ -286,11 +257,8 @@ export default function ProjectCreate({
                   value={createProject.PROJECT_END_DATE}
                   name="PROJECT_END_DATE"
                   onChange={handleCreate}
-                  className={`form-control form-control-2 rounded-0 ${
-                    endError ? "is-invalid" : ""
-                  }`}
+                  className="form-control form-control-2 rounded-0"
                 />
-                {endError && <div className="invalid-feedback">{endError}</div>}
               </div>
               <div className="form-group col-xl-4">
                 <label>Project Type</label>

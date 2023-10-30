@@ -21,10 +21,10 @@ function AdminCreate() {
   const [errorMsg, setErrorMsg] = useState("");
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
 
-  const headers = {
-    "Content-Type": "application/json",
-    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  };
+  // const headers = {
+  //   "Content-Type": "application/json",
+  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  // };
 
   const handleSubmission = () => {
     if (!values.ADMIN_NAME || !values.ADMIN_EMAIL || !values.ADMIN_PASSWORD) {
@@ -52,9 +52,7 @@ function AdminCreate() {
   const handleSubmit = (e) => {
     // e.preventDefault();
     axios
-      .post("http://3.84.137.243:5001/create_admin", values, {
-        headers,
-      })
+      .post("/create_admin", values)
       .then((response) => {
         // navigate("/dashboard");
         alert("successfully sign up")
