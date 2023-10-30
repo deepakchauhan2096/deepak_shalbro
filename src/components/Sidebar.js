@@ -125,28 +125,16 @@ const Sidebar = ({
             <Link
               to={`/company/bankaccount/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 4 ? "#f3f3f3" : "" }}
-            >
-              <ListItem disablePadding>
-                <ListItemButton sx={{ fontSize: "16px" }}>
-                  Bank Account
-                </ListItemButton>
-              </ListItem>
-            </Link>
-
-            <Link
-              to={`/company/checks/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
-              className="nav-link"
               style={{ background: active === 5 ? "#f3f3f3" : "" }}
             >
               <ListItemButton onClick={handleClick}>
-                <ListItemText primary="Check Creation" />
+                <ListItemText primary="Bank Account" />
                 {open ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
 
-                
-                {/* <List sx={{ paddingLeft: 2 }}>
               <Collapse in={open} timeout="auto" unmountOnExit>
+                
+                <List sx={{ paddingLeft: 2 }}>
                   <Link
                     to={`/company/bankaccount/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}/details`}
                     className="nav-link"
@@ -180,8 +168,8 @@ const Sidebar = ({
                       </ListItemButton>
                     </ListItem>
                   </Link>
+                </List>
               </Collapse>
-                </List> */}
               {/* </ListItem> */}
             </Link>
 

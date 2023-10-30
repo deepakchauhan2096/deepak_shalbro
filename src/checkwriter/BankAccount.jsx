@@ -1,17 +1,31 @@
 import React, { useState, useEffect, useContext } from "react";
-import "./bank.css"
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import "./bank.css"
 import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
-import { Button, Paper, Skeleton, styled } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Skeleton,
+  Toolbar,
+  Tooltip,
+  styled,
+} from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
 // import { useDispatch, useSelector } from "react-redux";
 // import { initProject_fun } from "../redux/action
-import country from "../Api/countryCityState.json";
-
 const BankAccount = (props) => {
   const [screen, setScreen] = useState(1);
   const [screenIndex, setScreenIndex] = useState(1);
@@ -26,13 +40,19 @@ const BankAccount = (props) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const [formValues, setFormValues] = useState({
-    selectedOption: 'USA',
-    companyName: '',
-    address1: '',
-    address2: '',
-    city: '',
-    state: '',
-    zip: '',
+    companyName: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zip: "",
+    routingNumber: "",
+    accountNumber: "",
+    nickName: "",
+    accountType: "",
+    checkNumber: "",
+    fractionalNumber: "",
+    signatureFile: null,
   });
 
   const [open, setOpen] = useState(false);
@@ -104,13 +124,6 @@ const BankAccount = (props) => {
   }, []);
 
   // console.log(ProjectData, "projectdata");
-  const [selectedOption, setSelectedOption] = useState("USA"); // Initial selected option
-
-  const handleOptionChange = (option) => {
-    setSelectedOption(option);
-  };
-
-
 
   const columns = [
     { field: "PROJECT_ID", headerName: "ID", width: 150 },
@@ -203,24 +216,47 @@ const BankAccount = (props) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
 
-    if (name === 'selectedOption') {
-      // Handle radio button change
-      setFormValues({ ...formValues, selectedOption: value });
-    } else {
-      // Handle input field change
-      setFormValues({ ...formValues, [name]: value });
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    setFormValues({
+      ...formValues,
+      signatureFile: file,
+    });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      // Simulate saving data to the server (replace with your actual API endpoint)
+      await axios.post("/api/save_bank_account", formValues);
+
+      // Reset the form or show a success message
+      alert("Bank account saved successfully!");
+      setFormValues({
+        companyName: "",
+        address1: "",
+        address2: "",
+        city: "",
+        state: "",
+        zip: "",
+        routingNumber: "",
+        accountNumber: "",
+        nickName: "",
+        accountType: "",
+        checkNumber: "",
+        fractionalNumber: "",
+        signatureFile: null,
+      });
+    } catch (error) {
+      // Handle errors, e.g., show an error message
+      console.error("Error saving bank account:", error);
     }
   };
-
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = formValues;
-    console.log(formData);
-  };
-
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 29px)",
@@ -252,17 +288,6 @@ const BankAccount = (props) => {
   };
 
 
-  // fetching cities state and country 
-
-  const availableState = country?.find((c) => c.name === formValues.country === "canada"
-  );
-
-  const availableCities = availableState?.states?.find((s) => {
-    return s.name === formValues.state;
-  });
-
-  console.log("availableState", availableState);
-  console.log("availableCities", availableCities);
 
   return (
     <>
@@ -271,7 +296,7 @@ const BankAccount = (props) => {
         COMPANY_USERNAME={COMPANY_USERNAME}
         COMPANY_PARENT_ID={COMPANY_PARENT_ID}
         COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
-        active={6}
+        active={5}
         toggle={openNav}
       />
 
@@ -287,7 +312,7 @@ const BankAccount = (props) => {
                 <>
                   <div role="group" style={{ display: "flex", gap: 5, marginBottom: "20px" }} >
                     <button type="button" className="btn btn-primary btn-sm">Quick Pay</button>
-                    <button type="button" className="btn btn-success btn-sm " onClick={() => setScreen(2)}>+ New</button>
+                    <button type="button" className="btn btn-success btn-sm ">+ New</button>
                     <button type="button" className="btn btn-warning  btn-sm">Print-Check Paper</button>
                     <button type="button" className="btn btn-warning btn-sm">Print-Wh
                       ite Paper</button>
@@ -321,7 +346,6 @@ const BankAccount = (props) => {
               )}
             </Box>
           </MyScreen> : screen === 2 ?
-
             <MyScreen sx={{ display: "block", padding: 3 }}>
               <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
                 {isLoading ? (
@@ -329,12 +353,12 @@ const BankAccount = (props) => {
                 ) : (
                   <>
                     <nav
-                      className="navbar navbar-expand-lg navbar-light bg-light"
+                      class="navbar navbar-expand-lg navbar-light bg-light"
                       style={{ height: "40px" }}
                     >
                       <div className="container">
-                        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                          <div className="navbar-nav">
+                        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                          <div class="navbar-nav">
                             <Link className=" text-dark nav-link " role="button" onClick={() => setScreen(1)}><ArrowBackIcon /></Link>
 
                           </div>
@@ -348,20 +372,20 @@ const BankAccount = (props) => {
 
                     <div className="row  justify-content-center">
                       <div className="col-3 Card">
-                        <div className="card text-center mb-3">
-                          <div className="card-body p-4">
+                        <div class="card text-center mb-3">
+                          <div class="card-body p-4">
                             <AccountBalanceOutlinedIcon sx={{ fontSize: "45px" }} color="primary" />
-                            <h5 className="card-title p-4">Connect Instantly</h5>
-                            <p className="card-text p-4 fs-6">Add with your net banking username & password</p>
+                            <h5 class="card-title p-4">Connect Instantly</h5>
+                            <p class="card-text p-4 fs-6">Add with your net banking username & password</p>
                           </div>
                         </div>
                       </div>
                       <div className="col-3 Card" onClick={() => setScreen(3)}>
-                        <div className="card text-center mb-3">
-                          <div className="card-body p-4" role="button"  >
+                        <div class="card text-center mb-3">
+                          <div class="card-body p-4" role="button"  >
                             <AccountBalanceOutlinedIcon sx={{ fontSize: "45px" }} color="primary" />
-                            <h5 className="card-title p-4">Add Manually</h5>
-                            <p className="card-text p-4 fs-6">Add by providing account details manually.</p>
+                            <h5 class="card-title p-4">Add Manually</h5>
+                            <p class="card-text p-4 fs-6">Add by providing account details manually.</p>
                           </div>
                         </div>
                       </div>
@@ -372,7 +396,7 @@ const BankAccount = (props) => {
             </MyScreen> : screen === 3 ?
               <MyScreen sx={{ display: "block", padding: 3 }}>
                 <div className="container g-0">
-                  <div className=" row ">
+                  <div class=" row ">
                     <div className="col-1">
                       <Link className=" text-dark nav-link " role="button" onClick={() => setScreen(2)}><ArrowBackIcon /></Link>   </div>
                     <div className="col-3">
@@ -389,131 +413,95 @@ const BankAccount = (props) => {
                       <div className="row">
                         <div className="col-6">
                           <p >Business Details</p>
-                          <div className="p-1 text-primary-emphasis  border border-primary-subtle rounded-3">
+                          <div class="p-1 text-primary-emphasis  border border-primary-subtle rounded-3">
                           </div>
                         </div>
 
                         <div className="col-6">
                           <p>Account Details</p>
-                          <div className="p-1 text-primary-emphasis border border-primary-subtle rounded-3">
+                          <div class="p-1 text-primary-emphasis border border-primary-subtle rounded-3">
 
                           </div>
                         </div>
                         <br />
 
-
-                        {/* form -------------------------- */}
-
-                        <form className="row g-3 needs-validation" onSubmit={handleSubmit}>
-                          <div className="row justify-content-between mt-5 mb-3">
-                            <label
-                              htmlFor="usaRadio"
-                              className={`col-5 radio-button ${formValues.selectedOption === 'USA' ? 'selected' : ''}`}
-                              style={{ backgroundColor: formValues.selectedOption === 'USA' ? 'blue' : '' }}
-                            >
-                              <input
-                                type="radio"
-                                id="usaRadio"
-                                name="selectedOption"
-                                value="USA"
-                                checked={formValues.selectedOption === 'USA'}
-                                onChange={handleInputChange}
-                              />
-                              USA
-                            </label>
-                            <label
-                              htmlFor="canadaRadio"
-                              className={`col-5 radio-button ${formValues.selectedOption === 'CANADA' ? 'selected' : ''}`}
-                              style={{ backgroundColor: formValues.selectedOption === 'CANADA' ? 'black' : '' }}
-                            >
-                              <input
-                                type="radio"
-                                id="canadaRadio"
-                                name="selectedOption"
-                                value="CANADA"
-                                checked={formValues.selectedOption === 'CANADA'}
-                                onChange={handleInputChange}
-                              />
-                              CANADA
-                            </label>
+                        <div className="row justify-content-between  mt-5 mb-3 ">
+                          <div className="col-5 btn btn-outline-primary " role="button">
+                            USA
                           </div>
+                          <div className="col-5 btn btn-outline-dark" role="button">
+                            CANADA
+                          </div>
+                        </div>
 
-                          {/* Input fields */}
-                          <div className="col-md-12 mb-3">
+
+
+                        <form class="row g-3 needs-validation" novalidate>
+                          <div class="col-md-12 mb-3">
+
                             <input
                               type="text"
                               name="companyName"
-                              className="form-control"
+                              class="form-control"
                               value={formValues.companyName}
                               onChange={handleInputChange}
                               placeholder="Company name / Your Name *"
                               required
                             />
+                            <div class="valid-feedback">
+                              Looks good!
+                            </div>
                           </div>
 
-                          <div className="col-md-6 mb-3">
-                            <input
-                              type="text"
-                              name="address1"
-                              className="form-control"
-                              value={formValues.address1}
-                              onChange={handleInputChange}
-                              placeholder="Address 1*"
-                            />
+                          <div class="col-md-6 mb-3">
+                            {/* <label for="validationCustom03" class="form-label">City</label> */}
+                            <input type="text" class="form-control" id="validationCustom03" placeholder="Address 1*" value={formValues.address1} />
+                            <div class="invalid-feedback">
+                              Please provide a valid address
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            {/* <label for="validationCustom03" class="form-label">City</label> */}
+                            <input type="text" class="form-control" id="validationCustom03" placeholder="Address 2*" />
+                            <div class="invalid-feedback">
+                              Please provide Adress second line
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-3">
+                            {/* <label for="validationCustom04" class="form-label">City</label> */}
+                            <select className="form-control form-control-2 border rounded"   value={formValues.address2} id="validationCustom04" required>
+                              <option selected disabled value="">Choose city...</option>
+                              <option>...</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Please select a valid state.
+                            </div>
+                          </div>
+                          <div class="col-md-4 ">
+                            {/* <label for="validationCustom04" class="form-label">State</label> */}
+                            <select id="validationCustom04" className="form-control form-control-2 border rounded p-5" value={formValues.state} required>
+                              <option selected disabled value="">Choose state...</option>
+                              <option>...</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Please select a valid state.
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            {/* <label for="validationCustom05" class="form-label">Zip</label> */}
+                            <input type="text" class="form-control" id="validationCustom05" className="form-control form-control-2 border rounded" placeholder="Zip" required />
+                            <div class="invalid-feedback">
+                              Please provide a valid zip.
+                            </div>
+                          </div>
+                          <div class="d-grid col-12 mt-5">
+                            <button class="btn btn-primary" type="button" onClick={() => setScreen(4)}>Next</button>
+
                           </div>
 
-                          <div className="col-md-6">
-                            <input
-                              type="text"
-                              name="address2"
-                              className="form-control"
-                              value={formValues.address2}
-                              onChange={handleInputChange}
-                              placeholder="Address 2*"
-                            />
-                          </div>
-
-                          <div className="col-md-4 mb-3">
-                            <input
-                              type="text"
-                              name="city"
-                              className="form-control"
-                              value={formValues.city}
-                              onChange={handleInputChange}
-                              placeholder="City"
-                            />
-                          </div>
-
-                          <div className="col-md-4">
-                            <input
-                              type="text"
-                              name="state"
-                              className="form-control"
-                              value={formValues.state}
-                              onChange={handleInputChange}
-                              placeholder="State"
-                            />
-                          </div>
-
-                          <div className="col-md-4">
-                            <input
-                              type="text"
-                              name="zip"
-                              className="form-control"
-                              value={formValues.zip}
-                              onChange={handleInputChange}
-                              placeholder="Zip"
-                            />
-                          </div>
-
-                          <div className="d-grid col-12 mt-5">
-                            <button className="btn btn-primary" type="submit">Next</button>
-                          </div>
                         </form>
-
                       </div>
                     </div>
-                    {/* side screen for instruction  */}
                     <div className="col-6  ml-5 mr-5 p-5">
                       <h6>Instructions</h6>
                       <p1>For canadian bank accounts</p1>
@@ -537,7 +525,7 @@ const BankAccount = (props) => {
 
                   <div className="container g-0">
 
-                    <div className=" row ">
+                    <div class=" row ">
                       <div className="col-1">
                         <Link className=" text-dark nav-link " role="button" onClick={() => setScreen(3)}><ArrowBackIcon /></Link>   </div>
                       <div className="col-3"> <center>
@@ -552,13 +540,13 @@ const BankAccount = (props) => {
                         <div className="row">
                           <div className="col-6">
                             <p >Business Details</p>
-                            <div className="p-1 text-primary-emphasis bg-primary border border-primary-subtle rounded-3">
+                            <div class="p-1 text-primary-emphasis bg-primary border border-primary-subtle rounded-3">
                             </div>
                           </div>
 
                           <div className="col-6">
                             <p>Account Details</p>
-                            <div className="p-1 text-primary-emphasis  border bg-success rounded-3">
+                            <div class="p-1 text-primary-emphasis  border bg-success rounded-3">
 
                             </div>
                           </div>
@@ -571,22 +559,39 @@ const BankAccount = (props) => {
                               CANADA
                             </div>
                           </div>
-                          <form className="row g-3 needs-validation" novalidate>
-                            <div className="col-md-6 mb-3">
-                              <input type="text" className="form-control" id="validationCustom01" placeholder=" Routing Number*" required />
+
+
+
+                          <form class="row g-3 needs-validation" novalidate>
+                            <div class="col-md-6 mb-3">
+                              {/* <label for="validationCustom01" class="form-label">Company name / Your Name *</label> */}
+                              <input type="text" class="form-control" id="validationCustom01" placeholder=" Routing Number*" required />
+                              <div class="valid-feedback">
+                                Looks good!
+                              </div>
                             </div>
 
-                            <div className="col-md-6 mb-3">
-                              <input type="text" className="form-control" id="validationCustom02" placeholder=" Account Number*" required />
+                            <div class="col-md-6 mb-3">
+                              {/* <label for="validationCustom01" class="form-label">Company name / Your Name *</label> */}
+                              <input type="text" class="form-control" id="validationCustom02" placeholder=" Account Number*" required />
+                              <div class="valid-feedback">
+                                Looks good!
+                              </div>
                             </div>
 
                             <h6>Bank Detail</h6>
 
-                            <div className="col-md-6 mb-3">
-                              <input type="text" className="form-control" id="validationCustom03" placeholder=" Nick Name*" required />
+
+                            <div class="col-md-6 mb-3">
+                              {/* <label for="validationCustom01" class="form-label">Company name / Your Name *</label> */}
+                              <input type="text" class="form-control" id="validationCustom03" placeholder=" Nick Name*" required />
+                              <div class="valid-feedback">
+                                Looks good!
+                              </div>
                             </div>
 
-                            <div className="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3">
+                              {/* <label for="validationCustom04" class="form-label">State</label> */}
                               <select id="validationCustom04" className="form-control border p-2" required>
                                 <option selected disabled value="">Select Account Type</option>
                                 <option>Personal Checking</option>
@@ -594,39 +599,47 @@ const BankAccount = (props) => {
                                 <option>Personal Savings</option>
                                 <option>Business Savings</option>
                               </select>
-
+                              <div class="invalid-feedback">
+                                Please select a valid state.
+                              </div>
                             </div>
 
 
-                            <div className="col-md-6 mb-3">
-                              <input type="text" className="form-control" id="validationCustom05" placeholder=" Check Number*" required />
-
+                            <div class="col-md-6 mb-3">
+                              {/* <label for="validationCustom01" class="form-label">Company name / Your Name *</label> */}
+                              <input type="text" class="form-control" id="validationCustom05" placeholder=" Check Number*" required />
+                              <div class="valid-feedback">
+                                Looks good!
+                              </div>
                             </div>
 
-                            <div className="col-md-6 mb-3">
-                              <input type="text" className="form-control" id="validationCustom06" placeholder=" Fractional Number*" required />
+                            <div class="col-md-6 mb-3">
+                              {/* <label for="validationCustom01" class="form-label">Company name / Your Name *</label> */}
+                              <input type="text" class="form-control" id="validationCustom06" placeholder=" Fractional Number*" required />
+                              <div class="valid-feedback">
+                                Looks good!
+                              </div>
                             </div>
 
-                            <div className="row mt-2">
-                              <div className="col-7"></div>
-                              <div className="col-5">
-                                <label for="fileInput" className="file-button">
+                            <div class="row mt-2">
+                              <div class="col-7"></div>
+                              <div class="col-5">
+                                <label for="fileInput" class="file-button">
                                   + Signature
-                                  <input id="fileInput" className="input-file" type="file" />
+                                  <input id="fileInput" class="input-file" type="file" />
                                 </label>
                                 {selectedFile && (
                                   <div className="selected-file">Selected File: {selectedFile}</div>
                                 )}
                               </div>
                             </div>
-                            <div className="d-grid col-12 mt-5">
-                              <button className="btn btn-primary" type="button" onClick={handleSubmit}>Save Bank Account</button>
+                            <div class="d-grid col-12 mt-5">
+                              <button class="btn btn-primary" type="button" onClick={handleSubmit}>Save Bank Account</button>
                             </div>
 
                           </form>
                         </div>
                       </div>
-                      {/*------------------------ side screen for instruction --------------- */}
                       <div className="col-6  ml-5 mr-5 p-5">
                         <h6>Instructions</h6>
                         <p1>For canadian bank accounts</p1>
@@ -645,6 +658,7 @@ const BankAccount = (props) => {
                     </div>
                   </div>
                 </MyScreen> : ""
+
 
         }
 

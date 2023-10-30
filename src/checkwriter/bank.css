@@ -34,33 +34,3 @@
     display: none;
   }
   
-
-
-  /* radio button  */
-
- .radio-button {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 5px;
-  }
-  
-  .radio-button.selected {
-    color: white; 
-    background-color: blue; 
-  }
-   
- 
-  .transition {
-    transition: all 0.3s ease-out;
-  }
-
-
-  input[type="radio"] {
-    visibility: hidden;
-    height: 0;
-    width: 0;
-  }
