@@ -24,9 +24,9 @@ import axios from "axios";
 import Page404 from "./pages/Page404";
 import Check from "./components/Check";
 import BankAccount from "./checkwriter/BankAccount";
-import CreateBill from "./checkwriter/CreateBill";
-import Screen1 from "./checkwriter/Screen1";
-
+// import Screen1 from "./checkwriter/Screen1";
+import BankCreate from "./checkwriter/BankCreate"
+import BankSrc from "./checkwriter/BankSrc";
 function App() {
 
   const [data, setData] = useState("")
@@ -73,7 +73,6 @@ function App() {
 
   }, [])
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -85,7 +84,6 @@ function App() {
             PROJECT_MEMBER_PARENT_USERNAME,
             PROJECT_USERNAME,
           } = item;
-
           const data = {
             PROJECT_ID,
             PROJECT_PARENT_ID,
@@ -93,7 +91,6 @@ function App() {
             PROJECT_MEMBER_PARENT_USERNAME,
             PROJECT_USERNAME,
           };
-
           return axios.put(
             "/get_projects_one",
             data,
@@ -133,7 +130,6 @@ function App() {
             <Route path="/*" element={<AdminLogin />} />
             <Route path="/employee/login/*" element={<EmployeeLogin />} />
           </>
-
           {data ?
             <>
               <Route
@@ -146,38 +142,24 @@ function App() {
               <Route path="/company/employees/:id/*" element={<EmployeeSrc />} />
               <Route path="/company/attendance/:id/*" element={<AttendanceReport />} />
               <Route path="/company/documents/:id/*" element={<Document />} />
-              {/* <Route path="/company/Checks/:id/*" element={<Check/>} /> */}
+              <Route path="/company/bankaccount/:id/*" element={<BankSrc/>} />
               {/* <Route path="/company/bankaccount/:id/*" element={<BankAccount/>} /> */}
-
-
-
-
-              <Route path="/company/bankaccount/:id/*" element={<BankAccount />}>
+              <Route path="/company/checks/:id/*" element={<BankAccount />}>
               {/* Submenus for Bank Account */}
-              <Route path="details" element={<CreateBill />} />
-              <Route path="settings" element={<Screen1 />} />
+             
             </Route>
-
-
-
               {user.ADMIN_COMPANIES?.map((e) => <Route path={`/company/${e.COMPANY_ID}&${e.COMPANY_USERNAME}&${e.COMPANY_PARENT_ID}&${e.COMPANY_PARENT_USERNAME}`} element={<Navigate to="/admin" />} />)}
-
             </> :
             <Route path="/*" element={<Navigate to="/login" />} />
-
           }
-
           {dataEmp ?
             <>
               <Route path="/error/*" element={<Page404 />} />
               <Route path="/employee/*" element={<EmployeeDetail state={userEmp.result} />} />
               <Route path="/employee/attendance/:latt/:lngi/:areas/:loca/:employees/:projects/:projectids/*" element={<EmployeeAttendance state={userEmp} />} />
               <Route path="/employee/history/:*" element={<EmployeeHistory state={userEmp} />} />
-
             </> :
-            
             project?.map((item, index) => (<Route key={index} path={`/employee/attendance/${item?.LATITUDE}/${item?.LONGITUDE}/${item?.AREA}/${item?.LOCATION_NAME}/${userEmp.result?.EMPLOYEE_NAME}/${item?.PROJECT_NAME}/${item?.PROJECT_ID}`} element={<Navigate to="/employee/login" />} />))
-
           }
         </Routes>
       </BrowserRouter>

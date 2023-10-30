@@ -26,13 +26,20 @@ const BankAccount = (props) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const [formValues, setFormValues] = useState({
-    selectedOption: 'USA',
-    companyName: '',
-    address1: '',
-    address2: '',
-    city: '',
-    state: '',
-    zip: '',
+    companyName: "",
+    address1: "",
+    address2: "",
+    country: "",
+    city: "",
+    state: "",
+    zip: "",
+    routingNumber: "",
+    accountNumber: "",
+    nickName: "",
+    accountType: "",
+    checkNumber: "",
+    fractionalNumber: "",
+    signatureFile: null,
   });
 
   const [open, setOpen] = useState(false);
@@ -201,26 +208,39 @@ const BankAccount = (props) => {
 
   const filterData = formValues?.row;
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
 
-    if (name === 'selectedOption') {
-      // Handle radio button change
-      setFormValues({ ...formValues, selectedOption: value });
-    } else {
-      // Handle input field change
-      setFormValues({ ...formValues, [name]: value });
+  const handleCreate = (e) => {
+    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+  };
+
+
+  const handleSubmit = async () => {
+    try {
+      // Simulate saving data to the server (replace with your actual API endpoint)
+      await axios.post("/api/save_bank_account", formValues);
+
+      // Reset the form or show a success message
+      alert("Bank account saved successfully!");
+      setFormValues({
+        companyName: "",
+        address1: "",
+        address2: "",
+        city: "",
+        state: "",
+        zip: "",
+        routingNumber: "",
+        accountNumber: "",
+        nickName: "",
+        accountType: "",
+        checkNumber: "",
+        fractionalNumber: "",
+        signatureFile: null,
+      });
+    } catch (error) {
+      // Handle errors, e.g., show an error message
+      console.error("Error saving bank account:", error);
     }
   };
-
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = formValues;
-    console.log(formData);
-  };
-
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 29px)",
@@ -271,7 +291,7 @@ const BankAccount = (props) => {
         COMPANY_USERNAME={COMPANY_USERNAME}
         COMPANY_PARENT_ID={COMPANY_PARENT_ID}
         COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
-        active={6}
+        active={5}
         toggle={openNav}
       />
 
@@ -329,12 +349,12 @@ const BankAccount = (props) => {
                 ) : (
                   <>
                     <nav
-                      className="navbar navbar-expand-lg navbar-light bg-light"
+                      class="navbar navbar-expand-lg navbar-light bg-light"
                       style={{ height: "40px" }}
                     >
                       <div className="container">
-                        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                          <div className="navbar-nav">
+                        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                          <div class="navbar-nav">
                             <Link className=" text-dark nav-link " role="button" onClick={() => setScreen(1)}><ArrowBackIcon /></Link>
 
                           </div>
@@ -348,20 +368,20 @@ const BankAccount = (props) => {
 
                     <div className="row  justify-content-center">
                       <div className="col-3 Card">
-                        <div className="card text-center mb-3">
-                          <div className="card-body p-4">
+                        <div class="card text-center mb-3">
+                          <div class="card-body p-4">
                             <AccountBalanceOutlinedIcon sx={{ fontSize: "45px" }} color="primary" />
-                            <h5 className="card-title p-4">Connect Instantly</h5>
-                            <p className="card-text p-4 fs-6">Add with your net banking username & password</p>
+                            <h5 class="card-title p-4">Connect Instantly</h5>
+                            <p class="card-text p-4 fs-6">Add with your net banking username & password</p>
                           </div>
                         </div>
                       </div>
                       <div className="col-3 Card" onClick={() => setScreen(3)}>
-                        <div className="card text-center mb-3">
-                          <div className="card-body p-4" role="button"  >
+                        <div class="card text-center mb-3">
+                          <div class="card-body p-4" role="button"  >
                             <AccountBalanceOutlinedIcon sx={{ fontSize: "45px" }} color="primary" />
-                            <h5 className="card-title p-4">Add Manually</h5>
-                            <p className="card-text p-4 fs-6">Add by providing account details manually.</p>
+                            <h5 class="card-title p-4">Add Manually</h5>
+                            <p class="card-text p-4 fs-6">Add by providing account details manually.</p>
                           </div>
                         </div>
                       </div>
@@ -372,7 +392,7 @@ const BankAccount = (props) => {
             </MyScreen> : screen === 3 ?
               <MyScreen sx={{ display: "block", padding: 3 }}>
                 <div className="container g-0">
-                  <div className=" row ">
+                  <div class=" row ">
                     <div className="col-1">
                       <Link className=" text-dark nav-link " role="button" onClick={() => setScreen(2)}><ArrowBackIcon /></Link>   </div>
                     <div className="col-3">
@@ -389,126 +409,109 @@ const BankAccount = (props) => {
                       <div className="row">
                         <div className="col-6">
                           <p >Business Details</p>
-                          <div className="p-1 text-primary-emphasis  border border-primary-subtle rounded-3">
+                          <div class="p-1 text-primary-emphasis  border border-primary-subtle rounded-3">
                           </div>
                         </div>
 
                         <div className="col-6">
                           <p>Account Details</p>
-                          <div className="p-1 text-primary-emphasis border border-primary-subtle rounded-3">
+                          <div class="p-1 text-primary-emphasis border border-primary-subtle rounded-3">
 
                           </div>
                         </div>
                         <br />
 
+                       
+
+
 
                         {/* form -------------------------- */}
 
-                        <form className="row g-3 needs-validation" onSubmit={handleSubmit}>
-                          <div className="row justify-content-between mt-5 mb-3">
-                            <label
-                              htmlFor="usaRadio"
-                              className={`col-5 radio-button ${formValues.selectedOption === 'USA' ? 'selected' : ''}`}
-                              style={{ backgroundColor: formValues.selectedOption === 'USA' ? 'blue' : '' }}
-                            >
-                              <input
-                                type="radio"
-                                id="usaRadio"
-                                name="selectedOption"
-                                value="USA"
-                                checked={formValues.selectedOption === 'USA'}
-                                onChange={handleInputChange}
-                              />
-                              USA
-                            </label>
-                            <label
-                              htmlFor="canadaRadio"
-                              className={`col-5 radio-button ${formValues.selectedOption === 'CANADA' ? 'selected' : ''}`}
-                              style={{ backgroundColor: formValues.selectedOption === 'CANADA' ? 'black' : '' }}
-                            >
-                              <input
-                                type="radio"
-                                id="canadaRadio"
-                                name="selectedOption"
-                                value="CANADA"
-                                checked={formValues.selectedOption === 'CANADA'}
-                                onChange={handleInputChange}
-                              />
-                              CANADA
-                            </label>
-                          </div>
+                        <form class="row g-3 needs-validation" >
+                        <div className="row justify-content-between mt-5 mb-3">
+                          <label
+                            htmlFor="usaRadio"
+                            className={`col-5 radio-button ${selectedOption === 'USA' ? 'selected' : ''}`}
+                            style={{ backgroundColor: selectedOption === 'USA' ? 'blue' : '' }}
+                          >
+                            <input
+                              type="radio"
+                              id="usaRadio"
+                              name="country"
+                              value="USA"
+                              checked={selectedOption === 'USA'}
+                              onChange={() => handleOptionChange('USA')}
+                            />
+                            USA
+                          </label>
+                          <label
+                            htmlFor="canadaRadio"
+                            className={`col-5 radio-button ${selectedOption === 'CANADA' ? 'selected' : ''}`}
+                            style={{ backgroundColor: selectedOption === 'CANADA' ? 'black' : '' }}
+                          >
+                            <input
+                              type="radio"
+                              id="canadaRadio"
+                              name="country"
+                              value="CANADA"
+                              checked={selectedOption === 'CANADA'}
+                              onChange={() => handleOptionChange('CANADA')}
+                            />
+                            CANADA
+                          </label>
+                        </div>
 
-                          {/* Input fields */}
-                          <div className="col-md-12 mb-3">
+
+                          <div class="col-md-12 mb-3">
+
                             <input
                               type="text"
                               name="companyName"
-                              className="form-control"
+                              class="form-control"
                               value={formValues.companyName}
-                              onChange={handleInputChange}
+                              onChange={handleCreate}
                               placeholder="Company name / Your Name *"
                               required
                             />
+
+
                           </div>
 
-                          <div className="col-md-6 mb-3">
-                            <input
-                              type="text"
-                              name="address1"
-                              className="form-control"
-                              value={formValues.address1}
-                              onChange={handleInputChange}
-                              placeholder="Address 1*"
-                            />
-                          </div>
+                          <div class="col-md-6 mb-3">
+                            <input type="text" class="form-control" id="validationCustom03" placeholder="Address 1*" value={formValues.address1} />
 
-                          <div className="col-md-6">
-                            <input
-                              type="text"
-                              name="address2"
-                              className="form-control"
-                              value={formValues.address2}
-                              onChange={handleInputChange}
-                              placeholder="Address 2*"
-                            />
                           </div>
+                          <div class="col-md-6">
+                            <input type="text" class="form-control" id="validationCustom03" placeholder="Address 2*" />
 
-                          <div className="col-md-4 mb-3">
-                            <input
-                              type="text"
-                              name="city"
-                              className="form-control"
-                              value={formValues.city}
-                              onChange={handleInputChange}
-                              placeholder="City"
-                            />
                           </div>
+                          <div class="col-md-4 mb-3">
+                            <select className="form-control form-control-2 border rounded" value={formValues.address2} id="validationCustom04" required>
+                              <option selected disabled value="">Choose city...</option>
+                              <option>...</option>
+                            </select>
 
-                          <div className="col-md-4">
-                            <input
-                              type="text"
-                              name="state"
-                              className="form-control"
+                          </div>
+                          <div class="col-md-4 ">
+                            <select id="validationCustom04" className="form-control form-control-2 border rounded p-5"
                               value={formValues.state}
-                              onChange={handleInputChange}
-                              placeholder="State"
-                            />
+                              onChange={handleCreate}
+                              required
+                            >
+                              <option selected disabled value="">Choose state...</option>
+                              <option>...</option>
+                            </select>
+
+                          </div>
+                          <div class="col-md-4">
+                            <input type="text" class="form-control" id="validationCustom05" className="form-control form-control-2 border rounded" placeholder="Zip" required />
+
+                          </div>
+                          <div class="d-grid col-12 mt-5">
+                            <button class="btn btn-primary" type="button" onClick={() => setScreen(4)}>Next</button>
+
                           </div>
 
-                          <div className="col-md-4">
-                            <input
-                              type="text"
-                              name="zip"
-                              className="form-control"
-                              value={formValues.zip}
-                              onChange={handleInputChange}
-                              placeholder="Zip"
-                            />
-                          </div>
-
-                          <div className="d-grid col-12 mt-5">
-                            <button className="btn btn-primary" type="submit">Next</button>
-                          </div>
                         </form>
 
                       </div>
@@ -537,7 +540,7 @@ const BankAccount = (props) => {
 
                   <div className="container g-0">
 
-                    <div className=" row ">
+                    <div class=" row ">
                       <div className="col-1">
                         <Link className=" text-dark nav-link " role="button" onClick={() => setScreen(3)}><ArrowBackIcon /></Link>   </div>
                       <div className="col-3"> <center>
@@ -552,13 +555,13 @@ const BankAccount = (props) => {
                         <div className="row">
                           <div className="col-6">
                             <p >Business Details</p>
-                            <div className="p-1 text-primary-emphasis bg-primary border border-primary-subtle rounded-3">
+                            <div class="p-1 text-primary-emphasis bg-primary border border-primary-subtle rounded-3">
                             </div>
                           </div>
 
                           <div className="col-6">
                             <p>Account Details</p>
-                            <div className="p-1 text-primary-emphasis  border bg-success rounded-3">
+                            <div class="p-1 text-primary-emphasis  border bg-success rounded-3">
 
                             </div>
                           </div>
@@ -571,22 +574,22 @@ const BankAccount = (props) => {
                               CANADA
                             </div>
                           </div>
-                          <form className="row g-3 needs-validation" novalidate>
-                            <div className="col-md-6 mb-3">
-                              <input type="text" className="form-control" id="validationCustom01" placeholder=" Routing Number*" required />
+                          <form class="row g-3 needs-validation" novalidate>
+                            <div class="col-md-6 mb-3">
+                              <input type="text" class="form-control" id="validationCustom01" placeholder=" Routing Number*" required />
                             </div>
 
-                            <div className="col-md-6 mb-3">
-                              <input type="text" className="form-control" id="validationCustom02" placeholder=" Account Number*" required />
+                            <div class="col-md-6 mb-3">
+                              <input type="text" class="form-control" id="validationCustom02" placeholder=" Account Number*" required />
                             </div>
 
                             <h6>Bank Detail</h6>
 
-                            <div className="col-md-6 mb-3">
-                              <input type="text" className="form-control" id="validationCustom03" placeholder=" Nick Name*" required />
+                            <div class="col-md-6 mb-3">
+                              <input type="text" class="form-control" id="validationCustom03" placeholder=" Nick Name*" required />
                             </div>
 
-                            <div className="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3">
                               <select id="validationCustom04" className="form-control border p-2" required>
                                 <option selected disabled value="">Select Account Type</option>
                                 <option>Personal Checking</option>
@@ -598,29 +601,29 @@ const BankAccount = (props) => {
                             </div>
 
 
-                            <div className="col-md-6 mb-3">
-                              <input type="text" className="form-control" id="validationCustom05" placeholder=" Check Number*" required />
+                            <div class="col-md-6 mb-3">
+                              <input type="text" class="form-control" id="validationCustom05" placeholder=" Check Number*" required />
 
                             </div>
 
-                            <div className="col-md-6 mb-3">
-                              <input type="text" className="form-control" id="validationCustom06" placeholder=" Fractional Number*" required />
+                            <div class="col-md-6 mb-3">
+                              <input type="text" class="form-control" id="validationCustom06" placeholder=" Fractional Number*" required />
                             </div>
 
-                            <div className="row mt-2">
-                              <div className="col-7"></div>
-                              <div className="col-5">
-                                <label for="fileInput" className="file-button">
+                            <div class="row mt-2">
+                              <div class="col-7"></div>
+                              <div class="col-5">
+                                <label for="fileInput" class="file-button">
                                   + Signature
-                                  <input id="fileInput" className="input-file" type="file" />
+                                  <input id="fileInput" class="input-file" type="file" />
                                 </label>
                                 {selectedFile && (
                                   <div className="selected-file">Selected File: {selectedFile}</div>
                                 )}
                               </div>
                             </div>
-                            <div className="d-grid col-12 mt-5">
-                              <button className="btn btn-primary" type="button" onClick={handleSubmit}>Save Bank Account</button>
+                            <div class="d-grid col-12 mt-5">
+                              <button class="btn btn-primary" type="button" onClick={handleSubmit}>Save Bank Account</button>
                             </div>
 
                           </form>
