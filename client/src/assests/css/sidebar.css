@@ -1,0 +1,91 @@
+/* App.css */
+
+.sidebar {
+  width: 250px;
+  /* background-color: #333; */
+  /* color: white; */
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(0);
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999999;
+  overflow-x: hidden;
+}
+
+.content {
+  margin-left: 250px;
+  /* border:1px solid red */
+}
+
+.display-sidebar-mobile {
+  display: none;
+}
+
+.display {
+  display: table;
+}
+
+.mobile-display {
+  display: none;
+}
+
+.modal-content {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
+  width: 60% ;
+  background-color: #fff;
+  box-shadow: 24;
+  padding: 25px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+@media only screen and (max-width: 993.333px) {
+  .sidebar {
+    display: none;
+  }
+
+  .content {
+    margin-left: 0;
+    /* border:1px solid red */
+  }
+
+  .display-sidebar-mobile {
+    display: block;
+    background-color: #fff;
+  }
+
+  .box {
+    margin-left: 0;
+  }
+
+  .display {
+    display: none;
+  }
+
+  .mobile-display {
+    display: block;
+  }
+
+  .modal-content {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%);
+    width: 90% ;
+    height: 80vh;
+    background-color: #fff;
+    box-shadow: 24;
+    padding: 25px;
+    border-radius: 10px;
+  }
+
+  /* td{
+    white-space: nowrap;
+  } */
+  
+}

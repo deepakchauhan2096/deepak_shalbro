@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../etc/letsencrypt/live"
+		},
+		{
+			"path": "../../etc/letsencrypt"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}

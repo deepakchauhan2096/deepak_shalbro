@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.e118420b.css",
+    "main.js": "/static/js/main.eb9e4bd2.js",
+    "static/js/787.cdfe00ef.chunk.js": "/static/js/787.cdfe00ef.chunk.js",
+    "static/media/shalbro-bg.webp": "/static/media/shalbro-bg.b3b39c4c179b364486dd.webp",
+    "index.html": "/index.html",
+    "main.e118420b.css.map": "/static/css/main.e118420b.css.map",
+    "main.eb9e4bd2.js.map": "/static/js/main.eb9e4bd2.js.map",
+    "787.cdfe00ef.chunk.js.map": "/static/js/787.cdfe00ef.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e118420b.css",
+    "static/js/main.eb9e4bd2.js"
+  ]
+}

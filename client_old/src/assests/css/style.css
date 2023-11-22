@@ -1,0 +1,106 @@
+
+
+::placeholder, label, option,select, textarea{
+  font-size: 13px !important;
+}
+
+
+*{
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  user-select: none;
+
+}
+
+
+p,b{
+  font-size: 13px;
+}
+
+/* .tableWidth{
+  width: 100% !important;
+
+} */
+
+.table-hover:hover{
+  background: #555555;
+}
+
+.fw-light {
+  font-size: 12px;
+  margin-bottom: 0;
+}
+
+.form-control-2{
+  height: 30px !important;
+  font-size: 12px !important;
+  padding: 0 10px !important;
+}
+
+.containers {
+  background-color: #fff;
+}
+
+.box {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(100% - 250px);
+  height: 100vh;
+  background: #fff;
+  margin-left: 250px;
+}
+
+.box-tab {
+  height: 88vh;
+}
+
+.button {
+  border: none;
+  border-radius: 0 !important;
+}
+
+.btn-blue {
+  background: "#3596d9";
+}
+
+.view-btn {
+  border-radius: 20px !important;
+  font-size: 12px !important;
+}
+
+.btn {
+  box-shadow: none !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555555;
+}
+
+
+@media only screen and (max-width:993.333px) {
+
+   .box{
+     margin-left: 0;
+     width: 100%;
+   }
+ 
+ }

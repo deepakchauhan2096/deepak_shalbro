@@ -1,0 +1,73 @@
+
+h4 {
+  text-align: center;
+  color: rgb(122, 123, 125);
+
+}
+
+.Doc_ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0 ;
+  justify-content: flex-start;
+align-items:center;
+}
+
+.Doc_li {
+  align-items: center;
+  width: 125px;
+  height: auto;
+  box-sizing: border-box;
+  text-align: center;
+  overflow: hidden;
+  margin:10px;
+  border: 1px solid #277099;
+  border-radius: 5px;
+  padding-top: 8px;
+  overflow: hidden;
+}
+
+
+
+.Docfile-icon {
+  font-size: 30px;
+  display: block;
+}
+
+.Docfile-name {
+  display: block;
+  font-size: 13px;
+  padding: 10px;
+
+}
+.showdocbtn{
+  background-color: #277099;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
+
+
+.doc_anchor{
+  background-color: #277099;
+  font-size: 14px;
+  padding: 2px;
+  color: white;
+  display: block;
+  /* border-top: 1px solid grey; */
+  width: 100%;
+  border: none;
+  transition: cubic-bezier(0.75, 0.82, 0.165, 2);
+
+
+}
+.doc_anchor:hover {
+  color: grey;
+  display: block;
+  background-color: whitesmoke;
+
+}

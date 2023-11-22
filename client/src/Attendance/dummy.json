@@ -1,0 +1,608 @@
+[
+    {
+        "_id": "64b5219f8bfeb2e084029ffa",
+        "EMPLOYEE_ID": 1889,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "Trainee",
+        "EMPLOYEE_NAME": "Deepak Kumar",
+        "EMPLOYEE_PHONE": 385645443634,
+        "EMPLOYEE_EMAIL": "mahesh@gmail.com",
+        "EMPLOYEE_USERNAME": "Mahesh006",
+        "EMPLOYEE_DOB": "2023-07-18",
+        "EMPLOYEE_EMPLMNTTYPE": "Permanent",
+        "EMPLOYEE_HIRE_DATE": "2023-07-27",
+        "EMPLOYEE_HOURLY_WAGE": "100",
+        "EMPLOYEE_ADD": "MCF  10307, GALI NO. 321, NEAR KALI MANDIR,\nSANJAY COLONY, SECTOR 23, BLOCK E, FARIDABAD",
+        "EMPLOYEE_STATE": "Haryana",
+        "EMPLOYEE_CITY": "Faridabad",
+        "__v": 0,
+        "EMPLOYEE_PASSWORD": "Mahesh12345",
+        "EMPLOYEE_ATTENDANCE":
+        [
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T00:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-08-3",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T05:34:36.717Z"
+          }
+      ]
+    }, 
+    {
+        "EMPLOYEE_PASSWORD": "",
+        "_id": "64b53b838bfeb2e08402a773",
+        "EMPLOYEE_ID": 1901,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "SuperWiser",
+        "EMPLOYEE_NAME": "raksha",
+        "EMPLOYEE_PHONE": 87198312772,
+        "EMPLOYEE_EMAIL": "raksha@gmail.com",
+        "EMPLOYEE_USERNAME": "raksha12345",
+        "EMPLOYEE_DOB": "2023-07-18",
+        "EMPLOYEE_EMPLMNTTYPE": "Contract",
+        "EMPLOYEE_HIRE_DATE": "2023-07-18",
+        "EMPLOYEE_HOURLY_WAGE": "100",
+        "EMPLOYEE_ADD": "MCF  10307, GALI NO. 321, NEAR KALI MANDIR,\nSANJAY COLONY, SECTOR 23, BLOCK E, FARIDABAD",
+        "EMPLOYEE_STATE": "Haryana",
+        "EMPLOYEE_CITY": "Faridabad",
+        "__v": 0,
+        "EMPLOYEE_ATTENDANCE":
+        [
+            {               
+              "ATTENDANCE_DATE_ID":"2023-07-25",
+              "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+              "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+            },
+            {               
+              "ATTENDANCE_DATE_ID":"2023-07-26",
+              "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+              "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+            },
+            {               
+              "ATTENDANCE_DATE_ID":"2023-07-28",
+              "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+              "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+            },
+            {               
+              "ATTENDANCE_DATE_ID":"2023-07-29",
+              "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+              "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+            },
+            {               
+              "ATTENDANCE_DATE_ID":"2023-07-30",
+              "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+              "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+            }
+        ]
+    },
+    {
+        "EMPLOYEE_PASSWORD": "",
+        "_id": "64b6270e8bfeb2e08402ab90",
+        "EMPLOYEE_ID": 1906,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "",
+        "EMPLOYEE_NAME": "suman",
+        "EMPLOYEE_PHONE": null,
+        "EMPLOYEE_EMAIL": "",
+        "EMPLOYEE_USERNAME": "sunit234",
+        "EMPLOYEE_DOB": "",
+        "EMPLOYEE_EMPLMNTTYPE": "",
+        "EMPLOYEE_HIRE_DATE": "",
+        "EMPLOYEE_HOURLY_WAGE": "",
+        "EMPLOYEE_ADD": "",
+        "EMPLOYEE_STATE": "",
+        "EMPLOYEE_CITY": "",
+        "__v": 0,
+        "EMPLOYEE_ATTENDANCE":
+        [
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
+    },
+    {
+        "EMPLOYEE_PASSWORD": "",
+        "_id": "64b627e78bfeb2e08402ac0f",
+        "EMPLOYEE_ID": 1907,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "Trainee",
+        "EMPLOYEE_NAME": "meghna",
+        "EMPLOYEE_PHONE": 21984526734,
+        "EMPLOYEE_EMAIL": "sunita@gmail.com",
+        "EMPLOYEE_USERNAME": "Mahesh894",
+        "EMPLOYEE_DOB": "",
+        "EMPLOYEE_EMPLMNTTYPE": "Permanent",
+        "EMPLOYEE_HIRE_DATE": "2023-07-20",
+        "EMPLOYEE_HOURLY_WAGE": "100",
+        "EMPLOYEE_ADD": "MCF  10307, GALI NO. 321, NEAR KALI MANDIR,\nSANJAY COLONY, SECTOR 23, BLOCK E, FARIDABAD",
+        "EMPLOYEE_STATE": "Haryana",
+        "EMPLOYEE_CITY": "Faridabad",
+        "__v": 0,
+        "EMPLOYEE_ATTENDANCE":
+        [
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
+    },
+    {
+        "EMPLOYEE_PASSWORD": "",
+        "_id": "64b6650eb3553291dbc4ca5e",
+        "EMPLOYEE_ID": 1912,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "Employee",
+        "EMPLOYEE_NAME": "sunita gupta",
+        "EMPLOYEE_PHONE": 879756454,
+        "EMPLOYEE_EMAIL": "sunitagupta@gmail.com",
+        "EMPLOYEE_USERNAME": "sunita24",
+        "EMPLOYEE_DOB": "2023-07-19",
+        "EMPLOYEE_EMPLMNTTYPE": "Permanent",
+        "EMPLOYEE_HIRE_DATE": "2023-07-18",
+        "EMPLOYEE_HOURLY_WAGE": "400",
+        "EMPLOYEE_ADD": "MCF  10307, GALI NO. 321, NEAR KALI MANDIR,\nSANJAY COLONY, SECTOR 23, BLOCK E, FARIDABAD",
+        "EMPLOYEE_STATE": "Haryana",
+        "EMPLOYEE_CITY": "Faridabad",
+        "__v": 0,
+        "EMPLOYEE_ATTENDANCE":
+        [
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
+    },
+    {
+        "EMPLOYEE_PASSWORD": "",
+        "_id": "64b6f2a2713b1ee24fe7f1d0",
+        "EMPLOYEE_ID": 1943,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "",
+        "EMPLOYEE_NAME": "preeti",
+        "EMPLOYEE_PHONE": null,
+        "EMPLOYEE_EMAIL": "",
+        "EMPLOYEE_USERNAME": "",
+        "EMPLOYEE_DOB": "",
+        "EMPLOYEE_EMPLMNTTYPE": "",
+        "EMPLOYEE_HIRE_DATE": "",
+        "EMPLOYEE_HOURLY_WAGE": "200",
+        "EMPLOYEE_ADD": "",
+        "EMPLOYEE_STATE": "",
+        "EMPLOYEE_CITY": "",
+        "__v": 0,
+        "EMPLOYEE_ATTENDANCE":
+        [
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
+    },
+    {
+        "EMPLOYEE_PASSWORD": "",
+        "_id": "64b6f5f0713b1ee24fe7f263",
+        "EMPLOYEE_ID": 1944,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "Employee",
+        "EMPLOYEE_NAME": "raksha",
+        "EMPLOYEE_PHONE": 4444657588,
+        "EMPLOYEE_EMAIL": "mahesh@gmail.com",
+        "EMPLOYEE_USERNAME": "meghna12345",
+        "EMPLOYEE_DOB": "2023-07-20",
+        "EMPLOYEE_EMPLMNTTYPE": "Permanent",
+        "EMPLOYEE_HIRE_DATE": "2023-07-21",
+        "EMPLOYEE_HOURLY_WAGE": "100",
+        "EMPLOYEE_ADD": "MCF  10307, GALI NO. 321, NEAR KALI MANDIR,\nSANJAY COLONY, SECTOR 23, BLOCK E, FARIDABAD",
+        "EMPLOYEE_STATE": "Haryana",
+        "EMPLOYEE_CITY": "Faridabad",
+        "__v": 0,
+        "EMPLOYEE_ATTENDANCE":
+        [
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
+    },
+    {
+        "EMPLOYEE_PASSWORD": "",
+        "_id": "64b6f63a713b1ee24fe7f2b4",
+        "EMPLOYEE_ID": 1945,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "Employee",
+        "EMPLOYEE_NAME": "sunita",
+        "EMPLOYEE_PHONE": 989757564646,
+        "EMPLOYEE_EMAIL": "pink@gmail.com",
+        "EMPLOYEE_USERNAME": "pinki12345",
+        "EMPLOYEE_DOB": "2023-07-20",
+        "EMPLOYEE_EMPLMNTTYPE": "Contract",
+        "EMPLOYEE_HIRE_DATE": "2023-07-20",
+        "EMPLOYEE_HOURLY_WAGE": "100",
+        "EMPLOYEE_ADD": "MCF  10307, GALI NO. 321, NEAR KALI MANDIR,\nSANJAY COLONY, SECTOR 23, BLOCK E, FARIDABAD",
+        "EMPLOYEE_STATE": "Haryana",
+        "EMPLOYEE_CITY": "Faridabad",
+        "__v": 0,
+        "EMPLOYEE_ATTENDANCE":
+        [
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
+    },
+    {
+        "EMPLOYEE_PASSWORD": "",
+        "_id": "64b6f6c6713b1ee24fe7f2cf",
+        "EMPLOYEE_ID": 1946,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "Employee",
+        "EMPLOYEE_NAME": "sunita",
+        "EMPLOYEE_PHONE": 989757564646,
+        "EMPLOYEE_EMAIL": "pink@gmail.com",
+        "EMPLOYEE_USERNAME": "pinki1234578",
+        "EMPLOYEE_DOB": "2023-07-20",
+        "EMPLOYEE_EMPLMNTTYPE": "Contract",
+        "EMPLOYEE_HIRE_DATE": "2023-07-20",
+        "EMPLOYEE_HOURLY_WAGE": "100",
+        "EMPLOYEE_ADD": "MCF  10307, GALI NO. 321, NEAR KALI MANDIR,\nSANJAY COLONY, SECTOR 23, BLOCK E, FARIDABAD",
+        "EMPLOYEE_STATE": "Haryana",
+        "EMPLOYEE_CITY": "Faridabad",
+        "__v": 0,
+        "EMPLOYEE_ATTENDANCE":
+        [
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
+    },
+    {
+        "EMPLOYEE_PASSWORD": "",
+        "_id": "64b6f6dd713b1ee24fe7f2d6",
+        "EMPLOYEE_ID": 1947,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "Employee",
+        "EMPLOYEE_NAME": "sunita gupta",
+        "EMPLOYEE_PHONE": 989757564646,
+        "EMPLOYEE_EMAIL": "pink@gmail.com",
+        "EMPLOYEE_USERNAME": "pinkih",
+        "EMPLOYEE_DOB": "2023-07-20",
+        "EMPLOYEE_EMPLMNTTYPE": "Permanent",
+        "EMPLOYEE_HIRE_DATE": "2023-07-20",
+        "EMPLOYEE_HOURLY_WAGE": "100",
+        "EMPLOYEE_ADD": "MCF  10307, GALI NO. 321, NEAR KALI MANDIR,\nSANJAY COLONY, SECTOR 23, BLOCK E, FARIDABAD",
+        "EMPLOYEE_STATE": "Haryana",
+        "EMPLOYEE_CITY": "Faridabad",
+        "__v": 0,
+        "EMPLOYEE_ATTENDANCE":
+        [
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
+    },
+    {
+        "EMPLOYEE_PASSWORD": "",
+        "_id": "64b6f778713b1ee24fe7f32b",
+        "EMPLOYEE_ID": 1948,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "Student",
+        "EMPLOYEE_NAME": "meghna",
+        "EMPLOYEE_PHONE": 8798678576565,
+        "EMPLOYEE_EMAIL": "megha@gmail.com",
+        "EMPLOYEE_USERNAME": "deerrr444",
+        "EMPLOYEE_DOB": "2023-07-21",
+        "EMPLOYEE_EMPLMNTTYPE": "Contract",
+        "EMPLOYEE_HIRE_DATE": "2023-07-20",
+        "EMPLOYEE_HOURLY_WAGE": "100",
+        "EMPLOYEE_ADD": "MCF  10307, GALI NO. 321, NEAR KALI MANDIR,\nSANJAY COLONY, SECTOR 23, BLOCK E, FARIDABAD",
+        "EMPLOYEE_STATE": "Haryana",
+        "EMPLOYEE_CITY": "Faridabad",
+        "__v": 0,
+        "EMPLOYEE_ATTENDANCE":
+        [
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
+    },
+    {
+        "EMPLOYEE_PASSWORD": "",
+        "_id": "64b76034713b1ee24fe7f66a",
+        "EMPLOYEE_ID": 1949,
+        "EMPLOYEE_PARENT_ID": 499,
+        "EMPLOYEE_PARENT_USERNAME": "vervebot12345",
+        "EMPLOYEE_MEMBER_PARENT_ID": 493,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "deepak2096",
+        "EMPLOYEE_ROLE": "Worker",
+        "EMPLOYEE_NAME": "Mahesh",
+        "EMPLOYEE_PHONE": 29387562478,
+        "EMPLOYEE_EMAIL": "punit@gmail.com",
+        "EMPLOYEE_USERNAME": "punit12345",
+        "EMPLOYEE_DOB": "2023-07-20",
+        "EMPLOYEE_EMPLMNTTYPE": "",
+        "EMPLOYEE_HIRE_DATE": "",
+        "EMPLOYEE_HOURLY_WAGE": "100",
+        "EMPLOYEE_ADD": "MCF  10307, GALI NO. 321, NEAR KALI MANDIR,\nSANJAY COLONY, SECTOR 23, BLOCK E, FARIDABAD",
+        "EMPLOYEE_STATE": "Haryana",
+        "EMPLOYEE_CITY": "Faridabad",
+        "__v": 0
+        ,
+        "EMPLOYEE_ATTENDANCE":
+        [
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-25",
+            "ATTENDANCE_IN":"2023-07-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-07-25T11:12:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-26",
+            "ATTENDANCE_IN":"2023-08-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-08-25T12:34:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-28",
+            "ATTENDANCE_IN":"2023-09-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-09-25T14:16:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-29",
+            "ATTENDANCE_IN":"2023-10-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-10-25T18:06:36.717Z"
+          },
+          {               
+            "ATTENDANCE_DATE_ID":"2023-07-30",
+            "ATTENDANCE_IN":"2023-11-25T09:34:36.717Z",
+            "ATTENDANCE_OUT":"2023-11-25T24:34:36.717Z"
+          }
+      ]
+    }
+]
