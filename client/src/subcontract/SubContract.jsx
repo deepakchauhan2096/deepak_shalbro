@@ -11,7 +11,6 @@ import EditSubcontract from "./EditSubContract";
 import Sidebar from "../components/Sidebar";
 import { useParams } from "react-router-dom";
 
-// import env from "react-dotenv";
 
 const SubContract = (props) => {
 
@@ -22,9 +21,20 @@ const SubContract = (props) => {
   const COMPANY_PARENT_ID = param[2];
   const COMPANY_PARENT_USERNAME = param[3];
 
+  const [open, setOpen] = React.useState(false);
+  const [index, setIndex] = useState(1);
+  const [subcontractData, setSubContractData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [Edit, setEdit] = useState(false);
+  const [openNav, setOpenNav] = useState(false);
+  const [updatedata, setUpdateData] = useState(false);
 
-
-
+  // modal
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const { alldata, setText } = useContext(MyContext);
+  const { projectcreatedata } = useContext(MyContext);
+  
   const [data, setData] = useState({
     row: {
       SUBCONTRACTOR_PARENT_ID: "",
@@ -45,57 +55,51 @@ const SubContract = (props) => {
     },
   });
 
-  const [open, setOpen] = React.useState(false);
-  const [index, setIndex] = useState(1);
-  const [ProjectData, setProjectData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [Edit, setEdit] = useState(false);
-  const [openNav, setOpenNav] = useState(false);
-  const [updatedata, setUpdateData] = useState(false);
-
-  // modal
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const { alldata, setText } = useContext(MyContext);
-  const { projectcreatedata } = useContext(MyContext);
 
   //update data
 
+
+  // const headers = {
+  //   "Content-Type": "application/json",
+  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  // };
+
+  const fetchsubcontracts =  () => {
+    // const axios = require('axios');
+    let data = JSON.stringify({
+      "SUBCONTRACTOR_ID": 3907,
+      "SUBCONTRACTOR_PARENT_ID": 3856,
+      "SUBCONTRACTOR_PARENT_USERNAME": "mukeshsahni8900@gmail.com",
+      "SUBCONTRACTOR_MEMBER_PARENT_ID": 3855,
+      "SUBCONTRACTOR_MEMBER_PARENT_USERNAME": "mukesh211@gmail.com",
+      "SUBCONTRACTOR_USERNAME": "newcontarct_sub"
+    });
+    
+    let config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: '/api/get_subcontractor',
+      headers: { 
+        // 'authorization_key': 'qzOUsBmZFgMDlwGtrgYypxUz', 
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    
+    axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
+
+  };
+
   useEffect(() => {
     fetchsubcontracts();
-  }, [projectcreatedata]);
-
-  const subcontractData = props.recieveData;
-  console.log("filterallprojectData", subcontractData)
-
-
-  const headers = {
-    "Content-Type": "application/json",
-    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  };
-
-  const fetchsubcontracts = async (e) => {
-    try {
-      const response = await axios.put(
-        "/api/get_subcontractor",
-        {
-          SUBCONTRACTOR_PARENT_ID: COMPANY_ID,
-          SUBCONTRACTOR_PARENT_USERNAME: COMPANY_USERNAME,
-          SUBCONTRACTOR_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
-          SUBCONTRACTOR_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
-        },
-        { headers }
-      );
-
-      const data = response.data;
-      setProjectData(data?.result);
-      setIsLoading(false);
-
-
-    } catch (err) {
-      console.log("Something Went Wrong: =>", err);
-    }
-  };
+  }, []);
 
   const [editedSubcontract, setEditedSubcontract] = useState(null);
 
@@ -177,7 +181,7 @@ const SubContract = (props) => {
 
   ];
 
-  const rows = ProjectData;
+  const rows = subcontractData;
 
   const handleClick = (event) => {
     setData(event);
@@ -213,17 +217,20 @@ const SubContract = (props) => {
 
   return (
     <>
-       <Sidebar
-                COMPANY_ID={COMPANY_ID}
-                COMPANY_USERNAME={COMPANY_USERNAME}
-                COMPANY_PARENT_ID={COMPANY_PARENT_ID}
-                COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
-                active={6}
-                toggle={openNav}
-            />
+      <Sidebar
+        COMPANY_ID={COMPANY_ID}
+        COMPANY_USERNAME={COMPANY_USERNAME}
+        COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+        COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+        active={6}
+        toggle={openNav}
+      />
       <Box className="box" style={{ background: "#277099" }}>
         <CreateSubcontract
-          companyData={subcontractData}
+          COMPANY_ID={COMPANY_ID}
+          COMPANY_USERNAME={COMPANY_USERNAME}
+          COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+          COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
           refetch={fetchsubcontracts}
           name={"Project"}
         />
@@ -634,7 +641,7 @@ const SubContract = (props) => {
                         className="form-check-label"
                         for="flexCheckIndeterminate"
                       >
-                        Panding
+                        Pending
                       </label>
                     </div>
 

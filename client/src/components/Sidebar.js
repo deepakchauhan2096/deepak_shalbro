@@ -38,6 +38,9 @@ const Sidebar = ({
       console.error('Error logging out: ', error);
     }
   };
+  const truncatedUsername =
+  COMPANY_USERNAME.split("@")[0].slice(0, 6).charAt(0).toUpperCase() +
+  COMPANY_USERNAME.split("@")[0].slice(1, 6);
 
   const drawerWidth = 0;
   return (
@@ -58,22 +61,22 @@ const Sidebar = ({
             class: "sidebar display-sidebar-desk"
           }}
         >
-          <div
-            className="sidebar-header d-flex p-3 f-20"
-            style={{ justifyContent: "space-between" }}
-          >
-            <h5 className="pt-2">{COMPANY_USERNAME}</h5>
-            <Tooltip title={"copany"}>
-              <Avatar>{(COMPANY_USERNAME)?.slice(0, 1)}</Avatar>
-            </Tooltip>
-          </div>
+        <div
+  className="sidebar-header d-flex p-3 f-20"
+  style={{ justifyContent: "space-between" }}
+>
+  <h5 className="pt-2">{truncatedUsername}</h5>
+  <Tooltip title={truncatedUsername}>
+    <Avatar>{truncatedUsername.slice(0, 1)}</Avatar>
+  </Tooltip>
+</div>
           <Divider />
 
           <List>
             <Link
               to={`/company/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active == 0 ? "#f3f3f3" : "" }}
+              style={{ background: active === 0 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -258,7 +261,7 @@ const Sidebar = ({
           >
             <div className="logout_icon ">
             <button
-                className="text-dark text-uppercase btn-link border-0 bg-white"
+                className="text-dark text-uppercase btn-link border-0 bg-light"
                 type="submit"
                 onClick={Logout}
               >

@@ -24,7 +24,7 @@ const SubcontractCreate = (props) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
-
+console.log("props", props);
   const [createSubcontract, setCreatesubcontract] = useState({
     SUBCONTRACTOR_PARENT_ID: props.COMPANY_ID,
     SUBCONTRACTOR_PARENT_USERNAME: props.COMPANY_USERNAME,
@@ -98,7 +98,6 @@ const SubcontractCreate = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const requiredFields = [
       "SUBCONTRACTOR_PARENT_ID",
       "SUBCONTRACTOR_PARENT_USERNAME",
@@ -107,7 +106,16 @@ const SubcontractCreate = (props) => {
       "SUBCONTRACTOR_USERNAME",
       "SUBCONTRACTOR_NAME",
       "SUBCONTRACTOR_PHONE",
+      // "SUBCONTRACTOR_ROLE",
+      // "SUBCONTRACTOR_START_DATE",
+      // "SUBCONTRACTOR_END_DATE",
+      // "SUBCONTRACTOR_SUPERVISOR",
+      // "SUBCONTRACTOR_ADD",
+      // "SUBCONTRACTOR_COUNTRY",
+      // "SUBCONTRACTOR_STATE",
+      // "SUBCONTRACTOR_CITY",
     ];
+
     const hasEmptyFields = requiredFields.some(
       (field) => !createSubcontract[field]
     );
@@ -124,18 +132,10 @@ const SubcontractCreate = (props) => {
 
     setErrorMsg("");
 
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: '/api/create_subcontractor',
-      headers: {
-        // 'authorization_key': 'qzOUsBmZFgMDlwGtrgYypxUz',
-        'Content-Type': 'application/json'
-      },
-      data: createSubcontract
-    };
-
-    axios.request(config)
+    axios
+      .post("/api/create_subcontractor", createSubcontract, {
+        headers,
+      })
       .then((response) => {
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
@@ -152,11 +152,8 @@ const SubcontractCreate = (props) => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error, "ERR");
       });
-
-
-
   };
 
   return (
@@ -233,7 +230,7 @@ const SubcontractCreate = (props) => {
                   name="SUBCONTRACTOR_START_DATE"
                   onChange={handleCreate}
                   className="form-control form-control-2 rounded-0"
-              
+                //required
                 />
               </div>
               <div className="form-group col-xl-6">
@@ -244,7 +241,7 @@ const SubcontractCreate = (props) => {
                   name="SUBCONTRACTOR_END_DATE"
                   onChange={handleCreate}
                   className="form-control form-control-2 rounded-0"
-               
+                //required
                 />
               </div>
             </div>
