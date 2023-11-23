@@ -349,7 +349,7 @@ const EmployeeAttendance = ({ state }) => {
           <div className="container">
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav">
-                <Link to="/employee" className="nav-link">My Projects</Link>
+                <Link to="/employee/" className="nav-link">My Projects</Link>
                 <a className="bg-white text-dark nav-link">Attendance - {ProjectName}</a>
               </div>
             </div>

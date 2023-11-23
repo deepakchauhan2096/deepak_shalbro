@@ -3,7 +3,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -53,12 +53,12 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function CompanyDashboard(props) {
-  // const { id } = useParams();
+  // const {COMPANY_ID, COMPANY_USERNAME, COMPANY_ROOT_ID, COMPANY_ROOT_USERNAME } = useParams();
   // const data = id.split("&");
 
   // const { id } = useParams();
-  const mydata = useLocation()
-  console.log(mydata, "mydata")
+  // const mydata = useLocation()
+  // console.log(COMPANY_ID, "mydata")
   const data = props?.data;
   console.log(data,"lala")
   const COMPANY_ID = data[0];

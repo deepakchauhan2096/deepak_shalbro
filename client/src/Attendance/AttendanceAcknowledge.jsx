@@ -211,13 +211,13 @@ const AttendanceReport = (props) => {
 
   // date range array
 
-  const { id } = useParams();
+  const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
 
-  const param = id.split("&");
-  const COMPANY_ID = param[0];
-  const COMPANY_USERNAME = param[1];
-  const COMPANY_PARENT_ID = param[2];
-  const COMPANY_PARENT_USERNAME = param[3];
+  // const param = id.split("&");
+  // const COMPANY_ID = param[0];
+  // const COMPANY_USERNAME = param[1];
+  // const COMPANY_PARENT_ID = param[2];
+  // const COMPANY_PARENT_USERNAME = param[3];
 
   const [employees, getReport] = useState();
   const [foundUsers, setFoundUsers] = useState([]);
