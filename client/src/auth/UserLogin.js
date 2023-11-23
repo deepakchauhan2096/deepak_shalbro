@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link, useNavigate, Navigate , useLocation} from "react-router-dom";
 import axios from "axios";
 import InputControl from "../components/InputControl";
 import styles from "../assests/css/Login.module.css";
@@ -14,6 +14,7 @@ import EmployeeLogin from "../employee/EmployeeLogin"
 
 function UserLogin({ onDataFetched }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [values, setValues] = useState({
     ADMIN_USERNAME: "",
     ADMIN_PASSWORD: "",
@@ -122,8 +123,8 @@ function UserLogin({ onDataFetched }) {
           </div>
 
 
-         {activeButton === 'Middle' ? <Logincomp/> : activeButton === 'Right' ? 
-          <EmployeeLogin />
+         {activeButton === 'Middle' ? <Logincomp message={location.state}  /> : activeButton === 'Right' ? 
+          <EmployeeLogin message={location.state} />
         : ""}
 
         </div>

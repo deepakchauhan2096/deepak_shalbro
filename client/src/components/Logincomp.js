@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -8,7 +8,7 @@ import { auth } from "../firebase";
 import styles from "../assests/css/Login.module.css";
 import { Alert, Stack } from "@mui/material";
 
-function Logincomp() {
+function Logincomp(props) {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     email: "",
@@ -18,6 +18,10 @@ function Logincomp() {
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showpassword, setShowpassword] = useState(true)
+
+  // useEffect(()=>{
+  //   setErrorMsg(props.message);
+  // },[])
 
   const handleSubmission = () => {
 
@@ -37,7 +41,8 @@ function Logincomp() {
         setSubmitButtonDisabled(false);
         setLoading(false)
         const data = res.user.displayName
-        navigate("/company", { state: data });
+        const param = data.split("&&")
+        navigate(`/company/${param[0]}/${param[1]}/${param[2]}/${param[3]}`, { state: data });
       })
       .catch((err) => {
         setSubmitButtonDisabled(false);

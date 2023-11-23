@@ -71,7 +71,7 @@ const Sidebar = ({
 
           <List>
             <Link
-              to={`/company/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 0 ? "#f3f3f3" : "" }}
             >
@@ -82,7 +82,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/projects/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/projects/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 1 ? "#f3f3f3" : "" }}
             >
@@ -93,7 +93,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/employees/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/employees/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 2 ? "#f3f3f3" : "" }}
             >
@@ -104,7 +104,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/attendance/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/attendance/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 3 ? "#f3f3f3" : "" }}
             >
@@ -115,7 +115,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/documents/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/documents/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 4 ? "#f3f3f3" : "" }}
             >
@@ -126,7 +126,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/contractor/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/contractor/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 6 ? "#f3f3f3" : "" }}
             >
@@ -185,7 +185,7 @@ const Sidebar = ({
 
           <List>
             <Link
-              to={`/company/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 0 ? "#f3f3f3" : "" }}
             >
@@ -196,7 +196,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/projects/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/projects/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 1 ? "#f3f3f3" : "" }}
             >
@@ -207,7 +207,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/employees/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/employees/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 2 ? "#f3f3f3" : "" }}
             >
@@ -218,7 +218,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/attendance/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/attendance/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 3 ? "#f3f3f3" : "" }}
             >
@@ -229,7 +229,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/documents/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/documents/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 4 ? "#f3f3f3" : "" }}
             >
@@ -240,7 +240,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/contractor/${COMPANY_ID}&${COMPANY_USERNAME}&${COMPANY_PARENT_ID}&${COMPANY_PARENT_USERNAME}`}
+              to={`/company/contractor/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
               style={{ background: active == 6 ? "#f3f3f3" : "" }}
             >
