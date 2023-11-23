@@ -29,12 +29,15 @@ export default function Document(props) {
     const [deleteItem, setDeleteItem] = useState("");
     const [openNav, setOpenNav] = useState(false);
 
-    const { id } = useParams();
-    const param = id.split("&");
-    const COMPANY_ID = param[0];
-    const COMPANY_USERNAME = param[1];
-    const COMPANY_PARENT_ID = param[2];
-    const COMPANY_PARENT_USERNAME = param[3];
+    // const { id } = useParams();
+    // const param = id.split("&");
+    // const COMPANY_ID = param[0];
+    // const COMPANY_USERNAME = param[1];
+    // const COMPANY_PARENT_ID = param[2];
+    // const COMPANY_PARENT_USERNAME = param[3];
+
+  const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+
 
     console.log("COMPANYPARENT :", COMPANY_PARENT_USERNAME);
 
@@ -304,7 +307,7 @@ export default function Document(props) {
             width: 160,
             editable: false,
             renderCell: (cellValues) => {
-                console.log(cellValues)
+              return  (<ExpiryReminder data={cellValues?.value} />)
             }
 
         },
