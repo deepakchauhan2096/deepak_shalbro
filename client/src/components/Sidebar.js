@@ -245,7 +245,7 @@ const Sidebar = ({
             <Link
               to={`/company/contractor/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active == 6 ? "#f3f3f3" : "" }}
+              style={{ background: active === 6 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -261,7 +261,7 @@ const Sidebar = ({
           >
             <div className="logout_icon ">
             <button
-                className="text-dark text-uppercase btn-link border-0 bg-light"
+                className="text-dark text-uppercase btn-link border-0 bg-lighty"
                 type="submit"
                 onClick={Logout}
               >

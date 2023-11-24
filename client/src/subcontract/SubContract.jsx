@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom";
 const SubContract = (props) => {
 
   const { id } = useParams();
-  const param = id.split("&");
+  const param = id?.split("&");
   const COMPANY_ID = param[0];
   const COMPANY_USERNAME = param[1];
   const COMPANY_PARENT_ID = param[2];
