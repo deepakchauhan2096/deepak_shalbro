@@ -10,7 +10,7 @@ import EmployeeAttendance from "./employee/EmployeeAttendance";
 import EmployeeLogin from "./employee/EmployeeLogin"
 import EmployeeHistory from "./employee/EmployeeHistory";
 import EmployeeDetail from "./employee/EmployeeDetail";
-import CompanyDashboard from "./company/CompanyDashboard";
+import CompanyDashboard from "./company/Dashboard";
 import Project from "./company/Project";
 import EmployeeSrc from "./employee/EmployeeSrc";
 import AttendanceReport from "./Attendance/AttendanceAcknowledge";
@@ -78,8 +78,8 @@ function App() {
             {/* <Route path="/employee" element={"employee" === userName[4] ? <EmployeeDetail state={userName} /> : <Navigate to="/" />} /> */}
 
 
-            <Route path="/company/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME" element={"company" === userName[4] ? <CompanyDashboard data={userName} />  : <Navigate to="/" />}  />
-            <Route path="/employee/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME" element={"employee" === userName[4] ? <EmployeeDetail state={userName} />  : <Navigate to="/" />}  />
+            <Route path="/company/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME" element={<CompanyDashboard data={userName} /> }  />
+            <Route path="/employee/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME" element={ <EmployeeDetail state={userName} />}  />
             <Route path="/employee/attendance" element={<EmployeeAttendance state={userName} />} />
             <Route path="/employee/attendance/:latt/:lngi/:areas/:loca/:employees/:projects/:projectids" element={<EmployeeAttendance state={userName} />} />
 
