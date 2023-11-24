@@ -288,6 +288,7 @@ const EmployeeAttendance = ({ state }) => {
       setLocationName(address);
       console.log(address, "fetchLocationName(Lat, Long)");
     } catch (error) {
+
       console.error("Error fetching location:", error);
     }
   };
@@ -349,7 +350,7 @@ const EmployeeAttendance = ({ state }) => {
           <div className="container">
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav">
-                <Link to="/employee/" className="nav-link">My Projects</Link>
+              <Link to={`employee/${state[0]}/${state[1]}/${state[2]}/${state[3]}}`} className="nav-link">My Projects</Link>
                 <a className="bg-white text-dark nav-link">Attendance - {ProjectName}</a>
               </div>
             </div>

@@ -8,7 +8,7 @@ import { auth } from "../firebase";
 import styles from "../assests/css/Login.module.css";
 import { Alert, Stack } from "@mui/material";
 
-function Logincomp(props) {
+function Logincomp({message}) {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     email: "",
@@ -19,9 +19,13 @@ function Logincomp(props) {
   const [loading, setLoading] = useState(false);
   const [showpassword, setShowpassword] = useState(true)
 
-  // useEffect(()=>{
-  //   setErrorMsg(props.message);
-  // },[])
+
+  console.log()
+
+  useEffect(()=>{
+    
+    setErrorMsg(message);
+  },[message])
 
   const handleSubmission = () => {
 
@@ -42,7 +46,13 @@ function Logincomp(props) {
         setLoading(false)
         const data = res.user.displayName
         const param = data.split("&&")
+        console.log(param[4] ,)
+        if(param[4] === "company"){
         navigate(`/company/${param[0]}/${param[1]}/${param[2]}/${param[3]}`, { state: data });
+        }else{
+        navigate("/");
+        setErrorMsg("Company: Error (auth/invalid-login-credentials).");
+        }
       })
       .catch((err) => {
         setSubmitButtonDisabled(false);
@@ -64,7 +74,7 @@ function Logincomp(props) {
           placeholder="Enter email address"
         />
 
-        <span style={{ position: "relative" }}>
+        <span style={{ position: "relative" }} className="mb-3">
           <InputControl
             label="Password"
             type={showpassword ? "password" : "text"}
@@ -86,12 +96,13 @@ function Logincomp(props) {
             </>
 
           )}
-
+        
+       
+        {/* <br /> */}
         <div className={styles.footer}>
           <button disabled={submitButtonDisabled} onClick={handleSubmission}>
             {loading ? "loading..." : "Login"}
           </button>
-          
         </div>
 
       {/* </div> */}
