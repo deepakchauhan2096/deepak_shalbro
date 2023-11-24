@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, Navigate , useLocation} from "react-router-dom";
 import axios from "axios";
 import InputControl from "../components/InputControl";
@@ -32,6 +32,7 @@ function UserLogin({ onDataFetched }) {
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
   };
+
 
   const handleSubmission = (e) => {
     e.preventDefault();
@@ -123,7 +124,7 @@ function UserLogin({ onDataFetched }) {
           </div>
 
 
-         {activeButton === 'Middle' ? <Logincomp message={location.state}  /> : activeButton === 'Right' ? 
+         {activeButton === 'Middle' ? <Logincomp message={onDataFetched}   /> : activeButton === 'Right' ? 
           <EmployeeLogin message={location.state} />
         : ""}
 
