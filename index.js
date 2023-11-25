@@ -158,7 +158,8 @@ app.use(cors());
 
 
   
-  app.put("/api/get_subcontractor'",(req,res)=> {
+  app.put("/api/get_subcontractor",(req,res)=> {
+    console.log(req.body);
     sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/get_subcontractor`,req,res)
   });
 

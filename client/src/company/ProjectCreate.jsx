@@ -88,10 +88,6 @@ export default function ProjectCreate({
     (s) => s.name === createProject.PROJECT_STATE
   );
 
-  // const headers = {
-  //   "Content-Type": "application/json",
-  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  // };
 
   const handleCreate = (e) => {
     const { name, value } = e.target;
