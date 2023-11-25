@@ -269,7 +269,7 @@ export default function Document(props) {
         id: item.DOCUMENT_ID,
         documentName: item.DOCUMENT_FILEDATA?.originalname || '', // Add conditional check here
         documentSize: item.DOCUMENT_FILEDATA?.size || '', // Add conditional check here
-        uploadDate: formatDate(item.created),
+        uploadDate: formatDate(item.createdAt),
         documentType: item.DOCUMENT_FILEDATA?.mimetype || '', // Add conditional check here
         ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '', // Add conditional check here
     })) || [];

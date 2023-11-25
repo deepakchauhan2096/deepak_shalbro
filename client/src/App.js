@@ -15,16 +15,13 @@ import Project from "./company/Project";
 import EmployeeSrc from "./employee/EmployeeSrc";
 import AttendanceReport from "./Attendance/AttendanceAcknowledge";
 import Document from "./Document/Documents";
-import Csc from "./components/Csc"
 // import Page404 from "./pages/Page404";
 import Signup from "./auth/Signup";
-import Login from "./components/Login";
-import Admin from "./components/Admin";
+
 import { auth } from "./firebase";
 import SubContract from "./subcontract/SubContract";
 import AdminLogin from "./auth/AdminLogin";
-import axios from "axios";
-import Logincomp from "./components/Logincomp";
+
 import Firecreate from "./components/Firecreate";
 import UserLogin from "./auth/UserLogin";
 import Updates from "./auth/Update";

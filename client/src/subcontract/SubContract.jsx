@@ -97,7 +97,7 @@ const SubContract = (props) => {
     { field: "SUBCONTRACTOR_ID", headerName: "ID", width: 90 },
     {
       field: "SUBCONTRACTOR_USERNAME",
-      headerName: "USername",
+      headerName: "Subcontractor Email",
       width: 150,
     },
     {
@@ -125,13 +125,13 @@ const SubContract = (props) => {
     {
       field: "SUBCONTRACTOR_SUPERVISOR",
       headerName: "Supervisor",
-      width: 200,
+      width: 120,
     },
 
     {
       field: "action",
       headerName: "Detail",
-      width: 120,
+      width: 100,
       renderCell: (cellValues) => {
         return (
           <Button
@@ -150,7 +150,7 @@ const SubContract = (props) => {
     {
       field: "edit",
       headerName: "Edit",
-      width: 120,
+      width: 100,
       renderCell: (cellValues) => {
         return (
           <Button
@@ -163,6 +163,29 @@ const SubContract = (props) => {
         );
       },
     },
+
+    {
+      field: "delete",
+      headerName: "Delete",
+      width: 100,
+
+
+      renderCell: (cellValues) => {
+          return (
+              <Button
+                  variant="contained"
+                  className="view-btn "
+                  color="error"
+                  style={{ padding: "2px 2px" }}
+                  // onClick={(e) => {
+                  //     handleDelDoc(e, cellValues.id);
+                  // }}
+              >
+                  Delete
+              </Button>
+          );
+      },
+  },
 
   ];
 
