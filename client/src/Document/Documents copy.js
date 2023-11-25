@@ -29,6 +29,12 @@ export default function Document(props) {
     const [deleteItem, setDeleteItem] = useState("");
     const [openNav, setOpenNav] = useState(false);
 
+    // const { id } = useParams();
+    // const param = id.split("&");
+    // const COMPANY_ID = param[0];
+    // const COMPANY_USERNAME = param[1];
+    // const COMPANY_PARENT_ID = param[2];
+    // const COMPANY_PARENT_USERNAME = param[3];
 
   const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
 
@@ -40,9 +46,11 @@ export default function Document(props) {
     const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
-        console.log("heelo i am runnig useEffect")
         getalldocument();
     }, [deleteItem]);
+
+
+
 
     // function to download the file 
     const downloadFile = (base64Data, fileName) => {
@@ -76,10 +84,13 @@ export default function Document(props) {
 
     const getalldocument = async () => {
 
+
         const requestData = {
             DOCUMENT_REF_ID: COMPANY_ID,
             DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME
         };
+
+
         try {
             const response = await axios.put("/api/get_all_document", requestData);
 
@@ -99,7 +110,9 @@ export default function Document(props) {
         }
     };
 
-  
+    // const Demo = styled("div")(({ theme }) => ({
+    //     backgroundColor: theme.palette.background.paper,
+    // }));
 
     // Function to download the uploaded documents 
     const handleDownload = async (documentId, fileName) => {
@@ -269,7 +282,7 @@ export default function Document(props) {
         id: item.DOCUMENT_ID,
         documentName: item.DOCUMENT_FILEDATA?.originalname || '', // Add conditional check here
         documentSize: item.DOCUMENT_FILEDATA?.size || '', // Add conditional check here
-        uploadDate: formatDate(item.createdAt),
+        uploadDate: formatDate(item.created),
         documentType: item.DOCUMENT_FILEDATA?.mimetype || '', // Add conditional check here
         ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '', // Add conditional check here
     })) || [];

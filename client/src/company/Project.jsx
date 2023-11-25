@@ -78,13 +78,6 @@ const Project = (props) => {
 
   const filterallprojectData = props.recieveData;
 
-  // console.log(filterallprojectData, "my project");
-
-  // const headers = {
-  //   "Content-Type": "application/json",
-  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  // };
-
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
@@ -96,14 +89,9 @@ const Project = (props) => {
           PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
         }
       );
-      // setTimeout(() => {
       const data = response.data;
       setProjectData(data?.result);
-      // dispatch(initProject_fun(data?.result))
-
       setIsLoading(false);
-      // console.log("contracts Data : =>", data);
-      // }, 1000);
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }

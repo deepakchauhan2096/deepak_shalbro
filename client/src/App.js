@@ -15,16 +15,13 @@ import Project from "./company/Project";
 import EmployeeSrc from "./employee/EmployeeSrc";
 import AttendanceReport from "./Attendance/AttendanceAcknowledge";
 import Document from "./Document/Documents";
-import Csc from "./components/Csc"
-import Page404 from "./pages/Page404";
+// import Page404 from "./pages/Page404";
 import Signup from "./auth/Signup";
-import Login from "./components/Login";
-import Admin from "./components/Admin";
+
 import { auth } from "./firebase";
 import SubContract from "./subcontract/SubContract";
 import AdminLogin from "./auth/AdminLogin";
-import axios from "axios";
-import Logincomp from "./components/Logincomp";
+
 import Firecreate from "./components/Firecreate";
 import UserLogin from "./auth/UserLogin";
 import Updates from "./auth/Update";
@@ -39,22 +36,13 @@ function App() {
     auth.onAuthStateChanged((user) => {
       if (user) {
         const data = user?.displayName
-        const splitedData = data.split("&&")
+        const splitedData = data?.split("&&")
         console.log(user, "user")
         setUserName(splitedData);
         console.log(splitedData, "splitedData")
       } else setUserName("");
     });
   }, []);
-
-
-
-
-
-
-
-
-
 
   return (
     <div className="wrapper" style={{ overflowX: "scroll", overflow: "hidden" }}>
@@ -66,7 +54,7 @@ function App() {
             <Route path="/root" element={<AdminLogin />} />
             <Route path="/" element={<UserLogin />} />
             <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/error" element={<Page404 />} />
+            {/* <Route path="/error" element={<Page404 />} /> */}
             <Route path="/employee/history/" element={<EmployeeHistory />} />
             <Route path="/myadmin/*" element={<AdminDashboard />} />
             <Route path="/test" element={<Updates />} />
