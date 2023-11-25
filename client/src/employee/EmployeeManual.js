@@ -8,6 +8,9 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
   const [project, setProject] = useState();
 
 
+
+
+
   //get all project
   useEffect(() => {
     const fetchData = async () => {
@@ -220,6 +223,36 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
 
     // console.log(formattedTime);
 
+
+    const fetchProjectReport = async () => {
+      // const axios = require('axios');
+      let data = {
+        "projectId": 3879,
+        "employeeId": 3858,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": "mukesh211@gmail.com"
+      };
+
+      let config = {
+        method: 'put',
+        maxBodyLength: Infinity,
+        url: '/api/getprojectreport',
+        data: data
+      };
+
+      axios.request(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+    }
+
+    useEffect(() => {
+      fetchProjectReport()
+    }, []);
+
     const handleSubmitIn = (event) => {
       event.preventDefault();
 
@@ -428,6 +461,11 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
         // setLocError("You are outside the project location");
       }
     };
+
+
+
+
+
 
 
 
