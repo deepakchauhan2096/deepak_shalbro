@@ -2,6 +2,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Button, Modal } from "@mui/material";
+import { toast } from "react-toastify";
 
 const EmployeeManual = ({ EMPLOYEE_DATA }) => {
 
@@ -190,11 +191,47 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
       borderRadius: 2,
     };
 
+    const [user, setUser] = useState({})
+    const [loading, setLoading] = useState(true)
+
+
+    const fetchProjectReport = async () => {
+      // const axios = require('axios');
+      let datas = {
+        "projectId": data.row?.PROJECT_ID,
+        "employeeId": EMPLOYEE_DATA?.EMPLOYEE_ID,
+        "EMPLOYEE_MEMBER_PARENT_USERNAME": EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+        "PUNCH_TYPE": "PunchIn"
+      };
+
+      let config = {
+        method: 'put',
+        maxBodyLength: Infinity,
+        url: '/api/getprojectreport',
+        data: datas
+      };
+
+      axios.request(config)
+        .then((response) => {
+          // console.log(JSON.stringify(response.data));
+          setUser(response.data.result)
+          // if(response){
+          setLoading(false)
+          // }
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false)
+        });
+
+    }
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [selectedTime, setSelectedTime] = useState('00:00');
     const [indone, setIndone] = useState(false);
+
 
     const handleTimeChange = (event) => {
       const newTime = event.target.value;
@@ -219,35 +256,17 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
     currentDate?.setMilliseconds(0);
 
     // Format the date in the desired format
-    const formattedTime = currentDate?.toISOString();
+    const formattedTime = currentDate?.toISOString(user);
 
     // console.log(formattedTime);
 
+    const dateObject = new Date(user?.TIME);
 
-    const fetchProjectReport = async () => {
-      // const axios = require('axios');
-      let data = {
-        "projectId": 3879,
-        "employeeId": 3858,
-        "EMPLOYEE_MEMBER_PARENT_USERNAME": "mukesh211@gmail.com"
-      };
+    const hour = dateObject.getUTCHours();
+    const minute = dateObject.getUTCMinutes();
 
-      let config = {
-        method: 'put',
-        maxBodyLength: Infinity,
-        url: '/api/getprojectreport',
-        data: data
-      };
 
-      axios.request(config)
-        .then((response) => {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
 
-    }
 
     useEffect(() => {
       fetchProjectReport()
@@ -265,8 +284,8 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
           ATTENDANCE_COMPANY_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_PARENT_USERNAME,
           ATTENDANCE_EMPLOYEE_ID: EMPLOYEE_DATA?.EMPLOYEE_ID,
           ATTENDANCE_EMPLOYEE_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_USERNAME,
-          ATTENDANCE_DATE_ID: formattedDate,
-          ATTENDANCE_IN: formattedTime,
+          ATTENDANCE_DATE_ID: user?.DATE,
+          ATTENDANCE_IN: user?.TIME,
           ATTENDANCE_PROJECT_ID: data.row?.PROJECT_ID
         };
 
@@ -279,8 +298,11 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
 
           )
           .then(() => {
-            setIndone("sucess");
-            // setShowBackdrop(false);
+            toast.success("PunchIn Submitted successfully!", {
+              position: toast.POSITION.TOP_CENTER,
+              autoClose: 1000,
+
+          });
             handleClose()
             console.log("sucess")
           })
@@ -298,17 +320,23 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
     return (
       <div>
         {/* <Button onClick={handleOpen}>Setup Punch In</Button> */}
-        <button
-          variant="contained"
-          className="primary btn btn-success btn-sm rounded-5"
+
+        {user?.TIME ?<> <button
+          className="primary btn btn-danger btn-sm rounded-2 text-white"
           style={{ padding: "4px 10px" }}
           // onClick={(event) => {
           //   handleSubmitIn(cellValues);
           // }}
           onClick={handleOpen}
         >
-          Setup Punch In
-        </button>
+           <i class="fa fa-address-card"></i> request
+        </button></> : <button
+         disabled
+          className="primary btn btn-success btn-sm rounded-2"
+          style={{ padding: "4px 10px" }}
+        >
+        { loading ? "Loading..." : "No request"}
+        </button>}
         <Modal
           open={open}
           onClose={handleClose}
@@ -322,12 +350,15 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
               <div className="container">
 
                 <div className="row py-4">
+                  <div>Date : {user?.DATE}</div>
+                  {/* <div>TIME : {user?.TIME}</div> */}
+
                   <div className="col-4  text-center ">
                     <input
                       type="time"
                       id="timeInput"
                       name="timeInput"
-                      value={selectedTime}
+                      value={`${hour}:${minute}`}
                       onChange={handleTimeChange}
                       className="form-control form-control-2"
                       style={{ width: "100px" }}
