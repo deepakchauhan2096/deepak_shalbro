@@ -24,6 +24,7 @@ import { useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import GenPassword from "./GenPassword";
+import ArchivedEmployee from "./EmployeeArchive";
 
 // import env from "react-dotenv";
 
@@ -422,6 +423,17 @@ const EmployeeSrc = (props) => {
           refetch={fetchData}
         />
 
+        {/* <ArchivedEmployee
+          COMPANY_ID={COMPANY_ID}
+          COMPANY_USERNAME={COMPANY_USERNAME}
+          COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+          COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+          name={"Employee"}
+          refetch={fetchData}
+        /> */}
+
+
+
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
@@ -502,9 +514,9 @@ const EmployeeSrc = (props) => {
                       <div className="card-body">
                         <table className="table" style={{ tableLayout: "" }}>
                           <tbody >
-                            <GenPassword 
-                            PROJECT_DATA={filterData?.row} 
-                            EMPLOYEE_USERNAME={filterData.row?.EMPLOYEE_USERNAME} EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID} ADMIN_ID={filterData.row?.EMPLOYEE_MEMBER_PARENT_ID} ADMIN_USERNAME={filterData.row?.EMPLOYEE_MEMBER_PARENT_USERNAME} />
+                            <GenPassword
+                              PROJECT_DATA={filterData?.row}
+                              EMPLOYEE_USERNAME={filterData.row?.EMPLOYEE_USERNAME} EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID} ADMIN_ID={filterData.row?.EMPLOYEE_MEMBER_PARENT_ID} ADMIN_USERNAME={filterData.row?.EMPLOYEE_MEMBER_PARENT_USERNAME} />
 
                             <tr>
                               <td><b>Email :</b></td>
