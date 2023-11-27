@@ -109,6 +109,7 @@ const EmployeeAttendance = ({ state }) => {
   let employeeData = empdata;
 
   console.log(markerPosition, state, "emp-data");
+  
 
   const currentTime = new Date().toLocaleTimeString();
   const currentDate = new Date().toLocaleDateString();
@@ -214,6 +215,7 @@ const EmployeeAttendance = ({ state }) => {
           setOutdone(true);
           setShowBackdrop(false);
         })
+
         .catch((error) => {
           console.log(error);
           setShowBackdrop(false);

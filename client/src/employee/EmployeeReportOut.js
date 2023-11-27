@@ -57,7 +57,7 @@ export default function EmployeeReportOut({ EMPLOYEE_ID, EMPLOYEE_PARENT_ID, EMP
 
 
 
-
+   console.log(createEmployee.TIME, "TIME")
 
 
     useEffect(() => {

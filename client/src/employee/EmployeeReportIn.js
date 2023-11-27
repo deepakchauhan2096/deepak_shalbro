@@ -6,17 +6,7 @@ import Modal from "@mui/material/Modal";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Alert, Button, Container, Stack } from "@mui/material";
-import env from "react-dotenv";
-import country from "../Api/countriess.json";
-import employeeRole from "../jsonlist/employeeRole.json"
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import {
-    validatePhoneNumber,
-    validateUsername,
-    validateEmail,
-    validatePassword
-} from "../components/Validation";
-import { auth } from "../firebase";
+
 
 const style = {
     position: "absolute",
@@ -141,94 +131,10 @@ export default function EmployeeReportOut({ EMPLOYEE_ID, EMPLOYEE_PARENT_ID, EMP
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                {/* <Container
-                    id="content"
-                    style={{ height: "100vh", position: "relative" }}
-                    maxWidth="xl"
-                > */}
                 <Box sx={style}>
                     <form onSubmit={handleSubmit} className="overflow-auto overflow-x-hidden">
-                        <h5>Send PunchOut Report</h5>
+                        <h5>Send PunchIn Report</h5>
                         <div className="row py-1">
-                            {/* <div className="form-group col-xl-6">
-                                    <input
-                                        disabled
-                                        type="text"
-                                        className={`form-control form-control-2 rounded-0`}
-                                        value={createEmployee.EMPLOYEE_ID}
-                                        onChange={handleCreate}
-                                    />
-                                </div> */}
-                            {/* <div className="form-group col-xl-6">
-                                    <input
-                                        disabled
-                                        type="text"
-                                        className={`form-control form-control-2 rounded-0`}
-                                        value={createEmployee.EMPLOYEE_PARENT_ID}
-                                        onChange={handleCreate}
-                                    />
-                                </div> */}
-                            {/* <div className="form-group col-xl-6">
-                                    <input
-                                        disabled
-                                        type="text"
-                                        className={`form-control form-control-2 rounded-0`}
-                                        value={createEmployee.EMPLOYEE_PARENT_USERNAME}
-                                        onChange={handleCreate}
-                                    />
-                                </div> */}
-                            {/* <div className="form-group col-xl-6">
-                                    <input
-                                        disabled
-                                        type="text"
-                                        className={`form-control form-control-2 rounded-0`}
-                                        value={createEmployee.EMPLOYEE_MEMBER_PARENT_ID}
-                                        onChange={handleCreate}
-                                    />
-                                </div> */}
-                            {/* <div className="form-group col-xl-6">
-                                    <input
-                                        disabled
-                                        type="text"
-                                        className={`form-control form-control-2 rounded-0`}
-                                        value={createEmployee.EMPLOYEE_MEMBER_PARENT_USERNAME}
-                                        onChange={handleCreate}
-                                    />
-                                </div> */}
-                            {/* <div className="form-group col-xl-6">
-                                    <input
-                                        disabled
-                                        type="text"
-                                        className={`form-control form-control-2 rounded-0`}
-                                        value={createEmployee.PROJECT_ID}
-                                        onChange={handleCreate}
-                                    />
-                                </div> */}
-                            {/* <div className="form-group col-xl-6">
-                                    <input
-                                        disabled
-                                        type="text"
-                                        className={`form-control form-control-2 rounded-0`}
-                                        value={createEmployee.EMPLOYEE_USERNAME}
-                                        onChange={handleCreate}
-                                    />
-                                </div> */}
-
-
-
-                            {/* <div className="form-group col-xl-6">
-                                    <input
-                                        disabled
-                                        type="text"
-                                        className={`form-control form-control-2 rounded-0`}
-                                        value={createEmployee.PHONE_NUMBER}
-                                        onChange={handleCreate}
-                                    />
-                                </div> */}
-
-
-
-
                             <div className="form-group">
                                 <input
                                     disabled
@@ -241,7 +147,7 @@ export default function EmployeeReportOut({ EMPLOYEE_ID, EMPLOYEE_PARENT_ID, EMP
                                     disabled
                                     type="text"
                                     className={`form-control form-control-2 rounded-0`}
-                                    value={createEmployee.TIME}
+                                    value={new Date()}
                                     onChange={handleCreate}
                                 />
                                 <input
