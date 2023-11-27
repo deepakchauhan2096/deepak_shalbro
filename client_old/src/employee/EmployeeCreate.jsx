@@ -192,6 +192,8 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
       >
         + Add New Employee
       </button>
+      
+  
       <Modal
         open={open}
         onClose={handleClose}

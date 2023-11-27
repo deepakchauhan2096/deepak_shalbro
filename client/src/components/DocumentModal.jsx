@@ -156,16 +156,7 @@ export default function DocumentModal(props) {
                 />
               </div>
             </div>
-            {/* <Button
-              variant="contained"
-              className="button rounded-2 lowercase mt-5"
-              onClick={handleSubmit}
-             
-            >
-              Upload document&nbsp;
-              <ArrowCircleUpIcon fontSize="small" />
-            </Button> */}
-          
+        
             <div className="FormButtonAlign">
               <button
                 type="submit"

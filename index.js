@@ -216,6 +216,10 @@ app.use(cors());
     sendHttpRequest("POST",`${process.env.SERVERAPIREQUEST}/create_documentnew`,req,res)
   });
 
+  app.post("/api/archive-employee",(req,res)=> {
+    sendHttpRequest("POST",`${process.env.SERVERAPIREQUEST}/archive-employee`,req,res)
+  });
+
   app.delete("/api/delete_document/:DOCUMENT_ID",(req,res)=> {
     console.log(process.env.SERVERAPIREQUEST);
     console.log("wole data1",req.body);
