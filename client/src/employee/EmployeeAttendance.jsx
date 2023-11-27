@@ -23,6 +23,9 @@ import placeholder from "../assests/images/placeholder.png";
 import { styled } from "@mui/styles";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from '../firebase';
+import EmployeeReport from "./EmployeeReportOut";
+import EmployeeReportIn from "./EmployeeReportIn";
+import EmployeeReportOut from "./EmployeeReportOut";
 
 const containerStyle = {
   width: "100%",
@@ -63,7 +66,9 @@ const EmployeeAttendance = ({ state }) => {
   const [circleCenter, setCircleCenter] = useState([null, null]);
   const [circleRadius, setCircleRadius] = useState(Area); // Default radius of the circle in meters
   const [isInsideCircle, setIsInsideCircle] = useState(false);
-  const [locError, setLocError] = useState(false);
+  const [locErrorin, setLocErrorIn] = useState(false);
+  const [locErrorout, setLocErrorOut] = useState(false);
+
   const [empdata, setData] = useState([]);
   const [map, setMap] = useState(null);
 
@@ -104,6 +109,7 @@ const EmployeeAttendance = ({ state }) => {
   let employeeData = empdata;
 
   console.log(markerPosition, state, "emp-data");
+  
 
   const currentTime = new Date().toLocaleTimeString();
   const currentDate = new Date().toLocaleDateString();
@@ -139,6 +145,8 @@ const EmployeeAttendance = ({ state }) => {
 
   const handleSubmitIn = (event) => {
     event.preventDefault();
+    setLocErrorIn("")
+    setLocErrorOut("")
 
     if (isInsideCircle) {
       const attendanceData = {
@@ -171,7 +179,7 @@ const EmployeeAttendance = ({ state }) => {
           setShowBackdrop(false);
         });
     } else {
-      setLocError("You are outside the project location");
+      setLocErrorIn("You are outside the project location");
     }
   };
 
@@ -179,6 +187,8 @@ const EmployeeAttendance = ({ state }) => {
 
   const handleSubmitOut = (event) => {
     event.preventDefault();
+    setLocErrorIn("")
+    setLocErrorOut("")
     if (isInsideCircle) {
       const attendanceData = {
         ATTENDANCE_ADMIN_ID: employeeData?.EMPLOYEE_MEMBER_PARENT_ID,
@@ -205,12 +215,14 @@ const EmployeeAttendance = ({ state }) => {
           setOutdone(true);
           setShowBackdrop(false);
         })
+
         .catch((error) => {
           console.log(error);
           setShowBackdrop(false);
         });
     } else {
-      setLocError("You are outside the project location");
+      setLocErrorOut("You are outside the project location");
+
     }
   };
 
@@ -317,10 +329,10 @@ const EmployeeAttendance = ({ state }) => {
 
   useEffect(() => {
     onLoad();
-  }, [markerPosition.lat,markerPosition.lng]);
+  }, [markerPosition.lat, markerPosition.lng]);
 
 
-  console.log(markerPosition,"markerPosition.lat")
+  console.log(markerPosition, "markerPosition.lat")
 
   return (
     <>
@@ -350,7 +362,7 @@ const EmployeeAttendance = ({ state }) => {
           <div className="container">
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav">
-              <Link to={`employee/${state[0]}/${state[1]}/${state[2]}/${state[3]}}`} className="nav-link">My Projects</Link>
+                <Link to={`/employee/${state[0]}/${state[1]}/${state[2]}/${state[3]}}`} className="nav-link">My Projects</Link>
                 <a className="bg-white text-dark nav-link">Attendance - {ProjectName}</a>
               </div>
             </div>
@@ -407,15 +419,15 @@ const EmployeeAttendance = ({ state }) => {
                   <tr>
                     <td>
                       <b>Your Location : <Button
-                          onClick={()=> getLocation()}
-                          name="in_btn"
-                          variant="contained"
-                          color="primary"
-                          size="small"
-                          className="btn btn-block btn-sm"
-                        >
-                          <i className="fa fa-refresh" style={{ fontSize: "14px", padding: "4px 0" }}></i>
-                        </Button></b>
+                        onClick={() => getLocation()}
+                        name="in_btn"
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        className="btn btn-block btn-sm"
+                      >
+                        <i className="fa fa-refresh" style={{ fontSize: "14px", padding: "4px 0" }}></i>
+                      </Button></b>
                     </td>
                     <td>{locationName?.length >= 20 ? locationName.substring(0, 50) + "..." : locationName}</td>
                   </tr>
@@ -477,7 +489,7 @@ const EmployeeAttendance = ({ state }) => {
                         >
                           PUNCH OUT
                         </Button>
-                        
+
                       </td>
 
                     )}
@@ -487,8 +499,45 @@ const EmployeeAttendance = ({ state }) => {
                       Your attendance is submitted
                     </p>
                   ) : null}
-                  {locError && (
-                    <p className="text-danger">Error : {locError}</p>
+                  {locErrorin && (
+                    <>
+                      <p className="text-danger">Error : {locErrorin}
+                        <strong className="text-primary"><EmployeeReportIn
+                          EMPLOYEE_ID={employeeData?.EMPLOYEE_ID}
+                          EMPLOYEE_PARENT_ID={employeeData?.EMPLOYEE_PARENT_ID}
+                          EMPLOYEE_PARENT_USERNAME={employeeData?.EMPLOYEE_PARENT_USERNAME}
+                          EMPLOYEE_MEMBER_PARENT_ID={employeeData?.EMPLOYEE_MEMBER_PARENT_ID}
+                          EMPLOYEE_MEMBER_PARENT_USERNAME={employeeData?.EMPLOYEE_MEMBER_PARENT_USERNAME}
+                          PROJECT_ID={projectids}
+                          EMPLOYEE_USERNAME={employeeData?.EMPLOYEE_USERNAME}
+                          EMPLOYEE_NAME={employeeData?.EMPLOYEE_NAME}
+                          PHONE_NUMBER={employeeData?.EMPLOYEE_PHONE}
+                          TIME={new Date()}
+                          DATE={formattedDate}
+                        /> ? </strong>
+                      </p>
+
+                    </>
+                  )}
+                   {locErrorout && (
+                    <>
+                      <p className="text-danger">Error : {locErrorout}
+                        <strong className="text-primary"><EmployeeReportOut
+                          EMPLOYEE_ID={employeeData?.EMPLOYEE_ID}
+                          EMPLOYEE_PARENT_ID={employeeData?.EMPLOYEE_PARENT_ID}
+                          EMPLOYEE_PARENT_USERNAME={employeeData?.EMPLOYEE_PARENT_USERNAME}
+                          EMPLOYEE_MEMBER_PARENT_ID={employeeData?.EMPLOYEE_MEMBER_PARENT_ID}
+                          EMPLOYEE_MEMBER_PARENT_USERNAME={employeeData?.EMPLOYEE_MEMBER_PARENT_USERNAME}
+                          PROJECT_ID={projectids}
+                          EMPLOYEE_USERNAME={employeeData?.EMPLOYEE_USERNAME}
+                          EMPLOYEE_NAME={employeeData?.EMPLOYEE_NAME}
+                          PHONE_NUMBER={employeeData?.EMPLOYEE_PHONE}
+                          TIME={new Date()}
+                          DATE={formattedDate}
+                        /> ? </strong>
+                      </p>
+
+                    </>
                   )}
                 </tbody>
               </table>
@@ -507,7 +556,7 @@ const EmployeeAttendance = ({ state }) => {
                     center={markerPosition || center} // Use markerPosition if available, else use center
                     zoom={markerPosition ? 13 : 10} // Zoom in when markerPosition is available
                   >
-                    {markerPosition.lat && markerPosition.lng &&<MarkerF position={markerPosition} />}
+                    {markerPosition.lat && markerPosition.lng && <MarkerF position={markerPosition} />}
                     {markerPosition.lat && markerPosition.lng && <MarkerF position={markerPosition2} />}
 
                     <CircleF

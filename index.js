@@ -167,6 +167,16 @@ app.use(cors());
     sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/get_all_attendance`,req,res)
   });
 
+
+
+  app.post("/api/projectreport",(req,res)=> {
+    sendHttpRequest("POST",`${process.env.SERVERAPIREQUEST}/projectreport`,req,res)
+  });
+
+  app.put("/api/getprojectreport",(req,res)=> {
+    sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/getprojectreport`,req,res)
+  });
+
   
 
   

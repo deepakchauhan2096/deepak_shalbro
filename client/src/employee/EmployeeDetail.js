@@ -215,8 +215,6 @@ const EmployeeDetail = ({ state }) => {
                         <Link to={`/employee/attendance/${item?.LATITUDE}/${item?.LONGITUDE}/${item?.AREA}/${item?.LOCATION_NAME}/${empdata?.EMPLOYEE_NAME}/${item?.PROJECT_NAME}/${item?.PROJECT_ID}`}
                           className="btn btn-sm btn-primary"
                         // to={`/employee/attendance/${item?.LATITUDE}&${item?.LONGITUDE}&${item?.AREA}&${item?.LOCATION_NAME}&${state.EMPLOYEE_NAME}&${item?.PROJECT_NAME}&${item?.PROJECT_ID}`}
-
-
                         >
                           Visit
                         </Link>
