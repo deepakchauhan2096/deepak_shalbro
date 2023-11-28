@@ -10,7 +10,7 @@ import env from "react-dotenv";
 import country from "../Api/countriess.json";
 import employeeRole from "../jsonlist/employeeRole.json"
 
-import EmployeeArchive from "./EmployeeArchive"
+
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import {
   validatePhoneNumber,
@@ -62,9 +62,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
 
   const [errorMsg, setErrorMsg] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  // const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
-  // const [passwordError, setPasswordError] = useState("");
   const [nameError, setNameError] = useState("");
 
 

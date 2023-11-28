@@ -27,7 +27,7 @@ import GenPassword from "./GenPassword";
 import { toast } from "react-toastify";
 import EmployeeAttendance from "./EmployeeAttendance";
 import EmployeeManual from "./EmployeeManual";
-import EmployeeArchive from "./EmployeeArchive";
+
 // import EmployeeManual from "./EmployeeManual";
 
 // import env from "react-dotenv";
