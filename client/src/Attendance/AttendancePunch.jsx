@@ -75,8 +75,8 @@ const AttendancePunch = (props) => {
                 <td>{post.ATTENDANCE_PROJECT_ID}</td>
                 <td>{props.data._doc.EMPLOYEE_NAME}</td>
                 <td>{post.ATTENDANCE_DATE_ID}</td>
-                <td>{moment(post.ATTENDANCE_IN).format("LT")}</td>
-                <td>{moment(post.ATTENDANCE_OUT).format("LT")}</td>
+                <td>{moment(post.ATTENDANCE_IN).utcOffset(0).format("LT")}</td>
+                <td>{moment(post.ATTENDANCE_OUT).utcOffset(0).format("LT")}</td>
                 <td>
                   {TotalWorkHours(post.ATTENDANCE_IN, post.ATTENDANCE_OUT)} h
                 </td>

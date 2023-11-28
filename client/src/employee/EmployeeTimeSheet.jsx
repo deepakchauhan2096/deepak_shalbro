@@ -214,13 +214,13 @@ const EmployeeTimeSheet = (props) => {
             {workvalue?.map((item) => (
               <tr className="table table-striped">
                 <td>{item.ATTENDANCE_DATE_ID}</td>
-                <td>{moment(item.ATTENDANCE_IN).format("LT")}</td>
-                <td>{moment(item.ATTENDANCE_OUT).format("LT")}</td>
+                <td>{item.ATTENDANCE_IN && moment(item.ATTENDANCE_IN).utcOffset(0).format("LT")}</td>
+                <td>{item.ATTENDANCE_OUT && moment(item.ATTENDANCE_OUT).utcOffset(0).format("LT")}</td>
                 <td>
-                  {timeValueHours(item.ATTENDANCE_OUT, item.ATTENDANCE_IN)}{" "}
-                  hours{" "}
-                  {timeValueMinutes(item.ATTENDANCE_OUT, item.ATTENDANCE_IN)}{" "}
-                  mins
+                  {item.ATTENDANCE_OUT && timeValueHours(item.ATTENDANCE_OUT, item.ATTENDANCE_IN)+"hours"}{" "}
+                  {/* hours{" "} */}
+                  {item.ATTENDANCE_OUT && timeValueMinutes(item.ATTENDANCE_OUT, item.ATTENDANCE_IN)+"mins"}{" "}
+                  
                 </td>
                 <td>{(Math.abs(Math.floor(sum.hours()) +
                     "hours" +
@@ -230,7 +230,7 @@ const EmployeeTimeSheet = (props) => {
                 <td>
                   {item.ATTENDANCE_IN && item.ATTENDANCE_OUT
                     ? "present"
-                    : "absent"}
+                    : item.ATTENDANCE_IN && item.ATTENDANCE_OUT && "absent"}
                 </td>
               </tr>
             ))}
