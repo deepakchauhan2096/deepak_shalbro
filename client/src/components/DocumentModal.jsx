@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
-import country from "../Api/countriess.json";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddIcon from "@mui/icons-material/Add";
@@ -157,16 +156,7 @@ export default function DocumentModal(props) {
                 />
               </div>
             </div>
-            {/* <Button
-              variant="contained"
-              className="button rounded-2 lowercase mt-5"
-              onClick={handleSubmit}
-             
-            >
-              Upload document&nbsp;
-              <ArrowCircleUpIcon fontSize="small" />
-            </Button> */}
-          
+        
             <div className="FormButtonAlign">
               <button
                 type="submit"

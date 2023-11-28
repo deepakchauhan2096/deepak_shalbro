@@ -70,13 +70,6 @@ const EmployeeDashboard = (props) => {
     setAnchorElUser(null);
   };
 
-  // const headers = {
-  //   "Content-Type": "application/json",
-  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  // };
-
-  
-
   const getAdminData = async () => {
     try {
       const response = await axios.put(
@@ -93,12 +86,8 @@ const EmployeeDashboard = (props) => {
       console.log("Error fetching data:", error);
     }
   };
-  // {
-  //   "DOCUMENT_REF_ID": 27,
-  //   "DOCUMENT_ADMIN_USERNAME": "deepanshu1"
-  // }
-
-
+ 
+  
 
   const getCompanyData = async () => {
     try {

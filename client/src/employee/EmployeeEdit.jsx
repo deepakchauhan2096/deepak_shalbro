@@ -114,7 +114,6 @@ export default function EmployeeEdit(props) {
       <Button
         onClick={handleOpen}
         variant="rounded"
-        className="view-btn border border-info text-success "
         style={{ padding: "2px 2px", onFocus: "none" }}
       >
         Edit

@@ -29,12 +29,6 @@ export default function Document(props) {
     const [deleteItem, setDeleteItem] = useState("");
     const [openNav, setOpenNav] = useState(false);
 
-    // const { id } = useParams();
-    // const param = id.split("&");
-    // const COMPANY_ID = param[0];
-    // const COMPANY_USERNAME = param[1];
-    // const COMPANY_PARENT_ID = param[2];
-    // const COMPANY_PARENT_USERNAME = param[3];
 
   const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
 
@@ -46,11 +40,9 @@ export default function Document(props) {
     const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
+        console.log("heelo i am runnig useEffect")
         getalldocument();
     }, [deleteItem]);
-
-
-
 
     // function to download the file 
     const downloadFile = (base64Data, fileName) => {
@@ -84,13 +76,10 @@ export default function Document(props) {
 
     const getalldocument = async () => {
 
-
         const requestData = {
             DOCUMENT_REF_ID: COMPANY_ID,
             DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME
         };
-
-
         try {
             const response = await axios.put("/api/get_all_document", requestData);
 
@@ -110,9 +99,7 @@ export default function Document(props) {
         }
     };
 
-    // const Demo = styled("div")(({ theme }) => ({
-    //     backgroundColor: theme.palette.background.paper,
-    // }));
+  
 
     // Function to download the uploaded documents 
     const handleDownload = async (documentId, fileName) => {
@@ -141,90 +128,6 @@ export default function Document(props) {
 
     };
 
-
-    // Function to download the uploaded documents
-    // const handleDownload = async (documentId, fileName) => {
-    //     try {
-    //         const requestData = {
-    //             DOCUMENT_ID: documentId,
-    //             DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME,
-    //         };
-
-    //         // Make a GET request to the download endpoint with the necessary query parameters
-    //         const response = await axios.get(`/api/download_document`, {
-    //             params: requestData,
-    //             responseType: 'arraybuffer', // Ensure the response is treated as binary data
-    //         });
-
-    //         // Check if the response status is OK (2xx)
-    //         if (response.status === 200) {
-    //             // Create a Blob from the response data and set the MIME type
-    //             const blob = new Blob([response.data], { type: response.headers['content-type'] });
-
-    //             // Create an object URL from the Blob
-    //             const url = window.URL.createObjectURL(blob);
-
-    //             // Create a temporary anchor element for downloading
-    //             const link = document.createElement('a');
-    //             link.href = url;
-    //             link.download = fileName;
-
-    //             // Programmatically click the anchor element to trigger the download
-    //             link.click();
-
-    //             // Clean up by revoking the object URL
-    //             window.URL.revokeObjectURL(url);
-    //         } else {
-    //             console.error('Failed to download the document');
-    //         }
-    //     } catch (error) {
-    //         console.error('An error occurred during download:', error);
-    //     }
-    // };
-
-
-
-    // Function to Delete the uploaded documents 
-    // const handleDelDoc = (e, documentId) => {
-    //     setBackdrop(true);
-    //     console.log(documentId);
-
-    //     let data = JSON.stringify({
-    //         "DOCUMENT_ID": documentId,
-    //         "DOCUMENT_ADMIN_USERNAME": COMPANY_PARENT_USERNAME
-    //     });
-    //     console.log("data found 1",data);
-
-
-    //     let config = {
-    //         method: 'delete',
-    //         maxBodyLength: Infinity,
-    //         url: `http://54.175.253.80:3001/delete_document/${documentId}`,
-
-    //         data
-    //     };
-    //     console.log("data found config:",config);
-
-    //     axios.request(config)
-    //         .then((response) => {
-    //             console.log("responddatafound",response);
-    //             setDeleteItem(response);
-    //             setBackdrop(false);
-    //             toast.success("Document Deleted successfully!", {
-    //                 position: toast.POSITION.TOP_CENTER,
-    //                 autoClose: 1000,
-    //             });
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //             toast.error('Document not found!', {
-
-    //                 // Show for 2 seconds
-    //             });
-    //         });
-
-
-    // }
     const handleDelDoc = async (e, documentId) => {
         setBackdrop(true);
         console.log(documentId);
@@ -366,7 +269,7 @@ export default function Document(props) {
         id: item.DOCUMENT_ID,
         documentName: item.DOCUMENT_FILEDATA?.originalname || '', // Add conditional check here
         documentSize: item.DOCUMENT_FILEDATA?.size || '', // Add conditional check here
-        uploadDate: formatDate(item.created),
+        uploadDate: formatDate(item.createdAt),
         documentType: item.DOCUMENT_FILEDATA?.mimetype || '', // Add conditional check here
         ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '', // Add conditional check here
     })) || [];

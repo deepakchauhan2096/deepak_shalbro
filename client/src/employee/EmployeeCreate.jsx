@@ -9,6 +9,8 @@ import { Button, Container } from "@mui/material";
 import env from "react-dotenv";
 import country from "../Api/countriess.json";
 import employeeRole from "../jsonlist/employeeRole.json"
+
+import EmployeeArchive from "./EmployeeArchive"
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import {
   validatePhoneNumber,
@@ -123,7 +125,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
     }
 
 
-    
+
     if (!isValidName) {
       setNameError("Name should not be empty");
       return;
@@ -166,13 +168,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
 
   return (
     < >
-      <Button
-        size="small"
-        variant={"outlined"}
-        className={"btn button border-bottom-0 bg-white"}
-      >
-        My Employees
-      </Button>
+      
       <button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
@@ -182,6 +178,9 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
       >
         + Add New Employee
       </button>
+
+      {/* <EmployeeArchive /> */}
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -231,23 +230,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
                 </div>
               </div>
               <div className="row">
-                {/* <div className="form-group col-xl-6 py-1">
-                  <label>E-mail</label>
-                  <input
-                    type="email"
-                    className={`form-control form-control-2 rounded-0 ${emailError ? "is-invalid" : ""
-                      }`}
-                    id="email"
-                    placeholder="Enter Email address"
-                    value={createEmployee.EMPLOYEE_EMAIL}
-                    name="EMPLOYEE_EMAIL"
-                    onChange={handleCreate}
-                    label="email"
-                  />
-                  {emailError && (
-                    <div className="invalid-feedback">{emailError}</div>
-                  )}
-                </div> */}
+
                 <div className="form-group col-xl-6 py-1">
                   <label>Phone</label>
                   <input
@@ -279,7 +262,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
                     required
                   />
                 </div>
-                
+
                 {/* <div className="form-group col-xl-6 py-1">
                   <label>Employee Password</label>
                   <input

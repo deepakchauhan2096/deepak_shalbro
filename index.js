@@ -158,7 +158,8 @@ app.use(cors());
 
 
   
-  app.put("/api/get_subcontractor'",(req,res)=> {
+  app.put("/api/get_subcontractor",(req,res)=> {
+    console.log(req.body);
     sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/get_subcontractor`,req,res)
   });
 
@@ -218,6 +219,21 @@ app.use(cors());
   app.post("/api/create_documentnew",(req,res)=> {
     sendHttpRequest("POST",`${process.env.SERVERAPIREQUEST}/create_documentnew`,req,res)
   });
+  
+  app.post("/api/archive-employee",(req,res)=> {
+    sendHttpRequest("POST",`${process.env.SERVERAPIREQUEST}/archive-employee`,req,res)
+  });
+
+  app.get("/api/getall-archived-employees",(req,res)=> {
+    sendHttpRequest("GET",`${process.env.SERVERAPIREQUEST}/getall-archived-employees`,req,res)
+  });
+
+
+
+  app.post("/api/unarchive-employee",(req,res)=> {
+    sendHttpRequest("POST",`${process.env.SERVERAPIREQUEST}/unarchive-employee`,req,res)
+  });
+
 
   app.delete("/api/delete_document/:DOCUMENT_ID",(req,res)=> {
     console.log(process.env.SERVERAPIREQUEST);

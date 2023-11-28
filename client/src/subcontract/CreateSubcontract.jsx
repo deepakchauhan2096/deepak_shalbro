@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { Button } from "@mui/material";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import country from "../Api/countriess.json";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import env from "react-dotenv";
+
+import { Button, Grid } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -19,12 +23,12 @@ const style = {
   borderRadius: 4,
 };
 
-const SubcontractCreate = (props) => {
-  const [open, setOpen] = useState(false);
+export default function SubcontractCreate(props) {
+
+  const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
-
   const [createSubcontract, setCreatesubcontract] = useState({
     SUBCONTRACTOR_PARENT_ID: props.COMPANY_ID,
     SUBCONTRACTOR_PARENT_USERNAME: props.COMPANY_USERNAME,
@@ -42,6 +46,14 @@ const SubcontractCreate = (props) => {
     SUBCONTRACTOR_STATE: "",
     SUBCONTRACTOR_CITY: "",
   });
+
+  const subcontractorRoleOptions = [
+    { value: "Painter", label: "Painter" },
+    { value: "Fitter", label: "Fitter" },
+    { value: "Plumber", label: "Plumber" },
+    { value: "Engineer", label: "Engineer" },
+  ];
+
 
   useEffect(() => {
     setCreatesubcontract((prevState) => ({
@@ -63,7 +75,9 @@ const SubcontractCreate = (props) => {
     }));
   }, [open]);
 
-  console.log(createSubcontract, "check");
+
+
+  console.log(createSubcontract, "check")
 
 
   const availableState = country?.find(
@@ -73,10 +87,7 @@ const SubcontractCreate = (props) => {
   const availableCities = availableState?.states?.find(
     (s) => s.name === createSubcontract.SUBCONTRACTOR_STATE
   );
-  const headers = {
-    "Content-Type": "application/json",
-    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  };
+ 
 
   const handleCreate = (e) => {
     const { name, value } = e.target;
@@ -84,21 +95,11 @@ const SubcontractCreate = (props) => {
       ...prevState,
       [name]: value,
     }));
-
   };
 
 
-
-  const subcontractorRoleOptions = [
-    { value: "Painter", label: "Painter" },
-    { value: "Fitter", label: "Fitter" },
-    { value: "Plumber", label: "Plumber" },
-    { value: "Engineer", label: "Engineer" },
-  ];
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const requiredFields = [
       "SUBCONTRACTOR_PARENT_ID",
       "SUBCONTRACTOR_PARENT_USERNAME",
@@ -108,12 +109,13 @@ const SubcontractCreate = (props) => {
       "SUBCONTRACTOR_NAME",
       "SUBCONTRACTOR_PHONE",
     ];
+
     const hasEmptyFields = requiredFields.some(
       (field) => !createSubcontract[field]
     );
 
     if (hasEmptyFields) {
-      setErrorMsg("Fill in all fields");
+      setErrorMsg("Fill all fields");
       toast.error("Please fill in all fields", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 1000,
@@ -121,21 +123,10 @@ const SubcontractCreate = (props) => {
       return;
     }
 
-
     setErrorMsg("");
 
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: '/api/create_subcontractor',
-      headers: {
-        // 'authorization_key': 'qzOUsBmZFgMDlwGtrgYypxUz',
-        'Content-Type': 'application/json'
-      },
-      data: createSubcontract
-    };
-
-    axios.request(config)
+    axios
+      .post("/api/create_subcontractor", createSubcontract)
       .then((response) => {
         if (response.data.operation === "failed") {
           setErrorMsg(response.data.errorMsg);
@@ -143,29 +134,25 @@ const SubcontractCreate = (props) => {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 1000,
           });
-        } else if (response.data.operation === "successful") {
+        } else if (response.data.operation === "successfull") {
           toast.success("Subcontract Created successfully!", {
             position: toast.POSITION.TOP_CENTER,
           });
           props.refetch();
+          setCreatesubcontract({});
           setOpen(false);
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error, "ERR");
       });
-
-
-
   };
+
+
 
   return (
     <>
-      <Button
-        size="small"
-        className="btn button border-bottom-0 bg-white"
-        variant="outlined"
-      >
+      <Button size="small" className="btn button border-bottom-0 bg-white" variant="outlined">
         Subcontract
       </Button>
       <Button
@@ -223,7 +210,6 @@ const SubcontractCreate = (props) => {
                 />
               </div>
             </div>
-
             <div className="row py-2">
               <div className="form-group col-xl-6">
                 <label>Project start date</label>
@@ -233,7 +219,7 @@ const SubcontractCreate = (props) => {
                   name="SUBCONTRACTOR_START_DATE"
                   onChange={handleCreate}
                   className="form-control form-control-2 rounded-0"
-              
+                //required
                 />
               </div>
               <div className="form-group col-xl-6">
@@ -244,11 +230,10 @@ const SubcontractCreate = (props) => {
                   name="SUBCONTRACTOR_END_DATE"
                   onChange={handleCreate}
                   className="form-control form-control-2 rounded-0"
-               
+                //required
                 />
               </div>
             </div>
-
             <div className="row py-2">
               <div className="form-group col-xl-6">
                 <label>Subcontract ROLE</label>
@@ -260,16 +245,14 @@ const SubcontractCreate = (props) => {
                   value={createSubcontract.SUBCONTRACTOR_ROLE}
                 >
                   <option selected>Choose...</option>
-                  {subcontractorRoleOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
+                  <option>Painter</option>
+                  <option>Fitter</option>
+                  <option>Plumber</option>
+                  <option>Engineer</option>
                 </select>
               </div>
-
               <div className="form-group col-md-6">
-                <label>Supervisor</label>
+                <label>Sub Contractor</label>
                 <input
                   type="text"
                   className="form-control form-control-2 rounded-0 "
@@ -355,9 +338,6 @@ const SubcontractCreate = (props) => {
                 </select>
               </div>
             </div>
-
-
-
             <div className="FormButtonAlign">
               <button
                 type="submit"
@@ -373,11 +353,11 @@ const SubcontractCreate = (props) => {
                 Cancel
               </button>
             </div>
+
+
           </form>
         </Box>
       </Modal>
     </>
   );
-};
-
-export default SubcontractCreate;
+}

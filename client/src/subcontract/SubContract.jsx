@@ -10,17 +10,11 @@ import { MyContext } from "../context/Mycontext";
 import EditSubcontract from "./EditSubContract";
 import Sidebar from "../components/Sidebar";
 import { useParams } from "react-router-dom";
+import Document from "../Document/Documents";
 
 
 const SubContract = (props) => {
-
-  const { id } = useParams();
-  const param = id.split("&");
-  const COMPANY_ID = param[0];
-  const COMPANY_USERNAME = param[1];
-  const COMPANY_PARENT_ID = param[2];
-  const COMPANY_PARENT_USERNAME = param[3];
-
+  const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
   const [subcontractData, setSubContractData] = useState([]);
@@ -34,7 +28,7 @@ const SubContract = (props) => {
   const handleClose = () => setOpen(false);
   const { alldata, setText } = useContext(MyContext);
   const { projectcreatedata } = useContext(MyContext);
-  
+
   const [data, setData] = useState({
     row: {
       SUBCONTRACTOR_PARENT_ID: "",
@@ -58,48 +52,39 @@ const SubContract = (props) => {
 
   //update data
 
+  const AllSubcontractor = props.SubContractorData;
 
-  // const headers = {
-  //   "Content-Type": "application/json",
-  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  // };
+  const headers = {
+    "Content-Type": "application/json",
+    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  };
 
-  const fetchsubcontracts =  () => {
-    // const axios = require('axios');
-    let data = JSON.stringify({
-      "SUBCONTRACTOR_ID": 3907,
-      "SUBCONTRACTOR_PARENT_ID": 3856,
-      "SUBCONTRACTOR_PARENT_USERNAME": "mukeshsahni8900@gmail.com",
-      "SUBCONTRACTOR_MEMBER_PARENT_ID": 3855,
-      "SUBCONTRACTOR_MEMBER_PARENT_USERNAME": "mukesh211@gmail.com",
-      "SUBCONTRACTOR_USERNAME": "newcontarct_sub"
-    });
-    
-    let config = {
-      method: 'put',
-      maxBodyLength: Infinity,
-      url: '/api/get_subcontractor',
-      headers: { 
-        // 'authorization_key': 'qzOUsBmZFgMDlwGtrgYypxUz', 
-        'Content-Type': 'application/json'
-      },
-      data : data
-    };
-    
-    axios.request(config)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-    
+  const fetchsubcontracts = async (e) => {
+    try {
+      const response = await axios.put(
+        "/api/get_subcontractor",
+        {
+          SUBCONTRACTOR_PARENT_ID: COMPANY_ID,
+          SUBCONTRACTOR_PARENT_USERNAME: COMPANY_USERNAME,
+          SUBCONTRACTOR_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+          SUBCONTRACTOR_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+        },
+        { headers }
+      );
 
+      const data = response.data;
+      setSubContractData(data?.result);
+      setIsLoading(false);
+
+
+    } catch (err) {
+      console.log("Something Went Wrong: =>", err);
+    }
   };
 
   useEffect(() => {
     fetchsubcontracts();
-  }, []);
+  }, [AllSubcontractor]);
 
   const [editedSubcontract, setEditedSubcontract] = useState(null);
 
@@ -112,7 +97,7 @@ const SubContract = (props) => {
     { field: "SUBCONTRACTOR_ID", headerName: "ID", width: 90 },
     {
       field: "SUBCONTRACTOR_USERNAME",
-      headerName: "USername",
+      headerName: "Subcontractor Email",
       width: 150,
     },
     {
@@ -140,13 +125,13 @@ const SubContract = (props) => {
     {
       field: "SUBCONTRACTOR_SUPERVISOR",
       headerName: "Supervisor",
-      width: 200,
+      width: 120,
     },
 
     {
       field: "action",
       headerName: "Detail",
-      width: 120,
+      width: 100,
       renderCell: (cellValues) => {
         return (
           <Button
@@ -165,7 +150,7 @@ const SubContract = (props) => {
     {
       field: "edit",
       headerName: "Edit",
-      width: 120,
+      width: 100,
       renderCell: (cellValues) => {
         return (
           <Button
@@ -178,6 +163,29 @@ const SubContract = (props) => {
         );
       },
     },
+
+    {
+      field: "delete",
+      headerName: "Delete",
+      width: 100,
+
+
+      renderCell: (cellValues) => {
+          return (
+              <Button
+                  variant="contained"
+                  className="view-btn "
+                  color="error"
+                  style={{ padding: "2px 2px" }}
+                  // onClick={(e) => {
+                  //     handleDelDoc(e, cellValues.id);
+                  // }}
+              >
+                  Delete
+              </Button>
+          );
+      },
+  },
 
   ];
 
@@ -232,7 +240,8 @@ const SubContract = (props) => {
           COMPANY_PARENT_ID={COMPANY_PARENT_ID}
           COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
           refetch={fetchsubcontracts}
-          name={"Project"}
+          name={"Contract"}
+          SubContractorData={subcontractData}
         />
 
         <MyScreen sx={{ display: "block", padding: 3 }}>
@@ -290,6 +299,15 @@ const SubContract = (props) => {
             Detail
           </Button>
 
+          <Button
+            onClick={(e) => setIndex(2)}
+            variant={index === 2 ? "outlined" : "outlined"}
+            className={index === 2 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-0  rounded-0 text-light"}
+            size="small"
+          >
+            Documents
+          </Button>
+
           {!Edit ? (
             <Button
               onClick={(e) => setEdit(true)}
@@ -313,13 +331,14 @@ const SubContract = (props) => {
           )}
 
           <Button
-            onClick={(e) => setIndex(2)}
-            variant={index === 2 ? "outlined" : "outlined"}
-            className={index === 2 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-0  rounded-0 text-light"}
+            onClick={(e) => setIndex(3)}
+            variant={index === 3 ? "outlined" : "outlined"}
+            className={index === 3 ? "btn button border-bottom-0 bg-white" : "btn rounded-0 border-0  rounded-0 text-light"}
             size="small"
           >
             Payment
           </Button>
+
         </div>
 
         {index === 1 ? (
@@ -421,248 +440,12 @@ const SubContract = (props) => {
                 </div>
               </div>
               <hr />
-              {/* Assigining project to the subcontractor  */}
-              {/*              
-              <div className="row">
-                <div className="col-4">
-                  <b>Assigned Employees to this project</b>
-                  <div className="p-2 rounded-3 bg-light">
-                  <ul>
-                 {filterData.SUBCONTRACTOR_ASSIGN?.map((assignproject,key) => {
-                      return(
-                       <>
-                       <b>Employee ID</b> <span>{assignproject.EMPLOYEE_ID}</span>
-                       <br />
-                       <b>Company Username </b> <span> {assignproject.EMPLOYEE_PARENT_USERNAME}</span> <br />
-                       <b>Admin Username </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_USERNAME}</span> <br />
-                       <b>Company ID </b> <span> {assignproject.EMPLOYEE_PARENT_ID}</span> <br />
-                       <b>Admin ID </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_ID}</span> 
-                       </>
-                    
-                      ) 
-                    
-                 })}
-                   </ul>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         ) : index === 2 ? (
           <div className="box-tab">
-            <div className="p-4 container-fluid">
-              <div className="row">
-                <div className="col-9">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Material</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Method</th>
-                        <th scope="col">Transaction ID</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Tiles</td>
-                        <td>10</td>
-                        <td>20 USD</td>
-                        <td>Cash</td>
-                        <td>RG384054859</td>
-                        <td>
-                          <b className="bg-success text-white px-2 rounded-2">
-                            Paid
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Cement</td>
-                        <td>20</td>
-                        <td>20 USD</td>
-                        <td>UPI</td>
-                        <td>TY485060</td>
-                        <td>
-                          <b className="bg-warning text-white px-2 rounded-2">
-                            Panding
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Concrete</td>
-                        <td>60</td>
-                        <td>20 USD</td>
-                        <td>Stripe</td>
-                        <td>PO6970845</td>
-                        <td>
-                          <b className="bg-success text-white px-2 rounded-2">
-                            Paid
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                      <tr>
-                        <td>Bricks</td>
-                        <td>120</td>
-                        <td>the Bird</td>
-                        <td>Visa</td>
-                        <td>PO697084599</td>
-                        <td>
-                          <b className="bg-danger text-white px-2 rounded-2">
-                            Failed
-                          </b>
-                        </td>
-                        <td>12-10-2020</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div className="col-3 px-4">
-                  <div className="mb-5 ">
-                    <button className="btn btn-primary float-right rounded-0">
-                      <i className="fa fa-print"></i> Print Invoice
-                    </button>
-                  </div>
-                  <div className="search-container mb-5">
-                    <input type="text" placeholder="Search.." name="search" />
-                    <button type="submit">
-                      <i className="fa fa-search"></i>
-                    </button>
-                  </div>
-
-                  <div>
-                    <b>Time Period</b>
-                  </div>
-                  <div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault1"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault1"
-                      >
-                        All time
-                      </label>
-                    </div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                        checked
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        Today
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        This Week
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        This month
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="flexRadioDefault"
-                        id="flexRadioDefault2"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexRadioDefault2"
-                      >
-                        Custom
-                      </label>
-                    </div>
-                  </div>
-                  <b>Status</b>
-                  <div>
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Paid
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Pending
-                      </label>
-                    </div>
-
-                    <div className="form-check py-1">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="flexCheckIndeterminate"
-                      />
-                      <label
-                        className="form-check-label"
-                        for="flexCheckIndeterminate"
-                      >
-                        Failed
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Document/>
+            <h1>Hello World</h1>
           </div>
         ) : index === 3 ? (
           <div className="box-tab">
