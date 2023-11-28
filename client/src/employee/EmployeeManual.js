@@ -408,11 +408,11 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
     }
 
 
-
+    const fatchData = user?.map((e) => e.PUNCH_TYPE);
 
     return (
       <>
-        <table className="table table-bordered">
+        {fatchData[0] === "PunchOut" ? <table className="table table-bordered">
           <thead>
             <tr>
               <th scope="col">S. No.</th>
@@ -436,7 +436,7 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
               )
             }
           </tbody>
-        </table>
+        </table> : "Currently! No Punch In Request"} 
       </>
     );
   }
@@ -673,11 +673,11 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
     }
 
 
-
+    const fatchData = user?.map((e) => e.PUNCH_TYPE);
 
     return (
       <>
-        <table className="table table-bordered">
+        {fatchData[0] === "PunchOut" ? <table className="table table-bordered">
           <thead>
             <tr>
               <th scope="col">S. No.</th>
@@ -701,7 +701,7 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
               )
             }
           </tbody>
-        </table>
+        </table> : "Currently! No Punch Out Request"}
       </>
     );
   }
@@ -741,10 +741,11 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
             expandIcon={<ExpandMoreIcon />}
             aria-controls={`panel${index}bh-content`}
             id={`panel${index}bh-header`}
-            sx={{ height: "40px" }}
+            sx={{background: expanded === `panel${index}` ? "#696969" : ""}}
+
           >
             <div className="container g-0">
-              <div className="row">
+              <div className={expanded === `panel${index}` ? "row text-white" : "row"}>
                 <div className="col">
                   <strong>{index + 1}</strong>
                 </div>
