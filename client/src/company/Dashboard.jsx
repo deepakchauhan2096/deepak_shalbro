@@ -56,14 +56,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function CompanyDashboard(props) {
 
-
-
-  // const { id } = useParams();
-  // const data = id.split("&");
-
-  // const { id } = useParams();
-  // const mydata = useLocation()
-  // console.log(mydata, "mydata")
   const data = props?.data;
   // console.log(data,"lala")
   const COMPANY_ID = data[0];
@@ -73,11 +65,6 @@ export default function CompanyDashboard(props) {
   const [open, setOpen] = React.useState(false);
 
   console.log(open, "open");
-
-
-
-
-
 
   return (
     <>

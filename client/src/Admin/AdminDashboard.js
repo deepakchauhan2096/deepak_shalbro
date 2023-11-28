@@ -151,8 +151,6 @@ const AdminDashboard = (props) => {
     const [userExist, setUserExist] = useState(false)
 
 
-
-
     // check if user exists
     const checkUserExists = () => {
       fetchSignInMethodsForEmail(auth, values.email)
@@ -219,8 +217,6 @@ const AdminDashboard = (props) => {
 
 
     const handleSubmission = () => {
-
-
       checkUserExists()
 
       if (!userExist) {
@@ -235,10 +231,6 @@ const AdminDashboard = (props) => {
         setpasswordMsg("something went wrong")
       }
     };
-
-
-
-
 
     console.log(data, "datainside")
     return (
@@ -428,7 +420,7 @@ const AdminDashboard = (props) => {
                               {/* <th>State</th> */}
                               <th>Edit</th>
                               <th>Detail</th>
-                              {/* <th>Status</th> */}
+                              <th>Archive</th>
                             </tr>
                           </thead> : "loading..."}
 
@@ -453,6 +445,13 @@ const AdminDashboard = (props) => {
                                     <label className="btn btn-sm form-control-2" for="a25">Show</label>
                                   </div>
                                 </td>
+                                <td>
+                                  <div className="buttons" onClick={(e) => HandleDetail(post)}>
+                                    <input type="radio" id="a25" name="check-substitution-2" />
+                                    <label className="btn btn-sm form-control-2" for="a25">Show</label>
+                                  </div>
+                                </td>
+                                
                               </tr>
                             ))}
                           </tbody>
