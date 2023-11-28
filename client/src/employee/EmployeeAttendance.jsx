@@ -26,6 +26,7 @@ import { auth } from '../firebase';
 import EmployeeReport from "./EmployeeReportOut";
 import EmployeeReportIn from "./EmployeeReportIn";
 import EmployeeReportOut from "./EmployeeReportOut";
+import moment from "moment/moment"
 
 const containerStyle = {
   width: "100%",
@@ -140,6 +141,9 @@ const EmployeeAttendance = ({ state }) => {
     }
   };
 
+  const time = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
+  console.log(time,"my time")
+
 
   // attendance in
 
@@ -158,7 +162,7 @@ const EmployeeAttendance = ({ state }) => {
         ATTENDANCE_EMPLOYEE_ID: employeeData?.EMPLOYEE_ID,
         ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
         ATTENDANCE_DATE_ID: formattedDate,
-        ATTENDANCE_IN: new Date(),
+        ATTENDANCE_IN: time,
         ATTENDANCE_PROJECT_ID: Project_Id
       };
 
@@ -199,7 +203,7 @@ const EmployeeAttendance = ({ state }) => {
         ATTENDANCE_EMPLOYEE_ID: employeeData?.EMPLOYEE_ID,
         ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
         ATTENDANCE_DATE_ID: formattedDate,
-        ATTENDANCE_OUT: new Date(),
+        ATTENDANCE_OUT: time,
         ATTENDANCE_PROJECT_ID: Project_Id
       };
 
@@ -512,7 +516,7 @@ const EmployeeAttendance = ({ state }) => {
                           EMPLOYEE_USERNAME={employeeData?.EMPLOYEE_USERNAME}
                           EMPLOYEE_NAME={employeeData?.EMPLOYEE_NAME}
                           PHONE_NUMBER={employeeData?.EMPLOYEE_PHONE}
-                          TIME={new Date()}
+                          TIME={time}
                           DATE={formattedDate}
                         /> ? </strong>
                       </p>
@@ -532,7 +536,7 @@ const EmployeeAttendance = ({ state }) => {
                           EMPLOYEE_USERNAME={employeeData?.EMPLOYEE_USERNAME}
                           EMPLOYEE_NAME={employeeData?.EMPLOYEE_NAME}
                           PHONE_NUMBER={employeeData?.EMPLOYEE_PHONE}
-                          TIME={new Date()}
+                          TIME={time}
                           DATE={formattedDate}
                         /> ? </strong>
                       </p>

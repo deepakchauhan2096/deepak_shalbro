@@ -177,6 +177,10 @@ app.use(cors());
     sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/getprojectreport`,req,res)
   });
 
+  app.delete("/api/deleteproject",(req,res)=> {
+    sendHttpRequest("DELETE",`${process.env.SERVERAPIREQUEST}/deleteproject`,req,res)
+  });
+
   
 
   

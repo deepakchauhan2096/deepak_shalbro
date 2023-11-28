@@ -8,6 +8,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import moment from "moment/moment";
 
 const EmployeeManual = ({ EMPLOYEE_DATA }) => {
 
@@ -172,17 +173,6 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
         )
       },
     }
-    ,
-    {
-      field: "action_2",
-      headerName: "Punch Out",
-      width: 220,
-      renderCell: (cellValues) => {
-        return (
-          <PUNCHOUT data={cellValues} />
-        )
-      },
-    }
   ];
 
 
@@ -203,18 +193,12 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
       borderRadius: 2,
     };
 
-    // user input
-    const handleTimeChange = (event) => {
-      const newTime = event.target.value;
-      setSelectedTimeIn(newTime);
-    };
-
-
 
 
     // fatch project report
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState([])
     const [loading, setLoading] = useState(true)
+    const [refresh, setRefresh] = useState(false)
 
 
     const fetchProjectReport = async () => {
@@ -236,6 +220,7 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
         .then((response) => {
           // console.log(JSON.stringify(response.data));
           setUser(response.data.result)
+          setUser(response.data.result, "PunchIn")
           setLoading(false)
         })
         .catch((error) => {
@@ -247,80 +232,99 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
 
     useEffect(() => {
       fetchProjectReport()
-    }, []);
+    }, [refresh]);
 
 
 
 
-
-    // const times 
-    const inputTime = user?.TIME
-
-    console.log(inputTime,"report time")
-    let dateTime = new Date(inputTime);
-    // Format components with leading zeros
-    let year = dateTime.getUTCFullYear();
-    let month = String(dateTime.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
-    let day = String(dateTime.getUTCDate()).padStart(2, '0');
-    let hours = String(dateTime.getUTCHours()).padStart(2, '0');
-    let minutes = String(dateTime.getUTCMinutes()).padStart(2, '0');
-    let seconds = String(dateTime.getUTCSeconds()).padStart(2, '0');
-    let milliseconds = dateTime.getUTCMilliseconds();
-
-    console.log(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`)
+    const MYMODAL = ({ events }) => {
+      const [open, setOpen] = React.useState(false);
+      const handleOpen = () => setOpen(true);
+      const handleClose = () => setOpen(false);
+      const handleTimeChange = (event) => {
+        const newTime = event.target.value;
+        setSelectedTimeIn(newTime);
+      };
+      const localTime = moment(events?.TIME).utcOffset(0).format("LT")
+      const convertedTime = moment(localTime, 'h:mm A').format('HH:mm')
 
 
-    // post attendence
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const [selectedTimeIn, setSelectedTimeIn] = useState("");
 
-    useEffect(() => {
-      setSelectedTimeIn(`${hours}:${minutes}`)
-    }, [hours])
 
-    console.log(`${year}-${month}-${day}T${selectedTimeIn?.split(':')[0]}:${selectedTimeIn?.split(':')[0]}:${seconds}.${milliseconds}Z`, "selectedTime in")
+      // post attendence
 
-    const handleSubmitIn = (event) => {
-      event.preventDefault();
+      const [selectedTimeIn, setSelectedTimeIn] = useState(convertedTime);
+      const originalTime = moment(`${events?.DATE} ${selectedTimeIn}`).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-      if (event) {
-        const attendanceData = {
-          ATTENDANCE_ADMIN_ID: EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_ID,
-          ATTENDANCE_ADMIN_USERNAME:
-            EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_USERNAME,
-          ATTENDANCE_COMPANY_ID: EMPLOYEE_DATA?.EMPLOYEE_PARENT_ID,
-          ATTENDANCE_COMPANY_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_PARENT_USERNAME,
-          ATTENDANCE_EMPLOYEE_ID: EMPLOYEE_DATA?.EMPLOYEE_ID,
-          ATTENDANCE_EMPLOYEE_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_USERNAME,
-          ATTENDANCE_DATE_ID: user?.DATE,
-          ATTENDANCE_IN: user?.TIME,
-          ATTENDANCE_PROJECT_ID: data?.PROJECT_ID
+      const deleteReport = () => {
+
+        let data = {
+          PROJECT_ID: events?.PROJECT_ID,
+          EMPLOYEE_ID: events?.EMPLOYEE_ID,
+          EMPLOYEE_MEMBER_PARENT_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+          DATE: events?.DATE
         };
 
-        // setShowBackdrop(true);
+        let config = {
+          method: 'delete',
+          maxBodyLength: Infinity,
+          url: `/api/deleteproject`,
+          data: data
+        };
 
-        axios
-          .post(
-            "/api/create_emp_attendence",
-            attendanceData,
-
-          )
-          .then(() => {
-            toast.success("PunchIn Submitted successfully!", {
-              position: toast.POSITION.TOP_CENTER,
-              autoClose: 1000,
-
-            });
-            handleClose()
-            console.log("sucess")
+        axios.request(config)
+          .then((response) => {
+            setRefresh(true)
           })
           .catch((error) => {
+            console.log(error);
+            toast.error('Document not found!', {
+            });
           });
-      } else {
+
+
       }
-    };
+
+
+
+      const handleSubmitIn = async (event) => {
+        event.preventDefault();
+
+        if (event) {
+          const attendanceData = {
+            ATTENDANCE_ADMIN_ID: EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_ID,
+            ATTENDANCE_ADMIN_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+            ATTENDANCE_COMPANY_ID: EMPLOYEE_DATA?.EMPLOYEE_PARENT_ID,
+            ATTENDANCE_COMPANY_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_PARENT_USERNAME,
+            ATTENDANCE_EMPLOYEE_ID: EMPLOYEE_DATA?.EMPLOYEE_ID,
+            ATTENDANCE_EMPLOYEE_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_USERNAME,
+            ATTENDANCE_DATE_ID: events?.DATE,
+            ATTENDANCE_IN: originalTime,
+            ATTENDANCE_PROJECT_ID: events?.PROJECT_ID
+          };
+
+          try {
+            // setShowBackdrop(true);
+
+            const res = await axios.post("/api/create_emp_attendence", attendanceData);
+
+            if (res) {
+              toast.success("PunchIn Submitted successfully! 333", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 1000,
+              });
+
+
+              deleteReport();
+              handleClose(false)
+            }
+          } catch (error) {
+            // Handle error
+          }
+        } else {
+          console.log("something wemt wrong")
+        }
+      };
 
 
 
@@ -328,88 +332,114 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
 
 
 
+      return (
+        <div>
+          {events?.TIME ? <> <button
+            className="primary btn btn-danger btn-sm rounded-2 text-white"
+            style={{ padding: "4px 10px" }}
+            onClick={handleOpen}
+          >
+            <i class="fa fa-address-card"></i> request
+          </button></> : <button
+            disabled
+            className="primary btn btn-success btn-sm rounded-2"
+            style={{ padding: "4px 10px" }}
+          >
+            {loading ? "Loading..." : "No request"}
+          </button>}
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <h5>Setup Punch In Time</h5>
+              <form className="form-row">
+
+                <div className="container">
+
+                  <div className="row py-4">
+                    <div>Date : {events?.DATE}</div>
+                    {/* <div>TIME : {moment(events?.TIME).format("LT")}</div> */}
+                    <div>{originalTime}</div>
+                    {/* {selectedTimeIn} */}
+
+                    <div className="col-4  text-center ">
+                      <input
+                        type="time"
+                        id="timeInput"
+                        name="timeInput"
+                        value={selectedTimeIn}
+                        onChange={handleTimeChange}
+                        className="form-control form-control-2"
+                        style={{ width: "100px" }}
+                      />
+                    </div>
+                    <div className="col-8 text-center d-flex" style={{ gap: 4 }}>
+                      <button
+                        variant="contained"
+                        className="primary btn btn-success btn-sm rounded-5"
+                        style={{ padding: "4px 10px" }}
+                        onClick={(event) => {
+                          handleSubmitIn(event);
+                        }}
+                      >
+                        Punch In
+                      </button>
+                      <button
+                        variant="contained"
+                        className="primary btn btn-danger btn-sm rounded-5"
+                        style={{ padding: "4px 10px" }}
+                        onClick={(event) => {
+                          handleClose();
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </Box>
+          </Modal>
+        </div>
+      )
+    }
+
+
+    const fatchData = user?.map((e) => e.PUNCH_TYPE);
 
     return (
-      <div>
-        {user?.TIME ? <> <button
-          className="primary btn btn-danger btn-sm rounded-2 text-white"
-          style={{ padding: "4px 10px" }}
-          onClick={handleOpen}
-        >
-          <i class="fa fa-address-card"></i> request
-        </button></> : <button
-          disabled
-          className="primary btn btn-success btn-sm rounded-2"
-          style={{ padding: "4px 10px" }}
-        >
-          {loading ? "Loading..." : "No request"}
-        </button>}
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <h5>Setup Punch In Time</h5>
-            <form className="form-row">
+      <>
+        {fatchData[0] === "PunchOut" ? <table className="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">S. No.</th>
+              <th scope="col">Date</th>
+              <th scope="col">Time</th>
+              <th scope="col">Punch In</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              user.map((e, index) =>
+                <>
+                  <tr>
+                    <th scope="row">{index + 1}</th>
+                    <td>{e.DATE}</td>
+                    <td>{moment(e.TIME).utcOffset(0).format('LT')}</td>
+                    <td><MYMODAL events={e} /></td>
+                  </tr>
+                </>
 
-              <div className="container">
-
-                <div className="row py-4">
-                  <div>Date : {user?.DATE}</div>
-                  <div>TIME : {`${year}-${month}-${day}T${selectedTimeIn?.split(':')[0]}:${selectedTimeIn?.split(':')[1]}:${seconds}.${milliseconds}Z`}</div>
-                  {selectedTimeIn}
-
-                  <div className="col-4  text-center ">
-                    <input
-                      type="time"
-                      id="timeInput"
-                      name="timeInput"
-                      value={selectedTimeIn}
-                      onChange={handleTimeChange}
-                      className="form-control form-control-2"
-                      style={{ width: "100px" }}
-                    />
-                  </div>
-                  <div className="col-8 text-center d-flex" style={{ gap: 4 }}>
-                    <button
-                      variant="contained"
-                      className="primary btn btn-success btn-sm rounded-5"
-                      style={{ padding: "4px 10px" }}
-                      onClick={(event) => {
-                        handleSubmitIn(event);
-                      }}
-                    >
-                      Punch In
-                    </button>
-
-
-                    <button
-                      variant="contained"
-                      className="primary btn btn-danger btn-sm rounded-5"
-                      style={{ padding: "4px 10px" }}
-                      onClick={(event) => {
-                        handleClose();
-                      }}
-                    >
-                      Cancel
-                    </button>
-
-
-                  </div>
-
-
-                </div>
-              </div>
-            </form>
-          </Box>
-        </Modal>
-      </div>
+              )
+            }
+          </tbody>
+        </table> : "Currently! No Punch In Request"} 
+      </>
     );
-
   }
-
 
 
   const PUNCHOUT = ({ data }) => {
@@ -428,18 +458,12 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
       borderRadius: 2,
     };
 
-    // user input
-    const handleTimeChange = (event) => {
-      const newTime = event.target.value;
-      setSelectedTimeIn(newTime);
-    };
-
-
 
 
     // fatch project report
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState([])
     const [loading, setLoading] = useState(true)
+    const [refresh, setRefresh] = useState(false)
 
 
     const fetchProjectReport = async () => {
@@ -461,6 +485,7 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
         .then((response) => {
           // console.log(JSON.stringify(response.data));
           setUser(response.data.result)
+          setUser(response.data.result, "PunchIn")
           setLoading(false)
         })
         .catch((error) => {
@@ -472,78 +497,99 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
 
     useEffect(() => {
       fetchProjectReport()
-    }, []);
+    }, [refresh]);
 
 
 
 
-
-    // const times 
-    const inputTime = user?.TIME
-    let dateTime = new Date(inputTime);
-    // Format components with leading zeros
-    let year = dateTime.getUTCFullYear();
-    let month = String(dateTime.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
-    let day = String(dateTime.getUTCDate()).padStart(2, '0');
-    let hours = String(dateTime.getUTCHours()).padStart(2, '0');
-    let minutes = String(dateTime.getUTCMinutes()).padStart(2, '0');
-    let seconds = String(dateTime.getUTCSeconds()).padStart(2, '0');
-    let milliseconds = dateTime.getUTCMilliseconds();
-
-    console.log(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`)
+    const MYMODAL = ({ events }) => {
+      const [open, setOpen] = React.useState(false);
+      const handleOpen = () => setOpen(true);
+      const handleClose = () => setOpen(false);
+      const handleTimeChange = (event) => {
+        const newTime = event.target.value;
+        setSelectedTimeIn(newTime);
+      };
+      const localTime = moment(events?.TIME).utcOffset(0).format("LT")
+      const convertedTime = moment(localTime, 'h:mm A').format('HH:mm')
 
 
-    // post attendence
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const [selectedTimeIn, setSelectedTimeIn] = useState("");
 
-    useEffect(() => {
-      setSelectedTimeIn(`${hours}:${minutes}`)
-    }, [hours])
 
-    console.log(`${year}-${month}-${day}T${selectedTimeIn?.split(':')[0]}:${selectedTimeIn?.split(':')[0]}:${seconds}.${milliseconds}Z`, "selectedTime in")
+      // post attendence
 
-    const handleSubmitIn = (event) => {
-      event.preventDefault();
+      const [selectedTimeIn, setSelectedTimeIn] = useState(convertedTime);
+      const originalTime = moment(`${events?.DATE} ${selectedTimeIn}`).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 
-      if (event) {
-        const attendanceData = {
-          ATTENDANCE_ADMIN_ID: EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_ID,
-          ATTENDANCE_ADMIN_USERNAME:
-            EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_USERNAME,
-          ATTENDANCE_COMPANY_ID: EMPLOYEE_DATA?.EMPLOYEE_PARENT_ID,
-          ATTENDANCE_COMPANY_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_PARENT_USERNAME,
-          ATTENDANCE_EMPLOYEE_ID: EMPLOYEE_DATA?.EMPLOYEE_ID,
-          ATTENDANCE_EMPLOYEE_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_USERNAME,
-          ATTENDANCE_DATE_ID: user?.DATE,
-          ATTENDANCE_OUT: user?.TIME,
-          ATTENDANCE_PROJECT_ID: data?.PROJECT_ID
+      const deleteReport = () => {
+
+        let data = {
+          PROJECT_ID: events?.PROJECT_ID,
+          EMPLOYEE_ID: events?.EMPLOYEE_ID,
+          EMPLOYEE_MEMBER_PARENT_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+          DATE: events?.DATE
         };
 
-        // setShowBackdrop(true);
+        let config = {
+          method: 'delete',
+          maxBodyLength: Infinity,
+          url: `/api/deleteproject`,
+          data: data
+        };
 
-        axios
-          .post(
-            "/api/create_emp_attendence",
-            attendanceData,
-
-          )
-          .then(() => {
-            toast.success("PunchIn Submitted successfully!", {
-              position: toast.POSITION.TOP_CENTER,
-              autoClose: 1000,
-
-            });
-            handleClose()
-            console.log("sucess")
+        axios.request(config)
+          .then((response) => {
+            setRefresh(true)
           })
           .catch((error) => {
+            console.log(error);
+            toast.error('Document not found!', {
+            });
           });
-      } else {
+
+
       }
-    };
+
+
+
+      const handleSubmitIn = async (event) => {
+        event.preventDefault();
+
+        if (event) {
+          const attendanceData = {
+            ATTENDANCE_ADMIN_ID: EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_ID,
+            ATTENDANCE_ADMIN_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+            ATTENDANCE_COMPANY_ID: EMPLOYEE_DATA?.EMPLOYEE_PARENT_ID,
+            ATTENDANCE_COMPANY_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_PARENT_USERNAME,
+            ATTENDANCE_EMPLOYEE_ID: EMPLOYEE_DATA?.EMPLOYEE_ID,
+            ATTENDANCE_EMPLOYEE_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_USERNAME,
+            ATTENDANCE_DATE_ID: events?.DATE,
+            ATTENDANCE_OUT: originalTime,
+            ATTENDANCE_PROJECT_ID: events?.PROJECT_ID
+          };
+
+          try {
+            // setShowBackdrop(true);
+
+            const res = await axios.post("/api/create_emp_attendence", attendanceData);
+
+            if (res) {
+              toast.success("PunchIn Submitted successfully! 333", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 1000,
+              });
+
+
+              deleteReport();
+              handleClose(false)
+            }
+          } catch (error) {
+            // Handle error
+          }
+        } else {
+          console.log("something wemt wrong")
+        }
+      };
 
 
 
@@ -551,89 +597,115 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
 
 
 
+      return (
+        <div>
+          {events?.TIME ? <> <button
+            className="primary btn btn-danger btn-sm rounded-2 text-white"
+            style={{ padding: "4px 10px" }}
+            onClick={handleOpen}
+          >
+            <i class="fa fa-address-card"></i> request
+          </button></> : <button
+            disabled
+            className="primary btn btn-success btn-sm rounded-2"
+            style={{ padding: "4px 10px" }}
+          >
+            {loading ? "Loading..." : "No request"}
+          </button>}
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <h5>Setup Punch In Time</h5>
+              <form className="form-row">
+
+                <div className="container">
+
+                  <div className="row py-4">
+                    <div>Date : {events?.DATE}</div>
+                    {/* <div>TIME : {moment(events?.TIME).format("LT")}</div> */}
+                    <div>{originalTime}</div>
+                    {/* {selectedTimeIn} */}
+
+                    <div className="col-4  text-center ">
+                      <input
+                        type="time"
+                        id="timeInput"
+                        name="timeInput"
+                        value={selectedTimeIn}
+                        onChange={handleTimeChange}
+                        className="form-control form-control-2"
+                        style={{ width: "100px" }}
+                      />
+                    </div>
+                    <div className="col-8 text-center d-flex" style={{ gap: 4 }}>
+                      <button
+                        variant="contained"
+                        className="primary btn btn-success btn-sm rounded-5"
+                        style={{ padding: "4px 10px" }}
+                        onClick={(event) => {
+                          handleSubmitIn(event);
+                        }}
+                      >
+                        Punch In
+                      </button>
+                      <button
+                        variant="contained"
+                        className="primary btn btn-danger btn-sm rounded-5"
+                        style={{ padding: "4px 10px" }}
+                        onClick={(event) => {
+                          handleClose();
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </Box>
+          </Modal>
+        </div>
+      )
+    }
+
+
+    const fatchData = user?.map((e) => e.PUNCH_TYPE);
 
     return (
-      <div>
+      <>
+        {fatchData[0] === "PunchOut" ? <table className="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">S. No.</th>
+              <th scope="col">Date</th>
+              <th scope="col">Time</th>
+              <th scope="col">Punch Out</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              user.map((e, index) =>
+                <>
+                  <tr>
+                    <th scope="row">{index + 1}</th>
+                    <td>{e.DATE}</td>
+                    <td>{moment(e.TIME).utcOffset(0).format('LT')}</td>
+                    <td><MYMODAL events={e} /></td>
+                  </tr>
+                </>
 
-        {user?.TIME ? <> <button
-          className="primary btn btn-danger btn-sm rounded-2 text-white"
-          style={{ padding: "4px 10px" }}
-          onClick={handleOpen}
-        >
-          <i class="fa fa-address-card"></i> request
-        </button></> : <button
-          disabled
-          className="primary btn btn-success btn-sm rounded-2"
-          style={{ padding: "4px 10px" }}
-        >
-          {loading ? "Loading..." : "No request"}
-        </button>}
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <h5>Setup Punch In Time</h5>
-            <form className="form-row">
-
-              <div className="container">
-
-                <div className="row py-4">
-                  <div>Date : {user?.DATE}</div>
-                  <div>Date : {user?.TIME}</div>
-                  <div>TIME : {`${year}-${month}-${day}T${selectedTimeIn?.split(':')[0]}:${selectedTimeIn?.split(':')[1]}:${seconds}.${milliseconds}Z`}</div>
-                  {selectedTimeIn}
-
-                  <div className="col-4  text-center ">
-                    <input
-                      type="time"
-                      id="timeInput"
-                      name="timeInput"
-                      value={selectedTimeIn}
-                      onChange={handleTimeChange}
-                      className="form-control form-control-2"
-                      style={{ width: "100px" }}
-                    />
-                  </div>
-                  <div className="col-8 text-center d-flex" style={{ gap: 4 }}>
-                    <button
-                      variant="contained"
-                      className="primary btn btn-success btn-sm rounded-5"
-                      style={{ padding: "4px 10px" }}
-                      onClick={(event) => {
-                        handleSubmitIn(event);
-                      }}
-                    >
-                      Punch Out
-                    </button>
-
-
-                    <button
-                      variant="contained"
-                      className="primary btn btn-danger btn-sm rounded-5"
-                      style={{ padding: "4px 10px" }}
-                      onClick={(event) => {
-                        handleClose();
-                      }}
-                    >
-                      Cancel
-                    </button>
-
-
-                  </div>
-
-
-                </div>
-              </div>
-            </form>
-          </Box>
-        </Modal>
-      </div>
+              )
+            }
+          </tbody>
+        </table> : "Currently! No Punch Out Request"}
+      </>
     );
-
   }
+
 
 
 
@@ -669,12 +741,13 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
             expandIcon={<ExpandMoreIcon />}
             aria-controls={`panel${index}bh-content`}
             id={`panel${index}bh-header`}
-            sx={{ height: "40px" }}
+            sx={{background: expanded === `panel${index}` ? "#696969" : ""}}
+
           >
             <div className="container g-0">
-              <div className="row">
+              <div className={expanded === `panel${index}` ? "row text-white" : "row"}>
                 <div className="col">
-                  <strong>{index+1}</strong>
+                  <strong>{index + 1}</strong>
                 </div>
                 <div className="col">
                   <strong>{post.PROJECT_ID}</strong>
@@ -692,43 +765,29 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
             </div>
           </AccordionSummary>
           <AccordionDetails>
-            <div className="container">
-              <div className="row pb-2 border-bottom  pb-2 border-bottom bg-primary">
-                <div className="col">
-                  <strong>S. No.</strong>
-                </div>
-                <div className="col">
-                  <strong>Punch In</strong>
-                </div>
-                <div className="col">
-                  <strong>PunchOut</strong>
-                </div>
-                <div className="col">
-                  <strong>Date</strong>
-                </div>
-              </div>
-            </div>
-            {expanded === `panel${index}` && 
-            <div className="container pt-2">
-              <div className="row">
-                <div className="col">
-                  <strong>{index}</strong>
-                </div>
-                <div className="col">
-                  <Typography>
-                    <PUNCHIN data={post} />
-                  </Typography>
-                </div>
-                <div className="col">
-                  <Typography>
-                    <PUNCHOUT data={post} />
-                  </Typography>
-                </div>
-                <div className="col">
-                  <strong>Date</strong>
+
+            {expanded === `panel${index}` &&
+
+              <div className="containet">
+                <div className="row">
+                  <div className="col-6">
+                    <>
+                      <Typography key={index}>
+                        <PUNCHIN data={post} ke />
+                      </Typography>
+                    </>
+                  </div>
+                  <div className="col-6">
+                  <>
+                      <Typography key={index}>
+                        <PUNCHOUT data={post} ke />
+                      </Typography>
+                    </>
+                  </div>
                 </div>
               </div>
-            </div>
+
+
             }
 
           </AccordionDetails>
