@@ -27,13 +27,15 @@ import GenPassword from "./GenPassword";
 import { toast } from "react-toastify";
 import EmployeeAttendance from "./EmployeeAttendance";
 import EmployeeManual from "./EmployeeManual";
+import EmployeeArchive from "./EmployeeArchive";
 // import EmployeeManual from "./EmployeeManual";
 
 // import env from "react-dotenv";
 
-const EmployeeSrc = (props) => {
+const EmployeeSrc = () => {
   const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
-  const [archived, setArchived] = useState([{}])
+  const [archived, setArchived] = useState([{}]);
+  const [getarchived, setGetrchived] = useState([{}]);
   //isLoading this is for the Skeleton
   const [isLoading, setIsLoading] = useState(true);
 
@@ -98,6 +100,7 @@ const EmployeeSrc = (props) => {
 
 
   const [errorMsg, setErrorMsg] = useState("");
+  const [display, setDisplay] = useState("unarchive")
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -179,8 +182,11 @@ const EmployeeSrc = (props) => {
 
   console.log(allempData, "myRows")
   const FilterArchive = allempData?.filter(newData => newData?.ARCHIVED === false);
-  const rows =FilterArchive;
+  const rows = FilterArchive;
 
+
+  const archivedData = allempData?.filter(newData => newData?.ARCHIVED === true);
+  const rows2 = archivedData;
   // For archive  employye 
 
   const archiveEmployee = async (archiveData) => {
@@ -192,11 +198,11 @@ const EmployeeSrc = (props) => {
         EMPLOYEE_MEMBER_PARENT_USERNAME: archiveData.row?.EMPLOYEE_MEMBER_PARENT_USERNAME,
         EMPLOYEE_ID: archiveData.row?.EMPLOYEE_ID
       };
-  
+
       console.log("Data:", data);
-  
+
       const response = await axios.post("/api/archive-employee", data);
-  
+
       if (response.status === 200) {
         const jsonResponse = response.data;
         setArchived(jsonResponse)
@@ -218,6 +224,44 @@ const EmployeeSrc = (props) => {
       });
     }
   };
+
+
+  const unarchiveEmployee = async (archiveemp) => {
+    try {
+      const data = {
+        EMPLOYEE_PARENT_ID: archiveemp.row?.EMPLOYEE_PARENT_ID,
+        EMPLOYEE_PARENT_USERNAME: archiveemp.row?.EMPLOYEE_PARENT_USERNAME,
+        // EMPLOYEE_MEMBER_PARENT_ID: archiveemp.row?.EMPLOYEE_MEMBER_PARENT_ID,
+        // EMPLOYEE_MEMBER_PARENT_USERNAME: archiveemp.row?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+        EMPLOYEE_ID: archiveemp.row?.EMPLOYEE_ID
+      };
+
+      console.log("Data:", data);
+
+      const response = await axios.post("/api/unarchive-employee", data);
+
+      if (response.status === 200) {
+        const jsonResponse = response.data;
+        setArchived(jsonResponse)
+        console.log("Response data:", jsonResponse);
+        toast.success("Employee UnArchived!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 1000,
+        });
+      } else {
+        console.error(response.status, response.statusText);
+        toast.error('Document not found!', {
+          // Show for 2 seconds
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('An error occurred while archiving the employee.', {
+        // Show for 2 seconds
+      });
+    }
+  };
+
   
 
 
@@ -303,15 +347,25 @@ const EmployeeSrc = (props) => {
       width: 120,
       renderCell: (cellValues) => {
         return (
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{ borderRadius: "12px", padding: "2px 10px" }}
-            size="small"
-            onClick={()=> archiveEmployee(cellValues)}
-          >
-            Archive
-          </Button>
+          <>
+            {display === "unarchive" ? <Button
+              variant="contained"
+              color="secondary"
+              sx={{ borderRadius: "12px", padding: "2px 10px" }}
+              size="small"
+              onClick={() => archiveEmployee(cellValues)}
+            >
+              Archive
+            </Button> : <Button
+              variant="contained"
+              color="secondary"
+              sx={{ borderRadius: "12px", padding: "2px 10px" }}
+              size="small"
+              onClick={() => unarchiveEmployee(cellValues)}
+            >
+              UnArchive
+            </Button>}
+          </>
         );
       },
     },
@@ -460,9 +514,6 @@ const EmployeeSrc = (props) => {
 
 
 
-
-
-
   return (
     <>
       <Sidebar
@@ -475,6 +526,22 @@ const EmployeeSrc = (props) => {
       />
       <Box className="box" style={{ background: "#277099" }}>
         <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} />
+        <Button
+          size="small"
+          variant={"outlined"}
+          className={display === "unarchive" ? "btn button border-bottom-0 bg-white" : "btn btn-sm btn-primary rounded-0 border-0  rounded-0 text-light"}
+          onClick={() => setDisplay("unarchive")}
+        >
+          My Employees
+        </Button>
+        <Button
+          size="small"
+          variant={"outlined"}
+          className={display === "archive" ? "btn button border-bottom-0 bg-white" : "btn btn-sm btn-primary rounded-0 border-0  rounded-0 text-light"}
+          onClick={() => setDisplay("archive")}
+        >
+          Archive
+        </Button>
         <EmployeeCreate
           COMPANY_ID={COMPANY_ID}
           COMPANY_USERNAME={COMPANY_USERNAME}
@@ -483,6 +550,7 @@ const EmployeeSrc = (props) => {
           name={"Employee"}
           refetch={fetchData}
         />
+
 
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
@@ -493,7 +561,7 @@ const EmployeeSrc = (props) => {
                 <DataGrid
                   className="display"
                   sx={{ border: "none" }}
-                  rows={rows}
+                  rows={display === "archive" ? rows2 : rows}
                   columns={columns}
                   getRowId={(row) => row.EMPLOYEE_ID}
                   initialState={{
@@ -789,6 +857,9 @@ const EmployeeSrc = (props) => {
           </PDFViewer>
         </MyScreen> */}
       </Box>
+
+
+
     </>
   );
 };
