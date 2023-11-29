@@ -261,21 +261,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
                   />
                 </div>
 
-                {/* <div className="form-group col-xl-6 py-1">
-                  <label>Employee Password</label>
-                  <input
-                    type="text"
-                    className={`form-control form-control-2 rounded-0 ${passwordError ? "is-invalid" : ""
-                      }`}
-                    placeholder="Enter Employee password"
-                    value={createEmployee.EMPLOYEE_PASSWORD}
-                    name="EMPLOYEE_PASSWORD"
-                    onChange={handleCreate}
-                  />
-                  {passwordError && (
-                    <div className="invalid-feedback">{passwordError}</div>
-                  )}
-                </div> */}
+    
                 <div className="form-group col-xl-6 py-1">
 
                   <label>Country</label>
