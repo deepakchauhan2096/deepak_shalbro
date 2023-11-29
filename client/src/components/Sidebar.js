@@ -38,9 +38,9 @@ const Sidebar = ({
       console.error('Error logging out: ', error);
     }
   };
-  const truncatedUsername =
-  COMPANY_USERNAME.split("@")[0].slice(0, 6).charAt(0).toUpperCase() +
-  COMPANY_USERNAME.split("@")[0].slice(1, 6);
+  // const truncatedUsername =
+  // COMPANY_USERNAME.split("@")[0].slice(0, 6).charAt(0).toUpperCase() +
+  // COMPANY_USERNAME.split("@")[0].slice(1, 6);
 
   const drawerWidth = 0;
   return (
@@ -65,9 +65,9 @@ const Sidebar = ({
   className="sidebar-header d-flex p-3 f-20"
   style={{ justifyContent: "space-between" }}
 >
-  <h5 className="pt-2">{truncatedUsername}</h5>
-  <Tooltip title={truncatedUsername}>
-    <Avatar>{truncatedUsername.slice(0, 1)}</Avatar>
+  <h5 className="pt-2">{COMPANY_USERNAME}</h5>
+  <Tooltip title={COMPANY_USERNAME}>
+  <Avatar>{(COMPANY_ID)}</Avatar>
   </Tooltip>
 </div>
           <Divider />
