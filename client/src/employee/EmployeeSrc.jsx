@@ -231,14 +231,14 @@ const EmployeeSrc = () => {
       const data = {
         EMPLOYEE_PARENT_ID: archiveemp.row?.EMPLOYEE_PARENT_ID,
         EMPLOYEE_PARENT_USERNAME: archiveemp.row?.EMPLOYEE_PARENT_USERNAME,
-        // EMPLOYEE_MEMBER_PARENT_ID: archiveemp.row?.EMPLOYEE_MEMBER_PARENT_ID,
-        // EMPLOYEE_MEMBER_PARENT_USERNAME: archiveemp.row?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+        EMPLOYEE_MEMBER_PARENT_ID: archiveemp.row?.EMPLOYEE_MEMBER_PARENT_ID,
+        EMPLOYEE_MEMBER_PARENT_USERNAME: archiveemp.row?.EMPLOYEE_MEMBER_PARENT_USERNAME,
         EMPLOYEE_ID: archiveemp.row?.EMPLOYEE_ID
       };
 
       console.log("Data:", data);
 
-      const response = await axios.post("/api/unarchive-employee", data);
+      const response = await axios.put("/api/unarchive-employee", data);
 
       if (response.status === 200) {
         const jsonResponse = response.data;

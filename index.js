@@ -230,8 +230,8 @@ app.use(cors());
 
 
 
-  app.post("/api/unarchive-employee",(req,res)=> {
-    sendHttpRequest("POST",`${process.env.SERVERAPIREQUEST}/unarchive-employee`,req,res)
+  app.put("/api/unarchive-employee",(req,res)=> {
+    sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/unarchive-employee`,req,res)
   });
 
 
