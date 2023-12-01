@@ -68,54 +68,76 @@ function getDatesBetween(startDate, endDate) {
   const dates = [];
   const currentDate = new Date(startDate);
   const lastDate = new Date(endDate);
-
   while (currentDate <= lastDate) {
     dates.push(formatDate(currentDate));
     currentDate.setDate(currentDate.getDate() + 1);
   }
-
   return dates;
 }
 
 const AttendanceReport = (props) => {
   // Generate an array of week options for the select element
+  // const generateWeekOptions = () => {
+  //   const options = [];
+  //   const today = new Date();
+  //   const currentWeek = getWeekNumber(today);
+
+  //   for (let i = 0; i < 5; i++) {
+  //     // Generate options for the current week and the four previous weeks
+  //     const weekStartDate = new Date(today);
+  //     weekStartDate.setDate(today.getDate() - today.getDay() - i * 7);
+  //     const weekEndDate = new Date(weekStartDate);
+  //     weekEndDate.setDate(weekStartDate.getDate() + 6);
+
+  //     // Find the start of the week (Monday) and end of the week (Sunday)
+  //     weekStartDate.setDate(
+  //       weekStartDate.getDate() - weekStartDate.getDay() + 1
+  //     );
+  //     weekEndDate.setDate(weekEndDate.getDate() - weekEndDate.getDay() + 7);
+
+  //     const weekLabel = `${formatDates(weekStartDate)} - ${formatDates(
+  //       weekEndDate
+  //     )}`;
+
+  //     const originalDate = new Date(weekEndDate);
+  //     const year = originalDate.getFullYear();
+  //     const month = String(originalDate.getMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1 and pad with 0 if needed
+  //     const day = String(originalDate.getDate()).padStart(2, "0");
+
+  //     const formattedDate = `${year}-${month}-${day}`;
+  //     // console.log(formattedDate);
+
+  //     options.push(
+  //       <option key={i} value={formattedDate}>
+  //         {weekLabel}
+  //       </option>
+  //     );
+  //   }
+
+  //   return options;
+  // };
+
   const generateWeekOptions = () => {
     const options = [];
-    const today = new Date();
+    const today = moment().utcOffset(0);
     const currentWeek = getWeekNumber(today);
-
+  
     for (let i = 0; i < 5; i++) {
       // Generate options for the current week and the four previous weeks
-      const weekStartDate = new Date(today);
-      weekStartDate.setDate(today.getDate() - today.getDay() - i * 7);
-      const weekEndDate = new Date(weekStartDate);
-      weekEndDate.setDate(weekStartDate.getDate() + 6);
-
-      // Find the start of the week (Monday) and end of the week (Sunday)
-      weekStartDate.setDate(
-        weekStartDate.getDate() - weekStartDate.getDay() + 1
-      );
-      weekEndDate.setDate(weekEndDate.getDate() - weekEndDate.getDay() + 7);
-
-      const weekLabel = `${formatDates(weekStartDate)} - ${formatDates(
-        weekEndDate
-      )}`;
-
-      const originalDate = new Date(weekEndDate);
-      const year = originalDate.getFullYear();
-      const month = String(originalDate.getMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1 and pad with 0 if needed
-      const day = String(originalDate.getDate()).padStart(2, "0");
-
-      const formattedDate = `${year}-${month}-${day}`;
-      // console.log(formattedDate);
-
+      const weekStartDate = moment(today).subtract(i * 7, 'days').startOf('isoWeek');
+      const weekEndDate = moment(weekStartDate).endOf('isoWeek');
+  
+      const weekLabel = `${weekStartDate.format('YYYY-MM-DD')} - ${weekEndDate.format('YYYY-MM-DD')}`;
+  
+      const formattedDate = weekEndDate.format('YYYY-MM-DD');
+  
       options.push(
-        <option key={i} value={formattedDate}>
+        <option key={i} value={formattedDate} selected={i === 0 ? true : false }>
           {weekLabel}
         </option>
       );
     }
-
+  
     return options;
   };
 
@@ -145,61 +167,67 @@ const AttendanceReport = (props) => {
   };
 
   // date array
+  // function DateArray(eventDate) {
+  //   let array = [];
+  //   let date = eventDate;
+  //   let MyDateAfter = new Date(date);
+  //   let MyDateStringAfter;
+
+  //   for (let i = 0; i < 6; i++) {
+  //     MyDateAfter.setDate(MyDateAfter.getDate() - 1);
+  //     MyDateStringAfter =
+  //       MyDateAfter.getFullYear() +
+  //       "-" +
+  //       ("0" + (MyDateAfter.getMonth() + 1)).slice(-2) +
+  //       "-" +
+  //       ("0" + MyDateAfter.getDate()).slice(-2);
+  //     array.push(MyDateStringAfter); // Add the date to the array
+  //   }
+  //   array.unshift(date);
+  //   return array; // Return the generated array of dates
+  // }
+
   function DateArray(eventDate) {
     let array = [];
-    let date = eventDate;
-    let MyDateAfter = new Date(date);
+    let MyDateAfter = moment.utc(eventDate); // Use moment with utcOffset(0)
     let MyDateStringAfter;
 
     for (let i = 0; i < 6; i++) {
-      MyDateAfter.setDate(MyDateAfter.getDate() - 1);
-      MyDateStringAfter =
-        MyDateAfter.getFullYear() +
-        "-" +
-        ("0" + (MyDateAfter.getMonth() + 1)).slice(-2) +
-        "-" +
-        ("0" + MyDateAfter.getDate()).slice(-2);
+      MyDateAfter.subtract(1, 'days');
+      MyDateStringAfter = MyDateAfter.format('YYYY-MM-DD');
       array.push(MyDateStringAfter); // Add the date to the array
     }
-    array.unshift(date);
+
+    array.unshift(eventDate);
     return array; // Return the generated array of dates
   }
 
-  console.log(selectedWeek, "selectedWeek");
+
+  // console.log(selectedWeek, "selectedWeek");
 
   const result = DateArray(selectedWeek);
 
-  console.log(result, " currentWeekDatesFormatted");
+  // console.log(result, " currentWeekDatesFormatted");
 
-  // current week
+  // const moment = require('moment');
   function getCurrentWeekDatesFormattedMondayToSunday() {
-    const currentDate = new Date();
-    const currentDay = currentDate.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
-    const startDate = new Date(currentDate); // Clone the current date
-
-    // Calculate the start of the week (Monday) by subtracting the appropriate number of days
-    startDate.setDate(
-      currentDate.getDate() - currentDay + (currentDay === 0 ? -6 : 1)
-    );
-
-    // Create an array to store the formatted dates of the current week (Monday to Sunday)
+    const currentDate = moment().utcOffset(0);
+    const currentDay = currentDate.day(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+    const startDate = moment(currentDate); // Clone the current date
+    startDate.subtract(currentDay, 'days').add(currentDay === 0 ? -6 : 1, 'days');
     const currentWeekDatesFormatted = [];
-
-    // Populate the array with formatted dates for the current week (Monday to Sunday)
     for (let i = 0; i < 7; i++) {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + i);
-
-      // Manually construct the "YYYY-MM-DD" formatted date string
-      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
-
+      const date = moment(startDate).add(i, 'days');
+      const formattedDate = date.utcOffset(0).format('YYYY-MM-DD');
       currentWeekDatesFormatted.push(formattedDate);
     }
-
     return currentWeekDatesFormatted;
   }
+
+  // Example usage
+  const weekDates = getCurrentWeekDatesFormattedMondayToSunday();
+  console.log(weekDates);
+
 
   // Get the current week's dates in "YYYY-MM-DD" format (Monday to Sunday)
   const currentWeekDatesFormatted = getCurrentWeekDatesFormattedMondayToSunday();
@@ -211,7 +239,7 @@ const AttendanceReport = (props) => {
 
   // date range array
 
-  const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+  const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
 
   // const param = id.split("&");
   // const COMPANY_ID = param[0];
@@ -222,14 +250,11 @@ const AttendanceReport = (props) => {
   const [employees, getReport] = useState();
   const [foundUsers, setFoundUsers] = useState([]);
   const [filterMethod, setFilterMethod] = useState("Date wise");
-  const [startDateString, setstartDateString] = useState(
-    result[result.length - 1] != "NaN-aN-aN"
-      ? result[result.length - 1]
-      : currentWeekDatesFormatted[0]
-  );
-  const [endDateString, setendDateString] = useState(result[result.length - 1] != "NaN-aN-aN"
-    ? result[0]
-    : currentWeekDatesFormatted[currentWeekDatesFormatted.length - 1]);
+  console.log(currentWeekDatesFormatted[0], "currentWeekDatesFormatted[0]")
+  const [startDateString, setstartDateString] = useState(currentWeekDatesFormatted[0]);
+
+  console.log(currentWeekDatesFormatted[0], "startDateString")
+  const [endDateString, setendDateString] = useState(currentWeekDatesFormatted[currentWeekDatesFormatted.length - 1]);
   const [keyword, setKeyword] = useState();
   const [name, setName] = useState("All");
   const [showDetail, setShowDetail] = useState(true);
@@ -274,13 +299,8 @@ const AttendanceReport = (props) => {
   const fetchData = async () => {
     try {
       const [employeeData] = await Promise.all([fetchAllEmployees()]);
-
-      // Both requests have completed here
-      // setIsLoading(false);
       setAllempData(employeeData.result);
       console.log("Both requests completed", employeeData);
-
-      // Now you can access employeeData and projectsData for further processing if needed
     } catch (err) {
       console.log("An error occurred:", err);
     }
@@ -344,21 +364,21 @@ const AttendanceReport = (props) => {
       mainData[0]?.EMPLOYEE_MEMBER_PARENT_USERNAME,
       mainData[0]?.EMPLOYEE_PARENT_USERNAME
     );
-  }, [allempData]);
+  }, [allempData, startDateString]);
 
-  console.log(mainData, "report");
 
-  // date array function call
 
-  // const startDate = new Date(startDateString);
-  // const endDate = new Date(endDateString);
   const dateArray = getDatesBetween(
-    currentWeekDatesFormatted[0],
-    currentWeekDatesFormatted[currentWeekDatesFormatted.length - 1]
+    startDateString,
+    endDateString
   );
 
-  //filter by different param
 
+  console.log(dateArray, "nnnnn")
+
+  console.log(currentWeekDatesFormatted, "my");
+
+  //filter by different param
   const filtered = (e, item) => {
     // topFunction()
     const word = e.target.value;
@@ -378,58 +398,88 @@ const AttendanceReport = (props) => {
   var arrayDate = [];
   arrayDate.push(...result);
 
-  console.log(selectedWeek, "selectedWeek");
+  console.log(filterMethod, "filterMethod");
 
-  //modify data
-  let processedData = foundUsers?.map((employee) => {
-    console.log(employee, "additional");
-    let filterByDate;
-    filterByDate = employee.AttendanceData.filter((item) => {
-      return (filterMethod === "Date Wise" ? dateArray : arrayDate).includes(
-        item.ATTENDANCE_DATE_ID
-      );
+
+
+
+
+
+  // process data
+  const processingData = (data) => {
+    let processedData = data?.map((employee) => {
+      console.log(employee, "additional");
+      let filterByDate;
+      filterByDate = employee.AttendanceData.filter((item) => {
+        switch (filterMethod) {
+          case ("Date Wise"): return dateArray.includes(item.ATTENDANCE_DATE_ID)
+          case ("By Pay Period"): return arrayDate.includes(item.ATTENDANCE_DATE_ID)
+            return;
+        }
+      });
+
+      console.log(filterByDate, arrayDate, "filter");
+
+      const totalDuration = filterByDate.reduce((acc, attendance) => {
+        const attendanceIn = moment(attendance.ATTENDANCE_IN).utcOffset(0);
+        const attendanceOut = moment(attendance.ATTENDANCE_OUT).utcOffset(0);
+
+        // Check for null or undefined values before performing calculations
+        if (attendanceIn.isValid() && attendanceOut.isValid()) {
+          const duration = moment.duration(attendanceOut.diff(attendanceIn));
+          acc.add(duration);
+        }
+
+        return acc;
+      }, moment.duration());
+
+      const totalHours = Math.floor(totalDuration.asHours());
+      const totalMinutes = totalDuration.minutes();
+
+      // Define a threshold for regular hours (e.g., 40 hours per week)
+      const regularHoursThreshold = 8;
+      let overtimeHours = 0;
+
+      if (totalHours > regularHoursThreshold) {
+        overtimeHours = totalHours - regularHoursThreshold;
+      }
+
+      const modifiedEmployee = {
+        ...employee._doc,
+        TOTAL_HOURS: `${totalHours} hours and ${totalMinutes} minutes`,
+        OVERTIME_HOURS: overtimeHours.toFixed(2),
+        PUNCH: employee,
+
+        EMPLOYEE_ATTENDANCE: filterByDate?.map((attendance) => {
+          const attendanceIn = moment(attendance.ATTENDANCE_IN).utcOffset(0);
+          const attendanceOut = moment(attendance.ATTENDANCE_OUT).utcOffset(0);
+
+          // Check for null or undefined values before performing calculations
+          if (attendanceIn.isValid() && attendanceOut.isValid()) {
+            const duration = moment.duration(attendanceOut.diff(attendanceIn));
+            const hoursWorked = Math.floor(duration.asHours());
+            const minutesWorked = duration.minutes();
+
+            return {
+              ...attendance,
+              HOURS: `${hoursWorked} hours and ${minutesWorked} minutes`,
+              REGULAR: `${hoursWorked} hours and ${minutesWorked} minutes`, // Assuming "REGULAR" represents the regular hours worked
+            };
+          } else {
+            return null; // or handle the case as needed
+          }
+        }).filter(Boolean), // Remove null entries
+      };
+
+      return modifiedEmployee;
     });
 
-    console.log(filterByDate, arrayDate, "filter");
+    return processedData;
 
-    const totalHours = filterByDate.reduce((acc, attendance) => {
-      const attendanceIn = new Date(attendance.ATTENDANCE_IN);
-      const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
-      const hoursWorked =
-        Math.abs(attendanceOut - attendanceIn) / (1000 * 60 * 60); // Convert milliseconds to hours
-      return acc + hoursWorked;
-    }, 0);
+  }
 
-    // Define a threshold for regular hours (e.g., 40 hours per week)
-    const regularHoursThreshold = 8;
-    let overtimeHours = 0;
+  const processedData = processingData(foundUsers)
 
-    if (totalHours > regularHoursThreshold) {
-      overtimeHours = totalHours - regularHoursThreshold;
-    }
-
-    const modifiedEmployee = {
-      ...employee._doc,
-      TOTAL_HOURS: totalHours.toFixed(2),
-      OVERTIME_HOURS: overtimeHours.toFixed(2), // Add overtime hours here
-      PUNCH: employee,
-
-      EMPLOYEE_ATTENDANCE: filterByDate?.map((attendance) => {
-        const attendanceIn = new Date(attendance.ATTENDANCE_IN);
-        const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
-        const hoursWorked =
-          Math.abs(attendanceOut - attendanceIn) / (1000 * 60 * 60); // Convert milliseconds to hours
-
-        return {
-          ...attendance,
-          HOURS: hoursWorked.toFixed(2),
-          REGULAR: hoursWorked.toFixed(2), // Assuming "REGULAR" represents the regular hours worked
-        };
-      }),
-    };
-
-    return modifiedEmployee;
-  });
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
@@ -513,6 +563,7 @@ const AttendanceReport = (props) => {
                         <div className="col-xl-6">
                           <div className="row justify-content-between">
                             <div className="col-xl-12">
+
                               <div className="row py-1">
                                 <div className="col">
                                   <label>Date filter by</label>
@@ -530,6 +581,7 @@ const AttendanceReport = (props) => {
                                   </select>
                                 </div>
                               </div>
+
                               {filterMethod === "By Pay Period" && (
                                 <div className="row py-1">
                                   <div className="col">
@@ -541,12 +593,13 @@ const AttendanceReport = (props) => {
                                       value={selectedWeek}
                                       onChange={handleWeekSelect}
                                     >
-                                      <option value="">Select a week</option>
+                                      {/* <option value="">Select a week</option> */}
                                       {generateWeekOptions()}
                                     </select>
                                   </div>
                                 </div>
                               )}
+
                               {filterMethod === "Date wise" && (
                                 <div className="row py-1">
                                   <div className="col">
@@ -648,80 +701,87 @@ const AttendanceReport = (props) => {
 
                             <tbody>
                               {processedData?.map((post) => {
-                                return (
-                                  <tr className="table table-striped">
-                                    <td>{post.EMPLOYEE_ID}</td>
-                                    <td>{post.EMPLOYEE_NAME}</td>
-                                    <td>
-                                      <span
-                                        className="rounded-2 px-1 text-light"
-                                        style={{
-                                          width: "content-fit",
-                                          backgroundColor: "#12AD2B",
-                                        }}
-                                      >
-                                        {post.TOTAL_HOURS} hours
-                                      </span>
-                                    </td>
-                                    <td>
-                                      <span
-                                        className="rounded-2 px-1 text-light"
-                                        style={{
-                                          width: "content-fit",
-                                          backgroundColor: "#12AD2B",
-                                        }}
-                                      >
-                                        {post.TOTAL_HOURS} hours
-                                      </span>
-                                    </td>
-                                    <td>{post.OVERTIME_HOURS}</td>
-                                    <td>
-                                      <PDFDownloadLink
-                                        className="btn btn-info btn-sm"
-                                        document={
-                                          <SalaryPDF
-                                            name={post.EMPLOYEE_NAME}
-                                            date={MyDateStringCurrent}
-                                            startdate={
-                                              result[result.length - 1] !=
-                                                "NaN-aN-aN"
-                                                ? result[result.length - 1]
-                                                : currentWeekDatesFormatted[0]
-                                            }
-                                            enddate={
-                                              result[result.length - 1] !=
-                                                "NaN-aN-aN"
-                                                ? result[0]
-                                                : currentWeekDatesFormatted[
-                                                currentWeekDatesFormatted.length -
-                                                1
-                                                ]
-                                            }
-                                          />
-                                        }
-                                        fileName={`${post.EMPLOYEE_NAME}.pdf`}
-                                      >
-                                        Download
-                                      </PDFDownloadLink>
-                                    </td>
-                                    <td>
-                                      {" "}
-                                      <button
-                                        className="btn btn-secondary btn-sm"
-                                        onClick={(e) =>
-                                          PunchReport({
-                                            a: post.PUNCH,
-                                            b: post.EMPLOYEE_ATTENDANCE,
-                                          })
-                                        }
-                                      >
-                                        Punch Detail
-                                      </button>
-                                    </td>
-                                  </tr>
-                                );
+                                // Extract hours and minutes from post.TOTAL_HOURS
+                                const [hours, minutes] = post.TOTAL_HOURS.match(/\d+/g) || [0, 0];
+                                const totalMinutes = parseInt(hours) * 60 + parseInt(minutes);
+
+                                // Check if totalMinutes is greater than zero before rendering the row
+                                if (totalMinutes > 0) {
+                                  return (
+                                    <tr key={post.EMPLOYEE_ID} className="table table-striped">
+                                      <td>{post.EMPLOYEE_ID}</td>
+                                      <td>{post.EMPLOYEE_NAME}</td>
+                                      <td>
+                                        <span
+                                          className="rounded-2 px-1 text-light"
+                                          style={{
+                                            width: "content-fit",
+                                            backgroundColor: "#12AD2B",
+                                          }}
+                                        >
+                                          {post.TOTAL_HOURS}
+                                        </span>
+                                      </td>
+                                      <td>
+                                        <span
+                                          className="rounded-2 px-1 text-light"
+                                          style={{
+                                            width: "content-fit",
+                                            backgroundColor: "#12AD2B",
+                                          }}
+                                        >
+                                          {post.TOTAL_HOURS}
+                                        </span>
+                                      </td>
+                                      <td>{post.OVERTIME_HOURS}</td>
+                                      <td>
+                                        <PDFDownloadLink
+                                          className="btn btn-info btn-sm"
+                                          document={
+                                            <SalaryPDF
+                                              name={post.EMPLOYEE_NAME}
+                                              date={MyDateStringCurrent}
+                                              startdate={
+                                                result[result.length - 1] !== "NaN-aN-aN"
+                                                  ? result[result.length - 1]
+                                                  : currentWeekDatesFormatted[0]
+                                              }
+                                              enddate={
+                                                result[result.length - 1] !== "NaN-aN-aN"
+                                                  ? result[0]
+                                                  : currentWeekDatesFormatted[
+                                                  currentWeekDatesFormatted.length - 1
+                                                  ]
+                                              }
+                                            />
+                                          }
+                                          fileName={`${post.EMPLOYEE_NAME}.pdf`}
+                                        >
+                                          Download
+                                        </PDFDownloadLink>
+                                      </td>
+                                      <td>
+                                        <button
+                                          className="btn btn-secondary btn-sm"
+                                          onClick={(e) =>
+                                            PunchReport({
+                                              a: post.PUNCH,
+                                              b: post.EMPLOYEE_ATTENDANCE,
+                                            })
+                                          }
+                                        >
+                                          Punch Detail
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  );
+                                } else {
+                                  return null; // Don't render the row if totalMinutes is zero
+                                }
                               })}
                             </tbody>
+
+
                           </table>
                         </div>
                       </div>
