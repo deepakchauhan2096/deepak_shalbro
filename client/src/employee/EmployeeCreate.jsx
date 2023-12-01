@@ -171,13 +171,11 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
         onClick={handleOpen}
         sx={{ color: "#277099" }}
         className="btn btn-sm btn-primary rounded-0 border-0  rounded-0 text-light"
-        // variant="contained"
+     
         size="small"
       >
         + Add New Employee
       </button>
-
-      {/* <EmployeeArchive /> */}
 
       <Modal
         open={open}
@@ -275,7 +273,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
                   >
                     <option value="">--Choose Country--</option>
                     {country?.map((value, key) => {
-                      // console.log("hhh", value.name)
+                   
                       return (
                         <option value={value.name} key={key}>
                           {value.name}
