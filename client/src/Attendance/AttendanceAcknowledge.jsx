@@ -172,34 +172,36 @@ const AttendanceReport = (props) => {
   console.log(result, " currentWeekDatesFormatted");
 
   // current week
+  const moment = require('moment');
+
   function getCurrentWeekDatesFormattedMondayToSunday() {
-    const currentDate = new Date();
-    const currentDay = currentDate.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
-    const startDate = new Date(currentDate); // Clone the current date
+    const currentDate = moment().utcOffset(0);
+    const currentDay = currentDate.day(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+    const startDate = moment(currentDate); // Clone the current date
 
     // Calculate the start of the week (Monday) by subtracting the appropriate number of days
-    startDate.setDate(
-      currentDate.getDate() - currentDay + (currentDay === 0 ? -6 : 1)
-    );
+    startDate.subtract(currentDay, 'days').add(currentDay === 0 ? -6 : 1, 'days');
 
     // Create an array to store the formatted dates of the current week (Monday to Sunday)
     const currentWeekDatesFormatted = [];
 
     // Populate the array with formatted dates for the current week (Monday to Sunday)
     for (let i = 0; i < 7; i++) {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + i);
+      const date = moment(startDate).add(i, 'days');
 
-      // Manually construct the "YYYY-MM-DD" formatted date string
-      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+      // Format the date as "YYYY-MM-DD"
+      const formattedDate = date.utcOffset(0).format('YYYY-MM-DD');
 
       currentWeekDatesFormatted.push(formattedDate);
     }
 
     return currentWeekDatesFormatted;
   }
+
+  // Example usage
+  const weekDates = getCurrentWeekDatesFormattedMondayToSunday();
+  console.log(weekDates);
+
 
   // Get the current week's dates in "YYYY-MM-DD" format (Monday to Sunday)
   const currentWeekDatesFormatted = getCurrentWeekDatesFormattedMondayToSunday();
@@ -211,7 +213,7 @@ const AttendanceReport = (props) => {
 
   // date range array
 
-  const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+  const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
 
   // const param = id.split("&");
   // const COMPANY_ID = param[0];
@@ -381,6 +383,59 @@ const AttendanceReport = (props) => {
   console.log(selectedWeek, "selectedWeek");
 
   //modify data
+  // let processedData = foundUsers?.map((employee) => {
+  //   console.log(employee, "additional");
+  //   let filterByDate;
+  //   filterByDate = employee.AttendanceData.filter((item) => {
+  //     return (filterMethod === "Date Wise" ? dateArray : arrayDate).includes(
+  //       item.ATTENDANCE_DATE_ID
+  //     );
+  //   });
+
+  //   console.log(filterByDate, arrayDate, "filter");
+
+  //   const totalHours = filterByDate.reduce((acc, attendance) => {
+  //     const attendanceIn = new Date(attendance.ATTENDANCE_IN);
+  //     const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
+  //     const hoursWorked =
+  //       Math.abs(attendanceOut - attendanceIn) / (1000 * 60 * 60); // Convert milliseconds to hours
+  //     return acc + hoursWorked;
+  //   }, 0);
+
+  //   // Define a threshold for regular hours (e.g., 40 hours per week)
+  //   const regularHoursThreshold = 8;
+  //   let overtimeHours = 0;
+
+  //   if (totalHours > regularHoursThreshold) {
+  //     overtimeHours = totalHours - regularHoursThreshold;
+  //   }
+
+  //   const modifiedEmployee = {
+  //     ...employee._doc,
+  //     TOTAL_HOURS: totalHours.toFixed(2),
+  //     OVERTIME_HOURS: overtimeHours.toFixed(2), // Add overtime hours here
+  //     PUNCH: employee,
+
+  //     EMPLOYEE_ATTENDANCE: filterByDate?.map((attendance) => {
+  //       const attendanceIn = new Date(attendance.ATTENDANCE_IN);
+  //       const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
+  //       const hoursWorked =
+  //         Math.abs(attendanceOut - attendanceIn) / (1000 * 60 * 60); // Convert milliseconds to hours
+
+  //       return {
+  //         ...attendance,
+  //         HOURS: hoursWorked.toFixed(2),
+  //         REGULAR: hoursWorked.toFixed(2), // Assuming "REGULAR" represents the regular hours worked
+  //       };
+  //     }),
+  //   };
+
+  //   return modifiedEmployee;
+  // });
+  // const moment = require('moment');
+
+  // const moment = require('moment');
+
   let processedData = foundUsers?.map((employee) => {
     console.log(employee, "additional");
     let filterByDate;
@@ -392,13 +447,21 @@ const AttendanceReport = (props) => {
 
     console.log(filterByDate, arrayDate, "filter");
 
-    const totalHours = filterByDate.reduce((acc, attendance) => {
-      const attendanceIn = new Date(attendance.ATTENDANCE_IN);
-      const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
-      const hoursWorked =
-        Math.abs(attendanceOut - attendanceIn) / (1000 * 60 * 60); // Convert milliseconds to hours
-      return acc + hoursWorked;
-    }, 0);
+    const totalDuration = filterByDate.reduce((acc, attendance) => {
+      const attendanceIn = moment(attendance.ATTENDANCE_IN).utcOffset(0);
+      const attendanceOut = moment(attendance.ATTENDANCE_OUT).utcOffset(0);
+
+      // Check for null or undefined values before performing calculations
+      if (attendanceIn.isValid() && attendanceOut.isValid()) {
+        const duration = moment.duration(attendanceOut.diff(attendanceIn));
+        acc.add(duration);
+      }
+
+      return acc;
+    }, moment.duration());
+
+    const totalHours = Math.floor(totalDuration.asHours());
+    const totalMinutes = totalDuration.minutes();
 
     // Define a threshold for regular hours (e.g., 40 hours per week)
     const regularHoursThreshold = 8;
@@ -410,26 +473,34 @@ const AttendanceReport = (props) => {
 
     const modifiedEmployee = {
       ...employee._doc,
-      TOTAL_HOURS: totalHours.toFixed(2),
-      OVERTIME_HOURS: overtimeHours.toFixed(2), // Add overtime hours here
+      TOTAL_HOURS: `${totalHours} hours and ${totalMinutes} minutes`,
+      OVERTIME_HOURS: overtimeHours.toFixed(2),
       PUNCH: employee,
 
       EMPLOYEE_ATTENDANCE: filterByDate?.map((attendance) => {
-        const attendanceIn = new Date(attendance.ATTENDANCE_IN);
-        const attendanceOut = new Date(attendance.ATTENDANCE_OUT);
-        const hoursWorked =
-          Math.abs(attendanceOut - attendanceIn) / (1000 * 60 * 60); // Convert milliseconds to hours
+        const attendanceIn = moment(attendance.ATTENDANCE_IN).utcOffset(0);
+        const attendanceOut = moment(attendance.ATTENDANCE_OUT).utcOffset(0);
 
-        return {
-          ...attendance,
-          HOURS: hoursWorked.toFixed(2),
-          REGULAR: hoursWorked.toFixed(2), // Assuming "REGULAR" represents the regular hours worked
-        };
-      }),
+        // Check for null or undefined values before performing calculations
+        if (attendanceIn.isValid() && attendanceOut.isValid()) {
+          const duration = moment.duration(attendanceOut.diff(attendanceIn));
+          const hoursWorked = Math.floor(duration.asHours());
+          const minutesWorked = duration.minutes();
+
+          return {
+            ...attendance,
+            HOURS: `${hoursWorked} hours and ${minutesWorked} minutes`,
+            REGULAR: `${hoursWorked} hours and ${minutesWorked} minutes`, // Assuming "REGULAR" represents the regular hours worked
+          };
+        } else {
+          return null; // or handle the case as needed
+        }
+      }).filter(Boolean), // Remove null entries
     };
 
     return modifiedEmployee;
   });
+
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
@@ -648,80 +719,87 @@ const AttendanceReport = (props) => {
 
                             <tbody>
                               {processedData?.map((post) => {
-                                return (
-                                  <tr className="table table-striped">
-                                    <td>{post.EMPLOYEE_ID}</td>
-                                    <td>{post.EMPLOYEE_NAME}</td>
-                                    <td>
-                                      <span
-                                        className="rounded-2 px-1 text-light"
-                                        style={{
-                                          width: "content-fit",
-                                          backgroundColor: "#12AD2B",
-                                        }}
-                                      >
-                                        {post.TOTAL_HOURS} hours
-                                      </span>
-                                    </td>
-                                    <td>
-                                      <span
-                                        className="rounded-2 px-1 text-light"
-                                        style={{
-                                          width: "content-fit",
-                                          backgroundColor: "#12AD2B",
-                                        }}
-                                      >
-                                        {post.TOTAL_HOURS} hours
-                                      </span>
-                                    </td>
-                                    <td>{post.OVERTIME_HOURS}</td>
-                                    <td>
-                                      <PDFDownloadLink
-                                        className="btn btn-info btn-sm"
-                                        document={
-                                          <SalaryPDF
-                                            name={post.EMPLOYEE_NAME}
-                                            date={MyDateStringCurrent}
-                                            startdate={
-                                              result[result.length - 1] !=
-                                                "NaN-aN-aN"
-                                                ? result[result.length - 1]
-                                                : currentWeekDatesFormatted[0]
-                                            }
-                                            enddate={
-                                              result[result.length - 1] !=
-                                                "NaN-aN-aN"
-                                                ? result[0]
-                                                : currentWeekDatesFormatted[
-                                                currentWeekDatesFormatted.length -
-                                                1
-                                                ]
-                                            }
-                                          />
-                                        }
-                                        fileName={`${post.EMPLOYEE_NAME}.pdf`}
-                                      >
-                                        Download
-                                      </PDFDownloadLink>
-                                    </td>
-                                    <td>
-                                      {" "}
-                                      <button
-                                        className="btn btn-secondary btn-sm"
-                                        onClick={(e) =>
-                                          PunchReport({
-                                            a: post.PUNCH,
-                                            b: post.EMPLOYEE_ATTENDANCE,
-                                          })
-                                        }
-                                      >
-                                        Punch Detail
-                                      </button>
-                                    </td>
-                                  </tr>
-                                );
+                                // Extract hours and minutes from post.TOTAL_HOURS
+                                const [hours, minutes] = post.TOTAL_HOURS.match(/\d+/g) || [0, 0];
+                                const totalMinutes = parseInt(hours) * 60 + parseInt(minutes);
+
+                                // Check if totalMinutes is greater than zero before rendering the row
+                                if (totalMinutes > 0) {
+                                  return (
+                                    <tr key={post.EMPLOYEE_ID} className="table table-striped">
+                                      <td>{post.EMPLOYEE_ID}</td>
+                                      <td>{post.EMPLOYEE_NAME}</td>
+                                      <td>
+                                        <span
+                                          className="rounded-2 px-1 text-light"
+                                          style={{
+                                            width: "content-fit",
+                                            backgroundColor: "#12AD2B",
+                                          }}
+                                        >
+                                          {post.TOTAL_HOURS}
+                                        </span>
+                                      </td>
+                                      <td>
+                                        <span
+                                          className="rounded-2 px-1 text-light"
+                                          style={{
+                                            width: "content-fit",
+                                            backgroundColor: "#12AD2B",
+                                          }}
+                                        >
+                                          {post.TOTAL_HOURS}
+                                        </span>
+                                      </td>
+                                      <td>{post.OVERTIME_HOURS}</td>
+                                      <td>
+                                        <PDFDownloadLink
+                                          className="btn btn-info btn-sm"
+                                          document={
+                                            <SalaryPDF
+                                              name={post.EMPLOYEE_NAME}
+                                              date={MyDateStringCurrent}
+                                              startdate={
+                                                result[result.length - 1] !== "NaN-aN-aN"
+                                                  ? result[result.length - 1]
+                                                  : currentWeekDatesFormatted[0]
+                                              }
+                                              enddate={
+                                                result[result.length - 1] !== "NaN-aN-aN"
+                                                  ? result[0]
+                                                  : currentWeekDatesFormatted[
+                                                  currentWeekDatesFormatted.length - 1
+                                                  ]
+                                              }
+                                            />
+                                          }
+                                          fileName={`${post.EMPLOYEE_NAME}.pdf`}
+                                        >
+                                          Download
+                                        </PDFDownloadLink>
+                                      </td>
+                                      <td>
+                                        <button
+                                          className="btn btn-secondary btn-sm"
+                                          onClick={(e) =>
+                                            PunchReport({
+                                              a: post.PUNCH,
+                                              b: post.EMPLOYEE_ATTENDANCE,
+                                            })
+                                          }
+                                        >
+                                          Punch Detail
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  );
+                                } else {
+                                  return null; // Don't render the row if totalMinutes is zero
+                                }
                               })}
                             </tbody>
+
+
                           </table>
                         </div>
                       </div>

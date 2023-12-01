@@ -9,8 +9,6 @@ import { Button, Container } from "@mui/material";
 import env from "react-dotenv";
 import country from "../Api/countriess.json";
 import employeeRole from "../jsonlist/employeeRole.json"
-
-import EmployeeArchive from "./EmployeeArchive"
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import {
   validatePhoneNumber,
