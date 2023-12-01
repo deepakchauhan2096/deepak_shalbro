@@ -3,7 +3,10 @@ import { styled, useTheme } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import { useLocation , useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Box, Container } from "@mui/material";
+import Dashheadm from "../"
+import DashboardComp from "../components/DashboardComp";
 
 const drawerWidth = 240;
 
@@ -78,6 +81,16 @@ export default function CompanyDashboard(props) {
       />
 
       <Navbar toggle={() => setOpen((e) => !e)} />
+
+      <Container
+        id="content"
+        style={{ height: "100vh", position: "relative" }}
+        maxWidth="xl"
+      >
+       
+          <DashboardComp/>
+   
+      </Container>
     </>
   );
 }
