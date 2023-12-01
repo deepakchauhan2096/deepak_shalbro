@@ -27,6 +27,7 @@ import GenPassword from "./GenPassword";
 import { toast } from "react-toastify";
 import EmployeeAttendance from "./EmployeeAttendance";
 import EmployeeManual from "./EmployeeManual";
+
 // import EmployeeManual from "./EmployeeManual";
 
 // import env from "react-dotenv";
@@ -104,6 +105,7 @@ const EmployeeSrc = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  // console.log(selectedProject, "selectedProject")
 
   const fetchProject = async () => {
     try {
@@ -119,6 +121,8 @@ const EmployeeSrc = () => {
       );
 
       const data = response.data;
+      // setProjectData(data?.result);
+      // console.log("Projects Data: =>", data);
       return data;
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
@@ -174,7 +178,7 @@ const EmployeeSrc = () => {
 
   // Call the fetchData function to fetch both sets of data concurrently
 
-
+  // const filterRow = allempData?.filter(obj => obj?.ARCHIVED === false);
 
   console.log(allempData, "myRows")
   const FilterArchive = allempData?.filter(newData => newData?.ARCHIVED === false);

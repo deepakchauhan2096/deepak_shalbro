@@ -110,7 +110,7 @@ const EmployeeAttendance = ({ state }) => {
   let employeeData = empdata;
 
   console.log(markerPosition, state, "emp-data");
-  
+
 
   const currentTime = new Date().toLocaleTimeString();
   const currentDate = new Date().toLocaleDateString();
@@ -142,7 +142,7 @@ const EmployeeAttendance = ({ state }) => {
   };
 
   const time = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]")
-  console.log(time,"my time")
+  console.log(time, "my time")
 
 
   // attendance in
@@ -523,7 +523,7 @@ const EmployeeAttendance = ({ state }) => {
 
                     </>
                   )}
-                   {locErrorout && (
+                  {locErrorout && (
                     <>
                       <p className="text-danger">Error : {locErrorout}
                         <strong className="text-primary"><EmployeeReportOut
