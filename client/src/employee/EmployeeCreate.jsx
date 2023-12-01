@@ -332,6 +332,8 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
                     {availableCities?.cities?.map((e, key) => {
                       return (
                         <option value={e.name} key={key}>
+
+                          
                           {e.name}
                         </option>
                       );
