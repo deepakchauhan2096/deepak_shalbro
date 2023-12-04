@@ -255,12 +255,17 @@ app.use(cors());
     sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/get_all_document`,req,res)
   });
 
+// Employee documents 
+
+  app.post("/api/employee_document",(req,res)=> {
+    sendHttpRequest("POST",`${process.env.SERVERAPIREQUEST}/employee_document`,req,res)
+  });
 
   app.put("/api/get_employee_details_for_attendence",(req,res)=> {
     sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/get_employee_details_for_attendence`,req,res)
   });
 
-  app.put("/api/update_subcontructor'",(req,res)=> {
+  app.put("/api/update_subcontructor",(req,res)=> {
     sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/update_subcontructor`,req,res)
   });
 

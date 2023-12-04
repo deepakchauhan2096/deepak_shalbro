@@ -126,8 +126,9 @@ export default function Document(props) {
             };
 
             const response = await axios.request(config);
-            console.log(response, "this is response")
-            downloadFile(response.data, fileName);
+            console.log(response, fileName,"this is response")
+            console.log(fileName,"filename")
+            downloadFile(response.data, fileName.name);
 
 
         } catch (error) {

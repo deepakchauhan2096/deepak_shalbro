@@ -20,7 +20,8 @@ const style = {
     borderRadius: 4,
 };
 
-const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
+const DocumentCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
+
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         selectedFile: null,
@@ -49,7 +50,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
         });
         setSelectedFileName(selectedFile ? selectedFile.name : ""); // Set the selected file name
     };
-   
+
     const handleExpiryDateChange = (e) => {
         setFormData({
             ...formData,
@@ -57,6 +58,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
         });
     };
     console.log("formdata :".formData);
+    console.log("document_rf_id 2", EMPLOYEE_ID)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -74,15 +76,15 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
         }
 
         const data = new FormData();
-        console.log(data,"data")
+        console.log(data, "data")
         data.append("file", formData.selectedFile);
-        data.append("DOCUMENT_REF_ID", COMPANY_ID);
-        data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
+        data.append("DOCUMENT_REF_ID", EMPLOYEE_ID);
+        data.append("DOCUMENT_PARENT_USERNAME", COMPANY_USERNAME);
         data.append("DOCUMENT_EXPIRY_DATE", formData.DOCUMENT_EXPIRY_DATE);
-
+        console.log("document_rf_id", EMPLOYEE_ID)
         try {
             const response = await axios.post(
-                "/api/create_document",
+                "/api/employee_document",
                 data,
             );
 
@@ -103,7 +105,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
             setIsSubmitting(false);
         }
     };
-  
+
 
     return (
         <>
@@ -129,7 +131,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
                     style={{ height: "100vh", position: "relative" }}
                     maxWidth="xl"
                 >
-                    
+
                     <Box sx={style}>
                         <div className="container">
                             <form onSubmit={handleSubmit}>
