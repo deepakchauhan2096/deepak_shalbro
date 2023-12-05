@@ -60,9 +60,12 @@ const DocumentCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
     console.log("formdata :".formData);
     console.log("document_rf_id 2", EMPLOYEE_ID)
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
 
+
+    const handleSubmit = async (e) =>  {
+    
+        e.preventDefault();
+       
         if (isSubmitting) {
             return; // Prevent multiple submissions
         }
@@ -81,7 +84,7 @@ const DocumentCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
         data.append("DOCUMENT_REF_ID", EMPLOYEE_ID);
         data.append("DOCUMENT_PARENT_USERNAME", COMPANY_USERNAME);
         data.append("DOCUMENT_EXPIRY_DATE", formData.DOCUMENT_EXPIRY_DATE);
-        console.log("document_rf_id", EMPLOYEE_ID)
+
         try {
             const response = await axios.post(
                 "/api/employee_document",
@@ -92,8 +95,8 @@ const DocumentCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
                 console.log("response", response)
                 setOpen(false);
                 update();
-                toast.success("Document uploaded successfully.");
                 setSelectedFileName("")
+                toast.success("Document uploaded successfully.");
                 setFormData("")
             } else {
                 toast.error("Failed to upload document.");
@@ -104,7 +107,8 @@ const DocumentCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
         } finally {
             setIsSubmitting(false);
         }
-    };
+
+    }
 
 
     return (

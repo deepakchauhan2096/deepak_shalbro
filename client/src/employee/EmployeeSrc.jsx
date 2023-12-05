@@ -27,7 +27,8 @@ import GenPassword from "./GenPassword";
 import { toast } from "react-toastify";
 import EmployeeAttendance from "./EmployeeAttendance";
 import EmployeeManual from "./EmployeeManual";
-import EmployeeDoc from "../employee/EmployeeDoc";
+import EmployeeDoc from "./EmployeeDocCreate";
+import EmployeeDocuments from "./EmployeeDocuments";
 
 // import EmployeeManual from "./EmployeeManual";
 
@@ -784,8 +785,14 @@ const EmployeeSrc = () => {
           <EmployeeDoc
             EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID}
             COMPANY_USERNAME={COMPANY_USERNAME}
-          // COMPANY_PARENT_ID={COMPANY_PARENT_ID}
-          // COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+          //  update={getalldocument}
+
+
+          />
+
+          <EmployeeDocuments
+           EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID}
+           COMPANY_USERNAME={COMPANY_USERNAME}
           />
         </MyScreen>
       </Box>

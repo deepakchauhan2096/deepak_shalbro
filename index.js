@@ -257,6 +257,21 @@ app.use(cors());
 
 // Employee documents 
 
+const employee_document = createProxyMiddleware('/api/employee_document', {
+  target: process.env.SERVERAPIREQUEST, // Set the target URL for create_document
+  changeOrigin: true,
+  pathRewrite: {
+    '/api/employee_document': '/employee_document', // Modify the path as needed
+  },
+});
+app.use(employee_document);
+
+//  get all employe document 
+app.put("/api/get_all_employee_document",(req,res)=> {
+  sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/get_all_employee_document`,req,res)
+});
+
+
   app.post("/api/employee_document",(req,res)=> {
     sendHttpRequest("POST",`${process.env.SERVERAPIREQUEST}/employee_document`,req,res)
   });
