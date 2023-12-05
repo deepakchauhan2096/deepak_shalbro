@@ -4,6 +4,11 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import moment from "moment/moment";
 import { RotatingLines } from 'react-loader-spinner'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 // import employees from "./dummy.json";
 import {
@@ -151,14 +156,15 @@ const AttendanceReport = (props) => {
       // Generate options for the current week and the four previous weeks
       const weekStartDate = moment(today).subtract(i * 7, 'days').startOf('isoWeek');
       const weekEndDate = moment(weekStartDate).endOf('isoWeek');
-      const weekLabel = `${weekStartDate.format('YYYY-MM-DD')} - ${weekEndDate.format('YYYY-MM-DD')}`;
-      const formattedDate = weekEndDate.format('YYYY-MM-DD');
+      const weekLabel = `${weekStartDate.format('YYYY/MM/DD')} - ${weekEndDate.format('YYYY/MM/DD')}`;
+      const formattedDate = weekEndDate.format('YYYY/MM/DD');
 
       options.push(
         <option key={i} value={formattedDate} selected={i === 0 ? true : false}>
           {weekLabel}
         </option>
       );
+
     }
 
     return options;
@@ -168,7 +174,7 @@ const AttendanceReport = (props) => {
 
 
 
-  
+
   // Handle the change event when the user selects a week
   const handleWeekSelect = (e) => {
     setSelectedWeek(e.target.value);
@@ -295,7 +301,7 @@ const AttendanceReport = (props) => {
     axios
       .request(config)
       .then((response) => {
-        console.log(response.data.result, "dut");
+        console.log(response.data.result);
         setTimeout(() => {
           setFoundUsers(response.data.result);
           getReport(response.data.result);
@@ -507,8 +513,8 @@ const AttendanceReport = (props) => {
             >
               {show ? (
                 processedData <= 0 ? (
-                  <div className="container" style={{postion:"position-relative"}}>
-                    <div style={{position:"absolute", top:"50%",left:"50%", transform:"translate(-50%,-50%)"}}>
+                  <div className="container" style={{ postion: "position-relative" }}>
+                    <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}>
                       <RotatingLines
                         strokeColor="blue"
                         strokeWidth="5"
@@ -526,7 +532,6 @@ const AttendanceReport = (props) => {
                         <div className="col-xl-6">
                           <div className="row justify-content-between">
                             <div className="col-xl-12">
-
                               <div className="row py-1">
                                 <div className="col">
                                   <label>Date filter by</label>
@@ -556,7 +561,6 @@ const AttendanceReport = (props) => {
                                       value={selectedWeek}
                                       onChange={handleWeekSelect}
                                     >
-                                      {/* <option value="">Select a week</option> */}
                                       {generateWeekOptions()}
                                     </select>
                                   </div>
@@ -564,39 +568,43 @@ const AttendanceReport = (props) => {
                               )}
 
                               {filterMethod === "Date wise" && (
-                                <div className="row py-1">
+                                <div className="d-flex flex-row w-100">
+
                                   <div className="col">
                                     <label>Period</label>
                                   </div>
                                   <div className="col">
-                                    <div className="row">
-                                      <div className="col">
-                                        <form>
-                                          <input
-                                            type="date"
-                                            className="form-control form-control-2 border"
-                                            value={startDateString}
-                                            onChange={(e) =>
-                                              setstartDateString(e.target.value)
-                                            }
-                                          />
-                                        </form>
-
-                                      </div>
-                                      <div className="col">
-                                        <form>
-                                          <input
-                                            type="date"
-                                            className="form-control form-control-2 border"
-                                            value={endDateString}
-                                            onChange={(e) =>
-                                              setendDateString(e.target.value)
-                                            }
-                                          />
-                                        </form>
-                                      </div>
-                                    </div>
+                                    <table className="table p-0 m-0">
+                                      <tr>
+                                        <th className=""><LocalizationProvider dateAdapter={AdapterDayjs}>
+                                          <DemoContainer components={['DatePicker', 'DatePicker']}>
+                                            <DatePicker
+                                              label="Start Date"
+                                              onChange={(newValue) => setstartDateString(newValue)}
+                                              defaultValue={dayjs(startDateString)}
+                                              sx={{}}
+                                              formatDensity="spacious"
+                                            />
+                                          </DemoContainer>
+                                        </LocalizationProvider>
+                                        </th>
+                                        <th className="">
+                                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DemoContainer components={['DatePicker', 'DatePicker']}>
+                                              <DatePicker
+                                                label="End Date"
+                                                onChange={(newValue) => setstartDateString(newValue)}
+                                                defaultValue={dayjs(endDateString)}
+                                                sx={{ height: "10" }}
+                                                formatDensity="spacious"
+                                              />
+                                            </DemoContainer>
+                                          </LocalizationProvider></th>
+                                      </tr>
+                                    </table>
                                   </div>
+
+
                                 </div>
                               )}
                             </div>
@@ -632,7 +640,7 @@ const AttendanceReport = (props) => {
                               >
                                 <option selected>All</option>
                                 {employees?.map((e) => (
-                                  <option>{e._doc.EMPLOYEE_ROLE}</option>
+                                  <option>{new Set(e._doc.EMPLOYEE_ROLE)}</option>
                                 ))}
                               </select>
                             </div>
