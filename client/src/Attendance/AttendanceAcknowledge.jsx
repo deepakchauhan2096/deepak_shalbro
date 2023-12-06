@@ -10,6 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 
+
 // import employees from "./dummy.json";
 import {
   Backdrop,
@@ -462,7 +463,7 @@ const AttendanceReport = (props) => {
     filename: "Doc.csv",
   };
 
-  // console.log(processedData, "processedData");
+
 
   return (
     <>
@@ -521,13 +522,13 @@ const AttendanceReport = (props) => {
                         animationDuration="0.75"
                         width="50"
                         visible={true}
+                        
                       />
                     </div>
                   </div>
                 ) : (
                   <>
                     <div className="container">
-                      {/* <WeekSelect /> */}
                       <div className="row sticky-top bg-white">
                         <div className="col-xl-6">
                           <div className="row justify-content-between">
@@ -593,7 +594,7 @@ const AttendanceReport = (props) => {
                                             <DemoContainer components={['DatePicker', 'DatePicker']}>
                                               <DatePicker
                                                 label="End Date"
-                                                onChange={(newValue) => setstartDateString(newValue)}
+                                                onChange={(newValue) => setendDateString(newValue)}
                                                 defaultValue={dayjs(endDateString)}
                                                 sx={{ height: "10" }}
                                                 formatDensity="spacious"

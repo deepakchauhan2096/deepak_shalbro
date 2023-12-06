@@ -17,7 +17,7 @@ const style = {
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
-    borderRadius: 4,
+    borderRadius: 4
 };
 
 const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
@@ -129,6 +129,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
                 className="modalWidth"
+                style={{zIndex:9999999}}
             >
                 <Container
                     id="content"
