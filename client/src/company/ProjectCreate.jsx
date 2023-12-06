@@ -179,6 +179,7 @@ export default function ProjectCreate({
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        style={{zIndex:9999999}}
       >
         <Box className="modal-content">
           <form onSubmit={handleSubmit} className="overflow-auto">

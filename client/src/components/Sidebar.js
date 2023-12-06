@@ -76,7 +76,7 @@ const Sidebar = ({
             <Link
               to={`/company/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 0 ? "#f3f3f3" : "" }}
+              style={{ background: active === 0 ? "#f3f3f3" : "", zIndex:"-1 !important" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -257,7 +257,7 @@ const Sidebar = ({
           <Divider />
           <div
             className="login sidebar_footer position-absolute p-3 "
-            style={{ bottom: "0" }}
+            style={{ bottom: "0"}}
           >
             <div className="logout_icon ">
             <button
