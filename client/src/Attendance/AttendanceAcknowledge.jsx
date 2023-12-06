@@ -3,6 +3,13 @@ import axios from "axios";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import moment from "moment/moment";
+import { RotatingLines } from 'react-loader-spinner'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+
 // import employees from "./dummy.json";
 import {
   Backdrop,
@@ -29,7 +36,9 @@ import SalaryPDF from "../Invoices/SalaryPDF";
 import Sidebar from "../components/Sidebar";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import WeekSelect from "../components/WeekSelect";
+
+
+
 
 let MyDateCurrent = new Date();
 let MyDateStringCurrent;
@@ -41,8 +50,10 @@ MyDateStringCurrent =
   "-" +
   ("0" + MyDateCurrent.getDate()).slice(-2);
 
-//current Date
 
+
+
+//current Date
 const MyDateAfter = new Date();
 let MyDateStringAfter;
 
@@ -55,8 +66,8 @@ MyDateStringAfter =
   "-" +
   ("0" + MyDateAfter.getDate()).slice(-2);
 
-//date array previous 30
 
+//formet date in YYY-MM-DD
 function formatDate(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -64,6 +75,7 @@ function formatDate(date) {
   return `${year}-${month}-${day}`;
 }
 
+// get date Array
 function getDatesBetween(startDate, endDate) {
   const dates = [];
   const currentDate = new Date(startDate);
@@ -75,91 +87,93 @@ function getDatesBetween(startDate, endDate) {
   return dates;
 }
 
+
+// const getCurrent WeekDates Formatted Monday To Sunday
+function getCurrentWeekDatesFormattedMondayToSunday() {
+  const currentDate = moment().utcOffset(0);
+  const currentDay = currentDate.day(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+  const startDate = moment(currentDate); // Clone the current date
+  startDate.subtract(currentDay, 'days').add(currentDay === 0 ? -6 : 1, 'days');
+  const currentWeekDatesFormatted = [];
+  for (let i = 0; i < 7; i++) {
+    const date = moment(startDate).add(i, 'days');
+    const formattedDate = date.utcOffset(0).format('YYYY-MM-DD');
+    currentWeekDatesFormatted.push(formattedDate);
+  }
+  return currentWeekDatesFormatted;
+}
+
+
 const AttendanceReport = (props) => {
-  // Generate an array of week options for the select element
-  // const generateWeekOptions = () => {
-  //   const options = [];
-  //   const today = new Date();
-  //   const currentWeek = getWeekNumber(today);
 
-  //   for (let i = 0; i < 5; i++) {
-  //     // Generate options for the current week and the four previous weeks
-  //     const weekStartDate = new Date(today);
-  //     weekStartDate.setDate(today.getDate() - today.getDay() - i * 7);
-  //     const weekEndDate = new Date(weekStartDate);
-  //     weekEndDate.setDate(weekStartDate.getDate() + 6);
 
-  //     // Find the start of the week (Monday) and end of the week (Sunday)
-  //     weekStartDate.setDate(
-  //       weekStartDate.getDate() - weekStartDate.getDay() + 1
-  //     );
-  //     weekEndDate.setDate(weekEndDate.getDate() - weekEndDate.getDay() + 7);
+  // Get the current week's dates in "YYYY-MM-DD" format (Monday to Sunday)
+  const currentWeekDatesFormatted = getCurrentWeekDatesFormattedMondayToSunday();
 
-  //     const weekLabel = `${formatDates(weekStartDate)} - ${formatDates(
-  //       weekEndDate
-  //     )}`;
+  // console.log(currentWeekDatesFormatted, "currentWeekDatesFormatted[0]")
 
-  //     const originalDate = new Date(weekEndDate);
-  //     const year = originalDate.getFullYear();
-  //     const month = String(originalDate.getMonth() + 1).padStart(2, "0"); // Months are 0-based, so add 1 and pad with 0 if needed
-  //     const day = String(originalDate.getDate()).padStart(2, "0");
 
-  //     const formattedDate = `${year}-${month}-${day}`;
-  //     // console.log(formattedDate);
 
-  //     options.push(
-  //       <option key={i} value={formattedDate}>
-  //         {weekLabel}
-  //       </option>
-  //     );
-  //   }
 
-  //   return options;
-  // };
+
+  // get Company data
+  const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+  const [employees, getReport] = useState();
+  const [foundUsers, setFoundUsers] = useState([]);
+  const [filterMethod, setFilterMethod] = useState("By Pay Period");
+
+  const [keyword, setKeyword] = useState();
+  const [name, setName] = useState("All");
+  const [showDetail, setShowDetail] = useState(true);
+  const [show, setshow] = useState(true);
+  const [employeeName, setEmployeeName] = useState([]);
+  const [allempData, setAllempData] = useState({
+    COMPANY_PARENT_ID: "",
+    COMPANY_PARENT_USERNAME: "",
+  });
+  const [openNav, setOpenNav] = useState(false);
+  const [selectedWeek, setSelectedWeek] = useState("");
+
+  const mainData = allempData;
+
+
+  const result = DateArray(selectedWeek);
+
+
+
+
+  const [startDateString, setstartDateString] = useState(currentWeekDatesFormatted[0]);
+  console.log(startDateString, currentWeekDatesFormatted[0], "report")
+  const [endDateString, setendDateString] = useState(currentWeekDatesFormatted[currentWeekDatesFormatted.length - 1]);
+
 
   const generateWeekOptions = () => {
     const options = [];
     const today = moment().utcOffset(0);
-    const currentWeek = getWeekNumber(today);
-  
+    // const currentWeek = getWeekNumber(today);
+
     for (let i = 0; i < 5; i++) {
       // Generate options for the current week and the four previous weeks
       const weekStartDate = moment(today).subtract(i * 7, 'days').startOf('isoWeek');
       const weekEndDate = moment(weekStartDate).endOf('isoWeek');
-  
-      const weekLabel = `${weekStartDate.format('YYYY-MM-DD')} - ${weekEndDate.format('YYYY-MM-DD')}`;
-  
-      const formattedDate = weekEndDate.format('YYYY-MM-DD');
-  
+      const weekLabel = `${weekStartDate.format('YYYY/MM/DD')} - ${weekEndDate.format('YYYY/MM/DD')}`;
+      const formattedDate = weekEndDate.format('YYYY/MM/DD');
+
       options.push(
-        <option key={i} value={formattedDate} selected={i === 0 ? true : false }>
+        <option key={i} value={formattedDate} selected={i === 0 ? true : false}>
           {weekLabel}
         </option>
       );
+
     }
-  
+
     return options;
   };
 
-  const [selectedWeek, setSelectedWeek] = useState(""); // State to store the selected week
 
-  // Helper function to get the week number of a date
-  const getWeekNumber = (date) => {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
-    const yearStart = new Date(d.getFullYear(), 0, 1);
-    const weekNumber = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-    return weekNumber;
-  };
 
-  // Helper function to format a date as "YYYY-MM-DD"
-  const formatDates = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
+
+
 
   // Handle the change event when the user selects a week
   const handleWeekSelect = (e) => {
@@ -167,26 +181,6 @@ const AttendanceReport = (props) => {
   };
 
   // date array
-  // function DateArray(eventDate) {
-  //   let array = [];
-  //   let date = eventDate;
-  //   let MyDateAfter = new Date(date);
-  //   let MyDateStringAfter;
-
-  //   for (let i = 0; i < 6; i++) {
-  //     MyDateAfter.setDate(MyDateAfter.getDate() - 1);
-  //     MyDateStringAfter =
-  //       MyDateAfter.getFullYear() +
-  //       "-" +
-  //       ("0" + (MyDateAfter.getMonth() + 1)).slice(-2) +
-  //       "-" +
-  //       ("0" + MyDateAfter.getDate()).slice(-2);
-  //     array.push(MyDateStringAfter); // Add the date to the array
-  //   }
-  //   array.unshift(date);
-  //   return array; // Return the generated array of dates
-  // }
-
   function DateArray(eventDate) {
     let array = [];
     let MyDateAfter = moment.utc(eventDate); // Use moment with utcOffset(0)
@@ -203,70 +197,30 @@ const AttendanceReport = (props) => {
   }
 
 
-  // console.log(selectedWeek, "selectedWeek");
-
-  const result = DateArray(selectedWeek);
-
-  // console.log(result, " currentWeekDatesFormatted");
-
-  // const moment = require('moment');
-  function getCurrentWeekDatesFormattedMondayToSunday() {
-    const currentDate = moment().utcOffset(0);
-    const currentDay = currentDate.day(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
-    const startDate = moment(currentDate); // Clone the current date
-    startDate.subtract(currentDay, 'days').add(currentDay === 0 ? -6 : 1, 'days');
-    const currentWeekDatesFormatted = [];
-    for (let i = 0; i < 7; i++) {
-      const date = moment(startDate).add(i, 'days');
-      const formattedDate = date.utcOffset(0).format('YYYY-MM-DD');
-      currentWeekDatesFormatted.push(formattedDate);
-    }
-    return currentWeekDatesFormatted;
-  }
 
   // Example usage
-  const weekDates = getCurrentWeekDatesFormattedMondayToSunday();
-  console.log(weekDates);
+  // const weekDates = getCurrentWeekDatesFormattedMondayToSunday();
+  // console.log(weekDates);
 
 
-  // Get the current week's dates in "YYYY-MM-DD" format (Monday to Sunday)
-  const currentWeekDatesFormatted = getCurrentWeekDatesFormattedMondayToSunday();
+
 
   // Print the array of formatted dates
-  console.log(currentWeekDatesFormatted, "current week");
+  // console.log(currentWeekDatesFormatted, "current week");
 
-  //current week
 
-  // date range array
+  // var arrayDate = [];
+  // arrayDate.push(...result);
 
-  const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+  // console.log(filterMethod, "filterMethod");
 
-  // const param = id.split("&");
-  // const COMPANY_ID = param[0];
-  // const COMPANY_USERNAME = param[1];
-  // const COMPANY_PARENT_ID = param[2];
-  // const COMPANY_PARENT_USERNAME = param[3];
 
-  const [employees, getReport] = useState();
-  const [foundUsers, setFoundUsers] = useState([]);
-  const [filterMethod, setFilterMethod] = useState("Date wise");
-  console.log(currentWeekDatesFormatted[0], "currentWeekDatesFormatted[0]")
-  const [startDateString, setstartDateString] = useState(currentWeekDatesFormatted[0]);
 
-  console.log(currentWeekDatesFormatted[0], "startDateString")
-  const [endDateString, setendDateString] = useState(currentWeekDatesFormatted[currentWeekDatesFormatted.length - 1]);
-  const [keyword, setKeyword] = useState();
-  const [name, setName] = useState("All");
-  const [showDetail, setShowDetail] = useState(true);
-  const [show, setshow] = useState(true);
-  const [employeeName, setEmployeeName] = useState([]);
-  const [allempData, setAllempData] = useState({
-    COMPANY_PARENT_ID: "",
-    COMPANY_PARENT_USERNAME: "",
-  });
-  const [openNav, setOpenNav] = useState(false);
-  const mainData = allempData;
-  console.log(mainData, "mainData");
+  // console.log(arrayDate,"arrayDate")
+
+
+
+
 
   const headers = {
     "Content-Type": "application/json",
@@ -347,7 +301,7 @@ const AttendanceReport = (props) => {
     axios
       .request(config)
       .then((response) => {
-        console.log(response.data.result, "dut");
+        console.log(response.data.result);
         setTimeout(() => {
           setFoundUsers(response.data.result);
           getReport(response.data.result);
@@ -364,19 +318,27 @@ const AttendanceReport = (props) => {
       mainData[0]?.EMPLOYEE_MEMBER_PARENT_USERNAME,
       mainData[0]?.EMPLOYEE_PARENT_USERNAME
     );
-  }, [allempData, startDateString]);
+  }, [allempData]);
 
 
+  // useEffect(() => {
 
-  const dateArray = getDatesBetween(
+  const dateWiseArray = getDatesBetween(
     startDateString,
     endDateString
   );
 
+  // console.log(startDateString, "startDateString")
 
-  console.log(dateArray, "nnnnn")
+  // Setarray(dateWiseArray)
 
-  console.log(currentWeekDatesFormatted, "my");
+
+
+
+
+  // console.log(dateWiseArray, "nnnnn")
+
+  // console.log(currentWeekDatesFormatted, "my");
 
   //filter by different param
   const filtered = (e, item) => {
@@ -395,12 +357,8 @@ const AttendanceReport = (props) => {
     setName(word);
   };
 
-  var arrayDate = [];
-  arrayDate.push(...result);
 
-  console.log(filterMethod, "filterMethod");
-
-
+  // console.log(array[0], "result[0]")
 
 
 
@@ -412,13 +370,13 @@ const AttendanceReport = (props) => {
       let filterByDate;
       filterByDate = employee.AttendanceData.filter((item) => {
         switch (filterMethod) {
-          case ("Date Wise"): return dateArray.includes(item.ATTENDANCE_DATE_ID)
-          case ("By Pay Period"): return arrayDate.includes(item.ATTENDANCE_DATE_ID)
-            return;
+          case ("Date wise"): return dateWiseArray.includes(item.ATTENDANCE_DATE_ID)
+          case ("By Pay Period"): return (result[0] == "" ? currentWeekDatesFormatted : result).includes(item.ATTENDANCE_DATE_ID)
+          default:
         }
       });
 
-      console.log(filterByDate, arrayDate, "filter");
+      console.log(result, "filter");
 
       const totalDuration = filterByDate.reduce((acc, attendance) => {
         const attendanceIn = moment(attendance.ATTENDANCE_IN).utcOffset(0);
@@ -479,6 +437,7 @@ const AttendanceReport = (props) => {
   }
 
   const processedData = processingData(foundUsers)
+  console.log(processedData, "processedData")
 
 
   const MyScreen = styled(Paper)((props) => ({
@@ -503,7 +462,7 @@ const AttendanceReport = (props) => {
     filename: "Doc.csv",
   };
 
-  console.log(processedData, "processedData");
+  // console.log(processedData, "processedData");
 
   return (
     <>
@@ -553,8 +512,18 @@ const AttendanceReport = (props) => {
               }}
             >
               {show ? (
-                processedData.length == 0 ? (
-                  "Loading..."
+                processedData <= 0 ? (
+                  <div className="container" style={{ postion: "position-relative" }}>
+                    <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}>
+                      <RotatingLines
+                        strokeColor="blue"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        width="50"
+                        visible={true}
+                      />
+                    </div>
+                  </div>
                 ) : (
                   <>
                     <div className="container">
@@ -563,7 +532,6 @@ const AttendanceReport = (props) => {
                         <div className="col-xl-6">
                           <div className="row justify-content-between">
                             <div className="col-xl-12">
-
                               <div className="row py-1">
                                 <div className="col">
                                   <label>Date filter by</label>
@@ -576,8 +544,8 @@ const AttendanceReport = (props) => {
                                     }
                                     value={filterMethod}
                                   >
-                                    <option>Date wise</option>
                                     <option>By Pay Period</option>
+                                    <option>Date wise</option>
                                   </select>
                                 </div>
                               </div>
@@ -593,7 +561,6 @@ const AttendanceReport = (props) => {
                                       value={selectedWeek}
                                       onChange={handleWeekSelect}
                                     >
-                                      {/* <option value="">Select a week</option> */}
                                       {generateWeekOptions()}
                                     </select>
                                   </div>
@@ -601,38 +568,43 @@ const AttendanceReport = (props) => {
                               )}
 
                               {filterMethod === "Date wise" && (
-                                <div className="row py-1">
+                                <div className="d-flex flex-row w-100">
+
                                   <div className="col">
                                     <label>Period</label>
                                   </div>
                                   <div className="col">
-                                    <div className="row">
-                                      <div className="col">
-                                        <form>
-                                          <input
-                                            type="date"
-                                            className="form-control form-control-2 border"
-                                            value={startDateString}
-                                            onChange={(e) =>
-                                              setstartDateString(e.target.value)
-                                            }
-                                          />
-                                        </form>
-                                      </div>
-                                      <div className="col">
-                                        <form>
-                                          <input
-                                            type="date"
-                                            className="form-control form-control-2 border"
-                                            value={endDateString}
-                                            onChange={(e) =>
-                                              setendDateString(e.target.value)
-                                            }
-                                          />
-                                        </form>
-                                      </div>
-                                    </div>
+                                    <table className="table p-0 m-0">
+                                      <tr>
+                                        <th className=""><LocalizationProvider dateAdapter={AdapterDayjs}>
+                                          <DemoContainer components={['DatePicker', 'DatePicker']}>
+                                            <DatePicker
+                                              label="Start Date"
+                                              onChange={(newValue) => setstartDateString(newValue)}
+                                              defaultValue={dayjs(startDateString)}
+                                              sx={{}}
+                                              formatDensity="spacious"
+                                            />
+                                          </DemoContainer>
+                                        </LocalizationProvider>
+                                        </th>
+                                        <th className="">
+                                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DemoContainer components={['DatePicker', 'DatePicker']}>
+                                              <DatePicker
+                                                label="End Date"
+                                                onChange={(newValue) => setstartDateString(newValue)}
+                                                defaultValue={dayjs(endDateString)}
+                                                sx={{ height: "10" }}
+                                                formatDensity="spacious"
+                                              />
+                                            </DemoContainer>
+                                          </LocalizationProvider></th>
+                                      </tr>
+                                    </table>
                                   </div>
+
+
                                 </div>
                               )}
                             </div>
@@ -668,7 +640,7 @@ const AttendanceReport = (props) => {
                               >
                                 <option selected>All</option>
                                 {employees?.map((e) => (
-                                  <option>{e._doc.EMPLOYEE_ROLE}</option>
+                                  <option>{new Set(e._doc.EMPLOYEE_ROLE)}</option>
                                 ))}
                               </select>
                             </div>

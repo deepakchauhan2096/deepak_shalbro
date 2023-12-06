@@ -1,6 +1,12 @@
 import React, { useEffect, useState, version } from "react";
 import axios from "axios";
 import moment from "moment/moment";
+import { RotatingLines } from 'react-loader-spinner'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 import { PDFDownloadLink, PDFViewer, ReactPDF } from "@react-pdf/renderer";
 import SalaryPDF from "../Invoices/SalaryPDF";
 import env from "react-dotenv";
@@ -101,7 +107,7 @@ const EmployeeTimeSheet = (props) => {
           {props.mainData.EMPLOYEE_NAME}
         </p>
         <div style={{ display: "flex", gap: 10, padding: "5px 0" }}>
-          <div className="form-group col-xl-1">
+          {/* <div className="form-group col-xl-1">
             <label>Date From: </label>
             <input
               type="date"
@@ -113,8 +119,8 @@ const EmployeeTimeSheet = (props) => {
                 }))
               }
             />
-          </div>
-          <div className="form-group col-xl-1">
+          </div> */}
+          {/* <div className="form-group col-xl-1">
             <label>Date to: </label>
             <input
               type="date"
@@ -129,7 +135,48 @@ const EmployeeTimeSheet = (props) => {
             />
           </div>
           <div>
-          </div>
+          </div> */}
+        </div>
+        <div className="col-3">
+          <table className="table p-0 m-0">
+            <tr>
+              <th><LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker', 'DatePicker']}>
+                  <DatePicker
+                    label="Date from"
+                    // onChange={(newValue) => setstartDateString(newValue)}
+                    onChange={(event) =>
+                      setDate((prev) => ({
+                        ...prev, ATTENDANCE_START_DATE: event,
+                      }))
+                    }
+                    defaultValue={dayjs(dateValue.ATTENDANCE_START_DATE)}
+                    sx={{}}
+                    formatDensity="spacious"
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+              </th>
+              <th>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DatePicker', 'DatePicker']}>
+                    <DatePicker
+                      label="Date to"
+                      // onChange={(newValue) => setstartDateString(newValue)}
+                      onChange={(event) =>
+                        setDate((prev) => ({
+                          ...prev,
+                          ATTENDANCE_END_DATE: event,
+                        }))
+                      }
+                      defaultValue={dayjs(dateValue.ATTENDANCE_END_DATE)}
+                      sx={{ height: "10" }}
+                      formatDensity="spacious"
+                    />
+                  </DemoContainer>
+                </LocalizationProvider></th>
+            </tr>
+          </table>
         </div>
         <table className="table table-hover border">
           <thead style={{ border: "1px solid black" }}>
