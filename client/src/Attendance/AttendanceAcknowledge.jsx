@@ -157,8 +157,8 @@ const AttendanceReport = (props) => {
       // Generate options for the current week and the four previous weeks
       const weekStartDate = moment(today).subtract(i * 7, 'days').startOf('isoWeek');
       const weekEndDate = moment(weekStartDate).endOf('isoWeek');
-      const weekLabel = `${weekStartDate.format('YYYY/MM/DD')} - ${weekEndDate.format('YYYY/MM/DD')}`;
-      const formattedDate = weekEndDate.format('YYYY/MM/DD');
+      const weekLabel = `${weekStartDate.format('YYYY-MM-DD')} - ${weekEndDate.format('YYYY-MM-DD')}`;
+      const formattedDate = weekEndDate.format('YYYY-MM-DD');
 
       options.push(
         <option key={i} value={formattedDate} selected={i === 0 ? true : false}>
@@ -359,7 +359,7 @@ const AttendanceReport = (props) => {
   };
 
 
-  // console.log(array[0], "result[0]")
+
 
 
 
@@ -380,8 +380,10 @@ const AttendanceReport = (props) => {
       console.log(result, "filter");
 
       const totalDuration = filterByDate.reduce((acc, attendance) => {
-        const attendanceIn = moment(attendance.ATTENDANCE_IN).utcOffset(0);
-        const attendanceOut = moment(attendance.ATTENDANCE_OUT).utcOffset(0);
+        const timeIn = moment(attendance.ATTENDANCE_IN).utcOffset(0).format("LT")
+        const timeOut = moment(attendance.ATTENDANCE_OUT).utcOffset(0).format("LT")
+        const attendanceIn = moment(timeIn, 'hh:mm A').utcOffset(0);
+        const attendanceOut = moment(timeOut, 'hh:mm A').utcOffset(0);
 
         // Check for null or undefined values before performing calculations
         if (attendanceIn.isValid() && attendanceOut.isValid()) {
@@ -410,8 +412,10 @@ const AttendanceReport = (props) => {
         PUNCH: employee,
 
         EMPLOYEE_ATTENDANCE: filterByDate?.map((attendance) => {
-          const attendanceIn = moment(attendance.ATTENDANCE_IN).utcOffset(0);
-          const attendanceOut = moment(attendance.ATTENDANCE_OUT).utcOffset(0);
+          const timeIn = moment(attendance.ATTENDANCE_IN, 'hh:mm A').utcOffset(0);
+          const timeOut = moment(attendance.ATTENDANCE_OUT, 'hh:mm A').utcOffset(0);
+          const attendanceIn = moment(timeIn).utcOffset(0);
+          const attendanceOut = moment(timeOut).utcOffset(0);
 
           // Check for null or undefined values before performing calculations
           if (attendanceIn.isValid() && attendanceOut.isValid()) {
@@ -522,7 +526,7 @@ const AttendanceReport = (props) => {
                         animationDuration="0.75"
                         width="50"
                         visible={true}
-                        
+
                       />
                     </div>
                   </div>

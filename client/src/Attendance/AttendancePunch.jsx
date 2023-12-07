@@ -5,9 +5,10 @@ const AttendancePunch = (props) => {
   const Data = props.attendance?.map((e) => e.ATTENDANCE_PROJECT_ID);
   const [filter, setFilteredData] = useState(props.attendance);
 
-  const TotalWorkHours = (ATTENDANCE_IN, ATTENDANCE_OUT) => {
-    const attendanceIn = moment(ATTENDANCE_IN).utcOffset(0);
-    const attendanceOut = moment(ATTENDANCE_OUT).utcOffset(0);
+  const TotalWorkHours = (ATTENDANCE_IN, ATTENDANCE_OUT) => { 
+
+    const attendanceIn = moment(ATTENDANCE_IN, 'hh:mm A').utcOffset(0);
+    const attendanceOut = moment(ATTENDANCE_OUT,'hh:mm A').utcOffset(0);
     
     const duration = moment.duration(attendanceOut.diff(attendanceIn));
     const hours = Math.floor(duration.asHours());
@@ -81,7 +82,7 @@ const AttendancePunch = (props) => {
                 <td>{moment(post.ATTENDANCE_IN).utcOffset(0).format("LT")}</td>
                 <td>{moment(post.ATTENDANCE_OUT).utcOffset(0).format("LT")}</td>
                 <td>
-                  {TotalWorkHours(post.ATTENDANCE_IN, post.ATTENDANCE_OUT)}
+                  {TotalWorkHours(moment(post.ATTENDANCE_IN).utcOffset(0).format("LT"), moment(post.ATTENDANCE_OUT).utcOffset(0).format("LT"))}
                 </td>
                 {/* <td>{post.LOCATION}</td> */}
               </tr>

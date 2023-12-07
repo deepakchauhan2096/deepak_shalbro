@@ -465,7 +465,7 @@ const Project = (props) => {
         </div>
 
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-          <div className="container-fluid g-0">
+          {index === 1 && <div className="container-fluid g-0">
             <div className="row">
               <div className="col-md-2">
                 <b>Project Name</b>
@@ -584,15 +584,15 @@ const Project = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
         </MyScreen>
 
         <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
-          <ProjectAssigned projectData={filterData} />
+          {index === 2 && <ProjectAssigned projectData={filterData} /> }
         </MyScreen>
 
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
-          <ProjectLoc projectData={filterData} />
+        {index === 3 && <ProjectLoc projectData={filterData} /> }
         </MyScreen>
       </Box>
     </>
