@@ -148,7 +148,7 @@ const EmployeeTimeSheet = (props) => {
   const ExtractHours = convertToDuration(ResultantTime)?._data.hours;
   const totalIncome = ExtractHours * props.mainData.EMPLOYEE_HOURLY_WAGE;
 
-
+  
 
 
   return (
