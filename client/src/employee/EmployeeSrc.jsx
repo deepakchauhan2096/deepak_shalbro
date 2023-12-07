@@ -27,7 +27,7 @@ import GenPassword from "./GenPassword";
 import { toast } from "react-toastify";
 import EmployeeAttendance from "./EmployeeAttendance";
 import EmployeeManual from "./EmployeeManual";
-import EmployeeDoc from "./EmployeeDocCreate";
+import EmployeeDocCreate from "./EmployeeDocCreate";
 import EmployeeDocuments from "./EmployeeDocuments";
 
 // import EmployeeManual from "./EmployeeManual";
@@ -624,7 +624,7 @@ const EmployeeSrc = () => {
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
-          <div className="container mt-1">
+         {index === 0 ? <div className="container mt-1">
             {/* <h1 className="text-center">Employee Detail Dashboard</h1> */}
             <div className="row">
               <div className="col-xl-6">
@@ -768,32 +768,24 @@ const EmployeeSrc = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </MyScreen>
+          </div> : "" }
+        </MyScreen> 
 
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-          <EmployeeManual
+        {index === 1 ? <EmployeeManual
             EMPLOYEE_DATA={filterData?.row}
-          />
+          /> : ""}
         </MyScreen>
 
         <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
-          <EmployeeTimeSheet mainData={filterData.row} />
+         {index === 2 ? <EmployeeTimeSheet mainData={filterData.row} /> :""}
         </MyScreen>
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
 
-          <EmployeeDoc
-            EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID}
-            COMPANY_USERNAME={COMPANY_USERNAME}
-          //  update={getalldocument}
-
-
-          />
-
-          <EmployeeDocuments
+          {index === 3 ? <EmployeeDocuments
            EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID}
            COMPANY_USERNAME={COMPANY_USERNAME}
-          />
+          />: "" }
         </MyScreen>
       </Box>
 

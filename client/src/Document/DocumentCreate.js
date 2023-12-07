@@ -20,7 +20,7 @@ const style = {
     borderRadius: 4,
 };
 
-const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
+const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         selectedFile: null,
@@ -49,7 +49,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
         });
         setSelectedFileName(selectedFile ? selectedFile.name : ""); // Set the selected file name
     };
-   
+
     const handleExpiryDateChange = (e) => {
         setFormData({
             ...formData,
@@ -74,7 +74,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
         }
 
         const data = new FormData();
-        console.log(data,"data")
+        console.log(data, "data")
         data.append("file", formData.selectedFile);
         data.append("DOCUMENT_REF_ID", COMPANY_ID);
         data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
@@ -103,7 +103,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
             setIsSubmitting(false);
         }
     };
-  
+
 
     return (
         <>
@@ -129,7 +129,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
                     style={{ height: "100vh", position: "relative" }}
                     maxWidth="xl"
                 >
-                    
+
                     <Box sx={style}>
                         <div className="container">
                             <form onSubmit={handleSubmit}>

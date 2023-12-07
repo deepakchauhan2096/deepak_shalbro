@@ -20,7 +20,7 @@ const style = {
     borderRadius: 4,
 };
 
-const DocumentCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
+const EmployeeDocCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
 
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
@@ -62,15 +62,11 @@ const DocumentCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
 
 
 
-    const handleSubmit = async (e) =>  {
-    
-        e.preventDefault();
-       
-        if (isSubmitting) {
-            return; // Prevent multiple submissions
-        }
 
-        setIsSubmitting(true);
+
+    // }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
         if (!formData.selectedFile || !formData.DOCUMENT_EXPIRY_DATE) {
             setIsSubmitting(false);
@@ -79,36 +75,36 @@ const DocumentCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
         }
 
         const data = new FormData();
-        console.log(data, "data")
         data.append("file", formData.selectedFile);
         data.append("DOCUMENT_REF_ID", EMPLOYEE_ID);
         data.append("DOCUMENT_PARENT_USERNAME", COMPANY_USERNAME);
         data.append("DOCUMENT_EXPIRY_DATE", formData.DOCUMENT_EXPIRY_DATE);
 
         try {
-            const response = await axios.post(
-                "/api/employee_document",
-                data,
-            );
+            const response = await axios.post("/api/employee_document", data);
 
-            if (response.status === 200) {
-                console.log("response", response)
+            console.log(response.data.operation, "successfull")
+
+            if (response.data.operation === "successfull") {
+                // Clear input fields after successful upload
+                // document.getElementById("fileInput").value = "";
+                setFormData({
+                    selectedFile: null,
+                    DOCUMENT_EXPIRY_DATE: "",
+                });
+                setSelectedFileName("");
                 setOpen(false);
-                update();
-                setSelectedFileName("")
+                handleClose();
                 toast.success("Document uploaded successfully.");
-                setFormData("")
+                update();
             } else {
-                toast.error("Failed to upload document.");
+                toast.error("An error occurred while uploading the document.");
             }
         } catch (error) {
-            console.error(error); // Log the error for debugging
-            toast.error("An error occurred while uploading the document.");
-        } finally {
-            setIsSubmitting(false);
+            console.error(error);
         }
-
     }
+
 
 
     return (
@@ -146,6 +142,7 @@ const DocumentCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
                                             type="file"
                                             label="Image"
                                             name="myFile"
+                                            id="fileInput"
                                             className="form-control form-control-2 rounded-0"
                                             accept=".jpeg, .png, .jpg, .pdf"
                                             onChange={handleFileChange}
@@ -210,4 +207,4 @@ const DocumentCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
     );
 };
 
-export default DocumentCreate;
+export default EmployeeDocCreate;
