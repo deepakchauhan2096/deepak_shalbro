@@ -58,44 +58,97 @@ const EmployeeTimeSheet = (props) => {
 
   // time calculation
   const timeValueHours = (x, y) => {
-    return Math.abs(new Date(x).getUTCHours() - new Date(y).getUTCHours());
+
+    // console.log(x,"xxxxxx")
+    const attendanceIn = moment(y, 'hh:mm A').utcOffset(0);
+    const attendanceOut = moment(x, 'hh:mm A').utcOffset(0);
+    const duration = moment.duration(attendanceOut.diff(attendanceIn));
+    const totalHours = Math.floor(duration.asHours());
+    const totalMinutes = duration.minutes();
+    return `${totalHours} hours and ${totalMinutes} minutes`;
   };
 
-  const timeValueMinutes = (x, y) => {
-    return Math.abs(new Date(x).getUTCMinutes() - new Date(y).getUTCMinutes());
+
+  // overtime calculation
+  const Overtime = (x, y) => {
+
+    // console.log(x,"xxxxxx")
+    const attendanceIn = moment(y, 'hh:mm A').utcOffset(0);
+    const attendanceOut = moment(x, 'hh:mm A').utcOffset(0);
+    const duration = moment.duration(attendanceOut.diff(attendanceIn));
+    const totalHours = Math.floor(duration.asHours());
+
+    // Define a threshold for regular hours (e.g., 40 hours per week)
+    const regularHoursThreshold = 8;
+    let overtimeHours = 0;
+
+    if (totalHours > regularHoursThreshold) {
+      overtimeHours = totalHours - regularHoursThreshold;
+    }
+
+    return `${overtimeHours} hours`
   };
+  
+
+
+
+  const attendanceIn = moment('11:50 AM', 'hh:mm A');
+  const attendanceOut = moment('5:00 PM', 'hh:mm A');
+  const duration = moment.duration(attendanceOut.diff(attendanceIn));
+  const totalHours = Math.floor(duration.asHours());
+  const totalMinutes = duration.minutes().toString().padStart(2, '0');
+
+  console.log(`${totalHours} hours and ${totalMinutes} minutes`);
+
+
+
 
   const allHours = workvalue.map((e) => {
     return (
-      Math.abs(new Date(e.ATTENDANCE_OUT).getUTCHours() -
-        new Date(e.ATTENDANCE_IN).getUTCHours()) +
-      ":" +
-      Math.abs(new Date(e.ATTENDANCE_OUT).getUTCMinutes() -
-        new Date(e.ATTENDANCE_IN).getUTCMinutes())
+      timeValueHours(moment(e.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(e.ATTENDANCE_IN).utcOffset(0).format("LT"))
     );
   });
 
-  const sum = allHours.reduce(
-    (time1, time2) => time1.add(moment.duration(time2)),
-    moment.duration()
-  );
+
+
+  const convertToDuration = (timeString) => {
+    const [hours, minutes] = timeString.match(/\d+/g).map(Number);
+    return moment.duration({ hours, minutes });
+  };
 
 
 
-  //gate cuurent and addition seven days
-
-  // total Income
-  const totalIncome = Math.floor(sum.hours()) * props.mainData.EMPLOYEE_HOURLY_WAGE;
-
-  // total Hours
-  const workingHours = Math.floor(sum.hours()) +
-    "hours" +
-    " " +
-    sum.minutes() +
-    "mins"
 
 
-  console.log(workvalue, "workvalue")
+  // read duration
+  const ReadDuration = (event) => {
+    const totalDuration = event.reduce((acc, timeString) => {
+      const duration = convertToDuration(timeString);
+      return acc.add(duration);
+    }, moment.duration());
+    return totalDuration
+  }
+
+
+  //overall time
+  const overallTime = (event) => {
+    // Add up all durations in the array
+    const totalDuration = ReadDuration(event)
+
+    // Get total hours and minutes from the total duration
+    const totalHourss = Math.floor(totalDuration.asHours());
+    const totalMinutess = totalDuration.minutes();
+    return `${totalHourss} hours and ${totalMinutess} minutes`;
+  }
+
+
+
+  // calculations
+  const ResultantTime = overallTime(allHours);
+  const ExtractHours = convertToDuration(ResultantTime)?._data.hours;
+  const totalIncome = ExtractHours * props.mainData.EMPLOYEE_HOURLY_WAGE;
+
+
 
 
   return (
@@ -107,35 +160,6 @@ const EmployeeTimeSheet = (props) => {
           {props.mainData.EMPLOYEE_NAME}
         </p>
         <div style={{ display: "flex", gap: 10, padding: "5px 0" }}>
-          {/* <div className="form-group col-xl-1">
-            <label>Date From: </label>
-            <input
-              type="date"
-              className="form-control form-control-2"
-              value={dateValue.ATTENDANCE_START_DATE}
-              onChange={(event) =>
-                setDate((prev) => ({
-                  ...prev, ATTENDANCE_START_DATE: event.target.value,
-                }))
-              }
-            />
-          </div> */}
-          {/* <div className="form-group col-xl-1">
-            <label>Date to: </label>
-            <input
-              type="date"
-              className="form-control form-control-2"
-              value={dateValue.ATTENDANCE_END_DATE}
-              onChange={(event) =>
-                setDate((prev) => ({
-                  ...prev,
-                  ATTENDANCE_END_DATE: event.target.value,
-                }))
-              }
-            />
-          </div>
-          <div>
-          </div> */}
         </div>
         <div className="col-3">
           <table className="table p-0 m-0">
@@ -196,16 +220,11 @@ const EmployeeTimeSheet = (props) => {
                 <td>{item.ATTENDANCE_IN && moment(item.ATTENDANCE_IN).utcOffset(0).format("LT")}</td>
                 <td>{item.ATTENDANCE_OUT && moment(item.ATTENDANCE_OUT).utcOffset(0).format("LT")}</td>
                 <td>
-                  {item.ATTENDANCE_OUT && timeValueHours(item.ATTENDANCE_OUT, item.ATTENDANCE_IN) + "hours"}{" "}
-                  {/* hours{" "} */}
-                  {item.ATTENDANCE_OUT && timeValueMinutes(item.ATTENDANCE_OUT, item.ATTENDANCE_IN) + "mins"}{" "}
-
+                  {item.ATTENDANCE_OUT && timeValueHours(moment(item.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(item.ATTENDANCE_IN).utcOffset(0).format("LT"))}
                 </td>
-                <td>{(Math.abs(Math.floor(sum.hours()) +
-                  " hours" +
-                  " " +
-                  sum.minutes() +
-                  " mins"))}</td>
+                <td>
+                  {item.ATTENDANCE_OUT && Overtime(moment(item.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(item.ATTENDANCE_IN).utcOffset(0).format("LT"))}
+                </td>
                 <td>
                   {item.ATTENDANCE_IN && item.ATTENDANCE_OUT
                     ? "present"
@@ -237,17 +256,12 @@ const EmployeeTimeSheet = (props) => {
                 <p className="text-dark fw-semibold">Rate Per Hour</p>
                 <p className="text-dark fw-semibold">Total Pay</p>
               </div>
-              <div className="col-4  m-2">
-                <p className="bg-warning text-center fs-6 text-light">
-                  {Math.floor(sum.hours()) +
-                    " hours" +
-                    " " +
-                    sum.minutes() +
-                    " mins"}
+              <div className="col-6  m-2">
+                <p className="bg-warning text-center fs-6 text-dark">
+                  {ResultantTime}
                 </p>
                 <p className="bg-primary text-center fs-6 text-light">
-                  {" "}
-                  {props.mainData.EMPLOYEE_HOURLY_WAGE}
+                  {props?.mainData.EMPLOYEE_HOURLY_WAGE}
                 </p>
                 <p className="bg-success text-center fs-6 text-light">
                   $ {totalIncome}
