@@ -23,48 +23,20 @@ const style = {
 
 const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
     const [open, setOpen] = useState(false);
-    const [file , setFile] = useState([])
+    const [file, setFile] = useState([])
     const [formData, setFormData] = useState({
         selectedFile: null,
         DOCUMENT_EXPIRY_DATE: "",
     });
-    console.log("formData", file);
+   
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [selectedFileName, setSelectedFileName] = useState("");
     const handleOpen = () => setOpen(true);
 
-    const handleClose = () => {
-        setOpen(false);
-        setFormData({
-            selectedFile: null,
-            DOCUMENT_EXPIRY_DATE: "",
-        });
-    };
 
-    const handleFileChange = (e) => {
-        const selectedFile = e.target.files[0];
-        setFormData({
-            ...formData,
-            selectedFile,
-        });
-        setSelectedFileName(selectedFile ? selectedFile.name : ""); // Set the selected file name
-    };
-    // const handleFileChange = (e) => {
-    //     setFormData({
-    //         ...formData,
-    //         selectedFile: e.target.files[0],
-    //     });
-    // };
 
-    const handleExpiryDateChange = (e) => {
-        setFormData({
-            ...formData,
-            DOCUMENT_EXPIRY_DATE: e.target.value,
-        });
-    };
-    console.log("formdata :".formData);
+    // functon for formSubmisson-----------------------------
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -81,6 +53,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
             return;
         }
 
+
         const data = new FormData();
         console.log(data, "data")
         data.append("file", file);
@@ -93,13 +66,12 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
                 "/api/create_document",
                 data,
             );
-
-            if (response.status === 200) {
+            if (response.data.operation === "successfull") {
                 console.log("response", response)
                 setOpen(false);
                 update();
                 toast.success("Document uploaded successfully.");
-                setSelectedFileName("")
+                setFile(file ? file.name : "");
                 setFormData("")
             } else {
                 toast.error("Failed to upload document.");
@@ -110,6 +82,25 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    // function for close modal on button click --------------------
+
+    const handleClose = () => {
+        setOpen(false);
+        setFormData({
+            selectedFile: null,
+            DOCUMENT_EXPIRY_DATE: "",
+        });
+    };
+
+    // function for Expiry status -------------------
+
+    const handleExpiryDateChange = (e) => {
+        setFormData({
+            ...formData,
+            DOCUMENT_EXPIRY_DATE: e.target.value,
+        });
     };
 
 
@@ -144,7 +135,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
                             <form onSubmit={handleSubmit}>
                                 <Dropzone onDrop={acceptedFiles => setFile(...acceptedFiles)}>
                                     {({ getRootProps, getInputProps }) => (
-                                        <section className="p-4 rounded-2" style={{background:"#f2f2f2", border:"2px dashed gray" }} {...getRootProps()}>
+                                        <section className="p-4 rounded-2" style={{ background: "#f2f2f2", border: "2px dashed gray" }} {...getRootProps()}>
                                             <div >
                                                 <input {...getInputProps()} />
                                                 <p>Drag 'n' drop some files here, or click to select files</p>
@@ -200,3 +191,4 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
     );
 };
 
+export default DocumentCreate;
