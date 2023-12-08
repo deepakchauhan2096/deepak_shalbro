@@ -103,7 +103,7 @@ const EmployeeTimeSheet = (props) => {
 
 
 
-  const allHours = workvalue.map((e) => {
+  const allHours = workvalue?.map((e) => {
     return (
       timeValueHours(moment(e.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(e.ATTENDANCE_IN).utcOffset(0).format("LT"))
     );
@@ -111,8 +111,9 @@ const EmployeeTimeSheet = (props) => {
 
 
 
+
   const convertToDuration = (timeString) => {
-    const [hours, minutes] = timeString.match(/\d+/g).map(Number);
+    const [hours, minutes] = timeString.match(/\d+/g)?.map(Number) || [0, 0];
     return moment.duration({ hours, minutes });
   };
 
