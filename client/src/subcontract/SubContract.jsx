@@ -164,29 +164,6 @@ const SubContract = (props) => {
       },
     },
 
-    {
-      field: "delete",
-      headerName: "Delete",
-      width: 100,
-
-
-      renderCell: (cellValues) => {
-          return (
-              <Button
-                  variant="contained"
-                  className="view-btn "
-                  color="error"
-                  style={{ padding: "2px 2px" }}
-                  // onClick={(e) => {
-                  //     handleDelDoc(e, cellValues.id);
-                  // }}
-              >
-                  Delete
-              </Button>
-          );
-      },
-  },
-
   ];
 
   const rows = subcontractData;

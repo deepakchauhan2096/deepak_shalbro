@@ -17,10 +17,11 @@ const style = {
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
-    borderRadius: 4
+    borderRadius: 4,
 };
 
-const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
+const EmployeeDocCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
+
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         selectedFile: null,
@@ -49,12 +50,6 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
         });
         setSelectedFileName(selectedFile ? selectedFile.name : ""); // Set the selected file name
     };
-    // const handleFileChange = (e) => {
-    //     setFormData({
-    //         ...formData,
-    //         selectedFile: e.target.files[0],
-    //     });
-    // };
 
     const handleExpiryDateChange = (e) => {
         setFormData({
@@ -63,53 +58,54 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
         });
     };
     console.log("formdata :".formData);
+    console.log("document_rf_id 2", EMPLOYEE_ID)
 
+
+
+  
+
+    // }
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (isSubmitting) {
-            return; // Prevent multiple submissions
-        }
-
-        setIsSubmitting(true);
-
+    
         if (!formData.selectedFile || !formData.DOCUMENT_EXPIRY_DATE) {
             setIsSubmitting(false);
             toast.error("Please select a file and enter an expiry date.");
             return;
         }
-
+    
         const data = new FormData();
-        console.log(data,"data")
         data.append("file", formData.selectedFile);
-        data.append("DOCUMENT_REF_ID", COMPANY_ID);
-        data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
+        data.append("DOCUMENT_REF_ID", EMPLOYEE_ID);
+        data.append("DOCUMENT_PARENT_USERNAME", COMPANY_USERNAME);
         data.append("DOCUMENT_EXPIRY_DATE", formData.DOCUMENT_EXPIRY_DATE);
-
+    
         try {
-            const response = await axios.post(
-                "/api/create_document",
-                data,
-            );
+            const response = await axios.post("/api/employee_document", data);
 
-            if (response.status === 200) {
-                console.log("response", response)
+            console.log(response.data.operation,"successfull")
+    
+            if (response.data.operation === "successfull") {
+                // Clear input fields after successful upload
+                // document.getElementById("fileInput").value = "";
+                setFormData({
+                    selectedFile: null,
+                    DOCUMENT_EXPIRY_DATE: "",
+                });
+                setSelectedFileName("");
                 setOpen(false);
-                update();
+                handleClose();
                 toast.success("Document uploaded successfully.");
-                setSelectedFileName("")
-                setFormData("")
+                update();
             } else {
-                toast.error("Failed to upload document.");
+                toast.error("An error occurred while uploading the document.");
             }
         } catch (error) {
-            console.error(error); // Log the error for debugging
-            toast.error("An error occurred while uploading the document.");
-        } finally {
-            setIsSubmitting(false);
+            console.error(error);
         }
-    };
-  
+    }
+    
+
 
     return (
         <>
@@ -129,14 +125,13 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
                 className="modalWidth"
-                style={{zIndex:9999999}}
             >
                 <Container
                     id="content"
                     style={{ height: "100vh", position: "relative" }}
                     maxWidth="xl"
                 >
-                    
+
                     <Box sx={style}>
                         <div className="container">
                             <form onSubmit={handleSubmit}>
@@ -147,6 +142,7 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
                                             type="file"
                                             label="Image"
                                             name="myFile"
+                                            id="fileInput"
                                             className="form-control form-control-2 rounded-0"
                                             accept=".jpeg, .png, .jpg, .pdf"
                                             onChange={handleFileChange}
@@ -211,5 +207,4 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
     );
 };
 
-export default DocumentCreate;
-
+export default EmployeeDocCreate;
