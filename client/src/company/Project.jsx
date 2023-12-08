@@ -31,7 +31,7 @@ import Navbar from "../components/Navbar";
 // import { initProject_fun } from "../redux/action";
 
 const Project = (props) => {
-    const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+  const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
   // const { id } = useParams();
 
   // const param = id.split("&");
@@ -113,7 +113,7 @@ const Project = (props) => {
           PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
           PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
         },
-  
+
       );
 
       const data = response.data;
@@ -258,9 +258,9 @@ const Project = (props) => {
           //   handleEdit(cellValues);
           // }}
           >
-            <ProjectEdit edit={cellValues} 
-            refetch={fetchProjects} 
-            
+            <ProjectEdit edit={cellValues}
+              refetch={fetchProjects}
+
             />
           </Button>
         );
@@ -380,24 +380,24 @@ const Project = (props) => {
               <Animations />
             ) : (
               <>
-                  <DataGrid
-                    sx={{ border: "none" }}
-                    rows={rows}
-                    columns={columns}
-                    getRowId={(row) => row.PROJECT_ID}
-                    initialState={{
-                      pagination: {
-                        paginationModel: {
-                          pageSize: 20,
-                        },
+                <DataGrid
+                  sx={{ border: "none" }}
+                  rows={rows}
+                  columns={columns}
+                  getRowId={(row) => row.PROJECT_ID}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 20,
                       },
-                    }}
-                    density="compact"
-                    pageSizeOptions={[5]}
-                    checkboxSelection={false}
-                    disableRowSelectionOnClick
-                    
-                  />
+                    },
+                  }}
+                  density="compact"
+                  pageSizeOptions={[5]}
+                  checkboxSelection={false}
+                  disableRowSelectionOnClick
+
+                />
               </>
             )}
           </Box>
@@ -588,11 +588,11 @@ const Project = (props) => {
         </MyScreen>
 
         <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
-          {index === 2 && <ProjectAssigned projectData={filterData} /> }
+          {index === 2 && <ProjectAssigned projectData={filterData} />}
         </MyScreen>
 
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
-        {index === 3 && <ProjectLoc projectData={filterData} /> }
+          {index === 3 && <ProjectLoc projectData={filterData} />}
         </MyScreen>
       </Box>
     </>
