@@ -200,4 +200,3 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
     );
 };
 
-export default DocumentCreate;
