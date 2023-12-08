@@ -8,6 +8,8 @@ import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import { ToastContainer, toast } from "react-toastify";
 import Dropzone from "react-dropzone"
 import "react-toastify/dist/ReactToastify.css";
+import SimpleBackdrop from "../components/Backdrop";
+
 
 const style = {
     position: "absolute",
@@ -28,6 +30,7 @@ const EmployeeDocCreate = ({ EMPLOYEE_ID, COMPANY_USERNAME, update }) => {
         selectedFile: null,
         DOCUMENT_EXPIRY_DATE: "",
     });
+    const [backdrop, setBackdrop] = useState(false);
    
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,7 +43,8 @@ const EmployeeDocCreate = ({ EMPLOYEE_ID, COMPANY_USERNAME, update }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setOpen(false);
+        setBackdrop(true);
         if (isSubmitting) {
             return; // Prevent multiple submissions
         }
@@ -68,8 +72,9 @@ const EmployeeDocCreate = ({ EMPLOYEE_ID, COMPANY_USERNAME, update }) => {
             if (response.data.operation === "successfull") {
                 console.log("response", response)
                 setOpen(false);
-                update();
                 toast.success("Document uploaded successfully.");
+                update();
+                
                 setFile(file ? file.name : "");
                 setFormData("")
             } else {
@@ -80,6 +85,8 @@ const EmployeeDocCreate = ({ EMPLOYEE_ID, COMPANY_USERNAME, update }) => {
             toast.error("An error occurred while uploading the document.");
         } finally {
             setIsSubmitting(false);
+        setBackdrop(false);
+
         }
     };
 
@@ -186,6 +193,7 @@ const EmployeeDocCreate = ({ EMPLOYEE_ID, COMPANY_USERNAME, update }) => {
                     <ToastContainer position="top-center" autoClose={1000} />
                 </Container>
             </Modal>
+                    <SimpleBackdrop open={backdrop} />
         </>
     );
 };
