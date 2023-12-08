@@ -17,10 +17,10 @@ const style = {
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
-    borderRadius: 4,
+    borderRadius: 4
 };
 
-const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
+const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         selectedFile: null,
@@ -49,6 +49,12 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
         });
         setSelectedFileName(selectedFile ? selectedFile.name : ""); // Set the selected file name
     };
+    // const handleFileChange = (e) => {
+    //     setFormData({
+    //         ...formData,
+    //         selectedFile: e.target.files[0],
+    //     });
+    // };
 
     const handleExpiryDateChange = (e) => {
         setFormData({
@@ -74,7 +80,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
         }
 
         const data = new FormData();
-        console.log(data, "data")
+        console.log(data,"data")
         data.append("file", formData.selectedFile);
         data.append("DOCUMENT_REF_ID", COMPANY_ID);
         data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
@@ -103,7 +109,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
             setIsSubmitting(false);
         }
     };
-
+  
 
     return (
         <>
@@ -123,13 +129,14 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
                 className="modalWidth"
+                style={{zIndex:9999999}}
             >
                 <Container
                     id="content"
                     style={{ height: "100vh", position: "relative" }}
                     maxWidth="xl"
                 >
-
+                    
                     <Box sx={style}>
                         <div className="container">
                             <form onSubmit={handleSubmit}>
@@ -205,3 +212,4 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
 };
 
 export default DocumentCreate;
+

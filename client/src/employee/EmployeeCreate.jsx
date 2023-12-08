@@ -182,6 +182,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        style={{zIndex:9999999}}
       >
         <Container
           id="content"

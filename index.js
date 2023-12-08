@@ -245,10 +245,20 @@ app.use(cors());
   });
 
 
+  app.delete("/api/delete_employee_document",(req,res)=> {
+    sendHttpRequest("DELETE",`${process.env.SERVERAPIREQUEST}/delete_employee_document`,req,res)
+  });
 
+
+  
   app.put("/api/download_document",(req,res)=> {
     console.log(req.body);
     sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/download_document`,req,res)
+  });
+
+  app.put("/api/download_employe_document",(req,res)=> {
+    console.log(req.body);
+    sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/download_employe_document`,req,res)
   });
 
   app.put("/api/get_all_document",(req,res)=> {

@@ -11,10 +11,13 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import ExpiryReminder from '../components/ExpiryReminder';
 import EmployeeDocCreate from './EmployeeDocCreate';
 import { Button } from '@mui/material';
+import SimpleBackdrop from "../components/Backdrop";
 
 const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
   const [deleteItem, setDeleteItem] = useState('');
   const [open, setOpen] = useState(false);
+  const [backdrop, setBackdrop] = useState(false);
+
   const [empDoc, setEmpDoc] = useState('');
 
   useEffect(() => {
@@ -54,16 +57,17 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
   };
 
   const handleDownload = async (documentId, fileName) => {
+    console.log("hi", documentId)
     try {
       const data = {
         DOCUMENT_ID: documentId,
-        DOCUMENT_ADMIN_USERNAME: COMPANY_USERNAME,
+        DOCUMENT_PARENT_USERNAME: COMPANY_USERNAME,
       };
 
       const config = {
         method: 'put',
         maxBodyLength: Infinity,
-        url: '/api/download_document',
+        url: '/api/download_employe_document',
         data: data,
       };
 
@@ -207,6 +211,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
       headerName: 'Download',
       width: 120,
       renderCell: (cellValues) => {
+        console.log("heelo world",cellValues.row.documentName,cellValues.id, )
         return (
           <Button
             variant="contained"
@@ -263,14 +268,15 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
 
   return (
     <>
-      <EmployeeDocCreate EMPLOYEE_ID={EMPLOYEE_ID} COMPANY_USERNAME={COMPANY_USERNAME} />
+      <EmployeeDocCreate EMPLOYEE_ID={EMPLOYEE_ID} COMPANY_USERNAME={COMPANY_USERNAME} update={getEmployeeDocuments} />
+      <SimpleBackdrop open={backdrop} />
       <DataGrid
         rows={rows}
         columns={columns}
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 10,
+              pageSize: 14,
             },
           },
         }}
@@ -280,6 +286,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
         sx={{ height: '80vh' }}
         getRowId={(row) => row.id}
       />
+       
     </>
   );
 };

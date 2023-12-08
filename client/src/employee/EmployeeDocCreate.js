@@ -62,29 +62,29 @@ const EmployeeDocCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
 
 
 
-
+  
 
     // }
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         if (!formData.selectedFile || !formData.DOCUMENT_EXPIRY_DATE) {
             setIsSubmitting(false);
             toast.error("Please select a file and enter an expiry date.");
             return;
         }
-
+    
         const data = new FormData();
         data.append("file", formData.selectedFile);
         data.append("DOCUMENT_REF_ID", EMPLOYEE_ID);
         data.append("DOCUMENT_PARENT_USERNAME", COMPANY_USERNAME);
         data.append("DOCUMENT_EXPIRY_DATE", formData.DOCUMENT_EXPIRY_DATE);
-
+    
         try {
             const response = await axios.post("/api/employee_document", data);
 
-            console.log(response.data.operation, "successfull")
-
+            console.log(response.data.operation,"successfull")
+    
             if (response.data.operation === "successfull") {
                 // Clear input fields after successful upload
                 // document.getElementById("fileInput").value = "";
@@ -104,7 +104,7 @@ const EmployeeDocCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
             console.error(error);
         }
     }
-
+    
 
 
     return (

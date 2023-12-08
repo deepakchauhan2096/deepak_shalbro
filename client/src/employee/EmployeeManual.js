@@ -412,7 +412,7 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
 
     return (
       <>
-        {fatchData[0] === "PunchOut" ? <table className="table table-bordered">
+        {fatchData[0] === "PunchIn" ? <table className="table table-bordered">
           <thead>
             <tr>
               <th scope="col">S. No.</th>
