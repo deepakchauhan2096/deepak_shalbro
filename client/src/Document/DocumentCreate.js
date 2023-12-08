@@ -6,6 +6,7 @@ import { Button, Container } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import { ToastContainer, toast } from "react-toastify";
+import Dropzone from "react-dropzone"
 import "react-toastify/dist/ReactToastify.css";
 
 const style = {
@@ -20,49 +21,22 @@ const style = {
     borderRadius: 4
 };
 
-const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
+const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
     const [open, setOpen] = useState(false);
+    const [file, setFile] = useState([])
     const [formData, setFormData] = useState({
         selectedFile: null,
         DOCUMENT_EXPIRY_DATE: "",
     });
-    console.log("formData", formData);
+   
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [selectedFileName, setSelectedFileName] = useState("");
     const handleOpen = () => setOpen(true);
 
-    const handleClose = () => {
-        setOpen(false);
-        setFormData({
-            selectedFile: null,
-            DOCUMENT_EXPIRY_DATE: "",
-        });
-    };
 
-    const handleFileChange = (e) => {
-        const selectedFile = e.target.files[0];
-        setFormData({
-            ...formData,
-            selectedFile,
-        });
-        setSelectedFileName(selectedFile ? selectedFile.name : ""); // Set the selected file name
-    };
-    // const handleFileChange = (e) => {
-    //     setFormData({
-    //         ...formData,
-    //         selectedFile: e.target.files[0],
-    //     });
-    // };
 
-    const handleExpiryDateChange = (e) => {
-        setFormData({
-            ...formData,
-            DOCUMENT_EXPIRY_DATE: e.target.value,
-        });
-    };
-    console.log("formdata :".formData);
+    // functon for formSubmisson-----------------------------
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -73,15 +47,16 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
 
         setIsSubmitting(true);
 
-        if (!formData.selectedFile || !formData.DOCUMENT_EXPIRY_DATE) {
+        if (!file || !formData.DOCUMENT_EXPIRY_DATE) {
             setIsSubmitting(false);
             toast.error("Please select a file and enter an expiry date.");
             return;
         }
 
+
         const data = new FormData();
-        console.log(data,"data")
-        data.append("file", formData.selectedFile);
+        console.log(data, "data")
+        data.append("file", file);
         data.append("DOCUMENT_REF_ID", COMPANY_ID);
         data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
         data.append("DOCUMENT_EXPIRY_DATE", formData.DOCUMENT_EXPIRY_DATE);
@@ -91,13 +66,12 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
                 "/api/create_document",
                 data,
             );
-
-            if (response.status === 200) {
+            if (response.data.operation === "successfull") {
                 console.log("response", response)
                 setOpen(false);
                 update();
                 toast.success("Document uploaded successfully.");
-                setSelectedFileName("")
+                setFile(file ? file.name : "");
                 setFormData("")
             } else {
                 toast.error("Failed to upload document.");
@@ -109,7 +83,26 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
             setIsSubmitting(false);
         }
     };
-  
+
+    // function for close modal on button click --------------------
+
+    const handleClose = () => {
+        setOpen(false);
+        setFormData({
+            selectedFile: null,
+            DOCUMENT_EXPIRY_DATE: "",
+        });
+    };
+
+    // function for Expiry status -------------------
+
+    const handleExpiryDateChange = (e) => {
+        setFormData({
+            ...formData,
+            DOCUMENT_EXPIRY_DATE: e.target.value,
+        });
+    };
+
 
     return (
         <>
@@ -129,42 +122,29 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
                 className="modalWidth"
-                style={{zIndex:9999999}}
+                style={{ zIndex: 9999999 }}
             >
                 <Container
                     id="content"
                     style={{ height: "100vh", position: "relative" }}
                     maxWidth="xl"
                 >
-                    
+
                     <Box sx={style}>
                         <div className="container">
                             <form onSubmit={handleSubmit}>
-                                <div className="row">
-                                    <div className="form-group col-xl-12">
-                                        <label className="fs-6 pb-2">Choose file to Upload</label>
-                                        <input
-                                            type="file"
-                                            label="Image"
-                                            name="myFile"
-                                            className="form-control form-control-2 rounded-0"
-                                            accept=".jpeg, .png, .jpg, .pdf"
-                                            onChange={handleFileChange}
-                                            style={{ display: "none" }}
-                                        />
-                                        {selectedFileName && <p className="text-success fs-7 fz-2">Selected File: {selectedFileName}</p>}
-                                    </div>
-                                </div>
-                                <Button
-                                    variant="outlined"
-                                    sx={{ width: "100%" }}
-                                    onClick={() =>
-                                        document.querySelector('input[type="file"]').click()
-                                    }
-                                >
-                                    Choose document&nbsp;
-                                    <AddIcon fontSize="small" />
-                                </Button>
+                                <Dropzone onDrop={acceptedFiles => setFile(...acceptedFiles)}>
+                                    {({ getRootProps, getInputProps }) => (
+                                        <section className="p-4 rounded-2" style={{ background: "#f2f2f2", border: "2px dashed gray" }} {...getRootProps()}>
+                                            <div >
+                                                <input {...getInputProps()} />
+                                                <p>Drag 'n' drop some files here, or click to select files</p>
+                                            </div>
+                                        </section>
+                                    )}
+                                </Dropzone>
+                                {file.name && <p className="text-success fs-7 fz-2 pt-2">Selected File: {file?.name}</p>}
+
                                 <div className="row mb-2">
                                     <div className="form-group col-xl-12">
                                         <label className="pb-2 fs-6 rounded p-2">
@@ -212,4 +192,3 @@ const DocumentCreate = ({COMPANY_ID,COMPANY_PARENT_USERNAME,update}) => {
 };
 
 export default DocumentCreate;
-
