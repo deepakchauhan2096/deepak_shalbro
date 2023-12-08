@@ -18,6 +18,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
   const [open, setOpen] = useState(false);
   const [backdrop, setBackdrop] = useState(false);
 
+
   const [empDoc, setEmpDoc] = useState('');
 
   useEffect(() => {
@@ -79,6 +80,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
   };
 
   const handleDelDoc = async (e, documentId) => {
+    setBackdrop(true);
     const data = {
       DOCUMENT_ID: documentId,
       DOCUMENT_PARENT_USERNAME: COMPANY_USERNAME,
@@ -96,6 +98,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
       if (response.ok) {
         const jsonResponse = await response.json();
         setDeleteItem(jsonResponse);
+        setBackdrop(false);
         toast.success('Document Deleted successfully!', {
           position: toast.POSITION.TOP_CENTER,
           autoClose: 1000,
@@ -270,6 +273,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
     <>
       <EmployeeDocCreate EMPLOYEE_ID={EMPLOYEE_ID} COMPANY_USERNAME={COMPANY_USERNAME} update={getEmployeeDocuments} />
       <SimpleBackdrop open={backdrop} />
+      
       <DataGrid
         rows={rows}
         columns={columns}
