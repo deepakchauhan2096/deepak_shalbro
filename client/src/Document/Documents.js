@@ -9,7 +9,6 @@ import "../assests/css/document.css"; // Import the CSS filefileN
 import { DataGrid } from '@mui/x-data-grid';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import DocumentModal from "./components/DocumentModal";
 import DocumentCreate from "./DocumentCreate";
 // import env from "react-dotenv";
 import { useParams } from "react-router-dom";
@@ -30,21 +29,16 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 
 export default function Document(props) {
 
-
     const [imagesData, setImagesData] = useState([]);
     const [totalDocuments, setTotalDocuments] = useState(0);
     const [backdrop, setBackdrop] = useState(false);
     const [deleteItem, setDeleteItem] = useState("");
     const [openNav, setOpenNav] = useState(false);
-
-
     const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
 
 
     console.log("COMPANYPARENT :", COMPANY_PARENT_USERNAME);
 
-
-    // console.log("DocData", DocData)
     const [open, setOpen] = React.useState(false);
 
     useEffect(() => {

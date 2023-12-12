@@ -4,37 +4,6 @@ import axios from "axios";
 const ProjectAssigned = (props) => {
 
   const filterData = props.projectData;
-  console.log("Hello employee", filterData)
-
-  // const fetchAllEmployee = async () => {
-  //   try {
-  //     const response = await axios.put(
-  //       "/get_employee",
-  //       {
-  //         EMPLOYEE_MEMBER_PARENT_ID: filterallprojectData?.COMPANY_PARENT_ID,
-  //         EMPLOYEE_MEMBER_PARENT_USERNAME:
-  //           filterallprojectData?.COMPANY_PARENT_USERNAME,
-  //         EMPLOYEE_PARENT_USERNAME: filterallprojectData?.COMPANY_USERNAME,
-  //         EMPLOYEE_PARENT_ID: filterallprojectData?.COMPANY_ID,
-  //       },
-  //       { headers }
-  //     );
-  //     setTimeout(() => {
-  //       // console.log("ALL EMPLOYEE data ", response);
-  //       const data = response.data;
-  //       setAllempData(data.result);
-  //       // setIsLoading(false);
-  //       console.log("please", data)
-  //     }, 1000);
-  //   } catch (err) {
-  //     console.log("something Went wrong: =>", err);
-  //   }
-  // };
-
-  // const data = {
-  //   ADMIN_USERNAME: PROJECT_PARENT_ID,
-  //   EMPLOYEE_ID: state[0]
-  // }
   const [project, setProject] = useState();
 
   useEffect(() => {
@@ -50,11 +19,6 @@ const ProjectAssigned = (props) => {
             ADMIN_USERNAME: EMPLOYEE_MEMBER_PARENT_USERNAME,
             EMPLOYEE_ID: EMPLOYEE_ID
           };
-
-          // const data = {
-          //   ADMIN_USERNAME: PROJECT_PARENT_ID,
-          //   EMPLOYEE_ID: state[0]
-          // }
 
           return axios.put(
             "/api/emp_data_one",
@@ -84,7 +48,7 @@ const ProjectAssigned = (props) => {
     <div className="container-fluid g-0">
       <div className="row">
         <div className="col-12">
-          {/* <b>Assigned Employees to this project</b> */}
+        
           <table className="table table-fixed table-sm">
             <thead>
               <tr >

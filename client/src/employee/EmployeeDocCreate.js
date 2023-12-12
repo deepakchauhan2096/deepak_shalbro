@@ -163,7 +163,7 @@ const EmployeeDocCreate = ({ EMPLOYEE_ID, COMPANY_USERNAME, update }) => {
                                             name=" DOCUMENT_EXPIRY_DATE"
                                             onChange={handleExpiryDateChange}
                                             value={formData.DOCUMENT_EXPIRY_DATE}
-                                            required
+                                          
                                         />
                                     </div>
                                 </div>

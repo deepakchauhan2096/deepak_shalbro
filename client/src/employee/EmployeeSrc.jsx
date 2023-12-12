@@ -15,9 +15,9 @@ import {
   Paper,
   Skeleton,
 } from "@mui/material";
-import Snippet from "./Snippet";
-import EmployeePDF from "../Invoices/EmployeePDF";
-import { PDFViewer } from "@react-pdf/renderer";
+// import Snippet from "./Snippet";
+// import EmployeePDF from "../Invoices/EmployeePDF";
+// import { PDFViewer } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
 import { useParams } from "react-router-dom";
@@ -25,9 +25,9 @@ import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import GenPassword from "./GenPassword";
 import { toast } from "react-toastify";
-import EmployeeAttendance from "./EmployeeAttendance";
+// import EmployeeAttendance from "./EmployeeAttendance";
 import EmployeeManual from "./EmployeeManual";
-import EmployeeDocCreate from "./EmployeeDocCreate";
+// import EmployeeDocCreate from "./EmployeeDocCreate";
 import EmployeeDocuments from "./EmployeeDocuments";
 
 // import EmployeeManual from "./EmployeeManual";
@@ -785,6 +785,7 @@ const EmployeeSrc = () => {
           {index === 3 ? <EmployeeDocuments
            EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID}
            COMPANY_USERNAME={COMPANY_USERNAME}
+           
           />: "" }
         </MyScreen>
       </Box>

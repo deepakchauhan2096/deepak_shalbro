@@ -30,7 +30,7 @@ const style = {
   borderRadius: 4,
 };
 
-export default function ProjectEdit(props) {
+export default function FeditProjectEdit(props) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

@@ -31,7 +31,7 @@ export default function ProjectCreate({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [selectedTimeZone, setSelectedTimeZone] = useState("");
+  // const [selectedTimeZone, setSelectedTimeZone] = useState("");
   const [createProject, setCreateProject] = useState({
     PROJECT_PARENT_ID: "",
     PROJECT_PARENT_USERNAME: "",
