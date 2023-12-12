@@ -13,7 +13,7 @@ import EmployeeDocCreate from './EmployeeDocCreate';
 import { Button } from '@mui/material';
 import SimpleBackdrop from "../components/Backdrop";
 
-const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
+const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
   const [deleteItem, setDeleteItem] = useState('');
   const [open, setOpen] = useState(false);
   const [backdrop, setBackdrop] = useState(false);
@@ -21,30 +21,35 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
 
   const [empDoc, setEmpDoc] = useState('');
 
+
   useEffect(() => {
+
     getEmployeeDocuments();
   }, [deleteItem]);
 
+
+
   const getEmployeeDocuments = async () => {
-    const empData = {
+
+    const requestData = {
       DOCUMENT_PARENT_USERNAME: COMPANY_USERNAME,
       DOCUMENT_REF_ID: EMPLOYEE_ID,
     };
-
     try {
-      const response = await axios.put('/api/get_all_employee_document', empData);
-      const data = response.data;
+      const response = await axios.put("/api/get_all_employee_document", requestData);
 
-      if (data.operation === 'successfull') {
-        setEmpDoc(data);
-      } else {
-        toast.error('Document Fetch Failed!', {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 1000,
-        });
+      if (!response.data) {
+        throw new Error("Response data is empty");
       }
+
+      const data = response.data;
+      console.log("requestdata", data);
+
+      setEmpDoc(data);
+
+
     } catch (error) {
-      console.log('Error Fetching Data:', error);
+      console.log("Error Fetching Data :", error);
     }
   };
 
@@ -109,6 +114,8 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
       toast.error('An error occurred while deleting the document.', {});
     }
   };
+
+
 
   const formatSize = (bytes) => {
     if (bytes >= 1048576) {
@@ -214,7 +221,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
       headerName: 'Download',
       width: 120,
       renderCell: (cellValues) => {
-        console.log("heelo world",cellValues.row.documentName,cellValues.id, )
+        console.log("heelo world", cellValues.row.documentName, cellValues.id,)
         return (
           <Button
             variant="contained"
@@ -273,7 +280,6 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
     <>
       <EmployeeDocCreate EMPLOYEE_ID={EMPLOYEE_ID} COMPANY_USERNAME={COMPANY_USERNAME} update={getEmployeeDocuments} />
       <SimpleBackdrop open={backdrop} />
-      
       <DataGrid
         rows={rows}
         columns={columns}
@@ -290,7 +296,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID }) => {
         sx={{ height: '80vh' }}
         getRowId={(row) => row.id}
       />
-       
+
     </>
   );
 };

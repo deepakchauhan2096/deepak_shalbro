@@ -52,16 +52,7 @@ const ProjectLoc = (props) => {
     LOCATION_NAME: "",
   });
 
-  
-
-
-  
-
-
-  // const headers = {
-  //   "Content-Type": "application/json",
-  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  // };
+// function for Fetching all projects ..................
 
   const fetchProjects = async (e) => {
     try {
@@ -86,8 +77,6 @@ const ProjectLoc = (props) => {
       setCircleRadius(parseInt(data?.result[0]?.AREA))
       setCircleCenter([parseFloat(data?.result[0]?.LATITUDE), parseFloat(data?.result[0]?.LONGITUDE)]);
       setLocationName(data?.result[0]?.LOCATION_NAME)
-      
-
       // console.log("one Data : =>", data);
       }, 1000);
     } catch (err) {

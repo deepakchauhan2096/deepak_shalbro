@@ -25,9 +25,9 @@ const CompanyNavbar = (props) => {
     setShowProfile(false)
   }
 
-  const handleOpen = () => {
-    setShowProfile(true)
-  }
+  // const handleOpen = () => {
+  //   setShowProfile(true)
+  // }
 
   // console.log(props,"myprops")
   const location = useLocation();
