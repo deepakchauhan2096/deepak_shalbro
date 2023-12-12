@@ -31,7 +31,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
     console.log("formData", file);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-
+    const [percentCompleted, setpercentCompleted] = useState(0)
     const [selectedFileName, setSelectedFileName] = useState("");
     const handleOpen = () => setOpen(true);
 
@@ -68,49 +68,57 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+      
         if (isSubmitting) {
-            return; // Prevent multiple submissions
+          return; // Prevent multiple submissions
         }
-
+      
         setIsSubmitting(true);
-
+      
         if (!file || !formData.DOCUMENT_EXPIRY_DATE) {
-            setIsSubmitting(false);
-            toast.error("Please select a file and enter an expiry date.");
-            return;
+          setIsSubmitting(false);
+          toast.error("Please select a file and enter an expiry date.");
+          return;
         }
-
+      
         const data = new FormData();
-        console.log(data, "data")
         data.append("file", file);
         data.append("DOCUMENT_REF_ID", COMPANY_ID);
         data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
         data.append("DOCUMENT_EXPIRY_DATE", formData.DOCUMENT_EXPIRY_DATE);
-
+      
         try {
-            const response = await axios.post(
-                "/api/create_document",
-                data,
-            );
-
-            if (response.status === 200) {
-                console.log("response", response)
-                setOpen(false);
-                update();
-                toast.success("Document uploaded successfully.");
-                setSelectedFileName("")
-                setFormData("")
-            } else {
-                toast.error("Failed to upload document.");
-            }
+          const response = await axios.post("/api/create_document", data, {
+            onUploadProgress: (progressEvent) => {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 1000) / progressEvent.total
+              );
+              setpercentCompleted(percentCompleted);
+              // You can use this percentage to update a progress bar or display the progress in your UI.
+            },
+          });
+      
+          if (response.status === 200) {
+            // console.log("response", response);
+            toast.success("Document uploaded successfully.");
+            setOpen(false);
+            update();
+            setSelectedFileName("");
+            setFormData("");
+            setpercentCompleted(0)
+          } else {
+            toast.error("Failed to upload document.");
+          }
         } catch (error) {
-            console.error(error); // Log the error for debugging
-            toast.error("An error occurred while uploading the document.");
+          console.error(error); // Log the error for debugging
+          toast.error("An error occurred while uploading the document.");
         } finally {
-            setIsSubmitting(false);
+          setIsSubmitting(false);
         }
-    };
+      };
+      
+
+    console.log(percentCompleted,"progprog")
 
 
     return (
@@ -153,6 +161,8 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
                                     )}
                                 </Dropzone>
                                 {file.name && <p className="text-success fs-7 fz-2 pt-2">Selected File: {file?.name}</p>}
+
+                                {percentCompleted > 0 && <center><progress id="file" value={percentCompleted} max="100" style={{width:"100%", height:"20px",borderRadius:"0",marginTop:"10px"}}>{percentCompleted}%</progress></center>}
 
                                 <div className="row mb-2">
                                     <div className="form-group col-xl-12">

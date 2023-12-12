@@ -210,7 +210,7 @@ export default function Document(props) {
             width: 160,
             editable: false,
             renderCell: (cellValues) => {
-              return  (<ExpiryReminder data={cellValues?.value} />)
+              return  (<ExpiryReminder data={cellValues?.value} COMPANY_ID={COMPANY_ID} />)
             }
 
         },
