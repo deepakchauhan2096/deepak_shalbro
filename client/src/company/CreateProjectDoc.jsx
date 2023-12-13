@@ -58,7 +58,10 @@ const CreateProjectDoc = ({ PROJECT_PARENT_USERNAME, update, PROJECT_ID }) => {
 
         if (!file || !formData.DOCUMENT_EXPIRY_DATE) {
             setIsSubmitting(false);
-            toast.error("Please select a file and enter an expiry date.");
+            toast.error("Please select a file and enter an expiry date.", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 1000,
+              });
             return;
         }
 
@@ -76,17 +79,26 @@ const CreateProjectDoc = ({ PROJECT_PARENT_USERNAME, update, PROJECT_ID }) => {
             if (response.data.operation === "successfull") {
                 console.log("response", response)
                 setOpen(false);
-                toast.success("Document uploaded successfully.");
+                toast.success("Document uploaded successfully.",  {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 1200,
+                  });
                 update();
 
                 setFile(file ? file.name : "");
                 setFormData("")
             } else {
-                toast.error("Failed to upload document.");
+                toast.error("Failed to upload document.", {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 1200,
+                  });
             }
         } catch (error) {
             console.error(error); // Log the error for debugging
-            toast.error("An error occurred while uploading the document.");
+            toast.error("An error occurred while uploading the document.", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 1200,
+              });
         } finally {
             setIsSubmitting(false);
             setBackdrop(false);

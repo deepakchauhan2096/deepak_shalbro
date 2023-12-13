@@ -70,7 +70,10 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
                 console.log("response", response)
                 setOpen(false);
                 update();
-                toast.success("Document uploaded successfully.");
+                toast.success('Document uploaded successfully!', {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 1000,
+                });
                 setFile(file ? file.name : "");
                 setFormData("")
             } else {

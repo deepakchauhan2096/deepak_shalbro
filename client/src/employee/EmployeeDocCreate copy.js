@@ -91,7 +91,11 @@ const EmployeeDocCreate = ({ COMPANY_USERNAME, update, EMPLOYEE_ID }) => {
                 setSelectedFileName("");
                 setOpen(false);
                 handleClose();
-                toast.success("Document uploaded successfully.");
+                toast.success("Document uploaded successfully.", {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 1000,
+        
+                  });
                 update();
             } else {
                 toast.error("An error occurred while uploading the document.");
