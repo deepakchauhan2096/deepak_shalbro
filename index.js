@@ -309,6 +309,16 @@ app.use(cors());
   app.put("/api/editbankdetail",(req,res)=> {
     sendHttpRequest("POST",`${process.env.SERVERAPIREQUEST}/editbankdetail`,req,res)
   })
+
+
+  app.put("/api/send-email",(req,res)=> {
+    sendHttpRequest("POST",`${process.env.SERVERAPIREQUEST}/send-email`,req,res)
+  })
+
+  
+
+
+
   
 
 
