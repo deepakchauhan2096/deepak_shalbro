@@ -31,7 +31,7 @@ export default function ProjectCreate({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [selectedTimeZone, setSelectedTimeZone] = useState("");
+  // const [selectedTimeZone, setSelectedTimeZone] = useState("");
   const [createProject, setCreateProject] = useState({
     PROJECT_PARENT_ID: "",
     PROJECT_PARENT_USERNAME: "",
@@ -132,7 +132,7 @@ export default function ProjectCreate({
           setErrorMsg(response.data.errorMsg);
           toast.error(response.data.errorMsg, {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 2000,
+            autoClose: 1000,
           });
         } else if (response.data.operation === "successfull") {
           toast.success("Project Created successfully!", {
@@ -148,7 +148,7 @@ export default function ProjectCreate({
         console.error(error, "ERR");
         toast.error("An error occurred. Please try again later.", {
           position: toast.POSITION.TOP_CENTER,
-          autoClose: 2000,
+          autoClose: 1000,
         });
       });
   };

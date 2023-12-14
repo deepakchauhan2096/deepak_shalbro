@@ -1,44 +1,28 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ProjectCreate from "./ProjectCreate";
-import { MyContext } from "../context/Mycontext";
+// import { MyContext } from "../context/Mycontext";
 import ProjectEdit from "./ProjectEdit";
 import ProjectLoc from "./ProjectLoc";
 import ProjectAssigned from "./ProjectAssigned";
 import {
-  Avatar,
   Button,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Paper,
   Skeleton,
-  Toolbar,
-  Tooltip,
   styled,
 } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-// import { useDispatch, useSelector } from "react-redux";
-// import { initProject_fun } from "../redux/action";
+import ProjectDocuments from "./ProjectDocuments";
 
 const Project = (props) => {
-  const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
-  // const { id } = useParams();
 
-  // const param = id.split("&");
-  // const COMPANY_ID = param[0];
-  // const COMPANY_USERNAME = param[1];
-  // const COMPANY_PARENT_ID = param[2];
-  // const COMPANY_PARENT_USERNAME = param[3];
+  const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+
 
   const [data, setData] = useState({
     row: {
@@ -462,6 +446,19 @@ const Project = (props) => {
           >
             Track
           </Button>
+
+          <Button
+            onClick={(e) => setIndex(4)}
+            variant={index === 4 ? "outlined" : "outlined"}
+            className={
+              index === 4
+                ? "btn button border-bottom-0 bg-white"
+                : "btn rounded-0 border-0  rounded-0 text-light"
+            }
+            size="small"
+          >
+            Documents
+          </Button>
         </div>
 
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
@@ -593,6 +590,10 @@ const Project = (props) => {
 
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
           {index === 3 && <ProjectLoc projectData={filterData} />}
+        </MyScreen>
+
+        <MyScreen screenIndex={index === 4} sx={{ padding: 3 }}>
+          {index === 4 && <ProjectDocuments projectData={filterData} />}
         </MyScreen>
       </Box>
     </>

@@ -164,29 +164,6 @@ const SubContract = (props) => {
       },
     },
 
-    {
-      field: "delete",
-      headerName: "Delete",
-      width: 100,
-
-
-      renderCell: (cellValues) => {
-          return (
-              <Button
-                  variant="contained"
-                  className="view-btn "
-                  color="error"
-                  style={{ padding: "2px 2px" }}
-                  // onClick={(e) => {
-                  //     handleDelDoc(e, cellValues.id);
-                  // }}
-              >
-                  Delete
-              </Button>
-          );
-      },
-  },
-
   ];
 
   const rows = subcontractData;
@@ -444,8 +421,8 @@ const SubContract = (props) => {
           </div>
         ) : index === 2 ? (
           <div className="box-tab">
-            <Document/>
-            <h1>Hello World</h1>
+            {/* <Document/> */}
+            <center style={{marginTop:"200px "}}>This is the page for Upload document and this is in Development Phase</center>
           </div>
         ) : index === 3 ? (
           <div className="box-tab">

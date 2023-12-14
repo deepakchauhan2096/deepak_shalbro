@@ -87,7 +87,7 @@ export default function SubcontractCreate(props) {
   const availableCities = availableState?.states?.find(
     (s) => s.name === createSubcontract.SUBCONTRACTOR_STATE
   );
- 
+
 
   const handleCreate = (e) => {
     const { name, value } = e.target;
@@ -175,7 +175,7 @@ export default function SubcontractCreate(props) {
           <form onSubmit={handleSubmit}>
             <div className="row py-2">
               <div className="form-group col-xl-4">
-                <label>Subcontract Username</label>
+                <label>Subcontract Email</label>
                 <input
                   type="text"
                   className="form-control form-control-2 rounded-0"
@@ -244,11 +244,12 @@ export default function SubcontractCreate(props) {
                   name="SUBCONTRACTOR_ROLE"
                   value={createSubcontract.SUBCONTRACTOR_ROLE}
                 >
-                  <option selected>Choose...</option>
-                  <option>Painter</option>
-                  <option>Fitter</option>
-                  <option>Plumber</option>
-                  <option>Engineer</option>
+                  <option value="" disabled>Select Subcontractor Role</option>
+                  {subcontractorRoleOptions.map((roleOption, index) => (
+                    <option key={index} value={roleOption.value}>
+                      {roleOption.label}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="form-group col-md-6">

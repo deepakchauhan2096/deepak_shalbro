@@ -15,9 +15,9 @@ import {
   Paper,
   Skeleton,
 } from "@mui/material";
-import Snippet from "./Snippet";
-import EmployeePDF from "../Invoices/EmployeePDF";
-import { PDFViewer } from "@react-pdf/renderer";
+// import Snippet from "./Snippet";
+// import EmployeePDF from "../Invoices/EmployeePDF";
+// import { PDFViewer } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
 import { useParams } from "react-router-dom";
@@ -25,8 +25,10 @@ import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import GenPassword from "./GenPassword";
 import { toast } from "react-toastify";
-import EmployeeAttendance from "./EmployeeAttendance";
+// import EmployeeAttendance from "./EmployeeAttendance";
 import EmployeeManual from "./EmployeeManual";
+// import EmployeeDocCreate from "./EmployeeDocCreate";
+import EmployeeDocuments from "./EmployeeDocuments";
 
 // import EmployeeManual from "./EmployeeManual";
 
@@ -262,7 +264,7 @@ const EmployeeSrc = () => {
     }
   };
 
-  
+
 
 
 
@@ -503,7 +505,7 @@ const EmployeeSrc = () => {
       });
   };
 
-
+  console.log(allempData[0].EMPLOYEE_ID, "eployeeid")
 
   const drawerWidth = 250;
 
@@ -542,6 +544,8 @@ const EmployeeSrc = () => {
         >
           Archive
         </Button>
+
+
         <EmployeeCreate
           COMPANY_ID={COMPANY_ID}
           COMPANY_USERNAME={COMPANY_USERNAME}
@@ -550,8 +554,6 @@ const EmployeeSrc = () => {
           name={"Employee"}
           refetch={fetchData}
         />
-
-
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
@@ -603,7 +605,7 @@ const EmployeeSrc = () => {
           >
             <ArrowBackIcon style={{ fontSize: "22.5px" }} />
           </Button>
-          {["Employee Details", "Attendance", "Timesheet"].map(
+          {["Employee Details", "Attendance", "Timesheet", "Documents"].map(
             (item, value) => (
               <Button
                 onClick={(e, index) => setIndex(value)}
@@ -622,7 +624,7 @@ const EmployeeSrc = () => {
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
-          <div className="container mt-1">
+         {index === 0 ? <div className="container mt-1">
             {/* <h1 className="text-center">Employee Detail Dashboard</h1> */}
             <div className="row">
               <div className="col-xl-6">
@@ -694,19 +696,9 @@ const EmployeeSrc = () => {
                     </div>
                   </div>
 
-                  {/* <div className="col-12 mt-2">
-                    <div className="card">
-                      <div className="card-body">
-                        <h5 className="card-title">Salary Information</h5>
-                        <p className="card-text">Salary: $60,000 per year</p>
-                        <p className="card-text">
-                          Payment Type: Direct Deposit
-                        </p>
-                      </div>
-                    </div>
-                  </div> */}
                 </div>
               </div>
+
               <div className="col-xl-6">
                 <div className="row">
                   <div className="col-xl-12 mt-2">
@@ -776,86 +768,26 @@ const EmployeeSrc = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </MyScreen>
-
-        {/* <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-          <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
-          <div
-            className="form-control form-control-2 rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Education Document
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-
-          <div
-            className="form-control form-control-2 rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Valid ID
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-          <div
-            className="form-control form-control-2 rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Other
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-        </MyScreen> */}
+          </div> : "" }
+        </MyScreen> 
 
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-          <EmployeeManual
+        {index === 1 ? <EmployeeManual
             EMPLOYEE_DATA={filterData?.row}
-          />
+          /> : ""}
         </MyScreen>
 
         <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
-          <EmployeeTimeSheet mainData={filterData.row} />
+         {index === 2 ? <EmployeeTimeSheet mainData={filterData.row} /> :""}
         </MyScreen>
+        <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
 
-        {/* <MyScreen
-          screenIndex={index === 2}
-          sx={{ padding: 3 }}
-          className="rounded-0"
-        >
-          <Snippet />
-        </MyScreen> */}
-
-        {/* <MyScreen screenIndex={index === 3} sx={{ padding: "0" }}>
-          <PDFViewer
-            style={{
-              width: "100%",
-              height: "100%",
-              position: "absolute",
-            }}
-          >
-            <EmployeePDF
-              name={filterData.row?.EMPLOYEE_NAME}
-              email={filterData.row?.EMPLOYEE_EMAIL}
-              phone={filterData.row?.EMPLOYEE_PHONE}
-            />
-          </PDFViewer>
-        </MyScreen> */}
+          {index === 3 ? <EmployeeDocuments
+           EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID}
+           COMPANY_USERNAME={COMPANY_USERNAME}
+           
+          />: "" }
+        </MyScreen>
       </Box>
 
 
