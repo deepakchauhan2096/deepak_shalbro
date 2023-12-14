@@ -446,13 +446,6 @@ const AttendanceReport = (props) => {
                                     <label>Date filter by</label>
                                   </div>
                                   <div className="col">
-                                    {/* <select
-                                      className="form-control form-control-2 border"
-                                      value={selectedWeek}
-                                      onChange={handleWeekSelect}
-                                    >
-                                      {generateWeekOptions()}
-                                    </select> */}
                                     <select className="form-control form-control-2 border" defaultValue={moment().endOf('isoWeek').format('YYYY-MM-DD')} value={selectDate} onChange={(e) => HandlePeriod(e.target.value)}>
                                       {weeklyDate?.map((e, index) => <option key={index}>{e.startVal} - {e.endVal}</option>)}
                                     </select>
@@ -616,7 +609,7 @@ const AttendanceReport = (props) => {
                                     </tr>
                                   );
                                 } else {
-                                  return null; // Don't render the row if totalMinutes is zero
+                                  return null;
                                 }
                               })}
                             </tbody>
