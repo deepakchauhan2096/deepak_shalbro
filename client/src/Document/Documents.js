@@ -257,9 +257,11 @@ export default function Document(props) {
             width: 140,
             editable: false,
             renderCell: (cellValues) => {
+
                 return (<ExpiryReminder data={cellValues?.value} />)
             },
             size: "small"
+
 
         },
         {

@@ -363,10 +363,6 @@ app.put("/api/editbankdetail", (req, res) => {
   sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/editbankdetail`, req, res)
 })
 
-
-
-
-
 // Dummy data for demonstration
 // const data = [
 //   { id: 1, name: 'Item 1' },

@@ -25,6 +25,8 @@ import AdminLogin from "./auth/AdminLogin";
 import Firecreate from "./components/Firecreate";
 import UserLogin from "./auth/UserLogin";
 import Updates from "./auth/Update";
+import EmployeeTimeSheet from "./employee/EmployeeTimeSheet";
+import EmployeeTimeSheetUser from "./employee/EmployeeTimeSheetUser";
 
 function App() {
 
@@ -69,6 +71,7 @@ function App() {
             <Route path="/company/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME" element={<CompanyDashboard data={userName} /> }  />
             <Route path="/employee/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME" element={ <EmployeeDetail state={userName} />}  />
             <Route path="/employee/attendance" element={<EmployeeAttendance state={userName} />} />
+            <Route path="/employee/timesheet" element={<EmployeeTimeSheetUser  />} />
             <Route path="/employee/attendance/:latt/:lngi/:areas/:loca/:employees/:projects/:projectids" element={<EmployeeAttendance state={userName} />} />
 
 

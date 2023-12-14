@@ -31,7 +31,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
     console.log("formData", file);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-
+    const [prog, setProg] = useState("")
     const [selectedFileName, setSelectedFileName] = useState("");
     const handleOpen = () => setOpen(true);
 
@@ -88,10 +88,21 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
         data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
         data.append("DOCUMENT_EXPIRY_DATE", formData.DOCUMENT_EXPIRY_DATE);
 
+        const config = {
+
+            onUploadProgress: function (progressEvent) {
+                var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                console.log("percentCompleted", percentCompleted);
+                setProg(percentCompleted)
+            }
+        }
+
+
         try {
             const response = await axios.post(
                 "/api/create_document",
                 data,
+                config
             );
 
             if (response.status === 200) {
@@ -112,7 +123,6 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
         }
     };
 
-
     return (
         <>
             <Button
@@ -122,8 +132,9 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
                 variant="contained"
                 size="small"
             >
-                + Add New Document
+                + Add New Document ---{prog}
             </Button>
+
 
             <Modal
                 open={open}
