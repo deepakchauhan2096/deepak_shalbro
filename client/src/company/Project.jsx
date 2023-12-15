@@ -83,32 +83,33 @@ const Project = (props) => {
 
   //update data
 
+
+  // const fetchProject = async () => {
+  //   try {
+  //     const response = await axios.put(
+  //       "/api/get_projects",
+  //       {
+  //         PROJECT_PARENT_ID: COMPANY_ID,
+  //         PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
+  //         PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+  //         PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+  //       },
+
+  //     );
+
+  //     const data = response.data;
+  //     setProjectData(data?.result);
+  //     console.log("Projects Data: =>", data);
+  //     return data;
+  //   } catch (err) {
+  //     console.log("Something Went Wrong: =>", err);
+  //     throw err;
+  //   }
+  // };
   useEffect(() => {
     fetchProjects();
   }, []);
 
-  const fetchProject = async () => {
-    try {
-      const response = await axios.put(
-        "/api/get_projects",
-        {
-          PROJECT_PARENT_ID: COMPANY_ID,
-          PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
-          PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
-          PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
-        },
-
-      );
-
-      const data = response.data;
-      setProjectData(data?.result);
-      console.log("Projects Data: =>", data);
-      return data;
-    } catch (err) {
-      console.log("Something Went Wrong: =>", err);
-      throw err;
-    }
-  };
 
   const fetchAllEmployees = async () => {
     try {
@@ -136,7 +137,7 @@ const Project = (props) => {
     try {
       const [employeeData, projectsData] = await Promise.all([
         fetchAllEmployees(),
-        fetchProject(),
+        fetchProjects(),
       ]);
 
       // Both requests have completed here
