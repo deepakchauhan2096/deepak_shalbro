@@ -139,6 +139,7 @@ const SubcontractDoc = ({ SubcontractorData }) => {
         }
     };
 
+// this function for render the name and icon of the doc 
 
     const renderDocumentNameCell = (cellValues) => {
         const { name, fileType } = cellValues.value;
@@ -152,6 +153,7 @@ const SubcontractDoc = ({ SubcontractorData }) => {
         );
     };
 
+    // this fucntion for the size of the doc 
 
     const formatSize = (bytes) => {
         if (bytes >= 1048576) {
@@ -299,7 +301,7 @@ const SubcontractDoc = ({ SubcontractorData }) => {
                     initialState={{
                         pagination: {
                             paginationModel: {
-                                pageSize: 5,
+                                pageSize: 13,
                             },
                         },
                     }}
