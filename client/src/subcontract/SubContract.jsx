@@ -11,10 +11,13 @@ import EditSubcontract from "./EditSubContract";
 import Sidebar from "../components/Sidebar";
 import { useParams } from "react-router-dom";
 import Document from "../Document/Documents";
+import SubcontractDoc from "./SubcontractDoc";
 
 
 const SubContract = (props) => {
+
   const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
   const [subcontractData, setSubContractData] = useState([]);
@@ -76,11 +79,14 @@ const SubContract = (props) => {
       setSubContractData(data?.result);
       setIsLoading(false);
 
-
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
   };
+
+  const filterData = data?.row;
+  console.log("new code", filterData)
+
 
   useEffect(() => {
     fetchsubcontracts();
@@ -167,13 +173,14 @@ const SubContract = (props) => {
   ];
 
   const rows = subcontractData;
+  console.log("row",subcontractData )
 
   const handleClick = (event) => {
     setData(event);
     handleOpen();
   };
 
-  const filterData = data?.row;
+
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
@@ -285,7 +292,7 @@ const SubContract = (props) => {
             Documents
           </Button>
 
-          {!Edit ? (
+          {/* {!Edit ? (
             <Button
               onClick={(e) => setEdit(true)}
               variant={"contained"}
@@ -305,7 +312,7 @@ const SubContract = (props) => {
             >
               Save
             </Button>
-          )}
+          )} */}
 
           <Button
             onClick={(e) => setIndex(3)}
@@ -421,8 +428,9 @@ const SubContract = (props) => {
           </div>
         ) : index === 2 ? (
           <div className="box-tab">
-            {/* <Document/> */}
-            <center style={{marginTop:"200px "}}>This is the page for Upload document and this is in Development Phase</center>
+            <div className="p-4 container-fluid">
+              <SubcontractDoc   SubcontractorData={filterData}  />
+            </div>
           </div>
         ) : index === 3 ? (
           <div className="box-tab">
