@@ -353,12 +353,6 @@ const SubContract = (props) => {
                     {filterData.SUBCONTRACTOR_SUPERVISOR}
                   </p>
                 </div>
-                {/* <div className="col-4">
-                  <b>Employement Type</b>
-                  <p className="bg-light text-dark p-2 rounded-2">
-                    {filterData.SUBCONTRACTOR_EMROLMNT_TYPE}
-                  </p>
-                </div> */}
                 <div className="col-4">
                   <b>Location</b>
                   <p className="bg-light text-dark p-2 rounded-2">
