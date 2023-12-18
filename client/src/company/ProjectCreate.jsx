@@ -8,17 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import projectList from "../jsonlist/typeOfProject.json";
 import { Button } from "@mui/material";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "60%",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 4,
-};
 
 export default function ProjectCreate({
   COMPANY_ID,
@@ -31,7 +20,6 @@ export default function ProjectCreate({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
-  // const [selectedTimeZone, setSelectedTimeZone] = useState("");
   const [createProject, setCreateProject] = useState({
     PROJECT_PARENT_ID: "",
     PROJECT_PARENT_USERNAME: "",
