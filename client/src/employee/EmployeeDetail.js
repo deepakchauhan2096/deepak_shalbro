@@ -135,14 +135,14 @@ const EmployeeDetail = ({ state }) => {
         </nav>
 
         <nav
-          className="navbar navbar-expand-lg navbar-light bg-light"
+          className="navbar navbar-expand-lg navbar-light bg-primary"
           style={{ height: "40px" }}
         >
           <div className="container">
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav">
                 <a className="bg-white text-dark nav-link">My Projects</a>
-                <Link className="bg-white text-dark nav-link" to={`/employee/timesheet?Id=${state[1]}&eid=${state[3]}`}>My attendance history</Link>
+                <Link className="bg-dark text-light nav-link" to={`/employee/timesheet?Id=${state[1]}&eid=${state[3]}`}>My attendance history</Link>
               </div>
             </div>
           </div>
