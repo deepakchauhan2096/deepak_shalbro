@@ -8,6 +8,9 @@ import { auth } from "../firebase"
 import { fetchSignInMethodsForEmail, signOut } from "firebase/auth";
 import InputControl from "../components/InputControl";
 import { createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from "firebase/auth";
+import EmailIcon from '@mui/icons-material/Email';
+import InfoIcon from '@mui/icons-material/Info';
+import { Button } from "@mui/material";
 const itemsPerPage = 8;
 
 const AdminDashboard = (props) => {
@@ -31,7 +34,7 @@ const AdminDashboard = (props) => {
   }
   let Rows = reverseArray(RowsData);
 
-
+  // console.log("my rows",RowsData[0].COMPANY_USERNAME)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,6 +62,8 @@ const AdminDashboard = (props) => {
 
     }
   };
+
+
 
   const handleLogout = async () => {
     try {
@@ -128,15 +133,6 @@ const AdminDashboard = (props) => {
     return pageButtons;
   };
 
-
-  // const UserExists = (event) => {
-
-  // };
-
-
-
-
-
   const Details = ({ data }) => {
 
     const [edit, setEdit] = useState(true)
@@ -172,8 +168,6 @@ const AdminDashboard = (props) => {
     };
 
 
-
-
     // create user
     const createUser = () => {
 
@@ -197,8 +191,6 @@ const AdminDashboard = (props) => {
         });
 
     }
-
-
 
     //send reset link
     const Resetlink = () => {
@@ -233,6 +225,7 @@ const AdminDashboard = (props) => {
     };
 
     console.log(data, "datainside")
+
     return (
       <>
         <div className="d-flex" style={{ gap: 4 }}>
@@ -258,7 +251,7 @@ const AdminDashboard = (props) => {
           </center>
         </div>
 
-        <h2 className="text-end">{data.COMPANY_NAME}</h2>
+      <center> <h4 style={{fontFamily:"monospace", border:"1px solid grey",background:"grey", color:"white"}}>{data.COMPANY_NAME}</h4></center> 
         <table className="table" style={{ tableLayout: "" }}>
           <tbody >
             <tr>
@@ -318,6 +311,25 @@ const AdminDashboard = (props) => {
     // return <Detail data={post} />
     return setDetail(<Details data={post} />)
   }
+
+
+  // trying to execute the expiry data 
+
+  // const HandleMail = async (post) => {
+  //   let data = JSON.stringify({
+  //     "DOCUMENT_ADMIN_USERNAME": post?.COMPANY_USERNAME,
+  //     "DOCUMENT_REF_ID": post?.COMPANY_ID,
+  //     // "DOCUMENT_EXPIRY_DATE": 8976
+  //   });
+  //   try {
+  //     const mailResponse = await axios.put('/api/send-com-notification', data);
+  //     console.log("mailData", mailResponse);
+
+  //   }
+  //   catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   // console.log(detail, "detail")
 
@@ -410,17 +422,13 @@ const AdminDashboard = (props) => {
                         <table className="table-sm  table-hover table border w-100 table-striped table-sm pt-4 table-fixed display">
                           {displayData?.length > 0 ? <thead>
                             <tr style={{ width: "100%" }}>
-                              <th>S.no.</th>
-                              <th>Name</th>
-                              <th>ID</th>
-                              <th>Username</th>
-                              {/* <th>Phone</th> */}
-                              {/* <th>Email</th>
-                          <th>Address</th> */}
-                              {/* <th>State</th> */}
-                              <th>Edit</th>
-                              <th>Detail</th>
-                              <th>Archive</th>
+                              <th style={{ fontSize: "13px" }}>S.no.</th>
+                              <th style={{ fontSize: "13px" }}>Name</th>
+                              <th style={{ fontSize: "13px" }}>ID</th>
+                              <th style={{ fontSize: "13px" }}>Username</th>
+                              <th style={{ fontSize: "13px" }}>Edit</th>
+                              <th style={{ fontSize: "13px" }}>Detail</th>
+                              {/* <th style={{ fontSize: "13px" }}>Mail</th> */}
                             </tr>
                           </thead> : "loading..."}
 
@@ -440,18 +448,11 @@ const AdminDashboard = (props) => {
                                   />
                                 </td>
                                 <td>
-                                  <div className="buttons" onClick={(e) => HandleDetail(post)}>
-                                    <input type="radio" id="a25" name="check-substitution-2" />
-                                    <label className="btn btn-sm form-control-2" for="a25">Show</label>
-                                  </div>
+                                  <Button variant={"contained"} size="small" onClick={(e) => HandleDetail(post)}><InfoIcon sx={{ color: "#fff" }} /></Button>
                                 </td>
-                                <td>
-                                  <div className="buttons" onClick={(e) => HandleDetail(post)}>
-                                    <input type="radio" id="a25" name="check-substitution-2" />
-                                    <label className="btn btn-sm form-control-2" for="a25">Show</label>
-                                  </div>
-                                </td>
-                                
+                                {/* <td>
+                                  <Button variant={"contained"} size="small" onClick={(e) => HandleMail(post)}><EmailIcon sx={{ color: "#fff" }} /></Button>
+                                </td> */}
                               </tr>
                             ))}
                           </tbody>
@@ -477,7 +478,7 @@ const AdminDashboard = (props) => {
                                     overflow: "hidden",
                                   }}
                                 >
-                                  <h6 className="card-title">
+                                  <h6 className="card-title" style={{fontSize:"10px"}}>
                                     {post.COMPANY_NAME} - {post.COMPANY_ID}
                                   </h6>
 
@@ -495,7 +496,6 @@ const AdminDashboard = (props) => {
                                       companyEDit={post}
                                       reFetchfun={getCompanyData}
                                     />
-                                    {" "}
                                     <div className="buttons" onClick={(e) => HandleDetail(post)}>
                                       <input type="radio" id="a25" name="check-substitution-2" />
                                       <label className="btn btn-default btn-sm" for="a25">Show</label>

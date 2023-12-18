@@ -94,6 +94,10 @@ app.put("/api/getSubAttendance", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/getSubAttendance`, req, res);
 })
 
+// // send mail 
+// app.put("/api/send-com-notification", (req, res) => {
+//   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/send-com-notification`, req, res);
+// })
 
 app.put("/api/get_admin", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_admin`, req, res);
