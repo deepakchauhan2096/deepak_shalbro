@@ -9,8 +9,8 @@ import { MyContext } from "../context/Mycontext";
 import Cookies from "js-cookie";
 import { Alert, Stack } from "@mui/material";
 import { validateEmail, validatePassword } from "../components/Validation";
-import Logincomp from "../components/Logincomp";
-import EmployeeLogin from "../employee/EmployeeLogin"
+import Logincomp from "./Logincomp";
+import EmployeeLogin from "./EmployeeLogin"
 
 function UserLogin({ onDataFetched }) {
   const navigate = useNavigate();

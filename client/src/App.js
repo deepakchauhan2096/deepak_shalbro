@@ -7,7 +7,7 @@ import "./assests/css/style.css";
 import "./assests/css/graph.css";
 import AdminDashboard from "./Admin/AdminDashboard";
 import EmployeeAttendance from "./employee/EmployeeAttendance";
-import EmployeeLogin from "./employee/EmployeeLogin"
+import EmployeeLogin from "./auth/EmployeeLogin"
 import EmployeeHistory from "./employee/EmployeeHistory";
 import EmployeeDetail from "./employee/EmployeeDetail";
 import CompanyDashboard from "./company/Dashboard";
@@ -60,47 +60,11 @@ function App() {
             <Route path="/employee/history/" element={<EmployeeHistory />} />
             <Route path="/myadmin/*" element={<AdminDashboard />} />
             <Route path="/test" element={<Updates />} />
-
-
-            
-
-            {/* <Route path="/company" element={"company" === userName[4] ? <CompanyDashboard data={userName} /> : <Navigate to="/" />} /> */}
-            {/* <Route path="/employee" element={"employee" === userName[4] ? <EmployeeDetail state={userName} /> : <Navigate to="/" />} /> */}
-
-
             <Route path="/company/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME" element={<CompanyDashboard data={userName} /> }  />
             <Route path="/employee/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME" element={ <EmployeeDetail state={userName} />}  />
             <Route path="/employee/attendance" element={<EmployeeAttendance state={userName} />} />
             <Route path="/employee/timesheet" element={<EmployeeTimeSheetUser  />} />
             <Route path="/employee/attendance/:latt/:lngi/:areas/:loca/:employees/:projects/:projectids" element={<EmployeeAttendance state={userName} />} />
-
-
-            {/* {
-              ("company" === userName[4]  || "employee" === userName[4] ) && (
-                <>
-                  <Route
-                    path={`/${userName[4]}`}
-                    element={
-                      userName[4] === "company" ? (
-                        <CompanyDashboard data={userName} />
-                      ) : (
-                        <EmployeeDetail state={userName} />
-                      )
-                    }
-                  />
-                  <Route
-                    path={`/${userName[4]}/attendance`}
-                    element={<EmployeeAttendance state={userName} />}
-                  />
-                  <Route
-                    path={`/${userName[4]}/attendance/:latt/:lngi/:areas/:loca/:employees/:projects/:projectids`}
-                    element={<EmployeeAttendance state={userName} />}
-                  />
-                </>
-              )
-            } */}
-
-
             <Route path="/company/projects/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME" element={<Project />} />
             <Route path="/company/employees/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME" element={<EmployeeSrc />} />
             <Route path="/company/attendance/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME" element={<AttendanceReport />} />
