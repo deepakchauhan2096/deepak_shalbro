@@ -212,7 +212,7 @@ const EmployeeTimeSheetUser = (props) => {
           </Button> : <Button
             variant="contained"
             color="warning"
-            sx={{ borderRadius: "10px",textTransform:"lowercase" }}
+            sx={{ borderRadius: "10px", textTransform: "lowercase" }}
             style={{ padding: "2px 10px" }}
           >
             {"absent"}
@@ -392,7 +392,19 @@ const EmployeeTimeSheetUser = (props) => {
                   },
                 ],
               },
-            }}
+
+              aggregation: {
+                model: {
+                  size: 'sum',
+                  updatedAt: 'max',
+                },
+              },
+
+
+
+            }
+
+            }
             density="compact"
             pageSizeOptions={[5]}
             // checkboxSelection
