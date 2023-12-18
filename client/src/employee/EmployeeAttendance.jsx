@@ -66,7 +66,7 @@ const EmployeeAttendance = ({ state }) => {
   const [longitude2, setLongitude2] = useState(Long);
   const [circleCenter, setCircleCenter] = useState([null, null]);
   const [circleRadius, setCircleRadius] = useState(Area); // Default radius of the circle in meters
-  const [isInsideCircle, setIsInsideCircle] = useState(false);
+  const [isInsideCircle, setIsInsideCircle] = useState(true);
   const [locErrorin, setLocErrorIn] = useState(false);
   const [locErrorout, setLocErrorOut] = useState(false);
 
@@ -163,14 +163,16 @@ const EmployeeAttendance = ({ state }) => {
         ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
         ATTENDANCE_DATE_ID: formattedDate,
         ATTENDANCE_IN: time,
-        ATTENDANCE_PROJECT_ID: Project_Id
+        ATTENDANCE_OUT: "",
+        ATTENDANCE_PROJECT_ID: parseInt(Project_Id),
+        ATTENDANCE_TYPE:"automatic"
       };
 
       setShowBackdrop(true);
 
       axios
         .post(
-          "/api/create_emp_attendence",
+          "/api/create_emp_attendance",
           attendanceData,
 
         )
@@ -203,15 +205,17 @@ const EmployeeAttendance = ({ state }) => {
         ATTENDANCE_EMPLOYEE_ID: employeeData?.EMPLOYEE_ID,
         ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
         ATTENDANCE_DATE_ID: formattedDate,
+        ATTENDANCE_IN: "",
         ATTENDANCE_OUT: time,
-        ATTENDANCE_PROJECT_ID: Project_Id
+        ATTENDANCE_PROJECT_ID: parseInt(Project_Id),
+        ATTENDANCE_TYPE:"automatic"
       };
 
       setShowBackdrop(true);
 
       axios
         .post(
-          "/api/create_emp_attendence",
+          "/api/create_emp_attendance",
           attendanceData,
 
         )
@@ -336,7 +340,7 @@ const EmployeeAttendance = ({ state }) => {
   }, [markerPosition.lat, markerPosition.lng]);
 
 
-  console.log(markerPosition, "markerPosition.lat")
+  console.log(employeeData, "employeeData")
 
   return (
     <>

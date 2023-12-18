@@ -300,13 +300,14 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
             ATTENDANCE_EMPLOYEE_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_USERNAME,
             ATTENDANCE_DATE_ID: events?.DATE,
             ATTENDANCE_IN: originalTime,
-            ATTENDANCE_PROJECT_ID: events?.PROJECT_ID
+            ATTENDANCE_PROJECT_ID: events?.PROJECT_ID,
+            ATTENDANCE_TYPE:"manual"
           };
 
           try {
             // setShowBackdrop(true);
 
-            const res = await axios.post("/api/create_emp_attendence", attendanceData);
+            const res = await axios.post("/api/create_emp_attendance", attendanceData);
 
             if (res) {
               toast.success("PunchIn Submitted successfully! 333", {
@@ -565,13 +566,14 @@ const EmployeeManual = ({ EMPLOYEE_DATA }) => {
             ATTENDANCE_EMPLOYEE_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_USERNAME,
             ATTENDANCE_DATE_ID: events?.DATE,
             ATTENDANCE_OUT: originalTime,
-            ATTENDANCE_PROJECT_ID: events?.PROJECT_ID
+            ATTENDANCE_PROJECT_ID: events?.PROJECT_ID,
+            ATTENDANCE_TYPE:"manual"
           };
 
           try {
             // setShowBackdrop(true);
 
-            const res = await axios.post("/api/create_emp_attendence", attendanceData);
+            const res = await axios.post("/api/create_emp_attendance", attendanceData);
 
             if (res) {
               toast.success("PunchIn Submitted successfully! 333", {
