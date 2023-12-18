@@ -60,7 +60,6 @@ app.post("/api/create_employee", middlewareFunction.vaildateClient, (req, res) =
   sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/create_employee`, req, res);
 })
 
-
 app.post("/api/create_company", middlewareFunction.vaildateMember, (req, res) => {
   sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/create_company`, req, res);
 })
@@ -93,7 +92,6 @@ app.put("/api/getSubAttendance", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/getSubAttendance`, req, res);
 })
 
-
 app.put("/api/get_admin", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_admin`, req, res);
 });
@@ -125,17 +123,20 @@ app.put("/api/get_employee", (req, res) => {
 // app.put("/api/get_employee_for_employee",(req,res)=> {
 //   sendHttpRequest("PUT",`${process.env.SERVERAPIREQUEST}/get_employee_for_employee`,req,res)
 // });
+
 app.put("/api/get_employee_for_employee", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_employee_for_employee`, req, res)
 });
 
 app.put("/api/get_employee_all", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_employee_all`, req, res)
+
 });
 
 app.put("/api/get_employee_all_for_attendence", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_employee_all_for_attendence`, req, res)
 });
+
 
 
 app.put("/api/get_projects", (req, res) => {
@@ -147,11 +148,22 @@ app.put("/api/get_projects_one", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_projects_one`, req, res)
 });
 
+
+
+app.post("/api/create_emp_attendance", (req, res) => {
+  sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/create_emp_attendance`, req, res)
+});
+
+
+app.put("/api/get_projects_one", (req, res) => {
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_projects_one`, req, res)
+});
+
 app.put("/api/emp_data_one", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/emp_data_one`, req, res)
 });
 
-app.post("/api/create_emp_attendance", (req, res) => {
+app.post("/api/create_emp_attendence", (req, res) => {
   sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/create_emp_attendance`, req, res)
 });
 
@@ -161,12 +173,19 @@ app.post("/api/create_emp_attendance", (req, res) => {
 app.put("/api/get_subcontractor", (req, res) => {
   console.log(req.body);
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_subcontractor`, req, res)
+
 });
 
 app.put("/api/get_all_attendance", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_all_attendance`, req, res)
 });
 
+
+
+
+app.put("/api/update_projects", (req, res) => {
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/update_projects`, req, res)
+});
 
 
 app.post("/api/projectreport", (req, res) => {
@@ -181,18 +200,18 @@ app.delete("/api/deleteproject", (req, res) => {
   sendHttpRequest("DELETE", `${process.env.SERVERAPIREQUEST}/deleteproject`, req, res)
 });
 
-
-
-
 app.put("/api/update_projects", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/update_projects`, req, res)
 });
+
 
 
 app.put("/api/get_all_company", (req, res) => {
   console.log("req", req);
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_all_company`, req, res)
 });
+
+
 
 
 
@@ -234,6 +253,7 @@ app.put("/api/unarchive-employee", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/unarchive-employee`, req, res)
 });
 
+// delete document api 
 
 app.delete("/api/delete_document/:DOCUMENT_ID", (req, res) => {
   console.log(process.env.SERVERAPIREQUEST);
@@ -245,22 +265,100 @@ app.delete("/api/delete_document/:DOCUMENT_ID", (req, res) => {
 });
 
 
+app.delete("/api/delete_employee_document", (req, res) => {
+  sendHttpRequest("DELETE", `${process.env.SERVERAPIREQUEST}/delete_employee_document`, req, res)
+});
+
+
+app.delete("/api/delete_project_document", (req, res) => {
+  sendHttpRequest("DELETE", `${process.env.SERVERAPIREQUEST}/delete_project_document`, req, res)
+});
+
+app.delete("/api/delete_subContractor_document", (req, res) => {
+  sendHttpRequest("DELETE", `${process.env.SERVERAPIREQUEST}/delete_subContractor_document`, req, res)
+});
+
+
+
+// download document api 
 
 app.put("/api/download_document", (req, res) => {
   console.log(req.body);
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/download_document`, req, res)
 });
+app.put("/api/download_project_document", (req, res) => {
+  console.log(req.body);
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/download_project_document`, req, res)
+});
+
+app.put("/api/download_employe_document", (req, res) => {
+  console.log(req.body);
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/download_employe_document`, req, res)
+});
+
+app.put("/api/download_subContractor_document", (req, res) => {
+  console.log(req.body);
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/download_subContractor_document`, req, res)
+});
+
+app.post("/api/subContractor_assign_project", (req, res) => {
+  sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/subContractor_assign_project`, req, res)
+})
+
+app.put("/api/editbankdetail", (req, res) => {
+  sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/editbankdetail`, req, res)
+})
+
 
 app.put("/api/get_all_document", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_all_document`, req, res)
 });
 
+//create  Employee documents 
+
+
+const employee_document = createProxyMiddleware('/api/employee_document', {
+  target: process.env.SERVERAPIREQUEST, // Set the target URL for create_document
+  changeOrigin: true,
+  pathRewrite: {
+    '/api/employee_document': '/employee_document', // Modify the path as needed
+  },
+});
+app.use(employee_document);
+
+
+
+//create  subcontrcator documents 
+
+const subcontractor_document = createProxyMiddleware('/api/create_subcontractor_document', {
+  target: process.env.SERVERAPIREQUEST, // Set the target URL for create_document
+  changeOrigin: true,
+  pathRewrite: {
+    '/api/create_subcontractor_document': '/create_subcontractor_document', // Modify the path as needed
+  },
+});
+app.use(subcontractor_document);
+
+
+// get all project Document .......................
+app.put("/api/get_all_project_document", (req, res) => {
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_all_project_document`, req, res)
+});
+
+// get all Subcontractor Document .......................
+app.put("/api/get_all_subContractor_document", (req, res) => {
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_all_subContractor_document`, req, res)
+});
+
+app.post("/api/employee_document", (req, res) => {
+  sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/employee_document`, req, res)
+});
 
 app.put("/api/get_employee_details_for_attendence", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_employee_details_for_attendence`, req, res)
 });
 
-app.put("/api/update_subcontructor'", (req, res) => {
+app.put("/api/update_subcontructor", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/update_subcontructor`, req, res)
 });
 
@@ -309,20 +407,6 @@ app.post("/api/subContractor_assign_project", (req, res) => {
 app.put("/api/editbankdetail", (req, res) => {
   sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/editbankdetail`, req, res)
 })
-
-
-app.put("/api/send-email", (req, res) => {
-  sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/send-email`, req, res)
-})
-
-
-
-
-
-
-
-
-
 
 // Dummy data for demonstration
 // const data = [

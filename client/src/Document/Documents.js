@@ -9,7 +9,6 @@ import "../assests/css/document.css"; // Import the CSS filefileN
 import { DataGrid } from '@mui/x-data-grid';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import DocumentModal from "./components/DocumentModal";
 import DocumentCreate from "./DocumentCreate";
 // import env from "react-dotenv";
 import { useParams } from "react-router-dom";
@@ -20,23 +19,26 @@ import {
 import Navbar from "../components/Navbar";
 import ExpiryReminder from "../components/ExpiryReminder";
 
-export default function Document(props) {
+// mui icons 
 
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import DescriptionIcon from '@mui/icons-material/Description';
+import InsertChartIcon from '@mui/icons-material/InsertChart';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+
+export default function Document(props) {
 
     const [imagesData, setImagesData] = useState([]);
     const [totalDocuments, setTotalDocuments] = useState(0);
     const [backdrop, setBackdrop] = useState(false);
     const [deleteItem, setDeleteItem] = useState("");
     const [openNav, setOpenNav] = useState(false);
-
-
-  const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+    const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
 
 
     console.log("COMPANYPARENT :", COMPANY_PARENT_USERNAME);
 
-
-    // console.log("DocData", DocData)
     const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
@@ -99,7 +101,7 @@ export default function Document(props) {
         }
     };
 
-  
+
 
     // Function to download the uploaded documents 
     const handleDownload = async (documentId, fileName) => {
@@ -114,12 +116,13 @@ export default function Document(props) {
                 method: "put",
                 maxBodyLength: Infinity,
                 url: "/api/download_document",
-                data:data,
+                data: data,
             };
 
             const response = await axios.request(config);
-            console.log(response, "this is response")
-            downloadFile(response.data, fileName);
+            console.log(response, fileName, "this is response")
+            console.log(fileName, "filename")
+            downloadFile(response.data, fileName.name);
 
 
         } catch (error) {
@@ -171,47 +174,94 @@ export default function Document(props) {
         }
     };
 
+
+    // function for converting the files into kb and mb 
+    const formatSize = (bytes) => {
+        if (bytes >= 1048576) {
+            return (bytes / 1048576).toFixed(2) + ' MB';
+        } else if (bytes >= 1024) {
+            return (bytes / 1024).toFixed(2) + ' KB';
+        } else {
+            return bytes + ' Bytes';
+        }
+    };
+
+
+    const getFileIcon = (fileType) => {
+        const fileTypeLowerCase = fileType.toLowerCase();
+        if (fileTypeLowerCase.includes('pdf')) {
+            return <DescriptionIcon color="error" />;
+        } else if (fileTypeLowerCase.includes('excel') || fileTypeLowerCase.includes('spreadsheet')) {
+            return <InsertChartIcon color="primary" />;
+        } else if (fileTypeLowerCase.includes('word') || fileTypeLowerCase.includes('document')) {
+            return <AssignmentIcon color="primary" />;
+        } else if (fileTypeLowerCase.includes('jpeg') || fileTypeLowerCase.includes('jpg')) {
+            return <InsertPhotoIcon color="primary" />;
+        } else if (fileTypeLowerCase.includes('csv')) {
+            return <InsertDriveFileIcon color="primary" />;
+        } else {
+            return <InsertDriveFileIcon color="disabled" />;
+        }
+    };
+
+    const renderDocumentNameCell = (cellValues) => {
+        const { name, fileType } = cellValues.value;
+        const icon = getFileIcon(fileType);
+
+        return (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                {icon}
+                <span style={{ marginLeft: '8px' }}>{name}</span>
+            </div>
+        );
+    };
     const columns = [
-        { field: 'id', headerName: 'ID', width: 90 },
+        { field: 'sr', headerName: 'S No.', width: 60 },
         {
             field: 'documentName',
             headerName: 'Document Name',
-            width: 180,
-            editable: false,
+            width: 140,
+            renderCell: renderDocumentNameCell,
         },
+        { field: 'id', headerName: 'ID', width: 60 },
         {
             field: 'documentSize',
-            headerName: 'Document Size',
-            width: 150,
+            headerName: "Size",
+            description: 'Document Size',
+            width: 80,
             editable: false,
 
         },
         {
             field: 'uploadDate',
-            headerName: 'Document Upload Date',
+            headerName: 'Upload Date',
             type: 'number',
-            width: 180,
+            width: 120,
             editable: false,
 
         },
-
         {
-            field: 'documentType',
-            headerName: 'Document Type',
+            field: 'documentExpDate',
+            headerName: 'Expiry Date',
+            description: 'Document Expiry Date',
             type: 'number',
-            width: 150,
+            width: 120,
             editable: false,
         },
+
         {
             field: 'ExpiryDate',
-            headerName: 'Document Expiry',
-            description: 'This column has a value getter and is not sortable.',
+            headerName: 'Expiry Status',
+            description: 'Document Expiry',
             sortable: false,
-            width: 160,
+            width: 140,
             editable: false,
             renderCell: (cellValues) => {
-              return  (<ExpiryReminder data={cellValues?.value} COMPANY_ID={COMPANY_ID} />)
-            }
+
+                return (<ExpiryReminder data={cellValues?.value} />)
+            },
+            size: "small"
+
 
         },
         {
@@ -259,20 +309,59 @@ export default function Document(props) {
     ];
 
     // Function to format date as dd/mm/yy
-    const formatDate = (dateString) => {
-        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    // const formatDate = (dateString) => {
+    //     const options = { day: '2-digit',month: '2-digit', year: 'numeric', };
+    //     const date = new Date(dateString);
+    //     return date.toLocaleDateString('en-GB', options).replace(/\//g, '-');
+    // };
+
+
+    // function for global time according to timezone 
+    const formatDate = (dateString, withTimezone = false) => {
+        const options = {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZoneName: 'short',
+        };
+
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-GB', options).replace(/\//g, '-');
+        const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+
+        return withTimezone ? formattedDate : formattedDate.split(', ')[0]; // Extract date without timezone
     };
 
-    const rows = imagesData?.result?.map((item) => ({
+
+    // Before ------------
+
+    // const rows = imagesData?.result?.map((item) => ({
+    //     id: item.DOCUMENT_ID,
+    //     documentName: item.DOCUMENT_FILEDATA?.originalname || '', // Add conditional check here
+    //     documentSize: formatSize(item.DOCUMENT_FILEDATA?.size) || '', // Add conditional check here
+    //     uploadDate: formatDate(item.createdAt),
+    //     documentType: item.DOCUMENT_FILEDATA?.mimetype || '', // Add conditional check here
+    //     ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '', 
+    //     documentExpDate:formatDate(item.DOCUMENT_EXPIRY_DATE)// Add conditional check here
+    // })) || [];
+
+    // after new
+    const rows = imagesData?.result?.map((item, index) => ({
         id: item.DOCUMENT_ID,
-        documentName: item.DOCUMENT_FILEDATA?.originalname || '', // Add conditional check here
-        documentSize: item.DOCUMENT_FILEDATA?.size || '', // Add conditional check here
+        sr: index + 1,
+        documentName: {
+            name: item.DOCUMENT_FILEDATA?.originalname || '',
+            fileType: item.DOCUMENT_FILEDATA?.mimetype || '',
+        },
+        documentSize: formatSize(item.DOCUMENT_FILEDATA?.size) || '',
         uploadDate: formatDate(item.createdAt),
-        documentType: item.DOCUMENT_FILEDATA?.mimetype || '', // Add conditional check here
-        ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '', // Add conditional check here
+        documentType: item.DOCUMENT_FILEDATA?.mimetype || '',
+        ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE, true) || '',
+        documentExpDate: formatDate(item.DOCUMENT_EXPIRY_DATE),
     })) || [];
+
 
     return (
         <>
