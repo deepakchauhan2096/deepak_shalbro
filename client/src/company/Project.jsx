@@ -81,31 +81,7 @@ const Project = (props) => {
     }
   };
 
-  //update data
-
-
-  // const fetchProject = async () => {
-  //   try {
-  //     const response = await axios.put(
-  //       "/api/get_projects",
-  //       {
-  //         PROJECT_PARENT_ID: COMPANY_ID,
-  //         PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
-  //         PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
-  //         PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
-  //       },
-
-  //     );
-
-  //     const data = response.data;
-  //     setProjectData(data?.result);
-  //     console.log("Projects Data: =>", data);
-  //     return data;
-  //   } catch (err) {
-  //     console.log("Something Went Wrong: =>", err);
-  //     throw err;
-  //   }
-  // };
+  
   useEffect(() => {
     fetchProjects();
   }, []);
@@ -133,29 +109,31 @@ const Project = (props) => {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const [employeeData, projectsData] = await Promise.all([
-        fetchAllEmployees(),
-        fetchProjects(),
-      ]);
+  // try to resolve error while both api's are not working synchrounously
 
-      // Both requests have completed here
-      setIsLoading(false);
-      console.log("Both requests completed", employeeData, projectsData);
+  // const fetchData = async () => {
+  //   try {
+  //     const [employeeData, projectsData] = await Promise.all([
+  //       fetchAllEmployees(),
+  //       fetchProjects(),
+  //     ]);
 
-      // Now you can access employeeData and projectsData for further processing if needed
-    } catch (err) {
-      console.log("An error occurred:", err);
-    }
-  };
+  //     // Both requests have completed here
+  //     setIsLoading(false);
+  //     console.log("Both requests completed", employeeData, projectsData);
 
-  // Call the fetchData function to fetch both sets of data concurrently
-  //update data
+  //     // Now you can access employeeData and projectsData for further processing if needed
+  //   } catch (err) {
+  //     console.log("An error occurred:", err);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+
+// calling this api on useEffect 
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   // console.log(ProjectData, "projectdata");
 
