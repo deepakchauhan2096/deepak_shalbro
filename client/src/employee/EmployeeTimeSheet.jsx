@@ -10,6 +10,8 @@ import dayjs from 'dayjs';
 import { PDFDownloadLink, PDFViewer, ReactPDF } from "@react-pdf/renderer";
 import SalaryPDF from "../Invoices/SalaryPDF";
 import env from "react-dotenv";
+import { DataGrid } from "@mui/x-data-grid";
+import { Button } from "@mui/material";
 
 // current day
 let MyDateCurrent = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
@@ -149,6 +151,97 @@ const EmployeeTimeSheet = (props) => {
   const ExtractHours = convertToDuration(ResultantTime)?._data.hours;
   const totalIncome = ExtractHours * props.mainData.EMPLOYEE_HOURLY_WAGE;
 
+
+
+  const columns = [
+
+    {
+      field: "ATTENDANCE_PROJECT_ID",
+      headerName: "Project Id",
+      width: 120,
+    },
+    { field: "ATTENDANCE_DATE_ID", headerName: "Date", width: 150 },
+
+    {
+      field: "ATTENDANCE_IN",
+      headerName: "In",
+      width: 120,
+      renderCell: (cellValues) => {
+        return (
+            <>
+            {cellValues.row.ATTENDANCE_IN && moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT")}
+            </>
+        );
+        
+      },
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_IN ? "bg-success text-white border" : "bg-danger text-white border"
+        }
+    },
+
+    {
+      field: "ATTENDANCE_OUT",
+      headerName: "Out",
+      width: 150,
+      renderCell: (cellValues) => {
+        return (
+          cellValues?.row.ATTENDANCE_OUT ? <>
+            {cellValues?.row.ATTENDANCE_OUT && moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT")}
+          </> : <>{"absent"}</>
+        );
+      },
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_OUT ? "bg-success text-white border" : "bg-danger text-white border"
+        }
+    },
+
+    {
+      field: "Working hours",
+      headerName: "Working hours",
+      width: 200,
+      renderCell: (cellValues) => {
+        return (
+          cellValues?.row.ATTENDANCE_OUT && <>
+            {timeValueHours(moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT"))}
+          </>
+        );
+      },
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-light text-dark border" : "text-dark border"
+        }
+    },
+    {
+      field: "overtime",
+      headerName: "Overtime",
+      width: 170,
+      renderCell: (cellValues) => {
+        return (
+          cellValues?.row.ATTENDANCE_OUT && <>
+            {Overtime(moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT"))}
+          </>
+        );
+      },
+    },
+    {
+      field: "Status",
+      headerName: "Status",
+      width: 210,
+      renderCell: (cellValues) => {
+        return (
+          cellValues?.row.ATTENDANCE_IN && cellValues?.row.ATTENDANCE_OUT ? <>
+            {"present"}
+          </> : <>
+            {"absent"}
+          </>
+        );
+      },
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-success text-light border" : "bg-danger text-white border"
+        }
+    },
+
+  ];
+
   
 
 
@@ -203,7 +296,7 @@ const EmployeeTimeSheet = (props) => {
             </tr>
           </table>
         </div>
-        <table className="table table-hover border">
+        {/* <table className="table table-hover border">
           <thead style={{ border: "1px solid black" }}>
             <tr className="table-dark">
               <th scope="col">Date</th>
@@ -234,7 +327,46 @@ const EmployeeTimeSheet = (props) => {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
+         {/* data gird */}
+         <DataGrid
+            className="display"
+            style={{ height: "55vh" }}
+            rows={workvalue}
+            columns={columns}
+            getRowId={(row) => row.ATTENDANCE_ID}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 8,
+                },
+              },
+              sorting: {
+                sortModel: [
+                  {
+                    field: 'ATTENDANCE_DATE_ID',
+                    sort: 'asc',
+                  },
+                ],
+              },
+
+              aggregation: {
+                model: {
+                  size: 'sum',
+                  updatedAt: 'max',
+                },
+              },
+
+
+
+            }
+ 
+            }
+            density="compact"
+            pageSizeOptions={[5]}
+            // checkboxSelection
+            disableRowSelectionOnClick
+          />
       </div>
       <div className="container-fluid" style={{ position: "", bottom: "0" }}>
         <div className="row border">
