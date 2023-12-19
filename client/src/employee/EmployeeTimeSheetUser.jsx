@@ -176,7 +176,7 @@ const EmployeeTimeSheetUser = (props) => {
       headerName: "Project Id",
       width: 120,
     },
-    { field: "ATTENDANCE_DATE_ID", headerName: "ID", width: 150 },
+    { field: "ATTENDANCE_DATE_ID", headerName: "Date", width: 150 },
 
     {
       field: "ATTENDANCE_IN",
@@ -184,16 +184,15 @@ const EmployeeTimeSheetUser = (props) => {
       width: 120,
       renderCell: (cellValues) => {
         return (
-          <Button
-            variant="contained"
-            color="success"
-            sx={{ borderRadius: "10px" }}
-            style={{ padding: "2px 10px" }}
-          >
+            <>
             {cellValues.row.ATTENDANCE_IN && moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT")}
-          </Button>
+            </>
         );
+        
       },
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_IN ? "bg-success text-white border" : "bg-danger text-white border"
+        }
     },
 
     {
@@ -202,23 +201,14 @@ const EmployeeTimeSheetUser = (props) => {
       width: 150,
       renderCell: (cellValues) => {
         return (
-          cellValues?.row.ATTENDANCE_OUT ? <Button
-            variant="contained"
-            color="success"
-            sx={{ borderRadius: "10px" }}
-            style={{ padding: "2px 10px" }}
-          >
+          cellValues?.row.ATTENDANCE_OUT ? <>
             {cellValues?.row.ATTENDANCE_OUT && moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT")}
-          </Button> : <Button
-            variant="contained"
-            color="warning"
-            sx={{ borderRadius: "10px", textTransform: "lowercase" }}
-            style={{ padding: "2px 10px" }}
-          >
-            {"absent"}
-          </Button>
+          </> : <>{"absent"}</>
         );
       },
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_OUT ? "bg-success text-white border" : "bg-danger text-white border"
+        }
     },
 
     {
@@ -227,17 +217,14 @@ const EmployeeTimeSheetUser = (props) => {
       width: 200,
       renderCell: (cellValues) => {
         return (
-          cellValues?.row.ATTENDANCE_OUT && <Button
-            variant="contained"
-            color="success"
-            sx={{ borderRadius: "10px" }}
-            style={{ padding: "2px 10px", textTransform: "lowercase" }}
-          >
-            {/* {moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT")} */}
+          cellValues?.row.ATTENDANCE_OUT && <>
             {timeValueHours(moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT"))}
-          </Button>
+          </>
         );
       },
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-light text-dark border" : "text-white border"
+        }
     },
     {
       field: "overtime",
@@ -245,14 +232,9 @@ const EmployeeTimeSheetUser = (props) => {
       width: 170,
       renderCell: (cellValues) => {
         return (
-          cellValues?.row.ATTENDANCE_OUT && <Button
-            variant="contained"
-            color="info"
-            sx={{ borderRadius: "10px" }}
-            style={{ padding: "2px 10px", textTransform: "lowercase" }}
-          >
+          cellValues?.row.ATTENDANCE_OUT && <>
             {Overtime(moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT"))}
-          </Button>
+          </>
         );
       },
     },
@@ -262,23 +244,16 @@ const EmployeeTimeSheetUser = (props) => {
       width: 210,
       renderCell: (cellValues) => {
         return (
-          cellValues?.row.ATTENDANCE_IN && cellValues?.row.ATTENDANCE_OUT ? <Button
-            variant="contained"
-            color="success"
-            sx={{ borderRadius: "10px" }}
-            style={{ padding: "2px 10px", textTransform: "lowercase" }}
-          >
+          cellValues?.row.ATTENDANCE_IN && cellValues?.row.ATTENDANCE_OUT ? <>
             {"present"}
-          </Button> : <Button
-            variant="contained"
-            color="error"
-            sx={{ borderRadius: "10px" }}
-            style={{ padding: "2px 10px", textTransform: "lowercase" }}
-          >
+          </> : <>
             {"absent"}
-          </Button>
+          </>
         );
       },
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-success text-light border" : "bg-danger text-white border"
+        }
     },
 
   ];
