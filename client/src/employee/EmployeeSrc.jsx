@@ -428,7 +428,7 @@ const EmployeeSrc = () => {
   };
 
   const MyScreen = styled(Paper)((props) => ({
-    height: "calc(100vh - 29px)",
+    height: "calc(100vh - 30px)",
     padding: 0,
     paddingBottom: "0",
     overflow: "auto",
@@ -452,12 +452,13 @@ const EmployeeSrc = () => {
     );
   };
 
-  console.log(data, "data");
+  // console.log(data, "data");
+
   const getallparam = data.filter(
     (e) => e?.PROJECT_ID === parseInt(selectedProject)
   );
 
-  console.log(filterData, "getallparam");
+  // console.log(filterData, "getallparam");
 
   const handleAssignProject = (e) => {
     e.preventDefault();
@@ -784,6 +785,7 @@ const EmployeeSrc = () => {
 
           {index === 3 ? <EmployeeDocuments
            EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID}
+           EMPLOYEE_USERNAME={filterData.row?.EMPLOYEE_USERNAME}
            COMPANY_USERNAME={COMPANY_USERNAME}
            
           />: "" }

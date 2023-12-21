@@ -181,8 +181,6 @@ app.put("/api/get_all_attendance", (req, res) => {
 });
 
 
-
-
 app.put("/api/update_projects", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/update_projects`, req, res)
 });
@@ -249,6 +247,8 @@ app.get("/api/getall-archived-employees", (req, res) => {
 
 
 
+
+
 app.put("/api/unarchive-employee", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/unarchive-employee`, req, res)
 });
@@ -300,6 +300,7 @@ app.put("/api/download_subContractor_document", (req, res) => {
   console.log(req.body);
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/download_subContractor_document`, req, res)
 });
+// --------------------------------
 
 app.post("/api/subContractor_assign_project", (req, res) => {
   sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/subContractor_assign_project`, req, res)
@@ -309,19 +310,18 @@ app.put("/api/editbankdetail", (req, res) => {
   sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/editbankdetail`, req, res)
 })
 
-
+// get all documents ------
 app.put("/api/get_all_document", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_all_document`, req, res)
 });
 
 //create  Employee documents 
 
-
-const employee_document = createProxyMiddleware('/api/employee_document', {
+const employee_document = createProxyMiddleware('/api/create_employee_document', {
   target: process.env.SERVERAPIREQUEST, // Set the target URL for create_document
   changeOrigin: true,
   pathRewrite: {
-    '/api/employee_document': '/employee_document', // Modify the path as needed
+    '/api/create_employee_document': '/create_employee_document', // Modify the path as needed
   },
 });
 app.use(employee_document);
@@ -340,6 +340,16 @@ const subcontractor_document = createProxyMiddleware('/api/create_subcontractor_
 app.use(subcontractor_document);
 
 
+
+const project_document = createProxyMiddleware('/api/create_project_document', {
+  target: process.env.SERVERAPIREQUEST, // Set the target URL for create_document
+  changeOrigin: true,
+  pathRewrite: {
+    '/api/create_project_document': '/create_project_document', // Modify the path as needed
+  },
+});
+app.use(project_document);
+
 // get all project Document .......................
 app.put("/api/get_all_project_document", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_all_project_document`, req, res)
@@ -350,8 +360,8 @@ app.put("/api/get_all_subContractor_document", (req, res) => {
   sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_all_subContractor_document`, req, res)
 });
 
-app.post("/api/employee_document", (req, res) => {
-  sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/employee_document`, req, res)
+app.put("/api/get_all_employee_document", (req, res) => {
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_all_employee_document`, req, res)
 });
 
 app.put("/api/get_employee_details_for_attendence", (req, res) => {
@@ -370,7 +380,7 @@ app.post("/api/check_user", (req, res) => {
   sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/check_user: ${req.params.employeeId}`, req, res)
 });
 
-app.post("/api/bankDetail", (req, res) => {
+app.post("/api/bankDetail", (download_subContractor_documentreq, res) => {
   sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/bankDetail`, req, res)
 });
 app.post("/api/SubConbankDetail", (req, res) => {

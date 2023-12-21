@@ -85,8 +85,6 @@ const SubContract = (props) => {
   };
 
   const filterData = data?.row;
-  console.log("new code", filterData)
-
 
   useEffect(() => {
     fetchsubcontracts();
@@ -173,7 +171,6 @@ const SubContract = (props) => {
   ];
 
   const rows = subcontractData;
-  console.log("row",subcontractData )
 
   const handleClick = (event) => {
     setData(event);

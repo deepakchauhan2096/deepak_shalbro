@@ -52,7 +52,6 @@ export default function EditSubcontract(props) {
     });
 
     const editsubcontracts = props?.editsubcontract.row
-    console.log(editsubcontracts, "check2")
 
     useEffect(() => {
         if (editsubcontracts) {
@@ -77,10 +76,6 @@ export default function EditSubcontract(props) {
         }
     }, [editsubcontracts]);
 
-
-
-    console.log("editcontract", editsubcontracts)
-
     const availableState = country?.find(
         (c) => c.name === editSubcontract.SUBCONTRACTOR_COUNTRY
     );
@@ -104,35 +99,7 @@ export default function EditSubcontract(props) {
 
     const
         handleSubmit = (e) => {
-            console.log("object")
             e.preventDefault();
-            // const requiredFields = [
-            //     "SUBCONTRACTOR_PARENT_ID",
-            //     "SUBCONTRACTOR_PARENT_USERNAME",
-            //     "SUBCONTRACTOR_MEMBER_PARENT_ID",
-            //     "SUBCONTRACTOR_MEMBER_PARENT_USERNAME",
-            //     "SUBCONTRACTOR_USERNAME",
-            //     "SUBCONTRACTOR_NAME",
-            //     "SUBCONTRACTOR_PHONE",
-            //   ];
-
-            //   const hasEmptyFields = requiredFields.some(
-            //     (field) => !editSubcontract[field]
-            //   );
-
-            //   if (hasEmptyFields) {
-            //     setErrorMsg("Fill all fields");
-            //     toast.error("Please fill in all fields", {
-            //       position: toast.POSITION.TOP_CENTER,
-            //       autoClose: 1000,
-            //     });
-            //     return;
-            //   }
-
-            //   setErrorMsg("");
-
-
-            // Clear previous validation errors
             setUsernameError("");
             setNameError("");
             setPhoneError("");

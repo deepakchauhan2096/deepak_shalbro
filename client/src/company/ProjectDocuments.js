@@ -23,9 +23,6 @@ const ProjectDocuments = ({ projectData }) => {
     const [backdrop, setBackdrop] = useState(false);
     const [deleteItem, setDeleteItem] = useState('');
 
-    console.log("documents project", projectDoc)
-
-
     useEffect(() => {
         fetchProjectDoc();
     }, [deleteItem])
@@ -45,7 +42,6 @@ const ProjectDocuments = ({ projectData }) => {
             }
 
             const data = response.data;
-            console.log("requestdata", data);
             setProjectDoc(data);
 
 
@@ -53,11 +49,9 @@ const ProjectDocuments = ({ projectData }) => {
             console.log("Error Fetching Data :", error);
         }
     };
-    //   function for deleting the project Document 
-
-    // console.log("heelo", projectData.PROJECT_ID)
 
 
+    
     const downloadFile = (base64Data, fileName) => {
         const link = document.createElement('a');
         link.href = `data:application/octet-stream;base64,${base64Data}`;
@@ -65,8 +59,9 @@ const ProjectDocuments = ({ projectData }) => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-      };
-
+    };
+        //   function for deleting the project Document 
+    
     const handleDelDoc = async (e, documentId) => {
         setBackdrop(true);
         const data = {
@@ -100,7 +95,6 @@ const ProjectDocuments = ({ projectData }) => {
 
     // functon for download the data 
     const handleDownload = async (documentId, fileName) => {
-        console.log("hi", documentId)
         try {
           const data = {
             DOCUMENT_ID: documentId,
@@ -213,6 +207,14 @@ const ProjectDocuments = ({ projectData }) => {
             editable: false,
         },
         {
+            field: 'documentIdType',
+            headerName: 'Document Type',
+            description: 'Document Type',
+            type: 'text',
+            width: 150,
+            editable: false,
+        },
+        {
             field: 'ExpiryDate',
             headerName: 'Expiry Status',
             description: 'Document Expiry',
@@ -229,7 +231,6 @@ const ProjectDocuments = ({ projectData }) => {
             headerName: 'Download',
             width: 120,
             renderCell: (cellValues) => {
-                console.log("heelo world", cellValues.row.documentName, cellValues.id,)
                 return (
                     <Button
                         variant="contained"
@@ -281,6 +282,7 @@ const ProjectDocuments = ({ projectData }) => {
                 documentType: item.DOCUMENT_FILEDATA?.mimetype || '',
                 ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE, true) || '',
                 documentExpDate: formatDate(item.DOCUMENT_EXPIRY_DATE),
+                documentIdType: item.DOCUMENT_TYPE || '',
             })) || []
         );
     }, [projectDoc]);
