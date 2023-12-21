@@ -28,28 +28,30 @@ export default function EditSubcontract(props) {
     const handleClose = () => setOpen(false);
     const [errorMsg, setErrorMsg] = useState("");
 
+    // Validation error states
+    const [usernameError, setUsernameError] = useState("");
+    const [nameError, setNameError] = useState("");
+    const [phoneError, setPhoneError] = useState("");
+
     const [editSubcontract, setEditsubcontract] = useState({
         SUBCONTRACTOR_PARENT_ID: '',
         SUBCONTRACTOR_PARENT_USERNAME: '',
         SUBCONTRACTOR_MEMBER_PARENT_ID: '',
         SUBCONTRACTOR_MEMBER_PARENT_USERNAME: '',
-        SUBCONTRACTOR_ROLE: '',
-        SUBCONTRACTOR_NAME: '',
-        SUBCONTRACTOR_PHONE: '',
-        SUBCONTRACTOR_USERNAME: '',
-        SUBCONTRACTOR_START_DATE: '',
-        SUBCONTRACTOR_END_DATE: '',
-        SUBCONTRACTOR_SUPERVISOR: '',
-        SUBCONTRACTOR_COUNTRY: '',
-        SUBCONTRACTOR_STATE: '',
-        SUBCONTRACTOR_ADD: '',
-        SUBCONTRACTOR_CITY: '',
+        SUBCONTRACTOR_USERNAME: "",
+        SUBCONTRACTOR_NAME: "",
+        SUBCONTRACTOR_PHONE: "",
+        SUBCONTRACTOR_ROLE: "",
+        SUBCONTRACTOR_START_DATE: "",
+        SUBCONTRACTOR_END_DATE: "",
+        SUBCONTRACTOR_SUPERVISOR: "",
+        SUBCONTRACTOR_ADD: "",
+        SUBCONTRACTOR_COUNTRY: "",
+        SUBCONTRACTOR_STATE: "",
+        SUBCONTRACTOR_CITY: "",
     });
 
     const editsubcontracts = props?.editsubcontract.row
-    console.log(editsubcontracts, "check2")
-
-
 
     useEffect(() => {
         if (editsubcontracts) {
@@ -59,24 +61,20 @@ export default function EditSubcontract(props) {
                 SUBCONTRACTOR_PARENT_USERNAME: editsubcontracts.COMPANY_USERNAME,
                 SUBCONTRACTOR_MEMBER_PARENT_ID: editsubcontracts.COMPANY_PARENT_ID,
                 SUBCONTRACTOR_MEMBER_PARENT_USERNAME: editsubcontracts.COMPANY_PARENT_USERNAME,
-                SUBCONTRACTOR_ROLE: editsubcontracts.SUBCONTRACTOR_ROLE,
-                SUBCONTRACTOR_NAME: editsubcontracts.SUBCONTRACTOR_NAME,
                 SUBCONTRACTOR_PHONE: editsubcontracts.SUBCONTRACTOR_PHONE,
                 SUBCONTRACTOR_USERNAME: editsubcontracts.SUBCONTRACTOR_USERNAME,
+                SUBCONTRACTOR_NAME: editsubcontracts.SUBCONTRACTOR_NAME,
+                SUBCONTRACTOR_ROLE: editsubcontracts.SUBCONTRACTOR_ROLE,
                 SUBCONTRACTOR_START_DATE: editsubcontracts.SUBCONTRACTOR_START_DATE,
                 SUBCONTRACTOR_END_DATE: editsubcontracts.SUBCONTRACTOR_END_DATE,
                 SUBCONTRACTOR_SUPERVISOR: editsubcontracts.SUBCONTRACTOR_SUPERVISOR,
+                SUBCONTRACTOR_ADD: editsubcontracts.SUBCONTRACTOR_ADD,
                 SUBCONTRACTOR_COUNTRY: editsubcontracts.SUBCONTRACTOR_COUNTRY,
                 SUBCONTRACTOR_STATE: editsubcontracts.SUBCONTRACTOR_STATE,
-                SUBCONTRACTOR_ADD: editsubcontracts.SUBCONTRACTOR_ADD,
                 SUBCONTRACTOR_CITY: editsubcontracts.SUBCONTRACTOR_CITY,
             }));
         }
     }, [editsubcontracts]);
-
-
-
-    console.log("editcontract", editsubcontracts)
 
     const availableState = country?.find(
         (c) => c.name === editSubcontract.SUBCONTRACTOR_COUNTRY
@@ -101,36 +99,33 @@ export default function EditSubcontract(props) {
 
     const
         handleSubmit = (e) => {
-       console.log("object")
             e.preventDefault();
-            if (
-              !editSubcontract.PROJECT_USERNAME ||
-              !editSubcontract.PROJECT_NAME ||
-              !editSubcontract.PROJECT_ACCOUNT ||
-              !editSubcontract.PROJECT_PARENT_ID ||
-              !editSubcontract.PROJECT_PARENT_USERNAME ||
-              !editSubcontract.PROJECT_MEMBER_PARENT_ID ||
-              !editSubcontract.PROJECT_MEMBER_PARENT_USERNAME ||
-              !editSubcontract.PROJECT_ADD ||
-              !editSubcontract.PROJECT_START_DATE ||
-              !editSubcontract.PROJECT_END_DATE ||
-              !editSubcontract.PROJECT_SUPERVISOR ||
-              !editSubcontract.PROJECT_COUNTRY ||
-              !editSubcontract.PROJECT_CITY ||
-              !editSubcontract.PROJECT_STATE||
-              !editSubcontract.PROJECT_VALUE ||
-              !editSubcontract.PROJECT_CURRENCY 
-        
-            ) {
-              setErrorMsg("Fill all fields");
-              toast.error("Please fill in all fields", {
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: 2000,
-              });
-              return;
-            }
-  
+            setUsernameError("");
+            setNameError("");
+            setPhoneError("");
             setErrorMsg("");
+
+            // Validate the "Project Username" field
+            if (!editSubcontract.SUBCONTRACTOR_USERNAME) {
+                setUsernameError("Subcontractor Email is required.");
+                return;
+
+            }
+
+            // Validate the "Project Name" field
+            if (!editSubcontract.SUBCONTRACTOR_NAME) {
+                setNameError("Subcontractor Name is required.");
+                return;
+
+            }
+
+            // Validate the "Account" field
+            if (!editSubcontract.SUBCONTRACTOR_PHONE) {
+                setPhoneError("Contact Number is required.");
+                return;
+            }
+
+
             axios
                 .put("/api/update_subcontructor",
                     {
@@ -138,7 +133,7 @@ export default function EditSubcontract(props) {
                         SUBCONTRACTOR_PARENT_ID: editsubcontracts.SUBCONTRACTOR_PARENT_ID,
                         SUBCONTRACTOR_PARENT_USERNAME: editsubcontracts.SUBCONTRACTOR_PARENT_USERNAME,
                         SUBCONTRACTOR_MEMBER_PARENT_ID: editsubcontracts.SUBCONTRACTOR_MEMBER_PARENT_ID,
-                        SUBCONTRACTOR_MEMBER_PARENT_USERNAME:editsubcontracts.SUBCONTRACTOR_MEMBER_PARENT_USERNAME ,
+                        SUBCONTRACTOR_MEMBER_PARENT_USERNAME: editsubcontracts.SUBCONTRACTOR_MEMBER_PARENT_USERNAME,
                         SUBCONTRACTOR_DETAILS_FOR_UPDATES: {
                             ...editSubcontract
                         }
@@ -154,7 +149,7 @@ export default function EditSubcontract(props) {
                             autoClose: 1000,
                         });
                     } else if (response.data.operation === "successfull") {
-                        toast.success("Subcontract Created successfully!", {
+                        toast.success("Subcontract Updated successfully!", {
                             position: toast.POSITION.TOP_CENTER,
                         });
                         props.refetch();
@@ -188,39 +183,56 @@ export default function EditSubcontract(props) {
                     <form onSubmit={handleSubmit}>
                         <div className="row py-2">
                             <div className="form-group col-xl-4">
-                                <label>Subcontract Username</label>
+                                <label>Subcontract Email</label>
                                 <input
                                     type="text"
-                                    className="form-control form-control-2 rounded-0"
+                                    className={`form-control form-control-2 rounded-0 ${usernameError ? "is-invalid" : ""
+                                        }`}
                                     placeholder="Username"
                                     value={editSubcontract.SUBCONTRACTOR_USERNAME}
                                     name="SUBCONTRACTOR_USERNAME"
                                     onChange={handleEdit}
+
                                 />
+                                {usernameError && (
+                                    <div className="invalid-feedback">{usernameError}</div>
+                                )}
                             </div>
                             <div className="form-group col-xl-4">
                                 <label>Subcontract Name</label>
                                 <input
                                     type="text"
-                                    className="form-control form-control-2 rounded-0"
+                                    className={`form-control form-control-2 rounded-0 ${
+                                        nameError ? "is-invalid" : ""
+                                      }`}
                                     id="inputname"
                                     placeholder="Project Name"
                                     value={editSubcontract.SUBCONTRACTOR_NAME}
                                     name="SUBCONTRACTOR_NAME"
                                     onChange={handleEdit}
+
                                 />
+                                   {nameError && (
+                  <div className="invalid-feedback">{nameError}</div>
+                )}
                             </div>
                             <div className="form-group col-xl-4">
                                 <label>Contact</label>
                                 <input
                                     type="number"
-                                    className="form-control form-control-2 rounded-0"
+                                    className={`form-control form-control-2 rounded-0 ${
+                                        phoneError ? "is-invalid" : ""
+                                      }`}
                                     id="inputPassword4"
                                     placeholder="Enter Phone Number"
                                     name="SUBCONTRACTOR_PHONE"
                                     value={editSubcontract.SUBCONTRACTOR_PHONE}
                                     onChange={handleEdit}
+
                                 />
+                                   {phoneError && (
+                  <div className="invalid-feedback">{phoneError}</div>
+                )}
                             </div>
                         </div>
                         <div className="row py-2">
@@ -232,7 +244,7 @@ export default function EditSubcontract(props) {
                                     name="SUBCONTRACTOR_START_DATE"
                                     onChange={handleEdit}
                                     className="form-control form-control-2 rounded-0"
-                                //required
+
                                 />
                             </div>
                             <div className="form-group col-xl-6">
@@ -243,7 +255,7 @@ export default function EditSubcontract(props) {
                                     name="SUBCONTRACTOR_END_DATE"
                                     onChange={handleEdit}
                                     className="form-control form-control-2 rounded-0"
-                                //required
+
                                 />
                             </div>
                         </div>
@@ -356,7 +368,7 @@ export default function EditSubcontract(props) {
                             <button
                                 type="submit"
                                 className="btn btn-info text-white"
-                                // onClick={handleSubmit}
+                                onClick={handleSubmit}
                             >
                                 Edit Subcontractor
                             </button>{" "}

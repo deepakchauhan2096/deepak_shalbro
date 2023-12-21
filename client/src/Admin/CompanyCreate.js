@@ -161,6 +161,7 @@ export default function CompanyCreate(props) {
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        style={{zIndex:9999999}}
       >
         <Container
           id="content"

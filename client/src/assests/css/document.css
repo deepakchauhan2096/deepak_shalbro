@@ -187,10 +187,7 @@ align-items:center;
 
 
 /* new css of modal document  */
-.modalWidth{
-  width: 1200px;
-  margin: 0 auto;
-}
+
 .labelSelectFile{
 font-size: 15px;
 font-weight: 600;

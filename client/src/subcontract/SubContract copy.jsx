@@ -10,14 +10,10 @@ import { MyContext } from "../context/Mycontext";
 import EditSubcontract from "./EditSubContract";
 import Sidebar from "../components/Sidebar";
 import { useParams } from "react-router-dom";
-import Document from "../Document/Documents";
-import SubcontractDoc from "./SubcontractDoc";
 
 
 const SubContract = (props) => {
-
-  const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
-
+  const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = useState(1);
   const [subcontractData, setSubContractData] = useState([]);
@@ -31,7 +27,7 @@ const SubContract = (props) => {
   const handleClose = () => setOpen(false);
   const { alldata, setText } = useContext(MyContext);
   const { projectcreatedata } = useContext(MyContext);
-
+  
   const [data, setData] = useState({
     row: {
       SUBCONTRACTOR_PARENT_ID: "",
@@ -55,8 +51,8 @@ const SubContract = (props) => {
 
   //update data
 
-  const AllSubcontractor = props.SubContractorData;
-
+const AllSubcontractor = props.SubContractorData;
+ 
   const headers = {
     "Content-Type": "application/json",
     authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
@@ -79,12 +75,11 @@ const SubContract = (props) => {
       setSubContractData(data?.result);
       setIsLoading(false);
 
+
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
   };
-
-  const filterData = data?.row;
 
   useEffect(() => {
     fetchsubcontracts();
@@ -101,7 +96,7 @@ const SubContract = (props) => {
     { field: "SUBCONTRACTOR_ID", headerName: "ID", width: 90 },
     {
       field: "SUBCONTRACTOR_USERNAME",
-      headerName: "Subcontractor Email",
+      headerName: "USername",
       width: 150,
     },
     {
@@ -129,13 +124,13 @@ const SubContract = (props) => {
     {
       field: "SUBCONTRACTOR_SUPERVISOR",
       headerName: "Supervisor",
-      width: 120,
+      width: 200,
     },
 
     {
       field: "action",
       headerName: "Detail",
-      width: 100,
+      width: 120,
       renderCell: (cellValues) => {
         return (
           <Button
@@ -154,7 +149,7 @@ const SubContract = (props) => {
     {
       field: "edit",
       headerName: "Edit",
-      width: 100,
+      width: 120,
       renderCell: (cellValues) => {
         return (
           <Button
@@ -177,7 +172,7 @@ const SubContract = (props) => {
     handleOpen();
   };
 
-
+  const filterData = data?.row;
 
   const MyScreen = styled(Paper)((props) => ({
     height: "calc(100vh - 32px)",
@@ -289,7 +284,7 @@ const SubContract = (props) => {
             Documents
           </Button>
 
-          {/* {!Edit ? (
+          {!Edit ? (
             <Button
               onClick={(e) => setEdit(true)}
               variant={"contained"}
@@ -309,7 +304,7 @@ const SubContract = (props) => {
             >
               Save
             </Button>
-          )} */}
+          )}
 
           <Button
             onClick={(e) => setIndex(3)}
@@ -350,6 +345,12 @@ const SubContract = (props) => {
                     {filterData.SUBCONTRACTOR_SUPERVISOR}
                   </p>
                 </div>
+                {/* <div className="col-4">
+                  <b>Employement Type</b>
+                  <p className="bg-light text-dark p-2 rounded-2">
+                    {filterData.SUBCONTRACTOR_EMROLMNT_TYPE}
+                  </p>
+                </div> */}
                 <div className="col-4">
                   <b>Location</b>
                   <p className="bg-light text-dark p-2 rounded-2">
@@ -415,15 +416,250 @@ const SubContract = (props) => {
                 </div>
               </div>
               <hr />
-            </div>
-          </div>
-        ) : index === 2 ? (
-          <div className="box-tab">
-            <div className="p-4 container-fluid">
-              <SubcontractDoc   SubcontractorData={filterData}  />
+              {/* Assigining project to the subcontractor  */}
+              {/*              
+              <div className="row">
+                <div className="col-4">
+                  <b>Assigned Employees to this project</b>
+                  <div className="p-2 rounded-3 bg-light">
+                  <ul>
+                 {filterData.SUBCONTRACTOR_ASSIGN?.map((assignproject,key) => {
+                      return(
+                       <>
+                       <b>Employee ID</b> <span>{assignproject.EMPLOYEE_ID}</span>
+                       <br />
+                       <b>Company Username </b> <span> {assignproject.EMPLOYEE_PARENT_USERNAME}</span> <br />
+                       <b>Admin Username </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_USERNAME}</span> <br />
+                       <b>Company ID </b> <span> {assignproject.EMPLOYEE_PARENT_ID}</span> <br />
+                       <b>Admin ID </b> <span> {assignproject.EMPLOYEE_MEMBER_PARENT_ID}</span> 
+                       </>
+                    
+                      ) 
+                    
+                 })}
+                   </ul>
+                  </div>
+                </div>
+              </div> */}
             </div>
           </div>
         ) : index === 3 ? (
+          <div className="box-tab">
+            <div className="p-4 container-fluid">
+              <div className="row">
+                <div className="col-9">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Material</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Method</th>
+                        <th scope="col">Transaction ID</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Tiles</td>
+                        <td>10</td>
+                        <td>20 USD</td>
+                        <td>Cash</td>
+                        <td>RG384054859</td>
+                        <td>
+                          <b className="bg-success text-white px-2 rounded-2">
+                            Paid
+                          </b>
+                        </td>
+                        <td>12-10-2020</td>
+                      </tr>
+                      <tr>
+                        <td>Cement</td>
+                        <td>20</td>
+                        <td>20 USD</td>
+                        <td>UPI</td>
+                        <td>TY485060</td>
+                        <td>
+                          <b className="bg-warning text-white px-2 rounded-2">
+                            Panding
+                          </b>
+                        </td>
+                        <td>12-10-2020</td>
+                      </tr>
+                      <tr>
+                        <td>Concrete</td>
+                        <td>60</td>
+                        <td>20 USD</td>
+                        <td>Stripe</td>
+                        <td>PO6970845</td>
+                        <td>
+                          <b className="bg-success text-white px-2 rounded-2">
+                            Paid
+                          </b>
+                        </td>
+                        <td>12-10-2020</td>
+                      </tr>
+                      <tr>
+                        <td>Bricks</td>
+                        <td>120</td>
+                        <td>the Bird</td>
+                        <td>Visa</td>
+                        <td>PO697084599</td>
+                        <td>
+                          <b className="bg-danger text-white px-2 rounded-2">
+                            Failed
+                          </b>
+                        </td>
+                        <td>12-10-2020</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="col-3 px-4">
+                  <div className="mb-5 ">
+                    <button className="btn btn-primary float-right rounded-0">
+                      <i className="fa fa-print"></i> Print Invoice
+                    </button>
+                  </div>
+                  <div className="search-container mb-5">
+                    <input type="text" placeholder="Search.." name="search" />
+                    <button type="submit">
+                      <i className="fa fa-search"></i>
+                    </button>
+                  </div>
+
+                  <div>
+                    <b>Time Period</b>
+                  </div>
+                  <div>
+                    <div className="form-check py-1">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault1"
+                      />
+                      <label
+                        className="form-check-label"
+                        for="flexRadioDefault1"
+                      >
+                        All time
+                      </label>
+                    </div>
+                    <div className="form-check py-1">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault2"
+                        checked
+                      />
+                      <label
+                        className="form-check-label"
+                        for="flexRadioDefault2"
+                      >
+                        Today
+                      </label>
+                    </div>
+
+                    <div className="form-check py-1">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault2"
+                      />
+                      <label
+                        className="form-check-label"
+                        for="flexRadioDefault2"
+                      >
+                        This Week
+                      </label>
+                    </div>
+
+                    <div className="form-check py-1">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault2"
+                      />
+                      <label
+                        className="form-check-label"
+                        for="flexRadioDefault2"
+                      >
+                        This month
+                      </label>
+                    </div>
+
+                    <div className="form-check py-1">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault2"
+                      />
+                      <label
+                        className="form-check-label"
+                        for="flexRadioDefault2"
+                      >
+                        Custom
+                      </label>
+                    </div>
+                  </div>
+                  <b>Status</b>
+                  <div>
+                    <div className="form-check py-1">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckIndeterminate"
+                      />
+                      <label
+                        className="form-check-label"
+                        for="flexCheckIndeterminate"
+                      >
+                        Paid
+                      </label>
+                    </div>
+
+                    <div className="form-check py-1">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckIndeterminate"
+                      />
+                      <label
+                        className="form-check-label"
+                        for="flexCheckIndeterminate"
+                      >
+                        Pending
+                      </label>
+                    </div>
+
+                    <div className="form-check py-1">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckIndeterminate"
+                      />
+                      <label
+                        className="form-check-label"
+                        for="flexCheckIndeterminate"
+                      >
+                        Failed
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : index === 2 ? (
           <div className="box-tab">
             <div className="p-4 container-fluid">
               <div className="row">

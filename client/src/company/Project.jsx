@@ -1,44 +1,28 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ProjectCreate from "./ProjectCreate";
-import { MyContext } from "../context/Mycontext";
+// import { MyContext } from "../context/Mycontext";
 import ProjectEdit from "./ProjectEdit";
 import ProjectLoc from "./ProjectLoc";
 import ProjectAssigned from "./ProjectAssigned";
 import {
-  Avatar,
   Button,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Paper,
   Skeleton,
-  Toolbar,
-  Tooltip,
   styled,
 } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-// import { useDispatch, useSelector } from "react-redux";
-// import { initProject_fun } from "../redux/action";
+import ProjectDocuments from "./ProjectDocuments";
 
 const Project = (props) => {
-    const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
-  // const { id } = useParams();
 
-  // const param = id.split("&");
-  // const COMPANY_ID = param[0];
-  // const COMPANY_USERNAME = param[1];
-  // const COMPANY_PARENT_ID = param[2];
-  // const COMPANY_PARENT_USERNAME = param[3];
+  const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+
 
   const [data, setData] = useState({
     row: {
@@ -78,13 +62,6 @@ const Project = (props) => {
 
   const filterallprojectData = props.recieveData;
 
-  // console.log(filterallprojectData, "my project");
-
-  // const headers = {
-  //   "Content-Type": "application/json",
-  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  // };
-
   const fetchProjects = async (e) => {
     try {
       const response = await axios.put(
@@ -96,47 +73,19 @@ const Project = (props) => {
           PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
         }
       );
-      // setTimeout(() => {
       const data = response.data;
       setProjectData(data?.result);
-      // dispatch(initProject_fun(data?.result))
-
       setIsLoading(false);
-      // console.log("contracts Data : =>", data);
-      // }, 1000);
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
     }
   };
 
-  //update data
-
+  
   useEffect(() => {
     fetchProjects();
   }, []);
 
-  const fetchProject = async () => {
-    try {
-      const response = await axios.put(
-        "/api/get_projects",
-        {
-          PROJECT_PARENT_ID: COMPANY_ID,
-          PROJECT_PARENT_USERNAME: COMPANY_USERNAME,
-          PROJECT_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
-          PROJECT_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
-        },
-  
-      );
-
-      const data = response.data;
-      setProjectData(data?.result);
-      console.log("Projects Data: =>", data);
-      return data;
-    } catch (err) {
-      console.log("Something Went Wrong: =>", err);
-      throw err;
-    }
-  };
 
   const fetchAllEmployees = async () => {
     try {
@@ -160,29 +109,31 @@ const Project = (props) => {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const [employeeData, projectsData] = await Promise.all([
-        fetchAllEmployees(),
-        fetchProject(),
-      ]);
+  // try to resolve error while both api's are not working synchrounously
 
-      // Both requests have completed here
-      setIsLoading(false);
-      console.log("Both requests completed", employeeData, projectsData);
+  // const fetchData = async () => {
+  //   try {
+  //     const [employeeData, projectsData] = await Promise.all([
+  //       fetchAllEmployees(),
+  //       fetchProjects(),
+  //     ]);
 
-      // Now you can access employeeData and projectsData for further processing if needed
-    } catch (err) {
-      console.log("An error occurred:", err);
-    }
-  };
+  //     // Both requests have completed here
+  //     setIsLoading(false);
+  //     console.log("Both requests completed", employeeData, projectsData);
 
-  // Call the fetchData function to fetch both sets of data concurrently
-  //update data
+  //     // Now you can access employeeData and projectsData for further processing if needed
+  //   } catch (err) {
+  //     console.log("An error occurred:", err);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+
+// calling this api on useEffect 
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   // console.log(ProjectData, "projectdata");
 
@@ -270,9 +221,9 @@ const Project = (props) => {
           //   handleEdit(cellValues);
           // }}
           >
-            <ProjectEdit edit={cellValues} 
-            refetch={fetchProjects} 
-            
+            <ProjectEdit edit={cellValues}
+              refetch={fetchProjects}
+
             />
           </Button>
         );
@@ -392,24 +343,24 @@ const Project = (props) => {
               <Animations />
             ) : (
               <>
-                  <DataGrid
-                    sx={{ border: "none" }}
-                    rows={rows}
-                    columns={columns}
-                    getRowId={(row) => row.PROJECT_ID}
-                    initialState={{
-                      pagination: {
-                        paginationModel: {
-                          pageSize: 20,
-                        },
+                <DataGrid
+                  sx={{ border: "none" }}
+                  rows={rows}
+                  columns={columns}
+                  getRowId={(row) => row.PROJECT_ID}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 20,
                       },
-                    }}
-                    density="compact"
-                    pageSizeOptions={[5]}
-                    checkboxSelection={false}
-                    disableRowSelectionOnClick
-                    
-                  />
+                    },
+                  }}
+                  density="compact"
+                  pageSizeOptions={[5]}
+                  checkboxSelection={false}
+                  disableRowSelectionOnClick
+
+                />
               </>
             )}
           </Box>
@@ -474,10 +425,23 @@ const Project = (props) => {
           >
             Track
           </Button>
+
+          <Button
+            onClick={(e) => setIndex(4)}
+            variant={index === 4 ? "outlined" : "outlined"}
+            className={
+              index === 4
+                ? "btn button border-bottom-0 bg-white"
+                : "btn rounded-0 border-0  rounded-0 text-light"
+            }
+            size="small"
+          >
+            Documents
+          </Button>
         </div>
 
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-          <div className="container-fluid g-0">
+          {index === 1 && <div className="container-fluid g-0">
             <div className="row">
               <div className="col-md-2">
                 <b>Project Name</b>
@@ -596,15 +560,19 @@ const Project = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>}
         </MyScreen>
 
         <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
-          <ProjectAssigned projectData={filterData} />
+          {index === 2 && <ProjectAssigned projectData={filterData} />}
         </MyScreen>
 
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
-          <ProjectLoc projectData={filterData} />
+          {index === 3 && <ProjectLoc projectData={filterData} />}
+        </MyScreen>
+
+        <MyScreen screenIndex={index === 4} sx={{ padding: 3 }}>
+          {index === 4 && <ProjectDocuments projectData={filterData} />}
         </MyScreen>
       </Box>
     </>

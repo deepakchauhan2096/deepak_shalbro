@@ -10,8 +10,10 @@ import dayjs from 'dayjs';
 import { PDFDownloadLink, PDFViewer, ReactPDF } from "@react-pdf/renderer";
 import SalaryPDF from "../Invoices/SalaryPDF";
 import env from "react-dotenv";
+import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 // current day
 let MyDateCurrent = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
@@ -21,21 +23,29 @@ const formattedMyDateCurrent = moment(MyDateCurrent).utcOffset(0).format('YYYY-M
 let MyDateBefore = moment().subtract(30, 'days').format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
 const formattedMyDateBefore = moment(MyDateBefore).utcOffset(0).format('YYYY-MM-DD');
 
-const EmployeeTimeSheet = (props) => {
+const EmployeeTimeSheetUser = (props) => {
 
   const [workvalue, setWorkvalue] = useState([]);
+  const [ids, setIds] = useState({ id: "", Eid: "" });
   const [dateValue, setDate] = useState({
     ATTENDANCE_START_DATE: formattedMyDateBefore,
     ATTENDANCE_END_DATE: formattedMyDateCurrent,
   });
 
-
-  console.log(dateValue, formattedMyDateCurrent, "dateValue")
-
-
   useEffect(() => {
-    gettimesheet();
-  }, [props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME, dateValue.ATTENDANCE_START_DATE, dateValue.ATTENDANCE_END_DATE]);
+    // Get the current URL
+    const currentURL = window.location.search;
+    let params = new URLSearchParams(currentURL);
+    const Id = params.get('Id');
+    const eid = params.get('eid');
+    setIds((prev) => ({ ...prev, id: Id, Eid: eid }));
+    console.log("Current", Id, eid);
+  }, []);
+
+
+  console.log(workvalue, "dateValue")
+
+
 
 
   const gettimesheet = async (e) => {
@@ -43,8 +53,8 @@ const EmployeeTimeSheet = (props) => {
       const response = await axios.put(
         "/api/get_employee_all_for_attendence",
         {
-          ATTENDANCE_ADMIN_USERNAME: props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME,
-          ATTENDANCE_EMPLOYEE_USERNAME: props.mainData?.EMPLOYEE_USERNAME,
+          ATTENDANCE_ADMIN_USERNAME: ids?.Eid,
+          ATTENDANCE_EMPLOYEE_USERNAME: ids?.id,
           ATTENDANCE_START_DATE: dateValue.ATTENDANCE_START_DATE,
           ATTENDANCE_END_DATE: dateValue.ATTENDANCE_END_DATE,
         },
@@ -57,6 +67,14 @@ const EmployeeTimeSheet = (props) => {
       console.log("something Went wrong: =>", err);
     }
   };
+
+  useEffect(() => {
+    gettimesheet();
+  }, [ids?.id, ids?.Eid, dateValue.ATTENDANCE_START_DATE, dateValue.ATTENDANCE_END_DATE]);
+
+
+
+
 
   // time calculation
   const timeValueHours = (x, y) => {
@@ -149,11 +167,7 @@ const EmployeeTimeSheet = (props) => {
   // calculations
   const ResultantTime = overallTime(allHours);
   const ExtractHours = convertToDuration(ResultantTime)?._data.hours;
-  const totalIncome = ExtractHours * props.mainData.EMPLOYEE_HOURLY_WAGE;
-  const Automatic = workvalue?.filter((prev) => prev.ATTENDANCE_TYPE_IN === "automatic" && prev.ATTENDANCE_TYPE_OUT === "automatic")
-
-
-
+  // const totalIncome = ExtractHours * props.mainData.EMPLOYEE_HOURLY_WAGE;
 
   const columns = [
 
@@ -170,15 +184,15 @@ const EmployeeTimeSheet = (props) => {
       width: 120,
       renderCell: (cellValues) => {
         return (
-          cellValues?.row.ATTENDANCE_TYPE_IN == "automatic" && cellValues?.row.ATTENDANCE_IN ? <>
+            <>
             {cellValues.row.ATTENDANCE_IN && moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT")}
-          </> : <>{"absent"}</>
+            </>
         );
-
+        
       },
-      cellClassName: (cellValues) => {
-        return cellValues?.row.ATTENDANCE_TYPE_IN == "automatic" && cellValues?.row.ATTENDANCE_IN ? "bg-success text-white border" : "bg-danger text-white border"
-      }
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_IN ? "bg-success text-white border" : "bg-danger text-white border"
+        }
     },
 
     {
@@ -187,14 +201,14 @@ const EmployeeTimeSheet = (props) => {
       width: 150,
       renderCell: (cellValues) => {
         return (
-          cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" && cellValues?.row.ATTENDANCE_OUT ? <>
+          cellValues?.row.ATTENDANCE_OUT ? <>
             {cellValues?.row.ATTENDANCE_OUT && moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT")}
           </> : <>{"absent"}</>
         );
       },
-      cellClassName: (cellValues) => {
-        return cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" && cellValues?.row.ATTENDANCE_OUT ? "bg-success text-white border" : "bg-danger text-white border"
-      }
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_OUT ? "bg-success text-white border" : "bg-danger text-white border"
+        }
     },
 
     {
@@ -208,9 +222,9 @@ const EmployeeTimeSheet = (props) => {
           </>
         );
       },
-      cellClassName: (cellValues) => {
-        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-light text-dark border" : "text-dark border"
-      }
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-light text-dark border" : "text-white border"
+        }
     },
     {
       field: "overtime",
@@ -237,149 +251,145 @@ const EmployeeTimeSheet = (props) => {
           </>
         );
       },
-      cellClassName: (cellValues) => {
-        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-success text-light border" : "bg-danger text-white border"
-      }
+      cellClassName : (cellValues) => {
+        return  cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-success text-light border" : "bg-danger text-white border"
+        }
     },
 
   ];
 
-
-
-
-
+  console.log(workvalue, "workvalue")
 
 
   return (
     <>
-      <div className="container-fluid border" style={{ height: "70vh" }}>
-        <p>
-          {" "}
-          <b style={{ fontWeight: "600", color: "black" }}>Employee Name : </b>
-          {props.mainData.EMPLOYEE_NAME}
-        </p>
-        <div style={{ display: "flex", gap: 10, padding: "5px 0" }}>
-        </div>
-        <div className="col-3">
-          <table className="table p-0 m-0">
-            <tr>
-              <th><LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={['DatePicker', 'DatePicker']}>
-                  <DatePicker
-                    label="Date from"
-                    // onChange={(newValue) => setstartDateString(newValue)}
-                    onChange={(event) =>
-                      setDate((prev) => ({
-                        ...prev, ATTENDANCE_START_DATE: event,
-                      }))
-                    }
-                    defaultValue={dayjs(dateValue.ATTENDANCE_START_DATE)}
-                    sx={{}}
-                    formatDensity="spacious"
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-              </th>
-              <th>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={['DatePicker', 'DatePicker']}>
-                    <DatePicker
-                      label="Date to"
-                      // onChange={(newValue) => setstartDateString(newValue)}
-                      onChange={(event) =>
-                        setDate((prev) => ({
-                          ...prev,
-                          ATTENDANCE_END_DATE: event,
-                        }))
-                      }
-                      defaultValue={dayjs(dateValue.ATTENDANCE_END_DATE)}
-                      sx={{ height: "10" }}
-                      formatDensity="spacious"
-                    />
-                  </DemoContainer>
-                </LocalizationProvider></th>
-            </tr>
-          </table>
-        </div>
-
-        {/* data gird */}
-        <DataGrid
-          className="display"
-          style={{ height: "55vh" }}
-          rows={workvalue}
-          columns={columns}
-          getRowId={(row) => row.ATTENDANCE_ID}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 8,
-              },
-            },
-            sorting: {
-              sortModel: [
-                {
-                  field: 'ATTENDANCE_DATE_ID',
-                  sort: 'asc',
-                },
-              ],
-            },
-
-            aggregation: {
-              model: {
-                size: 'sum',
-                updatedAt: 'max',
-              },
-            },
-
-
-
-          }
-
-          }
-          density="compact"
-          pageSizeOptions={[5]}
-          // checkboxSelection
-          disableRowSelectionOnClick
-        />
-      </div>
-      <div className="container-fluid" style={{ position: "", bottom: "0" }}>
-        <div className="row border">
-          <div className="col-6  pt-5 ">
-            <p className="fw-semibold text-dark">
-              Employee Signature:{" "}
-              <span
-                style={{
-                  borderBottom: "2px solid black",
-                  width: "200px",
-                }}
-              ></span>
-            </p>
+      <div className="container-fluid g-0">
+        <nav
+          className="navbar navbar-expand-lg navbar-dark bg-dark"
+          style={{ marginBottom: 0 }}
+        >
+          <div className="container">
+            <a className="navbar-brand" href="#">
+              {/* {state.EMPLOYEE_NAME} (Employee) */}
+            </a>
+            <button
+              className="btn btn-outline-primary my-2 my-sm-0 btn-sm"
+              type="submit"
+            // onClick={logout}
+            >
+              Logout
+            </button>
           </div>
+        </nav>
 
-          <div className="col-5">
-            <div className="row">
-              <div className="col-5  m-2">
-                <p className="text-dark fw-semibold">Total Hours</p>
-                <p className="text-dark fw-semibold">Rate Per Hour</p>
-                <p className="text-dark fw-semibold">Total Pay</p>
-              </div>
-              <div className="col-6  m-2">
-                <p className="bg-warning text-center fs-6 text-dark">
-                  {ResultantTime}
-                </p>
-                <p className="bg-primary text-center fs-6 text-light">
-                  {props?.mainData.EMPLOYEE_HOURLY_WAGE}
-                </p>
-                <p className="bg-success text-center fs-6 text-light">
-                  $ {totalIncome}
-                </p>
+        <nav
+          className="navbar navbar-expand-lg navbar-light bg-light"
+          style={{ height: "40px" }}
+        >
+          <div className="container">
+            <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div className="navbar-nav">
+                <a className="bg-light text-dark nav-link">My Projects</a>
+                <Link className="bg-white text-dark nav-link" to="">My attendance history</Link>
               </div>
             </div>
           </div>
+        </nav>
+        <div className="container" >
+          {/* <p>
+          {" "}
+          <b style={{ fontWeight: "600", color: "black" }}>Employee Name : </b>
+          {props.mainData.EMPLOYEE_NAME}
+        </p> */}
+          <div style={{ display: "flex", gap: 10, padding: "5px 0" }}>
+          </div>
+          <div className="col-3">
+            <table className="table p-0 m-0">
+              <tr>
+                <th><LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DatePicker', 'DatePicker']}>
+                    <DatePicker
+                      label="Date from"
+                      // onChange={(newValue) => setstartDateString(newValue)}
+                      onChange={(event) =>
+                        setDate((prev) => ({
+                          ...prev, ATTENDANCE_START_DATE: event,
+                        }))
+                      }
+                      defaultValue={dayjs(dateValue.ATTENDANCE_START_DATE)}
+                      sx={{}}
+                      formatDensity="spacious"
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+                </th>
+                <th>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DatePicker', 'DatePicker']}>
+                      <DatePicker
+                        label="Date to"
+                        // onChange={(newValue) => setstartDateString(newValue)}
+                        onChange={(event) =>
+                          setDate((prev) => ({
+                            ...prev,
+                            ATTENDANCE_END_DATE: event,
+                          }))
+                        }
+                        defaultValue={dayjs(dateValue.ATTENDANCE_END_DATE)}
+                        sx={{ height: "10" }}
+                        formatDensity="spacious"
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider></th>
+              </tr>
+            </table>
+          </div>
+
+
+          {/* data gird */}
+          <DataGrid
+            className="display"
+            style={{ height: "75vh" }}
+            rows={workvalue}
+            columns={columns}
+            getRowId={(row) => row.ATTENDANCE_ID}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 20,
+                },
+              },
+              sorting: {
+                sortModel: [
+                  {
+                    field: 'ATTENDANCE_DATE_ID',
+                    sort: 'asc',
+                  },
+                ],
+              },
+
+              aggregation: {
+                model: {
+                  size: 'sum',
+                  updatedAt: 'max',
+                },
+              },
+
+
+
+            }
+
+            }
+            density="compact"
+            pageSizeOptions={[5]}
+            // checkboxSelection
+            disableRowSelectionOnClick
+          />
         </div>
+
       </div>
     </>
   );
 };
 
-export default EmployeeTimeSheet;
+export default EmployeeTimeSheetUser;

@@ -15,9 +15,6 @@ import {
   Paper,
   Skeleton,
 } from "@mui/material";
-import Snippet from "./Snippet";
-import EmployeePDF from "../Invoices/EmployeePDF";
-import { PDFViewer } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
 import { useParams } from "react-router-dom";
@@ -25,29 +22,24 @@ import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import GenPassword from "./GenPassword";
 import { toast } from "react-toastify";
-import EmployeeAttendance from "./EmployeeAttendance";
+// import EmployeeAttendance from "./EmployeeAttendance";
 import EmployeeManual from "./EmployeeManual";
-// import EmployeeManual from "./EmployeeManual";
+// import EmployeeDocCreate from "./EmployeeDocCreate";
+import EmployeeDocuments from "./EmployeeDocuments";
 
-// import env from "react-dotenv";
 
-const EmployeeSrc = (props) => {
-  const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
-
-  // const { id } = useParams();
-  // const param = id?.split("&");
-  // const COMPANY_ID = param[0];
-  // const COMPANY_USERNAME = param[1];
-  // const COMPANY_PARENT_ID = param[2];
-  // const COMPANY_PARENT_USERNAME = param[3];
+const EmployeeSrc = () => {
+  const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+  const [archived, setArchived] = useState([{}]);
+  const [getarchived, setGetrchived] = useState([{}]);
   //isLoading this is for the Skeleton
   const [isLoading, setIsLoading] = useState(true);
 
   // all employee data
-  const [allempData, setAllempData] = useState({
+  const [allempData, setAllempData] = useState([{
     COMPANY_PARENT_ID: "",
     COMPANY_PARENT_USERNAME: "",
-  });
+  }]);
 
   const [data, setData] = useState([
     {
@@ -104,22 +96,12 @@ const EmployeeSrc = (props) => {
 
 
   const [errorMsg, setErrorMsg] = useState("");
+  const [display, setDisplay] = useState("unarchive")
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // const filterallempData = props.empData;
-
-  // const getallparam = allProjectData.filter(
-  //   (e) => e.PROJECT_NAME === selectedProject
-  // );
-
-  // const headers = {
-  //   "Content-Type": "application/json",
-  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  // };
-
-  console.log(selectedProject, "selectedProject")
+  // console.log(selectedProject, "selectedProject")
 
   const fetchProject = async () => {
     try {
@@ -136,7 +118,7 @@ const EmployeeSrc = (props) => {
 
       const data = response.data;
       // setProjectData(data?.result);
-      console.log("Projects Data: =>", data);
+      // console.log("Projects Data: =>", data);
       return data;
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
@@ -146,7 +128,7 @@ const EmployeeSrc = (props) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [archived]);
 
   const fetchAllEmployees = async () => {
     try {
@@ -163,7 +145,7 @@ const EmployeeSrc = (props) => {
 
       const data = response.data;
 
-      console.log("Employee Data: =>", data);
+      // console.log("Employee Data: =>", data);
       return data;
     } catch (err) {
       console.log("Something Went Wrong: =>", err);
@@ -182,7 +164,7 @@ const EmployeeSrc = (props) => {
       setIsLoading(false);
       setData(projectsData.result);
       setAllempData(employeeData.result);
-      console.log("Both requests completed", employeeData, projectsData);
+      // console.log("Both requests completed", employeeData, projectsData);
 
       // Now you can access employeeData and projectsData for further processing if needed
     } catch (err) {
@@ -192,7 +174,89 @@ const EmployeeSrc = (props) => {
 
   // Call the fetchData function to fetch both sets of data concurrently
 
-  const rows = allempData;
+  // const filterRow = allempData?.filter(obj => obj?.ARCHIVED === false);
+
+  console.log(allempData, "myRows")
+  const FilterArchive = allempData?.filter(newData => newData?.ARCHIVED === false);
+  const rows = FilterArchive;
+
+
+  const archivedData = allempData?.filter(newData => newData?.ARCHIVED === true);
+  const rows2 = archivedData;
+  // For archive  employye 
+
+  const archiveEmployee = async (archiveData) => {
+    try {
+      const data = {
+        EMPLOYEE_PARENT_ID: archiveData.row?.EMPLOYEE_PARENT_ID,
+        EMPLOYEE_PARENT_USERNAME: archiveData.row?.EMPLOYEE_PARENT_USERNAME,
+        EMPLOYEE_MEMBER_PARENT_ID: archiveData.row?.EMPLOYEE_MEMBER_PARENT_ID,
+        EMPLOYEE_MEMBER_PARENT_USERNAME: archiveData.row?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+        EMPLOYEE_ID: archiveData.row?.EMPLOYEE_ID
+      };
+
+      console.log("Data:", data);
+
+      const response = await axios.post("/api/archive-employee", data);
+
+      if (response.status === 200) {
+        const jsonResponse = response.data;
+        setArchived(jsonResponse)
+        console.log("Response data:", jsonResponse);
+        toast.success("Employee Archived!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 1000,
+        });
+      } else {
+        console.error(response.status, response.statusText);
+        toast.error('Document not found!', {
+          // Show for 2 seconds
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('An error occurred while archiving the employee.', {
+        // Show for 2 seconds
+      });
+    }
+  };
+
+
+  const unarchiveEmployee = async (archiveemp) => {
+    try {
+      const data = {
+        EMPLOYEE_PARENT_ID: archiveemp.row?.EMPLOYEE_PARENT_ID,
+        EMPLOYEE_PARENT_USERNAME: archiveemp.row?.EMPLOYEE_PARENT_USERNAME,
+        EMPLOYEE_MEMBER_PARENT_ID: archiveemp.row?.EMPLOYEE_MEMBER_PARENT_ID,
+        EMPLOYEE_MEMBER_PARENT_USERNAME: archiveemp.row?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+        EMPLOYEE_ID: archiveemp.row?.EMPLOYEE_ID
+      };
+
+      console.log("Data:", data);
+
+      const response = await axios.put("/api/unarchive-employee", data);
+
+      if (response.status === 200) {
+        const jsonResponse = response.data;
+        setArchived(jsonResponse)
+        console.log("Response data:", jsonResponse);
+        toast.success("Employee UnArchived!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 1000,
+        });
+      } else {
+        console.error(response.status, response.statusText);
+        toast.error('Document not found!', {
+          // Show for 2 seconds
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('An error occurred while archiving the employee.', {
+        // Show for 2 seconds
+      });
+    }
+  };
 
   const columns = [
     { field: "EMPLOYEE_ID", headerName: "ID", width: 60 },
@@ -200,50 +264,38 @@ const EmployeeSrc = (props) => {
       field: "EMPLOYEE_USERNAME",
       headerName: "Employee Email",
       width: 120,
-      // editable: true,
     },
     {
       field: "EMPLOYEE_NAME",
       headerName: "Name",
       width: 120,
-      // editable: true,
     },
-    // {
-    //   field: "EMPLOYEE_EMAIL",
-    //   headerName: "E-mail",
-    //   width: 120,
-    //   // editable: true,
-    // },
+
     {
       field: "EMPLOYEE_ROLE",
       headerName: "Employee Role",
       width: 120,
-      // editable: true,
     },
     {
       field: "EMPLOYEE_PHONE",
       headerName: "Phone",
       width: 110,
-      // editable: true,
     },
     {
       field: "EMPLOYEE_HIRE_DATE",
       headerName: "Hire Date",
       width: 100,
-      // editable: true,
     },
     {
       field: "EMPLOYEE_HOURLY_WAGE",
       headerName: "Hourly Wages",
       width: 110,
-      // editable: true,
     },
 
     {
       field: "EMPLOYEE_EMPLMNTTYPE",
       headerName: "Employement Type",
       width: 120,
-      // editable: true,
     },
     {
       field: "action",
@@ -253,7 +305,7 @@ const EmployeeSrc = (props) => {
         return (
           <Button
             variant="contained"
-            className="view-btn primary btn btn-success"
+            className="view-btn btn btn-success"
             style={{ padding: "2px 2px" }}
             onClick={(event) => {
               handleClick(cellValues);
@@ -270,9 +322,42 @@ const EmployeeSrc = (props) => {
       width: 80,
       renderCell: (cellValues) => {
         return (
-          <Button>
+          <Button
+            variant="contained"
+            color="warning"
+            sx={{ borderRadius: "12px", padding: "0px 10px" }}
+            size="small"
+          >
             <EmployeeEdit edit={cellValues} refetch={fetchData} />
           </Button>
+        );
+      },
+    },
+    {
+      field: "archive",
+      headerName: "Archive",
+      width: 120,
+      renderCell: (cellValues) => {
+        return (
+          <>
+            {display === "unarchive" ? <Button
+              variant="contained"
+              color="secondary"
+              sx={{ borderRadius: "12px", padding: "2px 10px" }}
+              size="small"
+              onClick={() => archiveEmployee(cellValues)}
+            >
+              Archive
+            </Button> : <Button
+              variant="contained"
+              color="secondary"
+              sx={{ borderRadius: "12px", padding: "2px 10px" }}
+              size="small"
+              onClick={() => unarchiveEmployee(cellValues)}
+            >
+              UnArchive
+            </Button>}
+          </>
         );
       },
     },
@@ -284,7 +369,6 @@ const EmployeeSrc = (props) => {
       field: "EMPLOYEE_USERNAME",
       headerName: "Username",
       width: 120,
-      // editable: true,
     },
     {
       field: "action",
@@ -334,7 +418,7 @@ const EmployeeSrc = (props) => {
   };
 
   const MyScreen = styled(Paper)((props) => ({
-    height: "calc(100vh - 29px)",
+    height: "calc(100vh - 30px)",
     padding: 0,
     paddingBottom: "0",
     overflow: "auto",
@@ -358,12 +442,13 @@ const EmployeeSrc = (props) => {
     );
   };
 
-  console.log(data, "data");
+  // console.log(data, "data");
+
   const getallparam = data.filter(
     (e) => e?.PROJECT_ID === parseInt(selectedProject)
   );
 
-  console.log(filterData, "getallparam");
+  // console.log(filterData, "getallparam");
 
   const handleAssignProject = (e) => {
     e.preventDefault();
@@ -411,16 +496,13 @@ const EmployeeSrc = (props) => {
       });
   };
 
-
+  console.log(allempData[0].EMPLOYEE_ID, "eployeeid")
 
   const drawerWidth = 250;
 
   console.log(filterData.row?.EMPLOYEE_ASSIGN, "filterData.row")
 
   // const filterProjects =
-
-
-
 
 
 
@@ -437,6 +519,24 @@ const EmployeeSrc = (props) => {
       />
       <Box className="box" style={{ background: "#277099" }}>
         <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} />
+        <Button
+          size="small"
+          variant={"outlined"}
+          className={display === "unarchive" ? "btn button border-bottom-0 bg-white" : "btn btn-sm btn-primary rounded-0 border-0  rounded-0 text-light"}
+          onClick={() => setDisplay("unarchive")}
+        >
+          My Employees
+        </Button>
+        <Button
+          size="small"
+          variant={"outlined"}
+          className={display === "archive" ? "btn button border-bottom-0 bg-white" : "btn btn-sm btn-primary rounded-0 border-0  rounded-0 text-light"}
+          onClick={() => setDisplay("archive")}
+        >
+          Archive
+        </Button>
+
+
         <EmployeeCreate
           COMPANY_ID={COMPANY_ID}
           COMPANY_USERNAME={COMPANY_USERNAME}
@@ -445,7 +545,6 @@ const EmployeeSrc = (props) => {
           name={"Employee"}
           refetch={fetchData}
         />
-
         <MyScreen sx={{ display: "block", padding: 3 }}>
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             {isLoading ? (
@@ -455,7 +554,7 @@ const EmployeeSrc = (props) => {
                 <DataGrid
                   className="display"
                   sx={{ border: "none" }}
-                  rows={rows}
+                  rows={display === "archive" ? rows2 : rows}
                   columns={columns}
                   getRowId={(row) => row.EMPLOYEE_ID}
                   initialState={{
@@ -497,7 +596,7 @@ const EmployeeSrc = (props) => {
           >
             <ArrowBackIcon style={{ fontSize: "22.5px" }} />
           </Button>
-          {["Employee Details", "Attendance", "Timesheet"].map(
+          {["Employee Details","Timesheet", "Manual Attendance","Documents" ].map(
             (item, value) => (
               <Button
                 onClick={(e, index) => setIndex(value)}
@@ -516,7 +615,7 @@ const EmployeeSrc = (props) => {
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
-          <div className="container mt-1">
+         {index === 0 ? <div className="container mt-1">
             {/* <h1 className="text-center">Employee Detail Dashboard</h1> */}
             <div className="row">
               <div className="col-xl-6">
@@ -529,12 +628,12 @@ const EmployeeSrc = (props) => {
                           <tbody >
                             <GenPassword
                               EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID}
-                              EMPLOYEE_USERNAME={filterData.row?.EMPLOYEE_USERNAME} 
-                              EMPLOYEE_PHONE={filterData.row?.EMPLOYEE_PHONE} 
+                              EMPLOYEE_USERNAME={filterData.row?.EMPLOYEE_USERNAME}
+                              EMPLOYEE_PHONE={filterData.row?.EMPLOYEE_PHONE}
                               ADMIN_ID={filterData.row?.EMPLOYEE_MEMBER_PARENT_ID}
                               ADMIN_USERNAME={filterData.row?.EMPLOYEE_MEMBER_PARENT_USERNAME}
-                              />
-                    
+                            />
+
                             <tr>
                               <td><b>Username :</b></td>
                               <>
@@ -587,20 +686,9 @@ const EmployeeSrc = (props) => {
                       </div>
                     </div>
                   </div>
-
-                  {/* <div className="col-12 mt-2">
-                    <div className="card">
-                      <div className="card-body">
-                        <h5 className="card-title">Salary Information</h5>
-                        <p className="card-text">Salary: $60,000 per year</p>
-                        <p className="card-text">
-                          Payment Type: Direct Deposit
-                        </p>
-                      </div>
-                    </div>
-                  </div> */}
                 </div>
               </div>
+
               <div className="col-xl-6">
                 <div className="row">
                   <div className="col-xl-12 mt-2">
@@ -670,87 +758,36 @@ const EmployeeSrc = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div>:""}
         </MyScreen>
-
-        {/* <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-          <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
-          <div
-            className="form-control form-control-2 rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Education Document
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-
-          <div
-            className="form-control form-control-2 rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Valid ID
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-          <div
-            className="form-control form-control-2 rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Other
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-        </MyScreen> */}
 
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-          <EmployeeManual
-          EMPLOYEE_DATA={filterData?.row}
-          />
-        </MyScreen>
-
-        <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
           <EmployeeTimeSheet mainData={filterData.row} />
         </MyScreen>
 
-        {/* <MyScreen
-          screenIndex={index === 2}
-          sx={{ padding: 3 }}
-          className="rounded-0"
-        >
-          <Snippet />
-        </MyScreen> */}
+        
+        <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
+          <EmployeeManual
+            mainData={filterData.row}
+          />
+        </MyScreen>
 
-        {/* <MyScreen screenIndex={index === 3} sx={{ padding: "0" }}>
-          <PDFViewer
-            style={{
-              width: "100%",
-              height: "100%",
-              position: "absolute",
-            }}
-          >
-            <EmployeePDF
-              name={filterData.row?.EMPLOYEE_NAME}
-              email={filterData.row?.EMPLOYEE_EMAIL}
-              phone={filterData.row?.EMPLOYEE_PHONE}
-            />
-          </PDFViewer>
-        </MyScreen> */}
+        <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
+
+          {index === 3 ? <EmployeeDocuments
+           EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID}
+           EMPLOYEE_USERNAME={filterData.row?.EMPLOYEE_USERNAME}
+           COMPANY_USERNAME={COMPANY_USERNAME}
+           
+          />: "" }
+        </MyScreen>
+
+       
+
       </Box>
+
+
+
     </>
   );
 };

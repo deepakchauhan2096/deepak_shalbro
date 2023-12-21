@@ -9,6 +9,8 @@ import { Button, Container } from "@mui/material";
 import env from "react-dotenv";
 import country from "../Api/countriess.json";
 import employeeRole from "../jsonlist/employeeRole.json"
+
+
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import {
   validatePhoneNumber,
@@ -60,9 +62,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
 
   const [errorMsg, setErrorMsg] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  // const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
-  // const [passwordError, setPasswordError] = useState("");
   const [nameError, setNameError] = useState("");
 
 
@@ -123,7 +123,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
     }
 
 
-    
+
     if (!isValidName) {
       setNameError("Name should not be empty");
       return;
@@ -166,27 +166,23 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
 
   return (
     < >
-      <Button
-        size="small"
-        variant={"outlined"}
-        className={"btn button border-bottom-0 bg-white"}
-      >
-        My Employees
-      </Button>
+      
       <button
         onClick={handleOpen}
         sx={{ color: "#277099" }}
         className="btn btn-sm btn-primary rounded-0 border-0  rounded-0 text-light"
-        // variant="contained"
+     
         size="small"
       >
         + Add New Employee
       </button>
+
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        style={{zIndex:9999999}}
       >
         <Container
           id="content"
@@ -231,23 +227,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
                 </div>
               </div>
               <div className="row">
-                {/* <div className="form-group col-xl-6 py-1">
-                  <label>E-mail</label>
-                  <input
-                    type="email"
-                    className={`form-control form-control-2 rounded-0 ${emailError ? "is-invalid" : ""
-                      }`}
-                    id="email"
-                    placeholder="Enter Email address"
-                    value={createEmployee.EMPLOYEE_EMAIL}
-                    name="EMPLOYEE_EMAIL"
-                    onChange={handleCreate}
-                    label="email"
-                  />
-                  {emailError && (
-                    <div className="invalid-feedback">{emailError}</div>
-                  )}
-                </div> */}
+
                 <div className="form-group col-xl-6 py-1">
                   <label>Phone</label>
                   <input
@@ -279,22 +259,8 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
                     required
                   />
                 </div>
-                
-                {/* <div className="form-group col-xl-6 py-1">
-                  <label>Employee Password</label>
-                  <input
-                    type="text"
-                    className={`form-control form-control-2 rounded-0 ${passwordError ? "is-invalid" : ""
-                      }`}
-                    placeholder="Enter Employee password"
-                    value={createEmployee.EMPLOYEE_PASSWORD}
-                    name="EMPLOYEE_PASSWORD"
-                    onChange={handleCreate}
-                  />
-                  {passwordError && (
-                    <div className="invalid-feedback">{passwordError}</div>
-                  )}
-                </div> */}
+
+    
                 <div className="form-group col-xl-6 py-1">
 
                   <label>Country</label>
@@ -308,7 +274,7 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
                   >
                     <option value="">--Choose Country--</option>
                     {country?.map((value, key) => {
-                      // console.log("hhh", value.name)
+                   
                       return (
                         <option value={value.name} key={key}>
                           {value.name}
@@ -367,6 +333,8 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
                     {availableCities?.cities?.map((e, key) => {
                       return (
                         <option value={e.name} key={key}>
+
+                          
                           {e.name}
                         </option>
                       );

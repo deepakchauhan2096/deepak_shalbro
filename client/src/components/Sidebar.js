@@ -38,9 +38,9 @@ const Sidebar = ({
       console.error('Error logging out: ', error);
     }
   };
-  const truncatedUsername =
-  COMPANY_USERNAME.split("@")[0].slice(0, 6).charAt(0).toUpperCase() +
-  COMPANY_USERNAME.split("@")[0].slice(1, 6);
+  // const truncatedUsername =
+  // COMPANY_USERNAME.split("@")[0].slice(0, 6).charAt(0).toUpperCase() +
+  // COMPANY_USERNAME.split("@")[0].slice(1, 6);
 
   const drawerWidth = 0;
   return (
@@ -65,9 +65,9 @@ const Sidebar = ({
   className="sidebar-header d-flex p-3 f-20"
   style={{ justifyContent: "space-between" }}
 >
-  <h5 className="pt-2">{truncatedUsername}</h5>
-  <Tooltip title={truncatedUsername}>
-    <Avatar>{truncatedUsername.slice(0, 1)}</Avatar>
+  <h5 className="pt-2">{COMPANY_USERNAME}</h5>
+  <Tooltip title={COMPANY_USERNAME}>
+  <Avatar>{(COMPANY_ID)}</Avatar>
   </Tooltip>
 </div>
           <Divider />
@@ -76,7 +76,7 @@ const Sidebar = ({
             <Link
               to={`/company/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active === 0 ? "#f3f3f3" : "" }}
+              style={{ background: active === 0 ? "#f3f3f3" : "", zIndex:"-1 !important" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -234,7 +234,7 @@ const Sidebar = ({
             <Link
               to={`/company/documents/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
               className="nav-link"
-              style={{ background: active == 4 ? "#f3f3f3" : "" }}
+              style={{ background: active === 4 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -257,7 +257,7 @@ const Sidebar = ({
           <Divider />
           <div
             className="login sidebar_footer position-absolute p-3 "
-            style={{ bottom: "0" }}
+            style={{ bottom: "0"}}
           >
             <div className="logout_icon ">
             <button

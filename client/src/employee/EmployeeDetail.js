@@ -2,21 +2,9 @@ import React from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 
-const containerStyle = {
-  width: "100%",
-  height: "63vh",
-};
-
-const center = {
-  lat: -33.8569,
-  lng: 151.2152,
-};
-
-window.google = window.google || {};
 
 const EmployeeDetail = ({ state }) => {
 
@@ -30,14 +18,9 @@ const EmployeeDetail = ({ state }) => {
 
 
   const navigate = useNavigate();
-  const [circleCenter, setCircleCenter] = useState([0, 0]);
-  const [circleRadius, setCircleRadius] = useState(100);
-  const [markerPosition, setMarkerPosition] = useState(center);
-  const [map, setMap] = useState(null);
   const [project, setProject] = useState();
-  const [filterProject, setFilterproject] = useState("");
   const [empdata, setEmpdata] = useState([]);
-  // console.log(state, "userEmp");
+  console.log(state, "userEmp");
  
 
   // get employee
@@ -114,29 +97,7 @@ const EmployeeDetail = ({ state }) => {
     fetchData();
   }, [empdata]);
 
-  const onLoad = (map) => {
-    setMap(map);
-  };
 
-  useEffect(() => {
-    onLoad();
-  }, [markerPosition]);
-
-
-  console.log(project, "arry")
-
-  // const filter = (event) => {
-  //   const myproject = project.find((e) => e.PROJECT_NAME === event);
-  //   let Position = {
-  //     lat: parseFloat(filterProject.LATITUDE),
-  //     lng: parseFloat(filterProject.LONGITUDE),
-  //   };
-  //   let Radius = parseInt(filterProject.AREA);
-  //   setFilterproject(myproject);
-  //   setCircleRadius(Radius);
-  //   setMarkerPosition(Position);
-  //   console.log(myproject, "myproject");
-  // };
 
 
   const logout = async () => {
@@ -181,6 +142,7 @@ const EmployeeDetail = ({ state }) => {
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav">
                 <a className="bg-white text-dark nav-link">My Projects</a>
+                <Link className="bg-light text-dark nav-link" to={`/employee/timesheet?Id=${state[1]}&eid=${state[3]}`}>My attendance history</Link>
               </div>
             </div>
           </div>
@@ -191,6 +153,7 @@ const EmployeeDetail = ({ state }) => {
             <div className="row">
               <div className="col-12   d-lg-none overflow-auto" />
               <h5 className="py-4 text-underline">My Projects</h5>
+            
               <table className="table table-striped table-sm">
                 <thead className="thead-dark">
                   <tr>
@@ -215,8 +178,6 @@ const EmployeeDetail = ({ state }) => {
                         <Link to={`/employee/attendance/${item?.LATITUDE}/${item?.LONGITUDE}/${item?.AREA}/${item?.LOCATION_NAME}/${empdata?.EMPLOYEE_NAME}/${item?.PROJECT_NAME}/${item?.PROJECT_ID}`}
                           className="btn btn-sm btn-primary"
                         // to={`/employee/attendance/${item?.LATITUDE}&${item?.LONGITUDE}&${item?.AREA}&${item?.LOCATION_NAME}&${state.EMPLOYEE_NAME}&${item?.PROJECT_NAME}&${item?.PROJECT_ID}`}
-
-
                         >
                           Visit
                         </Link>

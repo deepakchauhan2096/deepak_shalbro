@@ -8,17 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import projectList from "../jsonlist/typeOfProject.json";
 import { Button } from "@mui/material";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "60%",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 4,
-};
+
+
 
 export default function ProjectCreate({
   COMPANY_ID,
@@ -31,7 +22,6 @@ export default function ProjectCreate({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [selectedTimeZone, setSelectedTimeZone] = useState("");
   const [createProject, setCreateProject] = useState({
     PROJECT_PARENT_ID: "",
     PROJECT_PARENT_USERNAME: "",
@@ -88,10 +78,6 @@ export default function ProjectCreate({
     (s) => s.name === createProject.PROJECT_STATE
   );
 
-  // const headers = {
-  //   "Content-Type": "application/json",
-  //   authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
-  // };
 
   const handleCreate = (e) => {
     const { name, value } = e.target;
@@ -136,7 +122,7 @@ export default function ProjectCreate({
           setErrorMsg(response.data.errorMsg);
           toast.error(response.data.errorMsg, {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 2000,
+            autoClose: 1000,
           });
         } else if (response.data.operation === "successfull") {
           toast.success("Project Created successfully!", {
@@ -152,7 +138,7 @@ export default function ProjectCreate({
         console.error(error, "ERR");
         toast.error("An error occurred. Please try again later.", {
           position: toast.POSITION.TOP_CENTER,
-          autoClose: 2000,
+          autoClose: 1000,
         });
       });
   };
@@ -183,6 +169,7 @@ export default function ProjectCreate({
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        style={{zIndex:9999999}}
       >
         <Box className="modal-content">
           <form onSubmit={handleSubmit} className="overflow-auto">

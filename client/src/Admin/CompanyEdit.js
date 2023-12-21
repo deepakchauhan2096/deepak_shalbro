@@ -132,9 +132,6 @@ export default function CompanyEdit(props) {
       setEmailError("Invalid email address or should not be empty");
       return;
     }
-
-
-
     const hasErrors = Object.values(formErrors).some((error) => error !== "");
 
     if (hasErrors) {

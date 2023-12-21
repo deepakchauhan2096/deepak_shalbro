@@ -1,545 +1,579 @@
-import { DataGrid } from "@mui/x-data-grid";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, version } from "react";
 import axios from "axios";
-import { Box, Button, Modal } from "@mui/material";
+import moment from "moment/moment";
+import { RotatingLines } from 'react-loader-spinner'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+import { PDFDownloadLink, PDFViewer, ReactPDF } from "@react-pdf/renderer";
+import SalaryPDF from "../Invoices/SalaryPDF";
+import env from "react-dotenv";
+import { DataGrid } from "@mui/x-data-grid";
+import { Button } from "@mui/material";
 
-const EmployeeManual = ({ EMPLOYEE_DATA }) => {
+// current day
+let MyDateCurrent = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+const formattedMyDateCurrent = moment(MyDateCurrent).utcOffset(0).format('YYYY-MM-DD');
 
-  const [project, setProject] = useState();
+//Day before 30
+let MyDateBefore = moment().subtract(30, 'days').format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+const formattedMyDateBefore = moment(MyDateBefore).utcOffset(0).format('YYYY-MM-DD');
+
+const EmployeeManual = (props) => {
+
+  const [workvalue, setWorkvalue] = useState([]);
+  const [dateValue, setDate] = useState({
+    ATTENDANCE_START_DATE: formattedMyDateBefore,
+    ATTENDANCE_END_DATE: formattedMyDateCurrent,
+  });
+  const [selectedTimeIn, setSelectedTimeIn] = useState("");
+  const [selectedTimeOut, setSelectedTimeOut] = useState("");
 
 
-  //get all project
+  const originalTimeIn = moment(`2023-12-21 ${selectedTimeIn}`).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+
+  console.log(selectedTimeIn, originalTimeIn, "selectedTimeIn")
+  console.log(selectedTimeOut, "selectedTimeOut")
+
+
+
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const requests = EMPLOYEE_DATA.EMPLOYEE_ASSIGN.map((item) => {
-          const {
-            PROJECT_ID,
-            PROJECT_PARENT_ID,
-            PROJECT_MEMBER_PARENT_ID,
-            PROJECT_MEMBER_PARENT_USERNAME,
-            PROJECT_USERNAME,
-          } = item;
+    gettimesheet();
+  }, [props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME, dateValue.ATTENDANCE_START_DATE, dateValue.ATTENDANCE_END_DATE]);
 
-          const data = {
-            PROJECT_ID,
-            PROJECT_PARENT_ID,
-            PROJECT_MEMBER_PARENT_ID,
-            PROJECT_MEMBER_PARENT_USERNAME,
-            PROJECT_USERNAME,
-          };
 
-          return axios.put(
-            "/api/get_projects_one",
-            data,
+  const gettimesheet = async (e) => {
+    try {
+      const response = await axios.put(
+        "/api/get_employee_all_for_attendence",
+        {
+          ATTENDANCE_ADMIN_USERNAME: props.mainData?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+          ATTENDANCE_EMPLOYEE_USERNAME: props.mainData?.EMPLOYEE_USERNAME,
+          ATTENDANCE_START_DATE: dateValue.ATTENDANCE_START_DATE,
+          ATTENDANCE_END_DATE: dateValue.ATTENDANCE_END_DATE,
+        },
 
-          );
-        });
+      );
+      setTimeout(() => {
+        setWorkvalue(response.data.result);
+      }, 1000);
+    } catch (err) {
+      console.log("something Went wrong: =>", err);
+    }
+  };
 
-        const responses = await Promise.all(requests);
-        console.log(responses, "responses")
-        const arry = responses.map((response) => response.data.result[0]);
-        if (arry) {
-          setProject(arry);
-          console.log(arry, "arry")
-        }
-      } catch (error) {
-        console.error(error);
-      }
+  // time calculation
+  const timeValueHours = (x, y) => {
+
+    // console.log(x,"xxxxxx")
+    const attendanceIn = moment(y, 'hh:mm A').utcOffset(0);
+    const attendanceOut = moment(x, 'hh:mm A').utcOffset(0);
+    const duration = moment.duration(attendanceOut.diff(attendanceIn));
+    const totalHours = Math.floor(duration.asHours());
+    const totalMinutes = duration.minutes();
+    return `${totalHours} hours and ${totalMinutes} minutes`;
+  };
+
+
+  // overtime calculation
+  const Overtime = (x, y) => {
+
+    // console.log(x,"xxxxxx")
+    const attendanceIn = moment(y, 'hh:mm A').utcOffset(0);
+    const attendanceOut = moment(x, 'hh:mm A').utcOffset(0);
+    const duration = moment.duration(attendanceOut.diff(attendanceIn));
+    const totalHours = Math.floor(duration.asHours());
+
+    // Define a threshold for regular hours (e.g., 40 hours per week)
+    const regularHoursThreshold = 8;
+    let overtimeHours = 0;
+
+    if (totalHours > regularHoursThreshold) {
+      overtimeHours = totalHours - regularHoursThreshold;
+    }
+
+    return `${overtimeHours} hours`
+  };
+
+
+
+
+  const attendanceIn = moment('11:50 AM', 'hh:mm A');
+  const attendanceOut = moment('5:00 PM', 'hh:mm A');
+  const duration = moment.duration(attendanceOut.diff(attendanceIn));
+  const totalHours = Math.floor(duration.asHours());
+  const totalMinutes = duration.minutes().toString().padStart(2, '0');
+
+  console.log(`${totalHours} hours and ${totalMinutes} minutes`);
+
+
+
+
+  const allHours = workvalue?.map((e) => {
+    return (
+      timeValueHours(moment(e.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(e.ATTENDANCE_IN).utcOffset(0).format("LT"))
+    );
+  });
+
+
+
+
+  const convertToDuration = (timeString) => {
+    const [hours, minutes] = timeString.match(/\d+/g)?.map(Number) || [0, 0];
+    return moment.duration({ hours, minutes });
+  };
+
+
+
+
+
+  // read duration
+  const ReadDuration = (event) => {
+    const totalDuration = event.reduce((acc, timeString) => {
+      const duration = convertToDuration(timeString);
+      return acc.add(duration);
+    }, moment.duration());
+    return totalDuration
+  }
+
+
+
+
+
+  //overall time
+  const overallTime = (event) => {
+    // Add up all durations in the array
+    const totalDuration = ReadDuration(event)
+
+    // Get total hours and minutes from the total duration
+    const totalHourss = Math.floor(totalDuration.asHours());
+    const totalMinutess = totalDuration.minutes();
+    return `${totalHourss} hours and ${totalMinutess} minutes`;
+  }
+
+
+
+  // calculations
+  const ResultantTime = overallTime(allHours);
+  const ExtractHours = convertToDuration(ResultantTime)?._data.hours;
+  // const totalIncome = ExtractHours * props.mainData.EMPLOYEE_HOURLY_WAGE;
+  const Manual = workvalue?.filter((prev) => prev.ATTENDANCE_TYPE_OUT === "manual" || prev.ATTENDANCE_TYPE_IN === "manual")
+
+
+  const time12Hour = (event) => {
+    const time = moment(event, 'hh:mm A').format('HH:mm');
+    return time;
+  }
+
+
+
+  const HandleUpdateIn = async (event) => {
+
+
+    const originalTimeIn = moment(`${event?.ATTENDANCE_DATE_ID} ${selectedTimeIn}`).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+    const inTime = selectedTimeIn.length > 0 ? originalTimeIn : event?.ATTENDANCE_IN
+    // const outTime = selectedTimeOut.length > 0 ? originalTimeOut : event?.ATTENDANCE_OUT
+    // console.log(inTime, originalTimeIn, "myval")
+
+    const dataIn = {
+
+      ATTENDANCE_ID: event?.ATTENDANCE_ID,
+      ATTENDANCE_ADMIN_ID: event?.ATTENDANCE_ADMIN_ID,
+      ATTENDANCE_ADMIN_USERNAME: event?.ATTENDANCE_ADMIN_USERNAME,
+      ATTENDANCE_COMPANY_ID: event?.ATTENDANCE_COMPANY_ID,
+      ATTENDANCE_COMPANY_USERNAME: event?.ATTENDANCE_COMPANY_USERNAME,
+      ATTENDANCE_EMPLOYEE_ID: event?.NDANCE_EMPLOYEE_ID,
+      ATTENDANCE_EMPLOYEE_USERNAME: event?.ATTENDANCE_EMPLOYEE_USERNAME,
+      ATTENDANCE_DATE_ID: event?.ATTENDANCE_DATE_ID,
+      ATTENDANCE_IN: inTime,
+      ATTENDANCE_TYPE_IN: "automatic",
+    }
+
+
+    let config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: '/api/update_emp_attendance',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: dataIn
     };
 
-    fetchData();
-  }, [EMPLOYEE_DATA]);
+    axios.request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+
+  const HandleUpdateOut = async (event) => {
+
+
+    const originalTimeIn = moment(`${event?.ATTENDANCE_DATE_ID} ${selectedTimeIn}`).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
+    const outTime = selectedTimeIn.length > 0 ? originalTimeIn : event?.ATTENDANCE_OUT
+
+
+    const dataIn = {
+
+      ATTENDANCE_ID: event?.ATTENDANCE_ID,
+      ATTENDANCE_ADMIN_ID: event?.ATTENDANCE_ADMIN_ID,
+      ATTENDANCE_ADMIN_USERNAME: event?.ATTENDANCE_ADMIN_USERNAME,
+      ATTENDANCE_COMPANY_ID: event?.ATTENDANCE_COMPANY_ID,
+      ATTENDANCE_COMPANY_USERNAME: event?.ATTENDANCE_COMPANY_USERNAME,
+      ATTENDANCE_EMPLOYEE_ID: event?.NDANCE_EMPLOYEE_ID,
+      ATTENDANCE_EMPLOYEE_USERNAME: event?.ATTENDANCE_EMPLOYEE_USERNAME,
+      ATTENDANCE_DATE_ID: event?.ATTENDANCE_DATE_ID,
+      ATTENDANCE_OUT: outTime,
+      ATTENDANCE_TYPE_OUT: "automatic",
+    }
+
+
+    let config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: '/api/update_emp_attendance',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: dataIn
+    };
+
+    axios.request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
 
 
-  console.log(project, "project")
-
-  // current date time 
-  //  const currentTime = new Date().toLocaleTimeString();
-  //  const currentDate = new Date().toLocaleDateString();
-
-  const MyDate = new Date();
-  console.log(MyDate, "Mydate");
-
-  const currentDates = new Date();
-  currentDates.setDate(currentDates.getDate());
-  const year = currentDates.getFullYear();
-  const month = String(currentDates.getMonth() + 1).padStart(2, "0");
-  const day = String(currentDates.getDate()).padStart(2, "0");
-  const formattedDate = `${year}-${month}-${day}`;
-
-
-
-
-  // attendance in
-
-
-
-
-
-
-  // // attendance out
-
-  // const handleSubmitOut = (event) => {
-  //   event.preventDefault();
-  //   if (isInsideCircle) {
-  //     const attendanceData = {
-  //       ATTENDANCE_ADMIN_ID: event?.EMPLOYEE_MEMBER_PARENT_ID,
-  //       ATTENDANCE_ADMIN_USERNAME:
-  //       event?.EMPLOYEE_MEMBER_PARENT_USERNAME,
-  //       ATTENDANCE_COMPANY_ID: event?.EMPLOYEE_PARENT_ID,
-  //       ATTENDANCE_COMPANY_USERNAME: event?.EMPLOYEE_PARENT_USERNAME,
-  //       ATTENDANCE_EMPLOYEE_ID: event?.EMPLOYEE_ID,
-  //       ATTENDANCE_EMPLOYEE_USERNAME: event?.EMPLOYEE_USERNAME,
-  //       ATTENDANCE_DATE_ID: formattedDate,
-  //       ATTENDANCE_OUT: new Date(),
-  //       ATTENDANCE_PROJECT_ID: Project_Id
-  //     };
-
-  //     setShowBackdrop(true);
-
-  //     axios
-  //       .post(
-  //         "/api/create_emp_attendence",
-  //         attendanceData,
-
-  //       )
-  //       .then(() => {
-  //         setOutdone(true);
-  //         setShowBackdrop(false);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //         setShowBackdrop(false);
-  //       });
-  //   } else {
-  //     setLocError("You are outside the project location");
-  //   }
-  // };
-
-
-
-
-  // all rows
-  const rows = project ? project : [{
-    "PROJECT_ID": ""
-  }];
-
-
-  // all columns 
   const columns = [
-    { field: "PROJECT_ID", headerName: "Project Id", width: 120 },
 
     {
-      field: "PROJECT_USERNAME",
-      headerName: "Project Username",
+      field: "ATTENDANCE_PROJECT_ID",
+      headerName: "Project Id",
       width: 120,
+    },
+    { field: "ATTENDANCE_DATE_ID", headerName: "Date", width: 150 },
+    { field: "ATTENDANCE_ID", headerName: "Attendance Id", width: 150 },
+
+
+    {
+      field: "ATTENDANCE_IN",
+      headerName: "In",
+      width: 120,
+      renderCell: (cellValues) => {
+        return (
+          <>
+            {cellValues.row.ATTENDANCE_IN && moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT")}
+          </>
+        );
+
+      },
+      cellClassName: (cellValues) => {
+        return cellValues.row.ATTENDANCE_IN ? "bg-success text-white border" : "bg-danger text-white border"
+      },
+      type: "date",
       editable: true,
     },
+
     {
-      field: "PROJECT_NAME",
-      headerName: "Project Name",
-      width: 120,
+      field: "ATTENDANCE_OUT",
+      headerName: "Out",
+      width: 150,
+      renderCell: (cellValues) => {
+        return (
+          cellValues?.row.ATTENDANCE_OUT ? <>
+            {cellValues?.row.ATTENDANCE_OUT && moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT")}
+          </> : <>{"absent"}</>
+        );
+      },
+      cellClassName: (cellValues) => {
+        return cellValues.row.ATTENDANCE_OUT ? "bg-success text-white border" : "bg-danger text-white border"
+      },
+      type: "date",
       editable: true,
-    }
-    ,
+    },
+
     {
-      field: "action_1",
-      headerName: "Punch In",
-      width: 220,
+      field: "ATTENDANCE_STATUS",
+      headerName: "",
+      width: 200,
       renderCell: (cellValues) => {
         return (
-          <PUNCHIN data={cellValues} />
-        )
+          cellValues?.row.ATTENDANCE_OUT && <>
+            {timeValueHours(moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT"))}
+          </>
+        );
       },
-    }
-    ,
+      cellClassName: (cellValues) => {
+        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-light text-dark border" : "text-dark border"
+      }
+    },
     {
-      field: "action_2",
-      headerName: "Punch Out",
-      width: 220,
+      field: "overtime",
+      headerName: "Overtime",
+      width: 170,
       renderCell: (cellValues) => {
         return (
-          <PUNCHOUT data={cellValues} />
-        )
+          cellValues?.row.ATTENDANCE_OUT && <>
+            {Overtime(moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT"))}
+          </>
+        );
       },
+    },
+    {
+      field: "Status",
+      headerName: "Status",
+      width: 210,
+      renderCell: (cellValues) => {
+        return (
+          cellValues?.row.ATTENDANCE_IN && cellValues?.row.ATTENDANCE_OUT ? <>
+            {"present"}
+          </> : <>
+            {"absent"}
+          </>
+        );
+      },
+      cellClassName: (cellValues) => {
+        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-success text-light border" : "bg-danger text-white border"
+      }
     }
+
   ];
 
 
+  const columnsEdit = [
 
-  const PUNCHIN = ({ data }) => {
-
-    console.log(data, "props")
-    const style = {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      width: 400,
-      bgcolor: 'background.paper',
-      display: 'inline',
-      // border: '2px solid #000',
-      // boxShadow: 24,
-      p: 2,
-      zIndex: "999999 !important",
-      borderRadius: 2,
-    };
-
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const [selectedTime, setSelectedTime] = useState('00:00');
-    const [indone, setIndone] = useState(false);
-
-    const handleTimeChange = (event) => {
-      const newTime = event.target.value;
-      setSelectedTime(newTime);
-    };
-
-    console.log(selectedTime, "selectedTime")
+    {
+      field: "ATTENDANCE_PROJECT_ID",
+      headerName: "Project Id",
+      width: 120,
+    },
+    { field: "ATTENDANCE_DATE_ID", headerName: "Date", width: 150 },
+    { field: "ATTENDANCE_ID", headerName: "Attendance Id", width: 150 },
 
 
-    // CONVERT TIME FORMET
+    {
+      field: "ATTENDANCE_IN",
+      headerName: "In",
+      width: 100,
+      renderCell: (cellValues) => {
+        const convertedTime = time12Hour(cellValues.row.ATTENDANCE_IN && moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT"));
+        return (
+          cellValues?.row.ATTENDANCE_TYPE_IN == "manual" ? <>
+            <input type="time" style={{ outline: "none", height: "100%", width: "100%" }} value={selectedTimeIn ? selectedTimeIn : convertedTime} onChange={(e) => setSelectedTimeIn(e.target.value)} />
+          </> : <>{"no request"}</>
+        );
 
-    // Get the current date
-    const currentDate = new Date();
-
-    // Extract the time values from the input string "19:06"
-    const [hours, minutes] = selectedTime?.split(':');
-
-    // Set the time values to the current date
-    currentDate?.setHours(hours);
-    currentDate?.setMinutes(minutes);
-    currentDate?.setSeconds(0);
-    currentDate?.setMilliseconds(0);
-
-    // Format the date in the desired format
-    const formattedTime = currentDate?.toISOString();
-
-    // console.log(formattedTime);
-
-    const handleSubmitIn = (event) => {
-      event.preventDefault();
-
-      if (event) {
-        const attendanceData = {
-          ATTENDANCE_ADMIN_ID: EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_ID,
-          ATTENDANCE_ADMIN_USERNAME:
-            EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_USERNAME,
-          ATTENDANCE_COMPANY_ID: EMPLOYEE_DATA?.EMPLOYEE_PARENT_ID,
-          ATTENDANCE_COMPANY_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_PARENT_USERNAME,
-          ATTENDANCE_EMPLOYEE_ID: EMPLOYEE_DATA?.EMPLOYEE_ID,
-          ATTENDANCE_EMPLOYEE_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_USERNAME,
-          ATTENDANCE_DATE_ID: formattedDate,
-          ATTENDANCE_IN: formattedTime,
-          ATTENDANCE_PROJECT_ID: data.row?.PROJECT_ID
-        };
-
-        // setShowBackdrop(true);
-
-        axios
-          .post(
-            "/api/create_emp_attendence",
-            attendanceData,
-
-          )
-          .then(() => {
-            setIndone("sucess");
-            // setShowBackdrop(false);
-            handleClose()
-            console.log("sucess")
-          })
-          .catch((error) => {
-            // console.log(error);
-            // setShowBackdrop(false);
-          });
-      } else {
-        // setLocError("You are outside the project location");
+      },
+      cellClassName: (cellValues) => {
+        return cellValues.row.ATTENDANCE_IN ? "bg-success text-white border px-0" : "bg-danger text-white border"
       }
-    };
+    },
 
-
-
-    return (
-      <div>
-        {/* <Button onClick={handleOpen}>Setup Punch In</Button> */}
-        <button
-          variant="contained"
-          className="primary btn btn-success btn-sm rounded-5"
-          style={{ padding: "4px 10px" }}
-          // onClick={(event) => {
-          //   handleSubmitIn(cellValues);
-          // }}
-          onClick={handleOpen}
-        >
-          Setup Punch In
-        </button>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <h5>Setup Punch In Time</h5>
-            <form className="form-row">
-
-              <div className="container">
-
-                <div className="row py-4">
-                  <div className="col-4  text-center ">
-                    <input
-                      type="time"
-                      id="timeInput"
-                      name="timeInput"
-                      value={selectedTime}
-                      onChange={handleTimeChange}
-                      className="form-control form-control-2"
-                      style={{ width: "100px" }}
-                    />
-                  </div>
-                  <div className="col-8 text-center d-flex" style={{ gap: 4 }}>
-                    <button
-                      variant="contained"
-                      className="primary btn btn-success btn-sm rounded-5"
-                      style={{ padding: "4px 10px" }}
-                      onClick={(event) => {
-                        handleSubmitIn(event);
-                      }}
-                    >
-                      Punch In
-                    </button>
-
-
-                    <button
-                      variant="contained"
-                      className="primary btn btn-danger btn-sm rounded-5"
-                      style={{ padding: "4px 10px" }}
-                      onClick={(event) => {
-                        handleClose();
-                      }}
-                    >
-                      Cancel
-                    </button>
-
-
-                  </div>
-
-
-                </div>
-              </div>
-            </form>
-          </Box>
-        </Modal>
-      </div>
-    );
-
-  }
-
-
-
-  const PUNCHOUT = ({ data }) => {
-
-    console.log(data, "props")
-    const style = {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      width: 400,
-      bgcolor: 'background.paper',
-      display: 'inline',
-      // border: '2px solid #000',
-      // boxShadow: 24,
-      p: 2,
-      zIndex: "999999 !important",
-      borderRadius: 2,
-    };
-
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const [selectedTime, setSelectedTime] = useState('00:00');
-    const [outdone, setOutdone] = useState(false);
-
-    const handleTimeChange = (event) => {
-      const newTime = event.target.value;
-      setSelectedTime(newTime);
-    };
-
-
-    // CONVERT TIME FORMET
-
-    // Get the current date
-    const currentDate = new Date();
-
-    // Extract the time values from the input string "19:06"
-    const [hours, minutes] = selectedTime?.split(':');
-
-    // Set the time values to the current date
-    currentDate?.setHours(hours);
-    currentDate?.setMinutes(minutes);
-    currentDate?.setSeconds(0);
-    currentDate?.setMilliseconds(0);
-
-    // Format the date in the desired format
-    const formattedTime = currentDate.toISOString();
-
-    console.log(selectedTime, "selectedTime")
-
-    const handleSubmitIn = (event) => {
-      event.preventDefault();
-
-      if (event) {
-        const attendanceData = {
-          ATTENDANCE_ADMIN_ID: EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_ID,
-          ATTENDANCE_ADMIN_USERNAME:
-            EMPLOYEE_DATA?.EMPLOYEE_MEMBER_PARENT_USERNAME,
-          ATTENDANCE_COMPANY_ID: EMPLOYEE_DATA?.EMPLOYEE_PARENT_ID,
-          ATTENDANCE_COMPANY_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_PARENT_USERNAME,
-          ATTENDANCE_EMPLOYEE_ID: EMPLOYEE_DATA?.EMPLOYEE_ID,
-          ATTENDANCE_EMPLOYEE_USERNAME: EMPLOYEE_DATA?.EMPLOYEE_USERNAME,
-          ATTENDANCE_DATE_ID: formattedDate,
-          ATTENDANCE_OUT: formattedTime,
-          ATTENDANCE_PROJECT_ID: data.row?.PROJECT_ID
-        };
-
-        // setShowBackdrop(true);
-
-        axios
-          .post(
-            "/api/create_emp_attendence",
-            attendanceData,
-
-          )
-          .then(() => {
-            setOutdone("sucess");
-            // setShowBackdrop(false);
-            handleClose()
-            console.log("sucess")
-          })
-          .catch((error) => {
-            // console.log(error);
-            // setShowBackdrop(false);
-          });
-      } else {
-        // setLocError("You are outside the project location");
+    {
+      field: "ATTENDANCE_OUT",
+      headerName: "Out",
+      width: 100,
+      renderCell: (cellValues) => {
+        const convertedTime = time12Hour(cellValues.row.ATTENDANCE_OUT && moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT"));
+        return (
+          cellValues?.row.ATTENDANCE_TYPE_OUT == "manual" ? <>
+            <input type="time" style={{ outline: "none", height: "100%", width: "100%" }} value={selectedTimeOut ? selectedTimeOut : convertedTime} onChange={(e) => setSelectedTimeOut(e.target.value)} />
+          </> : <>{"no request"}</>
+        );
+      },
+      cellClassName: (cellValues) => {
+        return cellValues.row.ATTENDANCE_OUT ? "bg-success text-white border px-0" : "bg-danger text-white border"
       }
-    };
+    },
 
 
+    // {
+    //   field: "ATTENDANCE_STATUS",
+    //   headerName: "Region",
+    //   width: 200,
+    //   renderCell: (cellValues) => {
+    //     return (
+    //       cellValues?.row.ATTENDANCE_OUT && <>
+    //         {timeValueHours(moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT"))}
+    //       </>
+    //     );
+    //   },
+    //   cellClassName: (cellValues) => {
+    //     return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-light text-dark border" : "text-dark border"
+    //   }
+    // },
 
-    return (
-      <div>
-        {/* <Button onClick={handleOpen}>Setup Punch Out</Button> */}
-        <button
-          variant="contained"
-          className="primary btn btn-success btn-sm rounded-5"
-          style={{ padding: "4px 10px" }}
-          // onClick={(event) => {
-          //   handleSubmitIn(cellValues);
-          // }}
-          onClick={handleOpen}
-        >
-          Setup Punch Out
-        </button>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <h5>Setup Punch Out Time</h5>
-            <form className="form-row">
+    {
+      field: "overtime",
+      headerName: "Overtime",
+      width: 170,
+      renderCell: (cellValues) => {
+        return (
+          cellValues?.row.ATTENDANCE_OUT && <>
+            {Overtime(moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT"))}
+          </>
+        );
+      },
+    },
+    {
+      field: "Status",
+      headerName: "Status",
+      width: 110,
+      renderCell: (cellValues) => {
+        return (
+          cellValues?.row.ATTENDANCE_IN && cellValues?.row.ATTENDANCE_OUT ? <>
+            {"present"}
+          </> : <>
+            {"absent"}
+          </>
+        );
+      },
+      cellClassName: (cellValues) => {
+        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-success text-light border" : "bg-danger text-white border"
+      }
+    }
+    ,
+    {
+      field: "Action In",
+      headerName: "Action In",
+      width: 100,
+      renderCell: (cellValues) => {
+        return (
+          <>
+            <Button variant="contained" className="w-100" type="submit" onClick={() => HandleUpdateIn(cellValues.row)}>Update</Button>
+          </>
+        );
+      },
+      cellClassName: (cellValues) => {
+        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-info text-light border px-0 w-100" : "bg-info text-white border"
+      }
+    },
+    {
+      field: "Action Out",
+      headerName: "Action Out",
+      width: 100,
+      renderCell: (cellValues) => {
+        return (
+          <>
+            <Button variant="contained" className="w-100" type="submit" onClick={() => HandleUpdateOut(cellValues.row)}>Update</Button>
+          </>
+        );
+      },
+      cellClassName: (cellValues) => {
+        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-info text-light border px-0 w-100" : "bg-info text-white border"
+      }
+    },
 
-              <div className="container">
-
-                <div className="row py-4">
-                  <div className="col-4  text-center ">
-                    <input
-                      type="time"
-                      id="timeInput"
-                      name="timeInput"
-                      value={selectedTime}
-                      onChange={handleTimeChange}
-                      className="form-control form-control-2"
-                      style={{ width: "100px" }}
-                    />
-                  </div>
-                  <div className="col-8 text-center d-flex" style={{ gap: 4 }}>
-                    <button
-                      variant="contained"
-                      className="primary btn btn-success btn-sm rounded-5"
-                      style={{ padding: "4px 10px" }}
-                      onClick={(event) => {
-                        handleSubmitIn(event);
-                      }}
-                    >
-                      Punch Out
-                    </button>
-
-
-                    <button
-                      variant="contained"
-                      className="primary btn btn-danger btn-sm rounded-5"
-                      style={{ padding: "4px 10px" }}
-                      onClick={(event) => {
-                        handleClose();
-                      }}
-                    >
-                      Cancel
-                    </button>
-
-                    {outdone && outdone}
-
-
-
-                  </div>
-
-
-                </div>
-              </div>
-            </form>
-          </Box>
-        </Modal>
-      </div>
-    );
-
-  }
-
-
+  ];
 
 
 
 
   return (
-    <Box style={{ height: "100%", padding: 0, paddingBottom: "0", position: "relative" }}>
-
-      <>
-        {project?.length > 0 ? <DataGrid
+    <>
+      <div className="container-fluid border" style={{ height: "90vh" }}>
+        <p>
+          {" "}
+          <b style={{ fontWeight: "600", color: "black" }}>Employee Name : </b>
+          {props.mainData.EMPLOYEE_NAME}
+        </p>
+        <div style={{ display: "flex", gap: 10, padding: "5px 0" }}>
+        </div>
+        <div className="col-3">
+          <table className="table p-0 m-0">
+            <tr>
+              <th><LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker', 'DatePicker']}>
+                  <DatePicker
+                    label="Date from"
+                    // onChange={(newValue) => setstartDateString(newValue)}
+                    onChange={(event) =>
+                      setDate((prev) => ({
+                        ...prev, ATTENDANCE_START_DATE: event,
+                      }))
+                    }
+                    defaultValue={dayjs(dateValue.ATTENDANCE_START_DATE)}
+                    sx={{}}
+                    formatDensity="spacious"
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+              </th>
+              <th>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DatePicker', 'DatePicker']}>
+                    <DatePicker
+                      label="Date to"
+                      // onChange={(newValue) => setstartDateString(newValue)}
+                      onChange={(event) =>
+                        setDate((prev) => ({
+                          ...prev,
+                          ATTENDANCE_END_DATE: event,
+                        }))
+                      }
+                      defaultValue={dayjs(dateValue.ATTENDANCE_END_DATE)}
+                      sx={{ height: "10" }}
+                      formatDensity="spacious"
+                    />
+                  </DemoContainer>
+                </LocalizationProvider></th>
+            </tr>
+          </table>
+        </div>
+        {/* data gird */}
+        <DataGrid
           className="display"
-          sx={{ border: "none" }}
-          rows={rows}
-          columns={columns}
-          getRowId={(row, index) => row.PROJECT_ID}
+          style={{ height: "73vh" }}
+          rows={Manual}
+          columns={columnsEdit}
+          getRowId={(row) => row.ATTENDANCE_ID}
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 20,
+                pageSize: 8,
               },
             },
-          }}
+            sorting: {
+              sortModel: [
+                {
+                  field: 'ATTENDANCE_DATE_ID',
+                  sort: 'asc',
+                },
+              ],
+            },
+
+            aggregation: {
+              model: {
+                size: 'sum',
+                updatedAt: 'max',
+              },
+            },
+
+
+
+          }
+
+          }
           density="compact"
           pageSizeOptions={[5]}
           // checkboxSelection
           disableRowSelectionOnClick
-        /> : project?.length === 0 ? "Sorry!, No project assgin to this employee for attendance" : "Loading..."}
-      </>
+        />
+      </div>
 
-    </Box>
+    </>
   );
 };
 

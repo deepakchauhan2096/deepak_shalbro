@@ -37,6 +37,30 @@ p,b{
   padding: 0 10px !important;
 }
 
+.MuiInputBase-formControl{
+  height: 30px;
+  font-size: 12px !important;
+  width: 100% !important;
+  padding: 0 10px 0 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  position: fixed;
+  min-width: 0 !important;
+}
+
+.MuiSvgIcon-root{
+  width: 14px !important;
+  background-color: transparent !important;
+  right: 20px !important;
+}
+
+.MuiTextField-root{
+  min-width: 0 !important;
+}
+
+
 .containers {
   background-color: #fff;
 }

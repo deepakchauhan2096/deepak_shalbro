@@ -5,14 +5,18 @@ const AttendancePunch = (props) => {
   const Data = props.attendance?.map((e) => e.ATTENDANCE_PROJECT_ID);
   const [filter, setFilteredData] = useState(props.attendance);
 
-  const TotalWorkHours = (ATTENDANCE_IN, ATTENDANCE_OUT) => {
-    const attendanceIn = new Date(ATTENDANCE_IN);
-    const attendanceOut = new Date(ATTENDANCE_OUT);
-    const hoursWorked =
-      Math.abs(attendanceOut - attendanceIn) / (1000 * 60 * 60); // Convert milliseconds to hours
-    return hoursWorked.toFixed(2);
-  };
+  const TotalWorkHours = (ATTENDANCE_IN, ATTENDANCE_OUT) => { 
 
+    const attendanceIn = moment(ATTENDANCE_IN, 'hh:mm A').utcOffset(0);
+    const attendanceOut = moment(ATTENDANCE_OUT,'hh:mm A').utcOffset(0);
+    
+    const duration = moment.duration(attendanceOut.diff(attendanceIn));
+    const hours = Math.floor(duration.asHours());
+    const minutes = duration.minutes();
+  
+    console.log(`${hours} hours and ${minutes} minutes worked`);
+    return `${hours} hours and ${minutes} minutes`;
+  };
   // handle project id
   const onHandleProjectId = (event) => {
 
@@ -75,10 +79,10 @@ const AttendancePunch = (props) => {
                 <td>{post.ATTENDANCE_PROJECT_ID}</td>
                 <td>{props.data._doc.EMPLOYEE_NAME}</td>
                 <td>{post.ATTENDANCE_DATE_ID}</td>
-                <td>{moment(post.ATTENDANCE_IN).format("LT")}</td>
-                <td>{moment(post.ATTENDANCE_OUT).format("LT")}</td>
+                <td>{moment(post.ATTENDANCE_IN).utcOffset(0).format("LT")}</td>
+                <td>{moment(post.ATTENDANCE_OUT).utcOffset(0).format("LT")}</td>
                 <td>
-                  {TotalWorkHours(post.ATTENDANCE_IN, post.ATTENDANCE_OUT)} h
+                  {TotalWorkHours(moment(post.ATTENDANCE_IN).utcOffset(0).format("LT"), moment(post.ATTENDANCE_OUT).utcOffset(0).format("LT"))}
                 </td>
                 {/* <td>{post.LOCATION}</td> */}
               </tr>

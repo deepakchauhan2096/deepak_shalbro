@@ -9,6 +9,7 @@ import "../assests/css/document.css"; // Import the CSS filefileN
 import { DataGrid } from '@mui/x-data-grid';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import DocumentModal from "./components/DocumentModal";
 import DocumentCreate from "./DocumentCreate";
 // import env from "react-dotenv";
 import { useParams } from "react-router-dom";
@@ -19,32 +20,37 @@ import {
 import Navbar from "../components/Navbar";
 import ExpiryReminder from "../components/ExpiryReminder";
 
-// mui icons 
-
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import DescriptionIcon from '@mui/icons-material/Description';
-import InsertChartIcon from '@mui/icons-material/InsertChart';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-
 export default function Document(props) {
+
 
     const [imagesData, setImagesData] = useState([]);
     const [totalDocuments, setTotalDocuments] = useState(0);
     const [backdrop, setBackdrop] = useState(false);
     const [deleteItem, setDeleteItem] = useState("");
     const [openNav, setOpenNav] = useState(false);
-    const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
+
+    // const { id } = useParams();
+    // const param = id.split("&");
+    // const COMPANY_ID = param[0];
+    // const COMPANY_USERNAME = param[1];
+    // const COMPANY_PARENT_ID = param[2];
+    // const COMPANY_PARENT_USERNAME = param[3];
+
+  const {COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
 
 
     console.log("COMPANYPARENT :", COMPANY_PARENT_USERNAME);
 
+
+    // console.log("DocData", DocData)
     const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
-        console.log("heelo i am runnig useEffect")
         getalldocument();
     }, [deleteItem]);
+
+
+
 
     // function to download the file 
     const downloadFile = (base64Data, fileName) => {
@@ -78,10 +84,13 @@ export default function Document(props) {
 
     const getalldocument = async () => {
 
+
         const requestData = {
             DOCUMENT_REF_ID: COMPANY_ID,
             DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME
         };
+
+
         try {
             const response = await axios.put("/api/get_all_document", requestData);
 
@@ -101,7 +110,9 @@ export default function Document(props) {
         }
     };
 
-
+    // const Demo = styled("div")(({ theme }) => ({
+    //     backgroundColor: theme.palette.background.paper,
+    // }));
 
     // Function to download the uploaded documents 
     const handleDownload = async (documentId, fileName) => {
@@ -116,13 +127,12 @@ export default function Document(props) {
                 method: "put",
                 maxBodyLength: Infinity,
                 url: "/api/download_document",
-                data: data,
+                data:data,
             };
 
             const response = await axios.request(config);
-            console.log(response, fileName, "this is response")
-            console.log(fileName, "filename")
-            downloadFile(response.data, fileName.name);
+            console.log(response, "this is response")
+            downloadFile(response.data, fileName);
 
 
         } catch (error) {
@@ -174,101 +184,47 @@ export default function Document(props) {
         }
     };
 
-
-    // function for converting the files into kb and mb 
-    const formatSize = (bytes) => {
-        if (bytes >= 1048576) {
-            return (bytes / 1048576).toFixed(2) + ' MB';
-        } else if (bytes >= 1024) {
-            return (bytes / 1024).toFixed(2) + ' KB';
-        } else {
-            return bytes + ' Bytes';
-        }
-    };
-
-
-    const getFileIcon = (fileType) => {
-        const fileTypeLowerCase = fileType.toLowerCase();
-        if (fileTypeLowerCase.includes('pdf')) {
-            return <DescriptionIcon color="error" />;
-        } else if (fileTypeLowerCase.includes('excel') || fileTypeLowerCase.includes('spreadsheet')) {
-            return <InsertChartIcon color="primary" />;
-        } else if (fileTypeLowerCase.includes('word') || fileTypeLowerCase.includes('document')) {
-            return <AssignmentIcon color="primary" />;
-        } else if (fileTypeLowerCase.includes('jpeg') || fileTypeLowerCase.includes('jpg')) {
-            return <InsertPhotoIcon color="primary" />;
-        } else if (fileTypeLowerCase.includes('csv')) {
-            return <InsertDriveFileIcon color="primary" />;
-        } else {
-            return <InsertDriveFileIcon color="disabled" />;
-        }
-    };
-
-    const renderDocumentNameCell = (cellValues) => {
-        const { name, fileType } = cellValues.value;
-        const icon = getFileIcon(fileType);
-
-        return (
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-                {icon}
-                <span style={{ marginLeft: '8px' }}>{name}</span>
-            </div>
-        );
-    };
-
     const columns = [
-        { field: 'sr', headerName: 'S No.', width: 60 },
+        { field: 'id', headerName: 'ID', width: 90 },
         {
             field: 'documentName',
             headerName: 'Document Name',
             width: 180,
-            renderCell: renderDocumentNameCell,
+            editable: false,
         },
-        { field: 'id', headerName: 'ID', width: 60 },
         {
             field: 'documentSize',
-            headerName: "Size",
-            description: 'Document Size',
-            width: 80,
+            headerName: 'Document Size',
+            width: 150,
             editable: false,
+
         },
         {
             field: 'uploadDate',
-            headerName: 'Upload Date',
+            headerName: 'Document Upload Date',
             type: 'number',
-            width: 120,
+            width: 180,
             editable: false,
 
         },
+
         {
-            field: 'documentExpDate',
-            headerName: 'Expiry Date',
-            description: 'Document Expiry Date',
-            width: 120,
-            editable: false,
-        },
-        {
-            field: 'documentIdType',
+            field: 'documentType',
             headerName: 'Document Type',
-            description: 'Document Type',
-            type: 'text',
+            type: 'number',
             width: 150,
             editable: false,
         },
-
         {
             field: 'ExpiryDate',
-            headerName: 'Expiry Status',
-            description: 'Document Expiry',
+            headerName: 'Document Expiry',
+            description: 'This column has a value getter and is not sortable.',
             sortable: false,
-            width: 140,
+            width: 160,
             editable: false,
             renderCell: (cellValues) => {
-
-                return (<ExpiryReminder data={cellValues?.value} />)
-            },
-            size: "small"
-
+              return  (<ExpiryReminder data={cellValues?.value} />)
+            }
 
         },
         {
@@ -315,46 +271,22 @@ export default function Document(props) {
 
     ];
 
-
-
-    // function for global time according to timezone 
-    const formatDate = (dateString, withTimezone = false) => {
-        const options = {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZoneName: 'short',
-        };
-
+    // Function to format date as dd/mm/yy
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
         const date = new Date(dateString);
-        const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
-
-        return withTimezone ? formattedDate : formattedDate.split(', ')[0]; // Extract date without timezone
+        return date.toLocaleDateString('en-GB', options).replace(/\//g, '-');
     };
 
-
-
-
-    // after new
-    const rows = imagesData?.result?.map((item, index) => ({
+    const rows = imagesData?.result?.map((item) => ({
         id: item.DOCUMENT_ID,
-        sr: index + 1,
-        documentName: {
-            name: item.DOCUMENT_FILEDATA?.originalname || '',
-            fileType: item.DOCUMENT_FILEDATA?.mimetype || '',
-        },
-        documentSize: formatSize(item.DOCUMENT_FILEDATA?.size) || '',
-        uploadDate: formatDate(item.createdAt),
-        documentType: item.DOCUMENT_FILEDATA?.mimetype || '',
-        ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '',
-        documentExpDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '',
-        documentIdType: item.DOCUMENT_TYPE || '',
+        documentName: item.DOCUMENT_FILEDATA?.originalname || '', // Add conditional check here
+        documentSize: item.DOCUMENT_FILEDATA?.size || '', // Add conditional check here
+        uploadDate: formatDate(item.created),
+        documentType: item.DOCUMENT_FILEDATA?.mimetype || '', // Add conditional check here
+        ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '', // Add conditional check here
     })) || [];
 
-    console.log(rows, "myrows")
     return (
         <>
             <Sidebar
@@ -375,7 +307,6 @@ export default function Document(props) {
                 <DocumentCreate
                     name={"Employee"}
                     COMPANY_ID={COMPANY_ID}
-                    COMPANY_USERNAME={COMPANY_USERNAME}
                     COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
                     update={getalldocument}
 
@@ -387,7 +318,7 @@ export default function Document(props) {
                         <DataGrid
                             rows={rows}
                             columns={columns}
-                            sx={{ border: "none", height: '80vh'  }}
+                            sx={{ border: "none" }}
                             initialState={{
                                 pagination: {
                                     paginationModel: {
@@ -395,11 +326,9 @@ export default function Document(props) {
                                     },
                                 },
                             }}
-                            pageSizeOptions={[10]}
+                            pageSizeOptions={[5]}
                             disableMultipleSelection
                             density="compact"
-                          
-                            getRowId={(row) => row.id}
                         />
                     </Box>
                 </MyScreen>
