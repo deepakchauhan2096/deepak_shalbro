@@ -215,12 +215,13 @@ export default function Document(props) {
             </div>
         );
     };
+
     const columns = [
         { field: 'sr', headerName: 'S No.', width: 60 },
         {
             field: 'documentName',
             headerName: 'Document Name',
-            width: 140,
+            width: 180,
             renderCell: renderDocumentNameCell,
         },
         { field: 'id', headerName: 'ID', width: 60 },
@@ -230,7 +231,6 @@ export default function Document(props) {
             description: 'Document Size',
             width: 80,
             editable: false,
-
         },
         {
             field: 'uploadDate',
@@ -244,8 +244,15 @@ export default function Document(props) {
             field: 'documentExpDate',
             headerName: 'Expiry Date',
             description: 'Document Expiry Date',
-            type: 'number',
             width: 120,
+            editable: false,
+        },
+        {
+            field: 'documentIdType',
+            headerName: 'Document Type',
+            description: 'Document Type',
+            type: 'text',
+            width: 150,
             editable: false,
         },
 
@@ -308,12 +315,6 @@ export default function Document(props) {
 
     ];
 
-    // Function to format date as dd/mm/yy
-    // const formatDate = (dateString) => {
-    //     const options = { day: '2-digit',month: '2-digit', year: 'numeric', };
-    //     const date = new Date(dateString);
-    //     return date.toLocaleDateString('en-GB', options).replace(/\//g, '-');
-    // };
 
 
     // function for global time according to timezone 
@@ -335,17 +336,7 @@ export default function Document(props) {
     };
 
 
-    // Before ------------
 
-    // const rows = imagesData?.result?.map((item) => ({
-    //     id: item.DOCUMENT_ID,
-    //     documentName: item.DOCUMENT_FILEDATA?.originalname || '', // Add conditional check here
-    //     documentSize: formatSize(item.DOCUMENT_FILEDATA?.size) || '', // Add conditional check here
-    //     uploadDate: formatDate(item.createdAt),
-    //     documentType: item.DOCUMENT_FILEDATA?.mimetype || '', // Add conditional check here
-    //     ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '', 
-    //     documentExpDate:formatDate(item.DOCUMENT_EXPIRY_DATE)// Add conditional check here
-    // })) || [];
 
     // after new
     const rows = imagesData?.result?.map((item, index) => ({
@@ -358,11 +349,12 @@ export default function Document(props) {
         documentSize: formatSize(item.DOCUMENT_FILEDATA?.size) || '',
         uploadDate: formatDate(item.createdAt),
         documentType: item.DOCUMENT_FILEDATA?.mimetype || '',
-        ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE, true) || '',
-        documentExpDate: formatDate(item.DOCUMENT_EXPIRY_DATE),
+        ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '',
+        documentExpDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '',
+        documentIdType: item.DOCUMENT_TYPE || '',
     })) || [];
 
-
+    console.log(rows, "myrows")
     return (
         <>
             <Sidebar
@@ -383,6 +375,7 @@ export default function Document(props) {
                 <DocumentCreate
                     name={"Employee"}
                     COMPANY_ID={COMPANY_ID}
+                    COMPANY_USERNAME={COMPANY_USERNAME}
                     COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
                     update={getalldocument}
 
@@ -394,7 +387,7 @@ export default function Document(props) {
                         <DataGrid
                             rows={rows}
                             columns={columns}
-                            sx={{ border: "none" }}
+                            sx={{ border: "none", height: '80vh'  }}
                             initialState={{
                                 pagination: {
                                     paginationModel: {
@@ -402,9 +395,11 @@ export default function Document(props) {
                                     },
                                 },
                             }}
-                            pageSizeOptions={[5]}
+                            pageSizeOptions={[10]}
                             disableMultipleSelection
                             density="compact"
+                          
+                            getRowId={(row) => row.id}
                         />
                     </Box>
                 </MyScreen>

@@ -13,14 +13,12 @@ import EmployeeDocCreate from './EmployeeDocCreate';
 import { Button } from '@mui/material';
 import SimpleBackdrop from "../components/Backdrop";
 
-const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
+const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update, EMPLOYEE_USERNAME }) => {
   const [deleteItem, setDeleteItem] = useState('');
   const [open, setOpen] = useState(false);
   const [backdrop, setBackdrop] = useState(false);
-
-
+ 
   const [empDoc, setEmpDoc] = useState('');
-
 
   useEffect(() => {
 
@@ -35,6 +33,8 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
       DOCUMENT_PARENT_USERNAME: COMPANY_USERNAME,
       DOCUMENT_REF_ID: EMPLOYEE_ID,
     };
+    
+    console.log(requestData,"requestData")
     try {
       const response = await axios.put("/api/get_all_employee_document", requestData);
 
@@ -53,6 +53,8 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
     }
   };
 
+  // downloadfile 
+
   const downloadFile = (base64Data, fileName) => {
     const link = document.createElement('a');
     link.href = `data:application/octet-stream;base64,${base64Data}`;
@@ -62,6 +64,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
     document.body.removeChild(link);
   };
 
+  // for downoad file funciton
   const handleDownload = async (documentId, fileName) => {
     console.log("hi", documentId)
     try {
@@ -83,6 +86,8 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
       console.log(error);
     }
   };
+
+  // function for Delete the document 
 
   const handleDelDoc = async (e, documentId) => {
     setBackdrop(true);
@@ -116,6 +121,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
   };
 
 
+  // function to formate Size 
 
   const formatSize = (bytes) => {
     if (bytes >= 1048576) {
@@ -126,6 +132,8 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
       return bytes + ' Bytes';
     }
   };
+
+  // function togetFileIcon
 
   const getFileIcon = (fileType) => {
     const fileTypeLowerCase = fileType.toLowerCase();
@@ -144,6 +152,8 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
     }
   };
 
+  // function to fomate Date ----
+
   const formatDate = (dateString, withTimezone = false) => {
     const options = {
       day: '2-digit',
@@ -161,6 +171,9 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
     return withTimezone ? formattedDate : formattedDate.split(', ')[0];
   };
 
+
+  // function for add icons in document cell ----
+
   const renderDocumentNameCell = (cellValues) => {
     const { name, fileType } = cellValues.value;
     const icon = getFileIcon(fileType);
@@ -172,6 +185,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
       </div>
     );
   };
+
 
   const columns = [
     { field: 'sr', headerName: 'S No.', width: 60 },
@@ -204,6 +218,15 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
       width: 120,
       editable: false,
     },
+
+    {
+      field: 'documentIdType',
+      headerName: 'Document Type',
+      description: 'Document Type',
+      type: 'text',
+      width: 150,
+      editable: false,
+  },
     {
       field: 'ExpiryDate',
       headerName: 'Expiry Status',
@@ -272,13 +295,14 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update }) => {
         documentType: item.DOCUMENT_FILEDATA?.mimetype || '',
         ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE, true) || '',
         documentExpDate: formatDate(item.DOCUMENT_EXPIRY_DATE),
+        documentIdType: item.DOCUMENT_TYPE || '',
       })) || []
     );
   }, [empDoc]);
 
   return (
     <>
-      <EmployeeDocCreate EMPLOYEE_ID={EMPLOYEE_ID} COMPANY_USERNAME={COMPANY_USERNAME} update={getEmployeeDocuments} />
+      <EmployeeDocCreate EMPLOYEE_ID={EMPLOYEE_ID} EMPLOYEE_USERNAME={EMPLOYEE_USERNAME} COMPANY_USERNAME={COMPANY_USERNAME} update={getEmployeeDocuments} />
       <SimpleBackdrop open={backdrop} />
       <DataGrid
         rows={rows}

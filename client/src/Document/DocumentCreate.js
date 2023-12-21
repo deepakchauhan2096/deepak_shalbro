@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
@@ -9,6 +8,7 @@ import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import { ToastContainer, toast } from "react-toastify";
 import Dropzone from "react-dropzone"
 import "react-toastify/dist/ReactToastify.css";
+import SimpleBackdrop from "../components/Backdrop";
 
 const style = {
     position: "absolute",
@@ -22,25 +22,31 @@ const style = {
     borderRadius: 4
 };
 
-const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
+const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME, update }) => {
     const [open, setOpen] = useState(false);
     const [file, setFile] = useState([])
+    const [backdrop, setBackdrop] = useState(false);
+
+    console.log(COMPANY_USERNAME, "COMPANY_USERNAME")
+
     const [formData, setFormData] = useState({
         selectedFile: null,
         DOCUMENT_EXPIRY_DATE: "",
+        DOCUMENT_TYPE: "",
     });
-   
+
+    console.log(formData.DOCUMENT_EXPIRY_DATE, "formattedMyDateCurrent")
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleOpen = () => setOpen(true);
 
-
-
     // functon for formSubmisson-----------------------------
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setOpen(false);
+        setBackdrop(true);
 
         if (isSubmitting) {
             return; // Prevent multiple submissions
@@ -54,13 +60,14 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
             return;
         }
 
-
         const data = new FormData();
         console.log(data, "data")
         data.append("file", file);
         data.append("DOCUMENT_REF_ID", COMPANY_ID);
         data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
+        data.append("DOCUMENT_PARENT_USERNAME", COMPANY_USERNAME);
         data.append("DOCUMENT_EXPIRY_DATE", formData.DOCUMENT_EXPIRY_DATE);
+        data.append("DOCUMENT_TYPE", formData.DOCUMENT_TYPE);
 
         try {
             const response = await axios.post(
@@ -68,7 +75,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
                 data,
             );
             if (response.data.operation === "successfull") {
-                console.log("response", response)
+                // console.log("response", response)
                 setOpen(false);
                 update();
                 toast.success('Document uploaded successfully!', {
@@ -85,6 +92,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
             toast.error("An error occurred while uploading the document.");
         } finally {
             setIsSubmitting(false);
+            setBackdrop(false); //recently added
         }
     };
 
@@ -95,19 +103,19 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
         setFormData({
             selectedFile: null,
             DOCUMENT_EXPIRY_DATE: "",
+            DOCUMENT_TYPE: "",
         });
     };
 
-    // function for Expiry status -------------------
+    // onChnage method added for both field 
 
-    const handleExpiryDateChange = (e) => {
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
         setFormData({
             ...formData,
-            DOCUMENT_EXPIRY_DATE: e.target.value,
+            [name]: value,
         });
     };
-
-
     return (
         <>
             <Button
@@ -140,7 +148,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
                                 <Dropzone onDrop={acceptedFiles => setFile(...acceptedFiles)}>
                                     {({ getRootProps, getInputProps }) => (
                                         <section className="p-4 rounded-2" style={{ background: "#f2f2f2", border: "2px dashed gray" }} {...getRootProps()}>
-                                            <div >
+                                            <div>
                                                 <input {...getInputProps()} />
                                                 <p>Drag 'n' drop some files here, or click to select files</p>
                                             </div>
@@ -158,13 +166,34 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
                                             type="date"
                                             className="form-control mb-2 pb-2 pt-2 form-control-2 rounded-0"
                                             id="DOCUMENT_EXPIRY_DATE"
-                                            name=" DOCUMENT_EXPIRY_DATE"
-                                            onChange={handleExpiryDateChange}
+                                            name="DOCUMENT_EXPIRY_DATE"
+                                            onChange={handleInputChange}
                                             value={formData.DOCUMENT_EXPIRY_DATE}
                                             required
                                         />
                                     </div>
                                 </div>
+
+                                <div className="row mb-2">
+                                    <div className="form-group col-xl-12">
+                                        <label className="pb-2 fs-6 rounded p-2">
+                                            Document Type
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className="form-control mb-2 pb-2 pt-2 form-control-2 rounded-0"
+                                            id="DOCUMENT_TYPE"
+                                            name="DOCUMENT_TYPE"
+                                            onChange={handleInputChange}
+                                            value={formData.DOCUMENT_TYPE}
+                                            placeholder="Document Type"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* ... (other input fields) */}
+
                                 <div className="row">
                                     <div className="form-group col-8">
                                         <button
@@ -187,9 +216,13 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, update }) => {
                                 </div>
                             </form>
                         </div>
+
                     </Box>
                     <ToastContainer position="top-center" autoClose={1000} />
                 </Container>
+
+
+
             </Modal>
         </>
     );

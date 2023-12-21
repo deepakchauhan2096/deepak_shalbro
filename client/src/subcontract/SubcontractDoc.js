@@ -24,10 +24,6 @@ const SubcontractDoc = ({ SubcontractorData }) => {
     const [backdrop, setBackdrop] = useState(false);
     const [deleteItem, setDeleteItem] = useState('');
 
-    // console.log("documents project", SubcontractorData?.SUBCONTRACTOR_PARENT_USERNAME, SubcontractorData?.SUBCONTRACTOR_ID)
-
-    // console.log("filter", SubcontractorData[0]?.SUBCONTRACTOR_PARENT_USERNAME)
-
 
     useEffect(() => {
         fetchSubDoc();
@@ -38,7 +34,7 @@ const SubcontractDoc = ({ SubcontractorData }) => {
 
         const requestData = {
             DOCUMENT_PARENT_USERNAME: SubcontractorData?.SUBCONTRACTOR_PARENT_USERNAME,
-            DOCUMENT_REF_ID: SubcontractorData?.SUBCONTRACTOR_ID,
+            DOCUMENT_SUB_ID: SubcontractorData?.SUBCONTRACTOR_ID,
         };
         try {
             const response = await axios.put("/api/get_all_subContractor_document", requestData);
@@ -48,7 +44,6 @@ const SubcontractDoc = ({ SubcontractorData }) => {
             }
 
             const data = response.data;
-            console.log("requestdata", data);
             setSubcontractorDoc(data);
 
 
@@ -62,7 +57,7 @@ const SubcontractDoc = ({ SubcontractorData }) => {
     const handleDelDoc = async (e, documentId) => {
         setBackdrop(true);
         const data = {
-            DOCUMENT_ID: documentId,
+            DOCUMENT_SUB_ID: documentId,
             DOCUMENT_PARENT_USERNAME: SubcontractorData?.SUBCONTRACTOR_PARENT_USERNAME,
         };
 
@@ -101,7 +96,6 @@ const SubcontractDoc = ({ SubcontractorData }) => {
     };
 
     const handleDownload = async (documentId, fileName) => {
-        console.log("hi", documentId)
         try {
             const data = {
                 DOCUMENT_ID: documentId,
@@ -139,7 +133,7 @@ const SubcontractDoc = ({ SubcontractorData }) => {
         }
     };
 
-// this function for render the name and icon of the doc 
+    // this function for render the name and icon of the doc 
 
     const renderDocumentNameCell = (cellValues) => {
         const { name, fileType } = cellValues.value;
@@ -216,6 +210,14 @@ const SubcontractDoc = ({ SubcontractorData }) => {
             editable: false,
         },
         {
+            field: 'documentIdType',
+            headerName: 'Document Type',
+            description: 'Document Type',
+            type: 'text',
+            width: 150,
+            editable: false,
+        },
+        {
             field: 'ExpiryDate',
             headerName: 'Expiry Status',
             description: 'Document Expiry',
@@ -232,7 +234,6 @@ const SubcontractDoc = ({ SubcontractorData }) => {
             headerName: 'Download',
             width: 120,
             renderCell: (cellValues) => {
-                console.log("heelo world", cellValues.row.documentName, cellValues.id,)
                 return (
                     <Button
                         variant="contained"
@@ -284,6 +285,8 @@ const SubcontractDoc = ({ SubcontractorData }) => {
                 documentType: item.DOCUMENT_FILEDATA?.mimetype || '',
                 ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE, true) || '',
                 documentExpDate: formatDate(item.DOCUMENT_EXPIRY_DATE),
+                documentIdType: item.DOCUMENT_TYPE || '',
+
             })) || []
         );
     }, [subcontractorDoc]);
@@ -291,7 +294,7 @@ const SubcontractDoc = ({ SubcontractorData }) => {
     return (
         <>
             <CreateSubDoc DOCUMENT_PARENT_USERNAME={SubcontractorData?.SUBCONTRACTOR_PARENT_USERNAME}
-                DOCUMENT_REF_ID={SubcontractorData?.SUBCONTRACTOR_ID} update={fetchSubDoc}
+                DOCUMENT_REF_ID={SubcontractorData?.SUBCONTRACTOR_ID} update={fetchSubDoc} SUBCONTRACTOR_USERNAME={SubcontractorData?.SUBCONTRACTOR_USERNAME}
             />
 
             <Box sx={{ height: 400, width: '100%' }}>

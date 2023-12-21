@@ -31,10 +31,8 @@ export default function ProjectUpload(props) {
 
   // New state to manage visibility of the documents list
   const [showDocuments, setShowDocuments] = useState(false);
-  // console.log("Images data is here:=>", imagesData.result);
   // this is data of company for fetch the company username
   const DocData = props.empData;
-  // console.table(DocData, "<<=====================company data");
 
   useEffect(() => {
     getalldocument();
@@ -64,7 +62,6 @@ export default function ProjectUpload(props) {
         headers,
       })
       .then((response) => {
-        // console.log("response data  anurag pal:", response.data);
         getalldocument();
         setSuccessMessage("Document uploaded successfully!");
         setSelectedFileName("");
@@ -158,7 +155,6 @@ export default function ProjectUpload(props) {
       };
 
       const response = await axios.request(config);
-      console.log(response.data);
       downloadFile(response.data, fileName);
     } catch (error) {
       console.log(error);
