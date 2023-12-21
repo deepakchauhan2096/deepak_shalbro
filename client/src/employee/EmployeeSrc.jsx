@@ -15,9 +15,6 @@ import {
   Paper,
   Skeleton,
 } from "@mui/material";
-// import Snippet from "./Snippet";
-// import EmployeePDF from "../Invoices/EmployeePDF";
-// import { PDFViewer } from "@react-pdf/renderer";
 import EmployeeTimeSheet from "./EmployeeTimeSheet";
 import EmployeeEdit from "./EmployeeEdit";
 import { useParams } from "react-router-dom";
@@ -30,9 +27,6 @@ import EmployeeManual from "./EmployeeManual";
 // import EmployeeDocCreate from "./EmployeeDocCreate";
 import EmployeeDocuments from "./EmployeeDocuments";
 
-// import EmployeeManual from "./EmployeeManual";
-
-// import env from "react-dotenv";
 
 const EmployeeSrc = () => {
   const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
@@ -263,10 +257,6 @@ const EmployeeSrc = () => {
       });
     }
   };
-
-
-
-
 
   const columns = [
     { field: "EMPLOYEE_ID", headerName: "ID", width: 60 },
@@ -606,7 +596,7 @@ const EmployeeSrc = () => {
           >
             <ArrowBackIcon style={{ fontSize: "22.5px" }} />
           </Button>
-          {["Employee Details", "Attendance", "Timesheet", "Documents"].map(
+          {["Employee Details","Timesheet", "Manual Attendance","Documents" ].map(
             (item, value) => (
               <Button
                 onClick={(e, index) => setIndex(value)}
@@ -696,7 +686,6 @@ const EmployeeSrc = () => {
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
 
@@ -769,18 +758,20 @@ const EmployeeSrc = () => {
                 </div>
               </div>
             </div>
-          </div> : "" }
-        </MyScreen> 
+          </div>:""}
+        </MyScreen>
 
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-        {index === 1 ? <EmployeeManual
-            EMPLOYEE_DATA={filterData?.row}
-          /> : ""}
+          <EmployeeTimeSheet mainData={filterData.row} />
         </MyScreen>
 
+        
         <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
-         {index === 2 ? <EmployeeTimeSheet mainData={filterData.row} /> :""}
+          <EmployeeManual
+            mainData={filterData.row}
+          />
         </MyScreen>
+
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
 
           {index === 3 ? <EmployeeDocuments
@@ -790,6 +781,9 @@ const EmployeeSrc = () => {
            
           />: "" }
         </MyScreen>
+
+       
+
       </Box>
 
 

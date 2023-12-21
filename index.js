@@ -418,6 +418,26 @@ app.put("/api/editbankdetail", (req, res) => {
   sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/editbankdetail`, req, res)
 })
 
+
+app.put("/api/send-email", (req, res) => {
+  sendHttpRequest("POST", `${process.env.SERVERAPIREQUEST}/send-email`, req, res)
+})
+
+
+
+app.put("/api/update_emp_attendance", (req, res) => {
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/update_emp_attendance`, req, res)
+});
+
+
+
+
+
+
+
+
+
+
 // Dummy data for demonstration
 // const data = [
 //   { id: 1, name: 'Item 1' },
