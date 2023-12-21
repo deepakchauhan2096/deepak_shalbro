@@ -317,6 +317,12 @@ app.put("/api/send-email", (req, res) => {
 
 
 
+app.put("/api/update_emp_attendance", (req, res) => {
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/update_emp_attendance`, req, res)
+});
+
+
+
 
 
 

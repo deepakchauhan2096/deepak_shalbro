@@ -603,7 +603,7 @@ const EmployeeSrc = () => {
           >
             <ArrowBackIcon style={{ fontSize: "22.5px" }} />
           </Button>
-          {["Employee Details", "Attendance", "Timesheet"].map(
+          {["Employee Details","Timesheet", "Manual Attendance", ].map(
             (item, value) => (
               <Button
                 onClick={(e, index) => setIndex(value)}
@@ -693,18 +693,6 @@ const EmployeeSrc = () => {
                       </div>
                     </div>
                   </div>
-
-                  {/* <div className="col-12 mt-2">
-                    <div className="card">
-                      <div className="card-body">
-                        <h5 className="card-title">Salary Information</h5>
-                        <p className="card-text">Salary: $60,000 per year</p>
-                        <p className="card-text">
-                          Payment Type: Direct Deposit
-                        </p>
-                      </div>
-                    </div>
-                  </div> */}
                 </div>
               </div>
               <div className="col-xl-6">
@@ -779,83 +767,18 @@ const EmployeeSrc = () => {
           </div>
         </MyScreen>
 
-        {/* <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-          <h5 style={{ textDecoration: "underline" }}>All Documents</h5>
-          <div
-            className="form-control form-control-2 rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Education Document
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-
-          <div
-            className="form-control form-control-2 rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Valid ID
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-          <div
-            className="form-control form-control-2 rounded-0 mb-1"
-            style={{ position: "relative" }}
-          >
-            Other
-            <button
-              style={{ position: "absolute", right: "0", top: "0" }}
-              className="btn btn-primary rounded-0"
-              onClick={() => downloadPDF(filterData.complianceDoc)}
-            >
-              Download file
-            </button>
-          </div>
-        </MyScreen> */}
-
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
-          <EmployeeManual
-            EMPLOYEE_DATA={filterData?.row}
-          />
-        </MyScreen>
-
-        <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
           <EmployeeTimeSheet mainData={filterData.row} />
         </MyScreen>
 
-        {/* <MyScreen
-          screenIndex={index === 2}
-          sx={{ padding: 3 }}
-          className="rounded-0"
-        >
-          <Snippet />
-        </MyScreen> */}
+        <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
+          <EmployeeManual
+            mainData={filterData.row}
+          />
+        </MyScreen>
 
-        {/* <MyScreen screenIndex={index === 3} sx={{ padding: "0" }}>
-          <PDFViewer
-            style={{
-              width: "100%",
-              height: "100%",
-              position: "absolute",
-            }}
-          >
-            <EmployeePDF
-              name={filterData.row?.EMPLOYEE_NAME}
-              email={filterData.row?.EMPLOYEE_EMAIL}
-              phone={filterData.row?.EMPLOYEE_PHONE}
-            />
-          </PDFViewer>
-        </MyScreen> */}
+       
+
       </Box>
 
 

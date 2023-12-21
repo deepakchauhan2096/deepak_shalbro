@@ -26,7 +26,8 @@ import { auth } from '../firebase';
 import EmployeeReport from "./EmployeeReportOut";
 import EmployeeReportIn from "./EmployeeReportIn";
 import EmployeeReportOut from "./EmployeeReportOut";
-import moment from "moment/moment"
+import moment from "moment/moment";
+import Modal from "@mui/material/Modal";
 
 const containerStyle = {
   width: "100%",
@@ -69,9 +70,11 @@ const EmployeeAttendance = ({ state }) => {
   const [isInsideCircle, setIsInsideCircle] = useState(true);
   const [locErrorin, setLocErrorIn] = useState(false);
   const [locErrorout, setLocErrorOut] = useState(false);
-
   const [empdata, setData] = useState([]);
   const [map, setMap] = useState(null);
+  const [refresh, setRefresh] = useState(false);
+  const [reportMsg , setReportMsg] = useState("")
+ 
 
 
   // const location = useLocation();
@@ -125,7 +128,7 @@ const EmployeeAttendance = ({ state }) => {
   const day = String(currentDates.getDate()).padStart(2, "0");
   const formattedDate = `${year}-${month}-${day}`;
 
-  console.log(formattedDate, "for");
+  // console.log(formattedDate, "for");
 
 
 
@@ -147,7 +150,7 @@ const EmployeeAttendance = ({ state }) => {
 
   // attendance in
 
-  const handleSubmitIn = (event) => {
+  const handleSubmitIn = (event, typeValue) => {
     event.preventDefault();
     setLocErrorIn("")
     setLocErrorOut("")
@@ -163,9 +166,11 @@ const EmployeeAttendance = ({ state }) => {
         ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
         ATTENDANCE_DATE_ID: formattedDate,
         ATTENDANCE_IN: time,
-        ATTENDANCE_OUT: "",
         ATTENDANCE_PROJECT_ID: parseInt(Project_Id),
-        ATTENDANCE_TYPE:"automatic"
+        ATTENDANCE_TYPE: typeValue,
+        ATTENDENCE_LOCATION_IN: locationName,
+        ATTENDENCE_LOC_STATUS_IN: `Your location is ${isInsideCircle ? "inside" : "outside"}`,
+        ATTENDANCE_REPORT_IN: "",
       };
 
       setShowBackdrop(true);
@@ -205,10 +210,12 @@ const EmployeeAttendance = ({ state }) => {
         ATTENDANCE_EMPLOYEE_ID: employeeData?.EMPLOYEE_ID,
         ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
         ATTENDANCE_DATE_ID: formattedDate,
-        ATTENDANCE_IN: "",
         ATTENDANCE_OUT: time,
         ATTENDANCE_PROJECT_ID: parseInt(Project_Id),
-        ATTENDANCE_TYPE:"automatic"
+        ATTENDANCE_TYPE: "automatic",
+        ATTENDENCE_LOCATION_OUT: locationName,
+        ATTENDENCE_LOC_STATUS_OUT: `Your location is ${isInsideCircle ? "inside" : "outside"}`,
+        ATTENDANCE_REPORT_OUT: ""
       };
 
       setShowBackdrop(true);
@@ -234,7 +241,7 @@ const EmployeeAttendance = ({ state }) => {
     }
   };
 
-  const getLocation = () => {
+  const getLocation = (e) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -315,7 +322,9 @@ const EmployeeAttendance = ({ state }) => {
 
   useEffect(() => {
     getLocation();
-  }, [latt, lngi, areas, loca, employees, projects, projectids]);
+  }, [latt, lngi, areas, loca, employees, projects, projectids, refresh]);
+
+
 
   useEffect(() => {
     if (latitude && longitude && circleCenter[0] && circleCenter[1]) {
@@ -341,6 +350,301 @@ const EmployeeAttendance = ({ state }) => {
 
 
   console.log(employeeData, "employeeData")
+
+
+  const Modalsin = () => {
+
+    const [open, setOpen] = useState(false);
+    const [report, setReport] = useState("");
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+
+
+    const HandleSubmitInReport = (event, typeValue) => {
+      event.preventDefault();
+      setLocErrorIn("")
+      setLocErrorOut("")
+      setReportMsg("")
+  
+        const attendanceData = {
+          ATTENDANCE_ADMIN_ID: employeeData?.EMPLOYEE_MEMBER_PARENT_ID,
+          ATTENDANCE_ADMIN_USERNAME:
+            employeeData?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+          ATTENDANCE_COMPANY_ID: employeeData?.EMPLOYEE_PARENT_ID,
+          ATTENDANCE_COMPANY_USERNAME: employeeData?.EMPLOYEE_PARENT_USERNAME,
+          ATTENDANCE_EMPLOYEE_ID: employeeData?.EMPLOYEE_ID,
+          ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
+          ATTENDANCE_DATE_ID: formattedDate,
+          ATTENDANCE_IN: time,
+          ATTENDANCE_PROJECT_ID: parseInt(Project_Id),
+          ATTENDANCE_TYPE_IN: typeValue,
+          ATTENDENCE_LOCATION_IN: locationName,
+          ATTENDENCE_LOC_STATUS_IN: `Your location is ${isInsideCircle ? "inside" : "outside"}`,
+          ATTENDANCE_REPORT_IN: report,
+        };
+  
+        setShowBackdrop(true);
+  
+        axios
+          .post(
+            "/api/create_emp_attendance",
+            attendanceData,
+  
+          )
+          .then(() => {
+            setReportMsg("Punch in report submitted successfully!");
+            setShowBackdrop(false);
+          })
+          .catch((error) => {
+            console.log(error);
+            setShowBackdrop(false);
+          });
+
+    };
+
+
+    const style = {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: "50%",
+      bgcolor: "background.paper",
+      boxShadow: 24,
+      p: 4,
+      borderRadius: 4,
+      outline: "none"
+    };
+
+    return (
+      < >
+        <span
+          role="button"
+          onClick={handleOpen}
+        >
+          Punch In Report
+        </span>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            {/* <form className="overflow-auto overflow-x-hidden"> */}
+              <h5>Send Punch In Report</h5>
+              <div className="row py-1">
+                <div className="form-group">
+                  <table className="table" style={{ tableLayout: "fixed" }}>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <Typography>
+                            Date: {currentDate} Time: {currentTime}
+                          </Typography>
+                        </td>
+                        <td>
+                          <Typography>
+                            Location Status :  {isInsideCircle ? "inside" : "outside"}{" "}
+                            the area.
+                          </Typography>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <textarea
+                    // disabled
+                    type="text"
+                    ceholder="Enter hire date"
+                    className={`rounded-1 border`}
+                    name="COMMENT"
+                    rows={"5"}
+                    style={{ outline: "none", width: "100%" }}
+                    placeholder={"Write your problem here..."}
+                    onChange={(e) => setReport(e.target.value)}
+                  />
+
+                </div>
+                <div className="py-2">
+
+                  <Button
+                    onClick={(event) => HandleSubmitInReport(event, "manual")}
+                    name="in_btn"
+                    variant="contained"
+                    color="success"
+                    size="small"
+                    className="btn btn-block"
+                    px={2}
+                    type="submit"
+                  >
+                    Submit Report
+                  </Button>{" "}
+                  <button
+                    onClick={() => handleClose()}
+                    className="btn btn-danger text-white btn-sm"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            {/* </form> */}
+          </Box>
+        </Modal >
+      </>
+    );
+  }
+
+
+  const Modalsout = () => {
+
+    const [open, setOpen] = useState(false);
+    const [report, setReport] = useState("");
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+
+
+    const HandleSubmitOutReport = (event, typeValue) => {
+      event.preventDefault();
+      setLocErrorIn("")
+      setLocErrorOut("")
+      setReportMsg("");
+  
+        const attendanceData = {
+          ATTENDANCE_ADMIN_ID: employeeData?.EMPLOYEE_MEMBER_PARENT_ID,
+          ATTENDANCE_ADMIN_USERNAME:
+            employeeData?.EMPLOYEE_MEMBER_PARENT_USERNAME,
+          ATTENDANCE_COMPANY_ID: employeeData?.EMPLOYEE_PARENT_ID,
+          ATTENDANCE_COMPANY_USERNAME: employeeData?.EMPLOYEE_PARENT_USERNAME,
+          ATTENDANCE_EMPLOYEE_ID: employeeData?.EMPLOYEE_ID,
+          ATTENDANCE_EMPLOYEE_USERNAME: employeeData?.EMPLOYEE_USERNAME,
+          ATTENDANCE_DATE_ID: formattedDate,
+          ATTENDANCE_OUT: time,
+          ATTENDANCE_PROJECT_ID: parseInt(Project_Id),
+          ATTENDANCE_TYPE_OUT: typeValue,
+          ATTENDENCE_LOCATION_OUT: locationName,
+          ATTENDENCE_LOC_STATUS_OUT: `Your location is ${isInsideCircle ? "inside" : "outside"}`,
+          ATTENDANCE_REPORT_OUT: report,
+        };
+  
+        setShowBackdrop(true);
+  
+        axios
+          .post(
+            "/api/create_emp_attendance",
+            attendanceData,
+  
+          )
+          .then(() => {
+            setReportMsg("Punch out report submitted successfully!");
+            setShowBackdrop(false);
+          })
+          .catch((error) => {
+            console.log(error);
+            setShowBackdrop(false);
+          });
+
+    };
+
+
+    const style = {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: "50%",
+      bgcolor: "background.paper",
+      boxShadow: 24,
+      p: 4,
+      borderRadius: 4,
+      outline: "none"
+    };
+
+    return (
+      < >
+        <span
+          role="button"
+          onClick={handleOpen}
+        >
+          Punch Out Report
+        </span>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            {/* <form className="overflow-auto overflow-x-hidden"> */}
+              <h5>Send Punch In Report</h5>
+              <div className="row py-1">
+                <div className="form-group">
+                  <table className="table" style={{ tableLayout: "fixed" }}>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <Typography>
+                            Date: {currentDate} Time: {currentTime}
+                          </Typography>
+                        </td>
+                        <td>
+                          <Typography>
+                            Location Status :  {isInsideCircle ? "inside" : "outside"}{" "}
+                            the area.
+                          </Typography>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <textarea
+                    // disabled
+                    type="text"
+                    ceholder="Enter hire date"
+                    className={`rounded-1 border`}
+                    name="COMMENT"
+                    rows={"5"}
+                    style={{ outline: "none", width: "100%" }}
+                    placeholder={"Write your problem here..."}
+                    onChange={(e) => setReport(e.target.value)}
+                  />
+
+                </div>
+                <div className="py-2">
+
+                  <Button
+                    onClick={(event) => HandleSubmitOutReport(event, "manual")}
+                    name="in_btn"
+                    variant="contained"
+                    color="success"
+                    size="small"
+                    className="btn btn-block"
+                    px={2}
+                    type="submit"
+                  >
+                    Submit Report
+                  </Button>{" "}
+                  <button
+                    onClick={() => handleClose()}
+                    className="btn btn-danger text-white btn-sm"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            {/* </form> */}
+          </Box>
+        </Modal >
+      </>
+    );
+  }
+
+
+
+
+
 
   return (
     <>
@@ -466,7 +770,7 @@ const EmployeeAttendance = ({ state }) => {
                     ) : (
                       <td>
                         <Button
-                          onClick={handleSubmitIn}
+                          onClick={(event) => handleSubmitIn(event, "automatic")}
                           name="in_btn"
                           variant="contained"
                           color="success"
@@ -507,22 +811,29 @@ const EmployeeAttendance = ({ state }) => {
                       Your attendance is submitted
                     </p>
                   ) : null}
+
+                  {indone && (
+                    <p colSpan="2" className="text-success">
+                      Your Punch In submitted successfully!
+                    </p>
+                  )}
+
+                  {outdone && (
+                    <p colSpan="2" className="text-success">
+                      Your Punch Out submitted successfully!
+                    </p>
+                  )}
+
+
+                  {reportMsg && <p colSpan="2" className="text-success">
+                      {reportMsg}
+                    </p>}
+
+
                   {locErrorin && (
                     <>
                       <p className="text-danger">Error : {locErrorin}
-                        <strong className="text-primary"><EmployeeReportIn
-                          EMPLOYEE_ID={employeeData?.EMPLOYEE_ID}
-                          EMPLOYEE_PARENT_ID={employeeData?.EMPLOYEE_PARENT_ID}
-                          EMPLOYEE_PARENT_USERNAME={employeeData?.EMPLOYEE_PARENT_USERNAME}
-                          EMPLOYEE_MEMBER_PARENT_ID={employeeData?.EMPLOYEE_MEMBER_PARENT_ID}
-                          EMPLOYEE_MEMBER_PARENT_USERNAME={employeeData?.EMPLOYEE_MEMBER_PARENT_USERNAME}
-                          PROJECT_ID={projectids}
-                          EMPLOYEE_USERNAME={employeeData?.EMPLOYEE_USERNAME}
-                          EMPLOYEE_NAME={employeeData?.EMPLOYEE_NAME}
-                          PHONE_NUMBER={employeeData?.EMPLOYEE_PHONE}
-                          TIME={time}
-                          DATE={formattedDate}
-                        /> ? </strong>
+                        <strong className="text-primary"><Modalsin /> ? </strong>
                       </p>
 
                     </>
@@ -530,19 +841,7 @@ const EmployeeAttendance = ({ state }) => {
                   {locErrorout && (
                     <>
                       <p className="text-danger">Error : {locErrorout}
-                        <strong className="text-primary"><EmployeeReportOut
-                          EMPLOYEE_ID={employeeData?.EMPLOYEE_ID}
-                          EMPLOYEE_PARENT_ID={employeeData?.EMPLOYEE_PARENT_ID}
-                          EMPLOYEE_PARENT_USERNAME={employeeData?.EMPLOYEE_PARENT_USERNAME}
-                          EMPLOYEE_MEMBER_PARENT_ID={employeeData?.EMPLOYEE_MEMBER_PARENT_ID}
-                          EMPLOYEE_MEMBER_PARENT_USERNAME={employeeData?.EMPLOYEE_MEMBER_PARENT_USERNAME}
-                          PROJECT_ID={projectids}
-                          EMPLOYEE_USERNAME={employeeData?.EMPLOYEE_USERNAME}
-                          EMPLOYEE_NAME={employeeData?.EMPLOYEE_NAME}
-                          PHONE_NUMBER={employeeData?.EMPLOYEE_PHONE}
-                          TIME={time}
-                          DATE={formattedDate}
-                        /> ? </strong>
+                        <strong className="text-primary"><Modalsout /> ? </strong>
                       </p>
 
                     </>

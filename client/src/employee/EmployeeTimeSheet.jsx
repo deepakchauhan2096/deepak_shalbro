@@ -90,7 +90,7 @@ const EmployeeTimeSheet = (props) => {
 
     return `${overtimeHours} hours`
   };
-  
+
 
 
 
@@ -150,6 +150,8 @@ const EmployeeTimeSheet = (props) => {
   const ResultantTime = overallTime(allHours);
   const ExtractHours = convertToDuration(ResultantTime)?._data.hours;
   const totalIncome = ExtractHours * props.mainData.EMPLOYEE_HOURLY_WAGE;
+  const Automatic = workvalue?.filter((prev) => prev.ATTENDANCE_TYPE_IN === "automatic" && prev.ATTENDANCE_TYPE_OUT === "automatic")
+
 
 
 
@@ -168,15 +170,15 @@ const EmployeeTimeSheet = (props) => {
       width: 120,
       renderCell: (cellValues) => {
         return (
-            <>
+          cellValues?.row.ATTENDANCE_TYPE_IN == "automatic" && cellValues?.row.ATTENDANCE_IN ? <>
             {cellValues.row.ATTENDANCE_IN && moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT")}
-            </>
+          </> : <>{"absent"}</>
         );
-        
+
       },
-      cellClassName : (cellValues) => {
-        return  cellValues.row.ATTENDANCE_IN ? "bg-success text-white border" : "bg-danger text-white border"
-        }
+      cellClassName: (cellValues) => {
+        return cellValues?.row.ATTENDANCE_TYPE_IN == "automatic" && cellValues?.row.ATTENDANCE_IN ? "bg-success text-white border" : "bg-danger text-white border"
+      }
     },
 
     {
@@ -185,14 +187,14 @@ const EmployeeTimeSheet = (props) => {
       width: 150,
       renderCell: (cellValues) => {
         return (
-          cellValues?.row.ATTENDANCE_OUT ? <>
+          cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" && cellValues?.row.ATTENDANCE_OUT ? <>
             {cellValues?.row.ATTENDANCE_OUT && moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT")}
           </> : <>{"absent"}</>
         );
       },
-      cellClassName : (cellValues) => {
-        return  cellValues.row.ATTENDANCE_OUT ? "bg-success text-white border" : "bg-danger text-white border"
-        }
+      cellClassName: (cellValues) => {
+        return cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" && cellValues?.row.ATTENDANCE_OUT ? "bg-success text-white border" : "bg-danger text-white border"
+      }
     },
 
     {
@@ -206,9 +208,9 @@ const EmployeeTimeSheet = (props) => {
           </>
         );
       },
-      cellClassName : (cellValues) => {
-        return  cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-light text-dark border" : "text-dark border"
-        }
+      cellClassName: (cellValues) => {
+        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-light text-dark border" : "text-dark border"
+      }
     },
     {
       field: "overtime",
@@ -235,14 +237,17 @@ const EmployeeTimeSheet = (props) => {
           </>
         );
       },
-      cellClassName : (cellValues) => {
-        return  cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-success text-light border" : "bg-danger text-white border"
-        }
+      cellClassName: (cellValues) => {
+        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-success text-light border" : "bg-danger text-white border"
+      }
     },
 
   ];
 
-  
+
+
+
+
 
 
   return (
@@ -296,77 +301,46 @@ const EmployeeTimeSheet = (props) => {
             </tr>
           </table>
         </div>
-        {/* <table className="table table-hover border">
-          <thead style={{ border: "1px solid black" }}>
-            <tr className="table-dark">
-              <th scope="col">Date</th>
-              <th scope="col">In</th>
-              <th scope="col">Out</th>
-              <th scope="col">Working hours</th>
-              <th scope="col">Overtime</th>
-              <th scope="col">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workvalue?.map((item) => (
-              <tr className="table table-striped">
-                <td>{item.ATTENDANCE_DATE_ID}</td>
-                <td>{item.ATTENDANCE_IN && moment(item.ATTENDANCE_IN).utcOffset(0).format("LT")}</td>
-                <td>{item.ATTENDANCE_OUT && moment(item.ATTENDANCE_OUT).utcOffset(0).format("LT")}</td>
-                <td>
-                  {item.ATTENDANCE_OUT && timeValueHours(moment(item.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(item.ATTENDANCE_IN).utcOffset(0).format("LT"))}
-                </td>
-                <td>
-                  {item.ATTENDANCE_OUT && Overtime(moment(item.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(item.ATTENDANCE_IN).utcOffset(0).format("LT"))}
-                </td>
-                <td>
-                  {item.ATTENDANCE_IN && item.ATTENDANCE_OUT
-                    ? "present"
-                    : item.ATTENDANCE_IN && item.ATTENDANCE_OUT && "absent"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table> */}
-         {/* data gird */}
-         <DataGrid
-            className="display"
-            style={{ height: "55vh" }}
-            rows={workvalue}
-            columns={columns}
-            getRowId={(row) => row.ATTENDANCE_ID}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 8,
+
+        {/* data gird */}
+        <DataGrid
+          className="display"
+          style={{ height: "55vh" }}
+          rows={workvalue}
+          columns={columns}
+          getRowId={(row) => row.ATTENDANCE_ID}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 8,
+              },
+            },
+            sorting: {
+              sortModel: [
+                {
+                  field: 'ATTENDANCE_DATE_ID',
+                  sort: 'asc',
                 },
+              ],
+            },
+
+            aggregation: {
+              model: {
+                size: 'sum',
+                updatedAt: 'max',
               },
-              sorting: {
-                sortModel: [
-                  {
-                    field: 'ATTENDANCE_DATE_ID',
-                    sort: 'asc',
-                  },
-                ],
-              },
-
-              aggregation: {
-                model: {
-                  size: 'sum',
-                  updatedAt: 'max',
-                },
-              },
+            },
 
 
 
-            }
- 
-            }
-            density="compact"
-            pageSizeOptions={[5]}
-            // checkboxSelection
-            disableRowSelectionOnClick
-          />
+          }
+
+          }
+          density="compact"
+          pageSizeOptions={[5]}
+          // checkboxSelection
+          disableRowSelectionOnClick
+        />
       </div>
       <div className="container-fluid" style={{ position: "", bottom: "0" }}>
         <div className="row border">
