@@ -792,7 +792,7 @@ const EmployeeAttendance = ({ state }) => {
                     ) : (
                       <td>
                         <Button
-                          onClick={handleSubmitOut}
+                          onClick={(event) => handleSubmitIn(event, "automatic")}
                           name="in_btn"
                           variant="contained"
                           color="error"
