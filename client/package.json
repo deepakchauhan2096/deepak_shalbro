@@ -77,6 +77,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "prettier": "3.1.1",
     "redux-devtools-extension": "^2.13.9"
   },
   "react-dotenv": {

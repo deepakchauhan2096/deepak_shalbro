@@ -7,11 +7,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import InfoIcon from '@mui/icons-material/Info';
 import { PDFDownloadLink, PDFViewer, ReactPDF } from "@react-pdf/renderer";
 import SalaryPDF from "../Invoices/SalaryPDF";
 import env from "react-dotenv";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 
 // current day
 let MyDateCurrent = moment().format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
@@ -28,6 +29,7 @@ const EmployeeTimeSheet = (props) => {
     ATTENDANCE_START_DATE: formattedMyDateBefore,
     ATTENDANCE_END_DATE: formattedMyDateCurrent,
   });
+  const [resStatus, setResStatus] = useState(false)
 
 
   console.log(dateValue, formattedMyDateCurrent, "dateValue")
@@ -51,10 +53,12 @@ const EmployeeTimeSheet = (props) => {
 
       );
       setTimeout(() => {
+        setResStatus(true)
         setWorkvalue(response.data.result);
       }, 1000);
     } catch (err) {
       console.log("something Went wrong: =>", err);
+      setResStatus("error")
     }
   };
 
@@ -107,7 +111,7 @@ const EmployeeTimeSheet = (props) => {
 
   const allHours = workvalue?.map((e) => {
     return (
-      timeValueHours(moment(e.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(e.ATTENDANCE_IN).utcOffset(0).format("LT"))
+      timeValueHours(moment(e.ATTENDANCE_TYPE_OUT == "automatic" ? e.ATTENDANCE_OUT : "").utcOffset(0).format("LT"), moment(e.ATTENDANCE_TYPE_IN == "automatic" ?  e.ATTENDANCE_IN: "").utcOffset(0).format("LT"))
     );
   });
 
@@ -203,9 +207,9 @@ const EmployeeTimeSheet = (props) => {
       width: 200,
       renderCell: (cellValues) => {
         return (
-          cellValues?.row.ATTENDANCE_OUT && <>
-            {timeValueHours(moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT"))}
-          </>
+          cellValues?.row.ATTENDANCE_OUT && cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" ? <>
+            {timeValueHours(moment(cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" ? cellValues?.row.ATTENDANCE_OUT : "").utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_TYPE_IN == "automatic" ? cellValues?.row.ATTENDANCE_IN : "").utcOffset(0).format("LT"))}
+          </> : ""
         );
       },
       cellClassName: (cellValues) => {
@@ -219,7 +223,7 @@ const EmployeeTimeSheet = (props) => {
       renderCell: (cellValues) => {
         return (
           cellValues?.row.ATTENDANCE_OUT && <>
-            {Overtime(moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT"))}
+            {Overtime(moment(cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" ? cellValues?.row.ATTENDANCE_OUT : "").utcOffset(0).format("LT"), moment(cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" ? cellValues?.row.ATTENDANCE_IN : "").utcOffset(0).format("LT"))}
           </>
         );
       },
@@ -227,10 +231,10 @@ const EmployeeTimeSheet = (props) => {
     {
       field: "Status",
       headerName: "Status",
-      width: 210,
+      width: 150,
       renderCell: (cellValues) => {
         return (
-          cellValues?.row.ATTENDANCE_IN && cellValues?.row.ATTENDANCE_OUT ? <>
+          cellValues?.row.ATTENDANCE_TYPE_IN == "automatic" &&  cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" &&  cellValues?.row.ATTENDANCE_IN && cellValues?.row.ATTENDANCE_OUT ? <>
             {"present"}
           </> : <>
             {"absent"}
@@ -238,8 +242,19 @@ const EmployeeTimeSheet = (props) => {
         );
       },
       cellClassName: (cellValues) => {
-        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT ? "bg-success text-light border" : "bg-danger text-white border"
+        return cellValues?.row.ATTENDANCE_TYPE_IN == "automatic" &&  cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" &&  cellValues?.row.ATTENDANCE_IN && cellValues?.row.ATTENDANCE_OUT  ? "bg-success text-light border" : "bg-danger text-white border"
       }
+    },
+    {
+      type:"number",
+      field: "Location",
+      headerName: "Location",
+      width: 100,
+      renderCell: (cellValues) => {
+        return (
+         <center><Tooltip title={`(Location In) : ${cellValues.row.ATTENDENCE_LOCATION_IN} (Location Out) : ${cellValues.row.ATTENDENCE_LOCATION_OUT}`} enterDelay={500} leaveDelay={200}><i className="fa fa-info-circle fs-6 " style={{cursor:"pointer"}}></i></Tooltip></center> 
+        );
+      },
     },
 
   ];
@@ -303,7 +318,7 @@ const EmployeeTimeSheet = (props) => {
         </div>
 
         {/* data gird */}
-        <DataGrid
+        {resStatus == true ? <DataGrid
           className="display"
           style={{ height: "55vh" }}
           rows={workvalue}
@@ -340,7 +355,32 @@ const EmployeeTimeSheet = (props) => {
           pageSizeOptions={[5]}
           // checkboxSelection
           disableRowSelectionOnClick
+          localeText={{ noRowsLabel: workvalue.length == 0 && "No request available" }}
+        /> : resStatus === "error" ? <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%,-50%)",
+        }}
+      >
+       <small className="text-dark"><p>Check your connection and try again. :(</p><center><button onClick={gettimesheet}  className="btn btn-sm btn-secondary">Retry</button></center></small> 
+      </div> : <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%,-50%)",
+        }}
+      >
+        <RotatingLines
+          strokeColor="#2D5169"
+          strokeWidth="5"
+          animationDuration="0.75"
+          width="50"
+          visible={true}
         />
+      </div>}
       </div>
       <div className="container-fluid" style={{ position: "", bottom: "0" }}>
         <div className="row border">
