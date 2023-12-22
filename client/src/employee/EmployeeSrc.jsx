@@ -35,6 +35,19 @@ const EmployeeSrc = () => {
   //isLoading this is for the Skeleton
   const [isLoading, setIsLoading] = useState(true);
 
+  const [open, setOpen] = React.useState(false);
+  const [index, setIndex] = useState(0);
+  const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
+  const [selectedProject, setSelectedProject] = useState([]);
+  const [openNav, setOpenNav] = useState(false);
+
+
+  const [errorMsg, setErrorMsg] = useState("");
+  const [display, setDisplay] = useState("unarchive")
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   // all employee data
   const [allempData, setAllempData] = useState([{
     COMPANY_PARENT_ID: "",
@@ -88,18 +101,6 @@ const EmployeeSrc = () => {
     },
   });
 
-  const [open, setOpen] = React.useState(false);
-  const [index, setIndex] = useState(0);
-  const [isSuccessMessageVisible, setIsSuccessMessageVisible] = useState(false);
-  const [selectedProject, setSelectedProject] = useState([]);
-  const [openNav, setOpenNav] = useState(false);
-
-
-  const [errorMsg, setErrorMsg] = useState("");
-  const [display, setDisplay] = useState("unarchive")
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   // console.log(selectedProject, "selectedProject")
 
@@ -572,8 +573,6 @@ const EmployeeSrc = () => {
 
                 />
               </>
-
-
             )}
           </Box>
         </MyScreen>

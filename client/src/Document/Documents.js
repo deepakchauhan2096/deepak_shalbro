@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import { Button } from "@mui/material";
+import { Button ,Skeleton} from "@mui/material";
 
 import SimpleBackdrop from "../components/Backdrop";
 import "../assests/css/document.css"; // Import the CSS filefileN
@@ -37,6 +37,7 @@ export default function Document(props) {
     const [openNav, setOpenNav] = useState(false);
     const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
     const [resStatus, setResStatus] = useState(false); //adding newline
+    const [isLoading, setIsLoading] = useState(true);
 
     console.log("COMPANYPARENT :", COMPANY_PARENT_USERNAME);
 
@@ -92,13 +93,16 @@ export default function Document(props) {
 
             const data = response.data;
             console.log("requestdata", data);
+            setIsLoading(true);
             setResStatus(true);
             setImagesData(data);
+            setIsLoading(false);
+
             setTotalDocuments(data.result?.length || 0);
 
             // console.log("data", data.result);
         } catch (error) {
-            setResStatus(false);
+            setIsLoading(false);
             console.log("Error Fetching Data :", error);
         }
     };
@@ -359,6 +363,23 @@ export default function Document(props) {
         documentIdType: item.DOCUMENT_TYPE || '',
     })) || [];
 
+
+
+    
+  const Animations = () => {
+    return (
+      <Box sx={{ width: "100%" }}>
+        <Skeleton animation="pulse" height={60} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+      </Box>
+    );
+  };
     console.log(rows, "myrows")
     return (
         <>
@@ -391,7 +412,9 @@ export default function Document(props) {
 
                 <MyScreen sx={{ display: "block", padding: 2 }}>
                     <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
-                        {resStatus === true ?
+                    {isLoading === true ? 
+                       <Animations /> : isLoading === false ?
+           
                             <DataGrid
                                 rows={rows}
                                 columns={columns}
@@ -409,7 +432,8 @@ export default function Document(props) {
 
                                 getRowId={(row) => row.id}
                             />
-                            : resStatus === "error" ? <div
+                           
+                            : isLoading === "error" ? <div
                                 style={{
                                     position: "absolute",
                                     top: "50%",
@@ -433,8 +457,8 @@ export default function Document(props) {
                                     width="50"
                                     visible={true}
                                 />
-                            </div>
-                        }
+                            </div>  }
+                        
                     </Box>
                 </MyScreen>
             </Box>
