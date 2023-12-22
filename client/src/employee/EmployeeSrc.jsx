@@ -568,6 +568,8 @@ const EmployeeSrc = () => {
                   pageSizeOptions={[5]}
                   // checkboxSelection
                   disableRowSelectionOnClick
+                  localeText={{ noRowsLabel: rows.length === 0 && "There is no Emploies.." }}
+
                 />
               </>
 
@@ -596,7 +598,7 @@ const EmployeeSrc = () => {
           >
             <ArrowBackIcon style={{ fontSize: "22.5px" }} />
           </Button>
-          {["Employee Details","Timesheet", "Manual Attendance","Documents" ].map(
+          {["Employee Details", "Timesheet", "Manual Attendance", "Documents"].map(
             (item, value) => (
               <Button
                 onClick={(e, index) => setIndex(value)}
@@ -615,7 +617,7 @@ const EmployeeSrc = () => {
         </div>
 
         <MyScreen screenIndex={index === 0} sx={{ padding: 3 }}>
-         {index === 0 ? <div className="container mt-1">
+          {index === 0 ? <div className="container mt-1">
             {/* <h1 className="text-center">Employee Detail Dashboard</h1> */}
             <div className="row">
               <div className="col-xl-6">
@@ -758,14 +760,14 @@ const EmployeeSrc = () => {
                 </div>
               </div>
             </div>
-          </div>:""}
+          </div> : ""}
         </MyScreen>
 
         <MyScreen screenIndex={index === 1} sx={{ padding: 3 }}>
           <EmployeeTimeSheet mainData={filterData.row} />
         </MyScreen>
 
-        
+
         <MyScreen screenIndex={index === 2} sx={{ padding: 3 }}>
           <EmployeeManual
             mainData={filterData.row}
@@ -775,14 +777,14 @@ const EmployeeSrc = () => {
         <MyScreen screenIndex={index === 3} sx={{ padding: 3 }}>
 
           {index === 3 ? <EmployeeDocuments
-           EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID}
-           EMPLOYEE_USERNAME={filterData.row?.EMPLOYEE_USERNAME}
-           COMPANY_USERNAME={COMPANY_USERNAME}
-           
-          />: "" }
+            EMPLOYEE_ID={filterData.row?.EMPLOYEE_ID}
+            EMPLOYEE_USERNAME={filterData.row?.EMPLOYEE_USERNAME}
+            COMPANY_USERNAME={COMPANY_USERNAME}
+
+          /> : ""}
         </MyScreen>
 
-       
+
 
       </Box>
 

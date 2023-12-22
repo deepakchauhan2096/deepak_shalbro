@@ -12,16 +12,18 @@ import ExpiryReminder from '../components/ExpiryReminder';
 import EmployeeDocCreate from './EmployeeDocCreate';
 import { Button } from '@mui/material';
 import SimpleBackdrop from "../components/Backdrop";
+import { RotatingLines } from 'react-loader-spinner';
 
 const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update, EMPLOYEE_USERNAME }) => {
   const [deleteItem, setDeleteItem] = useState('');
   const [open, setOpen] = useState(false);
   const [backdrop, setBackdrop] = useState(false);
- 
   const [empDoc, setEmpDoc] = useState('');
+  const [resStatus, setResStatus] = useState(false);
+
+
 
   useEffect(() => {
-
     getEmployeeDocuments();
   }, [deleteItem]);
 
@@ -33,8 +35,8 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update, EMPLOYEE_USE
       DOCUMENT_PARENT_USERNAME: COMPANY_USERNAME,
       DOCUMENT_REF_ID: EMPLOYEE_ID,
     };
-    
-    console.log(requestData,"requestData")
+
+    console.log(requestData, "requestData")
     try {
       const response = await axios.put("/api/get_all_employee_document", requestData);
 
@@ -44,11 +46,13 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update, EMPLOYEE_USE
 
       const data = response.data;
       console.log("requestdata", data);
-
+      setResStatus(true);
       setEmpDoc(data);
 
 
     } catch (error) {
+      setResStatus("error");
+
       console.log("Error Fetching Data :", error);
     }
   };
@@ -226,7 +230,7 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update, EMPLOYEE_USE
       type: 'text',
       width: 150,
       editable: false,
-  },
+    },
     {
       field: 'ExpiryDate',
       headerName: 'Expiry Status',
@@ -302,24 +306,58 @@ const EmployeeDocuments = ({ COMPANY_USERNAME, EMPLOYEE_ID, update, EMPLOYEE_USE
 
   return (
     <>
-      <EmployeeDocCreate EMPLOYEE_ID={EMPLOYEE_ID} EMPLOYEE_USERNAME={EMPLOYEE_USERNAME} COMPANY_USERNAME={COMPANY_USERNAME} update={getEmployeeDocuments} />
-      <SimpleBackdrop open={backdrop} />
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 14,
-            },
+      {resStatus === true ? 
+      <>
+    <EmployeeDocCreate EMPLOYEE_ID={EMPLOYEE_ID} EMPLOYEE_USERNAME={EMPLOYEE_USERNAME} COMPANY_USERNAME={COMPANY_USERNAME} update={getEmployeeDocuments} />
+    <SimpleBackdrop open={backdrop} />
+    <DataGrid
+      rows={rows}
+      columns={columns}
+      initialState={{
+        pagination: {
+          paginationModel: {
+            pageSize: 14,
           },
-        }}
-        density="compact"
-        pageSizeOptions={[10]}
-        disableRowSelectionOnClick
-        sx={{ height: '80vh' }}
-        getRowId={(row) => row.id}
-      />
+        },
+      }}
+      density="compact"
+      pageSizeOptions={[10]}
+      disableRowSelectionOnClick
+      sx={{ height: '80vh' }}
+      getRowId={(row) => row.id}
+      localeText={{ noRowsLabel: rows.length === 0 && "No Document Available"}}
+    />
+    </>
+
+        : resStatus === "error" ? <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <small className="text-dark"><p>Check your connection and try again. :(</p><center><button onClick={getEmployeeDocuments} className="btn btn-sm btn-secondary">Retry</button></center></small>
+        </div> : <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="#2D5169"
+            strokeWidth="5"
+            animationDuration="0.75"
+            width="50"
+            visible={true}
+          />
+        </div>
+
+
+      }
+
 
     </>
   );
