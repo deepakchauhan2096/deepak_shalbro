@@ -25,8 +25,9 @@ const SubContract = (props) => {
   const [Edit, setEdit] = useState(false);
   const [openNav, setOpenNav] = useState(false);
   const [updatedata, setUpdateData] = useState(false);
-
+  
   // modal
+  const [resStatus, setResStatus] = useState(false); //adding newline
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { alldata, setText } = useContext(MyContext);
@@ -76,10 +77,12 @@ const SubContract = (props) => {
       );
 
       const data = response.data;
+      
       setSubContractData(data?.result);
       setIsLoading(false);
 
     } catch (err) {
+      
       console.log("Something Went Wrong: =>", err);
     }
   };
@@ -173,6 +176,7 @@ const SubContract = (props) => {
   const rows = subcontractData;
 
   const handleClick = (event) => {
+    setResStatus(true);
     setData(event);
     handleOpen();
   };
@@ -215,6 +219,7 @@ const SubContract = (props) => {
         toggle={openNav}
       />
       <Box className="box" style={{ background: "#277099" }}>
+        
         <CreateSubcontract
           COMPANY_ID={COMPANY_ID}
           COMPANY_USERNAME={COMPANY_USERNAME}
@@ -246,6 +251,8 @@ const SubContract = (props) => {
                 pageSizeOptions={[5]}
                 // checkboxSelection
                 disableRowSelectionOnClick
+                localeText={{ noRowsLabel: rows.length === 0 && "No Subcontractor Hired yet." }}
+
               />
             )}
           </Box>
@@ -267,7 +274,6 @@ const SubContract = (props) => {
             variant="contained"
             className="btn rounded-0"
             size="small"
-
           >
             <ArrowBackIcon style={{ fontSize: "20px" }} />
           </Button>
@@ -289,28 +295,6 @@ const SubContract = (props) => {
             Documents
           </Button>
 
-          {/* {!Edit ? (
-            <Button
-              onClick={(e) => setEdit(true)}
-              variant={"contained"}
-              className="btn rounded-0 border-0"
-              size="small"
-              sx={{ position: "absolute", right: "0" }}
-            >
-              Edit
-            </Button>
-          ) : (
-            <Button
-              onClick={(e) => setEdit(false)}
-              variant={"contained"}
-              className="btn rounded-0 border-0"
-              size="small"
-              sx={{ position: "absolute", right: "0" }}
-            >
-              Save
-            </Button>
-          )} */}
-
           <Button
             onClick={(e) => setIndex(3)}
             variant={index === 3 ? "outlined" : "outlined"}
@@ -319,9 +303,7 @@ const SubContract = (props) => {
           >
             Payment
           </Button>
-
         </div>
-
         {index === 1 ? (
           <div className="box-tab">
             <div className="container-fluid p-4">

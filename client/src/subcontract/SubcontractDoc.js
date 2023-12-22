@@ -17,12 +17,13 @@ import ExpiryReminder from '../components/ExpiryReminder';
 import CreateProjectDoc from '../company/CreateProjectDoc';
 
 import CreateSubDoc from './CreateSubDoc';
+import { RotatingLines } from 'react-loader-spinner';
 
 const SubcontractDoc = ({ SubcontractorData }) => {
 
     const [subcontractorDoc, setSubcontractorDoc] = useState('');
-    const [backdrop, setBackdrop] = useState(false);
     const [deleteItem, setDeleteItem] = useState('');
+    const [resStatus, setResStatus] = useState(false); //adding newline
 
 
     useEffect(() => {
@@ -38,16 +39,14 @@ const SubcontractDoc = ({ SubcontractorData }) => {
         };
         try {
             const response = await axios.put("/api/get_all_subContractor_document", requestData);
-
             if (!response.data) {
                 throw new Error("Response data is empty");
             }
-
             const data = response.data;
+            setResStatus(true);
             setSubcontractorDoc(data);
-
-
         } catch (error) {
+            setResStatus(false);
             console.log("Error Fetching Data :", error);
         }
     };
@@ -55,7 +54,7 @@ const SubcontractDoc = ({ SubcontractorData }) => {
 
     //   function for deleting the project Document 
     const handleDelDoc = async (e, documentId) => {
-        setBackdrop(true);
+        setResStatus(true);
         const data = {
             DOCUMENT_SUB_ID: documentId,
             DOCUMENT_PARENT_USERNAME: SubcontractorData?.SUBCONTRACTOR_PARENT_USERNAME,
@@ -72,8 +71,8 @@ const SubcontractDoc = ({ SubcontractorData }) => {
 
             if (response.ok) {
                 const jsonResponse = await response.json();
+                setResStatus(false);
                 setDeleteItem(jsonResponse);
-                setBackdrop(false);
                 toast.success('Document Deleted successfully!', {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 1000,
@@ -293,28 +292,60 @@ const SubcontractDoc = ({ SubcontractorData }) => {
 
     return (
         <>
-            <CreateSubDoc DOCUMENT_PARENT_USERNAME={SubcontractorData?.SUBCONTRACTOR_PARENT_USERNAME}
-                DOCUMENT_REF_ID={SubcontractorData?.SUBCONTRACTOR_ID} update={fetchSubDoc} SUBCONTRACTOR_USERNAME={SubcontractorData?.SUBCONTRACTOR_USERNAME}
-            />
+            {resStatus === true ?
+                    <>
+                    <CreateSubDoc DOCUMENT_PARENT_USERNAME={SubcontractorData?.SUBCONTRACTOR_PARENT_USERNAME}
+                    DOCUMENT_REF_ID={SubcontractorData?.SUBCONTRACTOR_ID} update={fetchSubDoc} SUBCONTRACTOR_USERNAME={SubcontractorData?.SUBCONTRACTOR_USERNAME}
+                    />
 
-            <Box sx={{ height: 400, width: '100%' }}>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 13,
-                            },
-                        },
+                    <Box sx={{ height: 400, width: '100%' }}>
+
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            initialState={{
+                                pagination: {
+                                    paginationModel: {
+                                        pageSize: 13,
+                                    },
+                                },
+                            }}
+                            density="compact"
+                            pageSizeOptions={[10]}
+                            disableRowSelectionOnClick
+                            sx={{ height: '80vh' }}
+                            getRowId={(row) => row.id}
+                            localeText={{ noRowsLabel: rows.length === 0 && "No Documents Available" }}
+                        />
+
+                    </Box>
+                </>
+                : resStatus === "error" ? <div
+                    style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%,-50%)",
                     }}
-                    density="compact"
-                    pageSizeOptions={[10]}
-                    disableRowSelectionOnClick
-                    sx={{ height: '80vh' }}
-                    getRowId={(row) => row.id}
-                />
-            </Box>
+                >
+                    <small className="text-dark"><p>Check your connection and try again. :(</p><center><button onClick={fetchSubDoc} className="btn btn-sm btn-secondary">Retry</button></center></small>
+                </div> : <div
+                    style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%,-50%)",
+                    }}
+                >
+                    <RotatingLines
+                        strokeColor="#2D5169"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        width="50"
+                        visible={true}
+                    />
+                </div>
+            }
         </>
     )
 }

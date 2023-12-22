@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import { Button } from "@mui/material";
+import { Button ,Skeleton} from "@mui/material";
 
 import SimpleBackdrop from "../components/Backdrop";
 import "../assests/css/document.css"; // Import the CSS filefileN
@@ -26,6 +26,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { RotatingLines } from "react-loader-spinner";
 
 export default function Document(props) {
 
@@ -35,7 +36,8 @@ export default function Document(props) {
     const [deleteItem, setDeleteItem] = useState("");
     const [openNav, setOpenNav] = useState(false);
     const { COMPANY_ID, COMPANY_USERNAME, COMPANY_PARENT_ID, COMPANY_PARENT_USERNAME } = useParams();
-
+    const [resStatus, setResStatus] = useState(false); //adding newline
+    const [isLoading, setIsLoading] = useState(true);
 
     console.log("COMPANYPARENT :", COMPANY_PARENT_USERNAME);
 
@@ -91,12 +93,16 @@ export default function Document(props) {
 
             const data = response.data;
             console.log("requestdata", data);
-
+            setIsLoading(true);
+            setResStatus(true);
             setImagesData(data);
+            setIsLoading(false);
+
             setTotalDocuments(data.result?.length || 0);
 
             // console.log("data", data.result);
         } catch (error) {
+            setIsLoading(false);
             console.log("Error Fetching Data :", error);
         }
     };
@@ -132,7 +138,8 @@ export default function Document(props) {
     };
 
     const handleDelDoc = async (e, documentId) => {
-        setBackdrop(true);
+        // setBackdrop(true);
+        setResStatus(true);
         console.log(documentId);
 
         const data = {
@@ -154,7 +161,9 @@ export default function Document(props) {
                 const jsonResponse = await response.json();
                 console.log("Response data found:", jsonResponse);
                 setDeleteItem(jsonResponse);
-                setBackdrop(false);
+                // setBackdrop(false);
+                setResStatus(false);
+
                 toast.success("Document Deleted successfully!", {
                     position: toast.POSITION.TOP_CENTER,
                     autoClose: 1000,
@@ -354,6 +363,23 @@ export default function Document(props) {
         documentIdType: item.DOCUMENT_TYPE || '',
     })) || [];
 
+
+
+    
+  const Animations = () => {
+    return (
+      <Box sx={{ width: "100%" }}>
+        <Skeleton animation="pulse" height={60} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+        <Skeleton animation="pulse" height={50} />
+      </Box>
+    );
+  };
     console.log(rows, "myrows")
     return (
         <>
@@ -365,6 +391,8 @@ export default function Document(props) {
                 active={4}
                 toggle={openNav}
             />
+            ;
+
             <Box className="box" >
                 <Button
                     sx={{ color: "#277099" }}
@@ -372,6 +400,7 @@ export default function Document(props) {
                 >Company Documents</Button>
 
                 <Navbar toggle={() => setOpenNav((e) => !e)} />
+
                 <DocumentCreate
                     name={"Employee"}
                     COMPANY_ID={COMPANY_ID}
@@ -383,27 +412,57 @@ export default function Document(props) {
 
                 <MyScreen sx={{ display: "block", padding: 2 }}>
                     <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
-
-                        <DataGrid
-                            rows={rows}
-                            columns={columns}
-                            sx={{ border: "none", height: '80vh'  }}
-                            initialState={{
-                                pagination: {
-                                    paginationModel: {
-                                        pageSize: 20,
+                    {isLoading === true ? 
+                       <Animations /> : isLoading === false ?
+           
+                            <DataGrid
+                                rows={rows}
+                                columns={columns}
+                                sx={{ border: "none", height: '80vh' }}
+                                initialState={{
+                                    pagination: {
+                                        paginationModel: {
+                                            pageSize: 20,
+                                        },
                                     },
-                                },
-                            }}
-                            pageSizeOptions={[10]}
-                            disableMultipleSelection
-                            density="compact"
-                          
-                            getRowId={(row) => row.id}
-                        />
+                                }}
+                                pageSizeOptions={[10]}
+                                disableMultipleSelection
+                                density="compact"
+
+                                getRowId={(row) => row.id}
+                            />
+                           
+                            : isLoading === "error" ? <div
+                                style={{
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%,-50%)",
+                                }}
+                            >
+                                <small className="text-dark"><p>Check your connection and try again. :(</p><center><button onClick={getalldocument} className="btn btn-sm btn-secondary">Retry</button></center></small>
+                            </div> : <div
+                                style={{
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%,-50%)",
+                                }}
+                            >
+                                <RotatingLines
+                                    strokeColor="#2D5169"
+                                    strokeWidth="5"
+                                    animationDuration="0.75"
+                                    width="50"
+                                    visible={true}
+                                />
+                            </div>  }
+                        
                     </Box>
                 </MyScreen>
             </Box>
+
 
 
             <SimpleBackdrop open={backdrop} />

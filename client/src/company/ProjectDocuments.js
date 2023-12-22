@@ -13,15 +13,15 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { toast } from 'react-toastify';
 import CircularProgressWithLabel from "../components/Backdrop"
 
-
-
 import ExpiryReminder from '../components/ExpiryReminder';
+import { RotatingLines } from 'react-loader-spinner';
 
 const ProjectDocuments = ({ projectData }) => {
 
     const [projectDoc, setProjectDoc] = useState('');
     const [backdrop, setBackdrop] = useState(false);
     const [deleteItem, setDeleteItem] = useState('');
+    const [resStatus, setResStatus] = useState(false);
 
     useEffect(() => {
         fetchProjectDoc();
@@ -42,16 +42,19 @@ const ProjectDocuments = ({ projectData }) => {
             }
 
             const data = response.data;
+            
+            setResStatus(true);
             setProjectDoc(data);
 
 
         } catch (error) {
+            setResStatus(true)
             console.log("Error Fetching Data :", error);
         }
     };
 
 
-    
+
     const downloadFile = (base64Data, fileName) => {
         const link = document.createElement('a');
         link.href = `data:application/octet-stream;base64,${base64Data}`;
@@ -60,8 +63,8 @@ const ProjectDocuments = ({ projectData }) => {
         link.click();
         document.body.removeChild(link);
     };
-        //   function for deleting the project Document 
-    
+    //   function for deleting the project Document 
+
     const handleDelDoc = async (e, documentId) => {
         setBackdrop(true);
         const data = {
@@ -96,24 +99,24 @@ const ProjectDocuments = ({ projectData }) => {
     // functon for download the data 
     const handleDownload = async (documentId, fileName) => {
         try {
-          const data = {
-            DOCUMENT_ID: documentId,
-            DOCUMENT_PARENT_USERNAME: projectData?.PROJECT_PARENT_USERNAME,
-          };
-    
-          const config = {
-            method: 'put',
-            maxBodyLength: Infinity,
-            url: '/api/download_project_document',
-            data: data,
-          };
-    
-          const response = await axios.request(config);
-          downloadFile(response.data, fileName.name);
+            const data = {
+                DOCUMENT_ID: documentId,
+                DOCUMENT_PARENT_USERNAME: projectData?.PROJECT_PARENT_USERNAME,
+            };
+
+            const config = {
+                method: 'put',
+                maxBodyLength: Infinity,
+                url: '/api/download_project_document',
+                data: data,
+            };
+
+            const response = await axios.request(config);
+            downloadFile(response.data, fileName.name);
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
+    };
 
     const getFileIcon = (fileType) => {
         const fileTypeLowerCase = fileType.toLowerCase();
@@ -236,11 +239,11 @@ const ProjectDocuments = ({ projectData }) => {
                         variant="contained"
                         className="view-btn primary btn btn-success"
                         style={{ padding: '2px 8px' }}
-                    onClick={(e) => {
-                      handleDownload(cellValues.id, cellValues.row.documentName);
-                    }}
+                        onClick={(e) => {
+                            handleDownload(cellValues.id, cellValues.row.documentName);
+                        }}
                     >
-                        Download 
+                        Download
                     </Button>
                 );
             },
@@ -289,25 +292,56 @@ const ProjectDocuments = ({ projectData }) => {
 
     return (
         <>
-            <CreateProjectDoc PROJECT_PARENT_USERNAME={projectData?.PROJECT_PARENT_USERNAME} PROJECT_ID={projectData?.PROJECT_ID} update={fetchProjectDoc} />
-            <Box sx={{ height: 400, width: '100%' }}>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 5,
-                            },
-                        },
+
+            {resStatus === true ?
+                <>
+                    < CreateProjectDoc PROJECT_PARENT_USERNAME={projectData?.PROJECT_PARENT_USERNAME} PROJECT_ID={projectData?.PROJECT_ID} update={fetchProjectDoc} />
+                    <Box sx={{ height: 400, width: '100%' }}>
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            initialState={{
+                                pagination: {
+                                    paginationModel: {
+                                        pageSize: 5,
+                                    },
+                                },
+                            }}
+                            density="compact"
+                            pageSizeOptions={[10]}
+                            disableRowSelectionOnClick
+                            sx={{ height: '80vh' }}
+                            getRowId={(row) => row.id}
+                            localeText={{ noRowsLabel: rows.length === 0 && "No Document Available..." }}
+
+                        />
+                    </Box>
+                </>
+                : resStatus === "error" ? <div
+                    style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%,-50%)",
                     }}
-                    density="compact"
-                    pageSizeOptions={[10]}
-                    disableRowSelectionOnClick
-                    sx={{ height: '80vh' }}
-                    getRowId={(row) => row.id}
-                />
-            </Box>
+                >
+                    <small className="text-dark"><p>Check your connection and try again. :(</p><center><button onClick={fetchProjectDoc} className="btn btn-sm btn-secondary">Retry</button></center></small>
+                </div> : <div
+                    style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%,-50%)",
+                    }}
+                >
+                    <RotatingLines
+                        strokeColor="#2D5169"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        width="50"
+                        visible={true}
+                    />
+                </div>}
         </>
     )
 }

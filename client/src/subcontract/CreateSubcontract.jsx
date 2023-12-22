@@ -55,6 +55,9 @@ export default function SubcontractCreate(props) {
   ];
 
 
+  const [resStatus, setResStatus] = useState(false); //adding newline
+
+
   useEffect(() => {
     setCreatesubcontract((prevState) => ({
       ...prevState,
@@ -134,6 +137,7 @@ export default function SubcontractCreate(props) {
             autoClose: 1000,
           });
         } else if (response.data.operation === "successfull") {
+          setResStatus(false);
           toast.success("Subcontract Created successfully!", {
             position: toast.POSITION.TOP_CENTER,
           });
