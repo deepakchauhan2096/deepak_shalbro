@@ -154,7 +154,7 @@ const EmployeeTimeSheet = (props) => {
   const ResultantTime = overallTime(allHours);
   const ExtractHours = convertToDuration(ResultantTime)?._data.hours;
   const totalIncome = ExtractHours * props.mainData.EMPLOYEE_HOURLY_WAGE;
-  const Automatic = workvalue?.filter((prev) => prev.ATTENDANCE_TYPE_IN === "automatic" && prev.ATTENDANCE_TYPE_OUT === "automatic")
+  // const Automatic = workvalue?.filter((prev) => prev.ATTENDANCE_TYPE_IN === "automatic" && prev.ATTENDANCE_TYPE_OUT === "automatic")
 
 
 
