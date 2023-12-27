@@ -84,11 +84,6 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
     (s) => s.name === createEmployee.EMPLOYEE_STATE
   );
 
-
-
-
-
-
   // const handleCreate = (e) => {
   //   setCreateEmployee({ ...createEmployee, [e.target.name]: e.target.value });
   // };
@@ -122,8 +117,6 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
       return;
     }
 
-
-
     if (!isValidName) {
       setNameError("Name should not be empty");
       return;
@@ -134,8 +127,6 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
       setPhoneError("Invalid phone number");
       return;
     }
-
-
 
     // Perform API validation and request
     axios
@@ -150,8 +141,6 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
 
           });
           // handleSubmission()
-
-
           setCreateEmployee({})
           refetch()
           setOpen(false);
@@ -163,10 +152,8 @@ export default function AddEmployee({ COMPANY_ID, COMPANY_USERNAME, COMPANY_PARE
       });
   };
 
-
   return (
     < >
-      
       <button
         onClick={handleOpen}
         sx={{ color: "#277099" }}

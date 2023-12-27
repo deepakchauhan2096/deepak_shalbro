@@ -109,34 +109,6 @@ const Project = (props) => {
     }
   };
 
-  // try to resolve error while both api's are not working synchrounously
-
-  // const fetchData = async () => {
-  //   try {
-  //     const [employeeData, projectsData] = await Promise.all([
-  //       fetchAllEmployees(),
-  //       fetchProjects(),
-  //     ]);
-
-  //     // Both requests have completed here
-  //     setIsLoading(false);
-  //     console.log("Both requests completed", employeeData, projectsData);
-
-  //     // Now you can access employeeData and projectsData for further processing if needed
-  //   } catch (err) {
-  //     console.log("An error occurred:", err);
-  //   }
-  // };
-
-
-// calling this api on useEffect 
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // console.log(ProjectData, "projectdata");
-
   const columns = [
     { field: "PROJECT_ID", headerName: "ID", width: 60 },
     {
@@ -411,7 +383,7 @@ const Project = (props) => {
             }
             size="small"
           >
-            Allocate Employees
+            Allocated Employees
           </Button>
           <Button
             onClick={(e) => setIndex(3)}

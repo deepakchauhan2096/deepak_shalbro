@@ -97,7 +97,6 @@ export default function Document(props) {
             setResStatus(true);
             setImagesData(data);
             setIsLoading(false);
-
             setTotalDocuments(data.result?.length || 0);
 
             // console.log("data", data.result);
