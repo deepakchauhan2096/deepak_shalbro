@@ -1,7 +1,7 @@
 import React, { useEffect, useState, version } from "react";
 import axios from "axios";
 import moment from "moment/moment";
-import { RotatingLines } from "react-loader-spinner";
+import { RotatingLines, ThreeDots } from "react-loader-spinner";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -36,6 +36,10 @@ const EmployeeManual = (props) => {
   const [selectedTimeIn, setSelectedTimeIn] = useState("");
   const [selectedTimeOut, setSelectedTimeOut] = useState("");
   const [resStatus, setResStatus] = useState(false)
+  const [updateIn, setUpdateIn] = useState(true)
+  const [updateOut, setUpdateOut] = useState(true)
+
+
 
   const originalTimeIn = moment(`2023-12-21 ${selectedTimeIn}`).format(
     "YYYY-MM-DDTHH:mm:ss.SSS[Z]"
@@ -158,6 +162,7 @@ const EmployeeManual = (props) => {
   };
 
   const HandleUpdateIn = async (event) => {
+    setUpdateIn(false)
     const originalTimeIn = moment(
       `${event?.ATTENDANCE_DATE_ID} ${selectedTimeIn}`
     ).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
@@ -193,6 +198,7 @@ const EmployeeManual = (props) => {
       .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
+        setUpdateIn(true)
         gettimesheet()
       })
       .catch((error) => {
@@ -201,6 +207,7 @@ const EmployeeManual = (props) => {
   };
 
   const HandleUpdateOut = async (event) => {
+    setUpdateOut(true)
     const originalTimeOut = moment(
       `${event?.ATTENDANCE_DATE_ID} ${selectedTimeOut}`
     ).format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
@@ -234,6 +241,7 @@ const EmployeeManual = (props) => {
       .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
+        setUpdateOut(false)
         gettimesheet()
       })
       .catch((error) => {
@@ -241,121 +249,121 @@ const EmployeeManual = (props) => {
       });
   };
 
-  const columns = [
-    {
-      field: "ATTENDANCE_PROJECT_ID",
-      headerName: "Project Id",
-      width: 120,
-    },
-    { field: "ATTENDANCE_DATE_ID", headerName: "Date", width: 150 },
-    { field: "ATTENDANCE_ID", headerName: "Attendance Id", width: 150 },
+  // const columns = [
+  //   {
+  //     field: "ATTENDANCE_PROJECT_ID",
+  //     headerName: "Project Id",
+  //     width: 120,
+  //   },
+  //   { field: "ATTENDANCE_DATE_ID", headerName: "Date", width: 150 },
+  //   { field: "ATTENDANCE_ID", headerName: "Attendance Id", width: 150 },
 
-    {
-      field: "ATTENDANCE_IN",
-      headerName: "In",
-      width: 120,
-      renderCell: (cellValues) => {
-        return (
-          <>
-            {cellValues.row.ATTENDANCE_IN &&
-              moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT")}
-          </>
-        );
-      },
-      cellClassName: (cellValues) => {
-        return cellValues.row.ATTENDANCE_IN
-          ? "bg-success text-white border"
-          : "bg-danger text-white border";
-      },
-      type: "date",
-      editable: true,
-    },
+  //   {
+  //     field: "ATTENDANCE_IN",
+  //     headerName: "In",
+  //     width: 120,
+  //     renderCell: (cellValues) => {
+  //       return (
+  //         <>
+  //           {cellValues.row.ATTENDANCE_IN &&
+  //             moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT")}
+  //         </>
+  //       );
+  //     },
+  //     cellClassName: (cellValues) => {
+  //       return cellValues.row.ATTENDANCE_IN
+  //         ? "bg-success text-white border"
+  //         : "bg-danger text-white border";
+  //     },
+  //     type: "date",
+  //     editable: true,
+  //   },
 
-    {
-      field: "ATTENDANCE_OUT",
-      headerName: "Out",
-      width: 150,
-      renderCell: (cellValues) => {
-        return cellValues?.row.ATTENDANCE_OUT ? (
-          <>
-            {cellValues?.row.ATTENDANCE_OUT &&
-              moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT")}
-          </>
-        ) : (
-          <>{"absent"}</>
-        );
-      },
-      cellClassName: (cellValues) => {
-        return cellValues.row.ATTENDANCE_OUT
-          ? "bg-success text-white border"
-          : "bg-danger text-white border";
-      },
-      type: "date",
-      editable: true,
-    },
+  //   {
+  //     field: "ATTENDANCE_OUT",
+  //     headerName: "Out",
+  //     width: 150,
+  //     renderCell: (cellValues) => {
+  //       return cellValues?.row.ATTENDANCE_OUT ? (
+  //         <>
+  //           {cellValues?.row.ATTENDANCE_OUT &&
+  //             moment(cellValues?.row.ATTENDANCE_OUT).utcOffset(0).format("LT")}
+  //         </>
+  //       ) : (
+  //         <>{"absent"}</>
+  //       );
+  //     },
+  //     cellClassName: (cellValues) => {
+  //       return cellValues.row.ATTENDANCE_OUT
+  //         ? "bg-success text-white border"
+  //         : "bg-danger text-white border";
+  //     },
+  //     type: "date",
+  //     editable: true,
+  //   },
 
-    {
-      field: "ATTENDANCE_STATUS",
-      headerName: "",
-      width: 200,
-      renderCell: (cellValues) => {
-        return (
-          cellValues?.row.ATTENDANCE_OUT && (
-            <>
-              {timeValueHours(
-                moment(cellValues?.row.ATTENDANCE_OUT)
-                  .utcOffset(0)
-                  .format("LT"),
-                moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT")
-              )}
-            </>
-          )
-        );
-      },
-      cellClassName: (cellValues) => {
-        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT
-          ? "bg-light text-dark border"
-          : "text-dark border";
-      },
-    },
-    {
-      field: "overtime",
-      headerName: "Overtime",
-      width: 170,
-      renderCell: (cellValues) => {
-        return (
-          cellValues?.row.ATTENDANCE_OUT && (
-            <>
-              {Overtime(
-                moment(cellValues?.row.ATTENDANCE_OUT)
-                  .utcOffset(0)
-                  .format("LT"),
-                moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT")
-              )}
-            </>
-          )
-        );
-      },
-    },
-    {
-      field: "Status",
-      headerName: "Status",
-      width: 210,
-      renderCell: (cellValues) => {
-        return cellValues?.row.ATTENDANCE_IN &&
-          cellValues?.row.ATTENDANCE_OUT ? (
-          <>{"present"}</>
-        ) : (
-          <>{"absent"}</>
-        );
-      },
-      cellClassName: (cellValues) => {
-        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT
-          ? "bg-success text-light border"
-          : "bg-danger text-white border";
-      },
-    },
-  ];
+  //   {
+  //     field: "ATTENDANCE_STATUS",
+  //     headerName: "",
+  //     width: 200,
+  //     renderCell: (cellValues) => {
+  //       return (
+  //         cellValues?.row.ATTENDANCE_OUT && (
+  //           <>
+  //             {timeValueHours(
+  //               moment(cellValues?.row.ATTENDANCE_OUT)
+  //                 .utcOffset(0)
+  //                 .format("LT"),
+  //               moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT")
+  //             )}
+  //           </>
+  //         )
+  //       );
+  //     },
+  //     cellClassName: (cellValues) => {
+  //       return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT
+  //         ? "bg-light text-dark border"
+  //         : "text-dark border";
+  //     },
+  //   },
+  //   {
+  //     field: "overtime",
+  //     headerName: "Overtime",
+  //     width: 170,
+  //     renderCell: (cellValues) => {
+  //       return (
+  //         cellValues?.row.ATTENDANCE_OUT && (
+  //           <>
+  //             {Overtime(
+  //               moment(cellValues?.row.ATTENDANCE_OUT)
+  //                 .utcOffset(0)
+  //                 .format("LT"),
+  //               moment(cellValues?.row.ATTENDANCE_IN).utcOffset(0).format("LT")
+  //             )}
+  //           </>
+  //         )
+  //       );
+  //     },
+  //   },
+  //   {
+  //     field: "Status",
+  //     headerName: "Status",
+  //     width: 210,
+  //     renderCell: (cellValues) => {
+  //       return cellValues?.row.ATTENDANCE_IN &&
+  //         cellValues?.row.ATTENDANCE_OUT ? (
+  //         <>{"present"}</>
+  //       ) : (
+  //         <>{"absent"}</>
+  //       );
+  //     },
+  //     cellClassName: (cellValues) => {
+  //       return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT
+  //         ? "bg-success text-light border"
+  //         : "bg-danger text-white border";
+  //     },
+  //   },
+  // ];
 
   const columnsEdit = [
     {
@@ -416,11 +424,20 @@ const EmployeeManual = (props) => {
                   ? false
                   : true
               }
-              className="btn btn-primary w-100 px-0 rounded-0"
+              className="position-relative btn btn-primary w-100 px-0 rounded-0"
               type="submit"
               onClick={() => HandleUpdateIn(cellValues.row)}
             >
-              Update
+              {updateIn ? <>Update</> : <>Updating<ThreeDots
+                visible={true}
+                height="12"
+                width="12"
+                color="#fff"
+                radius="2"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{bottom:"7px", right:"2px"}}
+                wrapperClass="position-absolute"
+              /></>}
             </button>
           </>
         );
@@ -460,8 +477,8 @@ const EmployeeManual = (props) => {
       },
       cellClassName: (cellValues) => {
         return cellValues.row.ATTENDANCE_OUT
-          ? "bg-success text-white border px-0"
-          : "bg-secondary text-white border px0";
+        ? "bg-success text-white border px-0"
+        : "bg-secondary text-white border px-0";
       },
     },
 
@@ -480,12 +497,22 @@ const EmployeeManual = (props) => {
                   ? false
                   : true
               }
-              className="btn btn-primary w-100 px-0 rounded-0"
+              className="position-relative btn btn-primary w-100 px-0 rounded-0"
               type="submit"
               onClick={() => HandleUpdateOut(cellValues.row)}
             >
-              Update
+               {updateOut ? <>Update</> : <>Updating<ThreeDots
+                visible={true}
+                height="12"
+                width="12"
+                color="#fff"
+                radius="2"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{bottom:"7px", right:"2px"}}
+                wrapperClass="position-absolute"
+              /></>}
             </button>
+            
           </>
         );
       },
@@ -634,7 +661,7 @@ const EmployeeManual = (props) => {
             transform: "translate(-50%,-50%)",
           }}
         >
-         <small className="text-dark"><p>Check your connection and try again. :(</p><center><button onClick={gettimesheet}  className="btn btn-sm btn-secondary">Retry</button></center></small> 
+          <small className="text-dark"><p>Check your connection and try again. :(</p><center><button onClick={gettimesheet} className="btn btn-sm btn-secondary">Retry</button></center></small>
         </div> : <div
           style={{
             position: "absolute",
