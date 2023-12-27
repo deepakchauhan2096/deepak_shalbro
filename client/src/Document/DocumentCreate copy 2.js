@@ -10,7 +10,6 @@ import Dropzone from "react-dropzone"
 import "react-toastify/dist/ReactToastify.css";
 import SimpleBackdrop from "../components/Backdrop";
 
-
 const style = {
     position: "absolute",
     top: "50%",
@@ -23,10 +22,12 @@ const style = {
     borderRadius: 4
 };
 
-const CreateSubDoc = ({ DOCUMENT_PARENT_USERNAME, update, DOCUMENT_REF_ID, SUBCONTRACTOR_USERNAME }) => {
-
+const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME, update }) => {
     const [open, setOpen] = useState(false);
-    const [file, setFile] = useState([]);
+    const [file, setFile] = useState([])
+    const [backdrop, setBackdrop] = useState(false);
+
+    console.log(COMPANY_USERNAME, "COMPANY_USERNAME")
 
     const [formData, setFormData] = useState({
         selectedFile: null,
@@ -34,21 +35,77 @@ const CreateSubDoc = ({ DOCUMENT_PARENT_USERNAME, update, DOCUMENT_REF_ID, SUBCO
         DOCUMENT_TYPE: "",
     });
 
-
-    const [backdrop, setBackdrop] = useState(false);
+    console.log(formData.DOCUMENT_EXPIRY_DATE, "formattedMyDateCurrent")
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleOpen = () => setOpen(true);
 
-
-
     // functon for formSubmisson-----------------------------
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setOpen(false);
+    //     setBackdrop(true);
+
+    //     if (isSubmitting) {
+    //         return; // Prevent multiple submissions
+    //     }
+
+    //     setIsSubmitting(true);
+
+    //     if (!file || !formData.DOCUMENT_EXPIRY_DATE) {
+    //         setIsSubmitting(false);
+    //         toast.error("Please select a file and enter an expiry date.");
+    //         return;
+    //     }
+
+    //     const data = new FormData();
+    //     console.log(data, "data")
+    //     data.append("file", file);
+    //     data.append("DOCUMENT_REF_ID", COMPANY_ID);
+    //     data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
+    //     data.append("DOCUMENT_PARENT_USERNAME", COMPANY_USERNAME);
+    //     data.append("DOCUMENT_EXPIRY_DATE", formData.DOCUMENT_EXPIRY_DATE);
+    //     data.append("DOCUMENT_TYPE", formData.DOCUMENT_TYPE);
+
+    //     try {
+    //         const response = await axios.post(
+    //             "/api/create_document",
+    //             data,
+    //         );
+    //         if (response.data.operation === "successfull") {
+    //             // console.log("response", response)
+    //             setOpen(false);
+    //             update();
+    //             toast.success('Document uploaded successfully!', {
+    //                 position: toast.POSITION.TOP_CENTER,
+    //                 autoClose: 1000,
+    //             });
+    //             setFile(file ? file.name : "");
+    //             setFormData("")
+    //         } else {
+    //             toast.error("Failed to upload document.");
+    //         }
+    //     } catch (error) {
+    //         console.error(error); // Log the error for debugging
+    //         toast.error("An error occurred while uploading the document.");
+    //     } finally {
+    //         setIsSubmitting(false);
+    //         setBackdrop(false); //recently added
+    //     }
+    // };
+
+
+
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setOpen(false);
         setBackdrop(true);
+
         if (isSubmitting) {
             return; // Prevent multiple submissions
         }
@@ -57,7 +114,17 @@ const CreateSubDoc = ({ DOCUMENT_PARENT_USERNAME, update, DOCUMENT_REF_ID, SUBCO
 
         if (!file || !formData.DOCUMENT_EXPIRY_DATE) {
             setIsSubmitting(false);
-            toast.error("Please select a file and enter an expiry date.", {
+            toast.error("Please select a file and enter an expiry date.");
+            return;
+        }
+
+        // Check if the expiry date is greater than the current date
+        const currentDate = new Date();
+        const selectedDate = new Date(formData.DOCUMENT_EXPIRY_DATE);
+
+        if (selectedDate <= currentDate) {
+            setIsSubmitting(false);
+            toast.error("Expiry date must be greater than the document upload date.", {
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: 1000,
             });
@@ -66,46 +133,41 @@ const CreateSubDoc = ({ DOCUMENT_PARENT_USERNAME, update, DOCUMENT_REF_ID, SUBCO
 
         const data = new FormData();
         data.append("file", file);
-        data.append("DOCUMENT_SUB_ID", DOCUMENT_REF_ID);
-        data.append("DOCUMENT_SUB_USERNAME", SUBCONTRACTOR_USERNAME);
-        data.append("DOCUMENT_PARENT_USERNAME", DOCUMENT_PARENT_USERNAME);
+        data.append("DOCUMENT_REF_ID", COMPANY_ID);
+        data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
+        data.append("DOCUMENT_PARENT_USERNAME", COMPANY_USERNAME);
         data.append("DOCUMENT_EXPIRY_DATE", formData.DOCUMENT_EXPIRY_DATE);
         data.append("DOCUMENT_TYPE", formData.DOCUMENT_TYPE);
 
         try {
             const response = await axios.post(
-                "/api/create_subcontractor_document",
+                "/api/create_document",
                 data,
             );
             if (response.data.operation === "successfull") {
                 setOpen(false);
-                toast.success("Document uploaded successfully.", {
-                    position: toast.POSITION.TOP_CENTER,
-                    autoClose: 1200,
-                });
                 update();
-
-                setFile(file ? file.name : "");
-                setFormData("")
-            } else {
-                toast.error("Failed to upload document.", {
+                toast.success('Document uploaded successfully!', {
                     position: toast.POSITION.TOP_CENTER,
-                    autoClose: 1200,
+                    autoClose: 1000,
                 });
+                setFile(file ? file.name : "");
+                setFormData({
+                    selectedFile: null,
+                    DOCUMENT_EXPIRY_DATE: "",
+                    DOCUMENT_TYPE: "",
+                });
+            } else {
+                toast.error("Failed to upload document.");
             }
         } catch (error) {
-            console.error(error); // Log the error for debugging
-            toast.error("An error occurred while uploading the document.", {
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: 1200,
-            });
+            console.error(error);
+            toast.error("An error occurred while uploading the document.");
         } finally {
             setIsSubmitting(false);
             setBackdrop(false);
-
         }
     };
-
     // function for close modal on button click --------------------
 
     const handleClose = () => {
@@ -113,18 +175,20 @@ const CreateSubDoc = ({ DOCUMENT_PARENT_USERNAME, update, DOCUMENT_REF_ID, SUBCO
         setFormData({
             selectedFile: null,
             DOCUMENT_EXPIRY_DATE: "",
-            DOCUMENT_TYPE:"",
+            DOCUMENT_TYPE: "",
         });
     };
 
+    // onChnage method added for both field 
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+
         setFormData({
             ...formData,
             [name]: value,
         });
     };
-
     return (
         <>
             <Button
@@ -142,6 +206,7 @@ const CreateSubDoc = ({ DOCUMENT_PARENT_USERNAME, update, DOCUMENT_REF_ID, SUBCO
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
+                className="modalWidth"
                 style={{ zIndex: 9999999 }}
             >
                 <Container
@@ -156,7 +221,7 @@ const CreateSubDoc = ({ DOCUMENT_PARENT_USERNAME, update, DOCUMENT_REF_ID, SUBCO
                                 <Dropzone onDrop={acceptedFiles => setFile(...acceptedFiles)}>
                                     {({ getRootProps, getInputProps }) => (
                                         <section className="p-4 rounded-2" style={{ background: "#f2f2f2", border: "2px dashed gray" }} {...getRootProps()}>
-                                            <div >
+                                            <div>
                                                 <input {...getInputProps()} />
                                                 <p>Drag 'n' drop some files here, or click to select files</p>
                                             </div>
@@ -199,6 +264,9 @@ const CreateSubDoc = ({ DOCUMENT_PARENT_USERNAME, update, DOCUMENT_REF_ID, SUBCO
                                         />
                                     </div>
                                 </div>
+
+                                {/* ... (other input fields) */}
+
                                 <div className="row">
                                     <div className="form-group col-8">
                                         <button
@@ -221,13 +289,16 @@ const CreateSubDoc = ({ DOCUMENT_PARENT_USERNAME, update, DOCUMENT_REF_ID, SUBCO
                                 </div>
                             </form>
                         </div>
+
                     </Box>
                     <ToastContainer position="top-center" autoClose={1000} />
                 </Container>
+
+
+
             </Modal>
-            <SimpleBackdrop open={backdrop} />
         </>
     );
 };
 
-export default CreateSubDoc;
+export default DocumentCreate;

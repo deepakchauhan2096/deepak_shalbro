@@ -109,31 +109,31 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
 
     // function for Expiry status -----------------------------------
 
-    // const handleExpiryDateChange = (e) => {
-    //     setFormData({
-    //         ...formData,
-    //         DOCUMENT_EXPIRY_DATE: e.target.value,
-    //     });
-    // };
+    const handleExpiryDateChange = (e) => {
+        setFormData({
+            ...formData,
+            DOCUMENT_EXPIRY_DATE: e.target.value,
+        });
+    };
 
 
-    // const handleAdditionalFieldChange = (e) => {
-    //     setFormData({
-    //         ...formData,
-    //         DOCUMENT_TYPE: e.target.value,
-    //     });
-    // };
+    const handleAdditionalFieldChange = (e) => {
+        setFormData({
+            ...formData,
+            DOCUMENT_TYPE: e.target.value,
+        });
+    };
 
 
     // onChnage method added for both field 
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
+    // const handleInputChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData({
+    //         ...formData,
+    //         [name]: value,
+    //     });
+    // };
     return (
         <>
             <Button
@@ -161,7 +161,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
                 >
 
                     <Box sx={style}>
-                        {/* <div className="container">
+                        <div className="container">
                             <form onSubmit={handleSubmit}>
                                 <Dropzone onDrop={acceptedFiles => setFile(...acceptedFiles)}>
                                     {({ getRootProps, getInputProps }) => (
@@ -236,92 +236,14 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
                                     </div>
                                 </div>
                             </form>
-                        </div> */}
-
-
-
-                        
-                <div className="container">
-                <form onSubmit={handleSubmit}>
-                    <Dropzone onDrop={acceptedFiles => setFile(...acceptedFiles)}>
-                        {({ getRootProps, getInputProps }) => (
-                            <section className="p-4 rounded-2" style={{ background: "#f2f2f2", border: "2px dashed gray" }} {...getRootProps()}>
-                                <div>
-                                    <input {...getInputProps()} />
-                                    <p>Drag 'n' drop some files here, or click to select files</p>
-                                </div>
-                            </section>
-                        )}
-                    </Dropzone>
-                    {file.name && <p className="text-success fs-7 fz-2 pt-2">Selected File: {file?.name}</p>}
-
-                    <div className="row mb-2">
-                        <div className="form-group col-xl-12">
-                            <label className="pb-2 fs-6 rounded p-2">
-                                Select Expiry Date
-                            </label>
-                            <input
-                                type="date"
-                                className="form-control mb-2 pb-2 pt-2 form-control-2 rounded-0"
-                                id="DOCUMENT_EXPIRY_DATE"
-                                name="DOCUMENT_EXPIRY_DATE"
-                                onChange={handleInputChange}
-                                value={formData.DOCUMENT_EXPIRY_DATE}
-                                required
-                            />
                         </div>
-                    </div>
-
-                    <div className="row mb-2">
-                        <div className="form-group col-xl-12">
-                            <label className="pb-2 fs-6 rounded p-2">
-                                Document Type
-                            </label>
-                            <input
-                                type="text"
-                                className="form-control mb-2 pb-2 pt-2 form-control-2 rounded-0"
-                                id="DOCUMENT_TYPE"
-                                name="DOCUMENT_TYPE"
-                                onChange={handleInputChange}
-                                value={formData.DOCUMENT_TYPE}
-                                placeholder="Document Type"
-                                required
-                            />
-                        </div>
-                    </div>
-
-                    {/* ... (other input fields) */}
-
-                    <div className="row">
-                        <div className="form-group col-8">
-                            <button
-                                type="submit"
-                                className="btn btn-info text-white"
-                                disabled={isSubmitting}
-                            >
-                                {isSubmitting ? "Uploading..." : "Upload document"}
-                                <ArrowCircleUpIcon fontSize="small" className="ml-2" />
-                            </button>{" "}
-                        </div>
-                        <div className="form-group col-4">
-                            <button
-                                onClick={handleClose}
-                                className="btn btn-danger text-white pl-2 pr-2"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </form>
-                </div>
-
                     </Box>
                     <ToastContainer position="top-center" autoClose={1000} />
-                </Container>
+                </Container >
 
 
 
-            </Modal>
+            </Modal >
         </>
     );
 };
