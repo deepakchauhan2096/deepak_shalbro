@@ -28,14 +28,14 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
     const [backdrop, setBackdrop] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    console.log(COMPANY_USERNAME, "COMPANY_USERNAME")
+    // console.log(COMPANY_USERNAME, "COMPANY_USERNAME")
 
     const [formData, setFormData] = useState({
         selectedFile: null,
         DOCUMENT_EXPIRY_DATE: "",
         DOCUMENT_TYPE: "",
     });
-
+console.log(formData, "this is form data in doc create")
 
 
     console.log(formData.DOCUMENT_EXPIRY_DATE, "formattedMyDateCurrent")
@@ -79,7 +79,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
         // --------------end
 
         const data = new FormData();
-        console.log(data, "data")
+        // console.log(data, "data")
         data.append("file", file);
         data.append("DOCUMENT_REF_ID", COMPANY_ID);
         data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
@@ -125,16 +125,6 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
         });
     };
 
-    // function for Expiry status -----------------------------------
-
-    // const handleExpiryDateChange = (e) => {
-    //     setFormData({
-    //         ...formData,
-    //         DOCUMENT_EXPIRY_DATE: e.target.value,
-    //     });
-    // };
-
-
 
     const handleExpiryDateChange = (e) => {
         const selectedDate = e.target.value;
@@ -147,7 +137,9 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
         setFormData({
             ...formData,
             DOCUMENT_EXPIRY_DATE: userTimeZoneDate,
+            
         });
+        console.log(setFormData.DOCUMENT_EXPIRY_DATE, "setting")
     };
 
 
@@ -158,16 +150,6 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
         });
     };
 
-
-    // onChnage method added for both field 
-
-    // const handleInputChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData({
-    //         ...formData,
-    //         [name]: value,
-    //     });
-    // };
     return (
         <>
             <Button

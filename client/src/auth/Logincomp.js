@@ -7,6 +7,8 @@ import { auth } from "../firebase";
 
 import styles from "../assests/css/Login.module.css";
 import { Alert, Stack } from "@mui/material";
+import {setCompanyErr, setCompanyuser} from "../redux/slices/CompanyLoginSlice"
+import { useDispatch } from "react-redux";
 
 function Logincomp({message}) {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ function Logincomp({message}) {
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showpassword, setShowpassword] = useState(true)
+const dispatch = useDispatch();
 
 
   console.log()
@@ -39,9 +42,9 @@ function Logincomp({message}) {
     signInWithEmailAndPassword(auth, values.email, values.pass)
       .then(async (res) => {
         console.log("res", res.user.displayName);
-
+const resonse =res.user.displayName
         // res.user.displayName ? navigate("/company"):
-
+        dispatch(setCompanyuser(resonse));
         setSubmitButtonDisabled(false);
         setLoading(false)
         const data = res.user.displayName
