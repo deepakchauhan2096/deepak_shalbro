@@ -126,20 +126,27 @@ console.log(formData, "this is form data in doc create")
     };
 
 
+    // const handleExpiryDateChange = (e) => {
+    //     const selectedDate = e.target.value;
+
+    //     // Use moment to adjust the date to the user's time zone
+    //     const userTimeZoneDate = moment(selectedDate)
+    //         .tz(moment.tz.guess())
+    //         .format("YYYY-MM-DD");
+
+    //     setFormData({
+    //         ...formData,
+    //         DOCUMENT_EXPIRY_DATE: userTimeZoneDate,
+            
+    //     });
+    //     console.log(setFormData.DOCUMENT_EXPIRY_DATE, "setting")
+    // };
+
     const handleExpiryDateChange = (e) => {
-        const selectedDate = e.target.value;
-
-        // Use moment to adjust the date to the user's time zone
-        const userTimeZoneDate = moment(selectedDate)
-            .tz(moment.tz.guess())
-            .format("YYYY-MM-DD");
-
         setFormData({
             ...formData,
-            DOCUMENT_EXPIRY_DATE: userTimeZoneDate,
-            
+            DOCUMENT_EXPIRY_DATE: e.target.value,
         });
-        console.log(setFormData.DOCUMENT_EXPIRY_DATE, "setting")
     };
 
 
