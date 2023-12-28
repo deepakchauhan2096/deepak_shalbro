@@ -324,27 +324,6 @@ export default function Document(props) {
     ];
 
 
-
-    // function for global time according to timezone 
-    // const formatDate = (dateString, withTimezone = false) => {
-    //     // const options = {
-    //     //     day: '2-digit',
-    //     //     month: '2-digit',
-    //     //     year: 'numeric',
-    //     //     hour: '2-digit',
-    //     //     minute: '2-digit',
-    //     //     second: '2-digit',
-    //     //     timeZoneName: 'short',
-    //     // };
-    //     const userTimeZoneDate = moment()
-    //             .tz(moment.tz.guess())
-    //             .format("YYYY-MM-DD");
-    //     const date = new Date(dateString);
-    //     const formattedDate = new Intl.DateTimeFormat('en-US', userTimeZoneDate).format(date);
-
-    //     return withTimezone ? formattedDate : formattedDate.split(', ')[0]; // Extract date without timezone
-    // };
-
 // this is a new function using moment for date conversion 
     const formatDate = (dateString, withTimezone = false) => {
         const userTimeZone = moment.tz.guess();
@@ -357,9 +336,6 @@ export default function Document(props) {
         return formattedDate;
     };
     
-
-
-
 
     // after new
     const rows = imagesData?.result?.map((item, index) => ({
@@ -377,9 +353,6 @@ export default function Document(props) {
         documentIdType: item.DOCUMENT_TYPE || '',
     })) || [];
 
-
-
-    
   const Animations = () => {
     return (
       <Box sx={{ width: "100%" }}>
@@ -405,7 +378,7 @@ export default function Document(props) {
                 active={4}
                 toggle={openNav}
             />
-            ;
+            
 
             <Box className="box" >
                 <Button
@@ -428,7 +401,6 @@ export default function Document(props) {
                     <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
                     {isLoading === true ? 
                        <Animations /> : isLoading === false ?
-           
                             <DataGrid
                                 rows={rows}
                                 columns={columns}
@@ -436,7 +408,7 @@ export default function Document(props) {
                                 initialState={{
                                     pagination: {
                                         paginationModel: {
-                                            pageSize: 20,
+                                            pageSize: 14,
                                         },
                                     },
                                 }}
