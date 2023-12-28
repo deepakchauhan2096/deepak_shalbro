@@ -39,12 +39,12 @@ export default function Document(props) {
     const [resStatus, setResStatus] = useState(false); //adding newline
     const [isLoading, setIsLoading] = useState(true);
 
-    console.log("COMPANYPARENT :", COMPANY_PARENT_USERNAME);
+    // console.log("COMPANYPARENT :", COMPANY_PARENT_USERNAME);
 
     const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
-        console.log("heelo i am runnig useEffect")
+        // console.log("heelo i am runnig useEffect")
         getalldocument();
     }, [deleteItem]);
 
@@ -92,7 +92,7 @@ export default function Document(props) {
             }
 
             const data = response.data;
-            console.log("requestdata", data);
+            // console.log("requestdata", data);
             setIsLoading(true);
             setResStatus(true);
             setImagesData(data);
@@ -110,7 +110,7 @@ export default function Document(props) {
 
     // Function to download the uploaded documents 
     const handleDownload = async (documentId, fileName) => {
-        console.log(documentId, fileName, "filename")
+        // console.log(documentId, fileName, "filename")
         try {
             const data = {
                 DOCUMENT_ID: documentId,
@@ -125,8 +125,8 @@ export default function Document(props) {
             };
 
             const response = await axios.request(config);
-            console.log(response, fileName, "this is response")
-            console.log(fileName, "filename")
+            // console.log(response, fileName, "this is response")
+            // console.log(fileName, "filename")
             downloadFile(response.data, fileName.name);
 
 
@@ -139,13 +139,13 @@ export default function Document(props) {
     const handleDelDoc = async (e, documentId) => {
         // setBackdrop(true);
         setResStatus(true);
-        console.log(documentId);
+        // console.log(documentId);
 
         const data = {
             DOCUMENT_ID: documentId,
             DOCUMENT_ADMIN_USERNAME: COMPANY_PARENT_USERNAME,
         };
-        console.log("Data found 1:", data);
+        // console.log("Data found 1:", data);
 
         try {
             const response = await fetch(`/api/delete_document/${documentId}`, {
@@ -158,7 +158,7 @@ export default function Document(props) {
 
             if (response.ok) {
                 const jsonResponse = await response.json();
-                console.log("Response data found:", jsonResponse);
+                // console.log("Response data found:", jsonResponse);
                 setDeleteItem(jsonResponse);
                 // setBackdrop(false);
                 setResStatus(false);
@@ -379,7 +379,7 @@ export default function Document(props) {
       </Box>
     );
   };
-    console.log(rows, "myrows")
+    // console.log(rows, "myrows")
     return (
         <>
             <Sidebar

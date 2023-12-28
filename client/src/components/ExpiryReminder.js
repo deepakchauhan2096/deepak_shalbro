@@ -10,7 +10,6 @@ function ExpiryReminder(props) {
 
   const { data } = props;
 
-  console.log(data,"expiry")
 
   const breakdate =  data?.split("-")
   const day = breakdate[0]
@@ -19,7 +18,6 @@ function ExpiryReminder(props) {
 
   const expiryDate = `${year}-${month}-${day}`
 
-  console.log(expiryDate, "expiryDate")
   
 
   

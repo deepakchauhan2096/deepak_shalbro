@@ -28,13 +28,15 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
     const [backdrop, setBackdrop] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    console.log(COMPANY_USERNAME, "COMPANY_USERNAME")
+    // console.log(COMPANY_USERNAME, "COMPANY_USERNAME")
 
     const [formData, setFormData] = useState({
         selectedFile: null,
         DOCUMENT_EXPIRY_DATE: "",
         DOCUMENT_TYPE: "",
     });
+console.log(formData, "this is form data in doc create")
+
 
 
 
@@ -79,7 +81,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
         // --------------end
 
         const data = new FormData();
-        console.log(data, "data")
+        // console.log(data, "data")
         data.append("file", file);
         data.append("DOCUMENT_REF_ID", COMPANY_ID);
         data.append("DOCUMENT_ADMIN_USERNAME", COMPANY_PARENT_USERNAME);
@@ -125,6 +127,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
         });
     };
 
+
     // function for Expiry status -----------------------------------
 
     // const handleExpiryDateChange = (e) => {
@@ -139,10 +142,12 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
     const handleExpiryDateChange = (e) => {
         const selectedDate = e.target.value;
 
+
         // Use moment to adjust the date to the user's time zone
         const userTimeZoneDate = moment(selectedDate)
             .tz(moment.tz.guess())
             .format("YYYY-MM-DD");
+
 
         setFormData({
             ...formData,
@@ -155,7 +160,9 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
         setFormData({
             ...formData,
             DOCUMENT_TYPE: e.target.value,
+
         });
+        console.log(setFormData.DOCUMENT_EXPIRY_DATE, "setting")
     };
 
 
@@ -168,6 +175,7 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
     //         [name]: value,
     //     });
     // };
+
     return (
         <>
             <Button

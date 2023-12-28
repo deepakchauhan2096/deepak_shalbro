@@ -11,6 +11,8 @@ import { Alert, Stack } from "@mui/material";
 import { validateEmail, validatePassword } from "../components/Validation";
 import Logincomp from "./Logincomp";
 import EmployeeLogin from "./EmployeeLogin"
+import { setAdminUser, setAdminError, setAdminLoading } from "../redux/slices/AdminSlice"
+import { useDispatch } from "react-redux";
 
 function AdminLogin({ onDataFetched }) {
   const navigate = useNavigate();
@@ -18,6 +20,8 @@ function AdminLogin({ onDataFetched }) {
     ADMIN_USERNAME: "",
     ADMIN_PASSWORD: "",
   });
+  // for redux 
+  const dispatch = useDispatch();
   const [errorMsg, setErrorMsg] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,13 +66,6 @@ function AdminLogin({ onDataFetched }) {
     }
 
 
-    // if (!isValidPassword) {
-    //   setPasswordError("Invalid Password");
-    //   return;
-    // }
-
-
-
     let config = {
       method: "post",
       maxBodyLength: Infinity,
@@ -83,11 +80,14 @@ function AdminLogin({ onDataFetched }) {
         setIsSubmitting(false);
         // setLoginSuccess(true);
         const data = response.data;
+        dispatch(setAdminUser(data))
         navigate("/admin", { state: data.user })
       })
       .catch((error) => {
         if (error.response.status == 403) {
-          setErrorMsg(error.response.data.error);
+          dispatch(setAdminError(error.response.data.error))
+
+          // setErrorMsg(error.response.data.error);
         } else if (error.response.status == 404) {
           setErrorMsg(error.response.data.error);
         } else if (error.response.status == 401) {
