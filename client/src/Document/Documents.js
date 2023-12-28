@@ -3,7 +3,7 @@ import axios from "axios";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import { Button ,Skeleton} from "@mui/material";
-
+import moment from "moment-timezone";
 import SimpleBackdrop from "../components/Backdrop";
 import "../assests/css/document.css"; // Import the CSS filefileN
 import { DataGrid } from '@mui/x-data-grid';
@@ -99,7 +99,7 @@ export default function Document(props) {
             setIsLoading(false);
             setTotalDocuments(data.result?.length || 0);
 
-            // console.log("data", data.result);
+            console.log("data documents", data.result);
         } catch (error) {
             setIsLoading(false);
             console.log("Error Fetching Data :", error);
@@ -265,7 +265,7 @@ export default function Document(props) {
         },
 
         {
-            field: 'ExpiryDate',
+            field: 'ExpiryDateStatus',
             headerName: 'Expiry Status',
             description: 'Document Expiry',
             sortable: false,
@@ -326,22 +326,37 @@ export default function Document(props) {
 
 
     // function for global time according to timezone 
+    // const formatDate = (dateString, withTimezone = false) => {
+    //     // const options = {
+    //     //     day: '2-digit',
+    //     //     month: '2-digit',
+    //     //     year: 'numeric',
+    //     //     hour: '2-digit',
+    //     //     minute: '2-digit',
+    //     //     second: '2-digit',
+    //     //     timeZoneName: 'short',
+    //     // };
+    //     const userTimeZoneDate = moment()
+    //             .tz(moment.tz.guess())
+    //             .format("YYYY-MM-DD");
+    //     const date = new Date(dateString);
+    //     const formattedDate = new Intl.DateTimeFormat('en-US', userTimeZoneDate).format(date);
+
+    //     return withTimezone ? formattedDate : formattedDate.split(', ')[0]; // Extract date without timezone
+    // };
+
+// this is a new function using moment for date conversion 
     const formatDate = (dateString, withTimezone = false) => {
-        const options = {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZoneName: 'short',
-        };
-
-        const date = new Date(dateString);
-        const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
-
-        return withTimezone ? formattedDate : formattedDate.split(', ')[0]; // Extract date without timezone
+        const userTimeZone = moment.tz.guess();
+        const date = moment(dateString).tz(userTimeZone);
+    
+        const formattedDate = withTimezone
+            ? date.format("YYYY-MM-DD HH:mm:ss z") // Include time and timezone
+            : date.format("YYYY-MM-DD"); // Date only
+    
+        return formattedDate;
     };
+    
 
 
 
@@ -357,7 +372,7 @@ export default function Document(props) {
         documentSize: formatSize(item.DOCUMENT_FILEDATA?.size) || '',
         uploadDate: formatDate(item.createdAt),
         documentType: item.DOCUMENT_FILEDATA?.mimetype || '',
-        ExpiryDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '',
+        ExpiryDateStatus: formatDate(item.DOCUMENT_EXPIRY_DATE) || '',
         documentExpDate: formatDate(item.DOCUMENT_EXPIRY_DATE) || '',
         documentIdType: item.DOCUMENT_TYPE || '',
     })) || [];
