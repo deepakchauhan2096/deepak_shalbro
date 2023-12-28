@@ -38,6 +38,8 @@ const DocumentCreate = ({ COMPANY_ID, COMPANY_PARENT_USERNAME, COMPANY_USERNAME,
 console.log(formData, "this is form data in doc create")
 
 
+
+
     console.log(formData.DOCUMENT_EXPIRY_DATE, "formattedMyDateCurrent")
 
 
@@ -126,20 +128,31 @@ console.log(formData, "this is form data in doc create")
     };
 
 
+    // function for Expiry status -----------------------------------
+
+    // const handleExpiryDateChange = (e) => {
+    //     setFormData({
+    //         ...formData,
+    //         DOCUMENT_EXPIRY_DATE: e.target.value,
+    //     });
+    // };
+
+
+
     const handleExpiryDateChange = (e) => {
         const selectedDate = e.target.value;
+
 
         // Use moment to adjust the date to the user's time zone
         const userTimeZoneDate = moment(selectedDate)
             .tz(moment.tz.guess())
             .format("YYYY-MM-DD");
 
+
         setFormData({
             ...formData,
             DOCUMENT_EXPIRY_DATE: userTimeZoneDate,
-            
         });
-        console.log(setFormData.DOCUMENT_EXPIRY_DATE, "setting")
     };
 
 
@@ -147,8 +160,21 @@ console.log(formData, "this is form data in doc create")
         setFormData({
             ...formData,
             DOCUMENT_TYPE: e.target.value,
+
         });
+        console.log(setFormData.DOCUMENT_EXPIRY_DATE, "setting")
     };
+
+
+    // onChnage method added for both field 
+
+    // const handleInputChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData({
+    //         ...formData,
+    //         [name]: value,
+    //     });
+    // };
 
     return (
         <>
