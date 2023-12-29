@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import { Button ,Skeleton} from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import moment from "moment-timezone";
 import SimpleBackdrop from "../components/Backdrop";
-import "../assests/css/document.css"; // Import the CSS filefileN
+// import "../assests/css/document.css"; // Import the CSS filefileN
+import "../assests/css/document.css";
 import { DataGrid } from '@mui/x-data-grid';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -39,10 +40,13 @@ export default function Document(props) {
     const [resStatus, setResStatus] = useState(false); //adding newline
     const [isLoading, setIsLoading] = useState(true);
 
+    // const [display, setDisplay] = useState("unarchive")
+
     // console.log("COMPANYPARENT :", COMPANY_PARENT_USERNAME);
 
     const [open, setOpen] = React.useState(false);
 
+    // let {endpoint} = props
     useEffect(() => {
         // console.log("heelo i am runnig useEffect")
         getalldocument();
@@ -321,21 +325,50 @@ export default function Document(props) {
             },
         },
 
+        // {
+        //     field: "archive",
+        //     headerName: "Archive",
+        //     width: 120,
+        //     renderCell: (cellValues) => {
+        //         return (
+        //             <>
+        //                 {display === "unarchive" ? <Button
+        //                     variant="contained"
+        //                     color="secondary"
+        //                     sx={{ borderRadius: "12px", padding: "2px 10px" }}
+        //                     size="small"
+        //                 // onClick={() => archiveEmployee(cellValues)}
+        //                 >
+        //                     Archive
+        //                 </Button> : <Button
+        //                     variant="contained"
+        //                     color="secondary"
+        //                     sx={{ borderRadius: "12px", padding: "2px 10px" }}
+        //                     size="small"
+        //                 // onClick={() => unarchiveEmployee(cellValues)}
+        //                 >
+        //                     UnArchive
+        //                 </Button>}
+        //             </>
+        //         );
+        //     },
+        // },
+
     ];
 
 
-// this is a new function using moment for date conversion 
+    // this is a new function using moment for date conversion 
     const formatDate = (dateString, withTimezone = false) => {
         const userTimeZone = moment.tz.guess();
         const date = moment(dateString).tz(userTimeZone);
-    
+
         const formattedDate = withTimezone
             ? date.format("YYYY-MM-DD HH:mm:ss z") // Include time and timezone
             : date.format("YYYY-MM-DD"); // Date only
-    
+
         return formattedDate;
     };
-    
+
 
     // after new
     const rows = imagesData?.result?.map((item, index) => ({
@@ -353,20 +386,20 @@ export default function Document(props) {
         documentIdType: item.DOCUMENT_TYPE || '',
     })) || [];
 
-  const Animations = () => {
-    return (
-      <Box sx={{ width: "100%" }}>
-        <Skeleton animation="pulse" height={60} />
-        <Skeleton animation="pulse" height={50} />
-        <Skeleton animation="pulse" height={50} />
-        <Skeleton animation="pulse" height={50} />
-        <Skeleton animation="pulse" height={50} />
-        <Skeleton animation="pulse" height={50} />
-        <Skeleton animation="pulse" height={50} />
-        <Skeleton animation="pulse" height={50} />
-      </Box>
-    );
-  };
+    const Animations = () => {
+        return (
+            <Box sx={{ width: "100%" }}>
+                <Skeleton animation="pulse" height={60} />
+                <Skeleton animation="pulse" height={50} />
+                <Skeleton animation="pulse" height={50} />
+                <Skeleton animation="pulse" height={50} />
+                <Skeleton animation="pulse" height={50} />
+                <Skeleton animation="pulse" height={50} />
+                <Skeleton animation="pulse" height={50} />
+                <Skeleton animation="pulse" height={50} />
+            </Box>
+        );
+    };
     // console.log(rows, "myrows")
     return (
         <>
@@ -378,16 +411,27 @@ export default function Document(props) {
                 active={4}
                 toggle={openNav}
             />
-            
+
 
             <Box className="box" >
                 <Button
-                    sx={{ color: "#277099" }}
-                    className="btn"
-                >Company Documents</Button>
-
+                    size="small"
+                    variant={"outlined"}
+                    className="btn button  bg-white"
+                // className={display === "unarchive" ? "btn button  bg-white" : "btn btn-sm bg-button rounded-0 text-light"}
+                // onClick={() => setDisplay("unarchive")}
+                >
+                    Company Documents
+                </Button>
+                {/* <Button
+                    size="small"
+                    variant={"outlined"}
+                    className={display === "archive" ? "btn button  bg-white" : "btn btn-sm bg-button rounded-0 text-light"}
+                    onClick={() => setDisplay("archive")}
+                >
+                    Archive
+                </Button> */}
                 <Navbar toggle={() => setOpenNav((e) => !e)} />
-
                 <DocumentCreate
                     name={"Employee"}
                     COMPANY_ID={COMPANY_ID}
@@ -396,55 +440,54 @@ export default function Document(props) {
                     update={getalldocument}
 
                 />
-
                 <MyScreen sx={{ display: "block", padding: 2 }}>
                     <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
-                    {isLoading === true ? 
-                       <Animations /> : isLoading === false ?
-                            <DataGrid
-                                rows={rows}
-                                columns={columns}
-                                sx={{ border: "none", height: '80vh' }}
-                                initialState={{
-                                    pagination: {
-                                        paginationModel: {
-                                            pageSize: 14,
-                                        },
-                                    },
-                                }}
-                                pageSizeOptions={[10]}
-                                disableMultipleSelection
-                                density="compact"
+                        {isLoading === true ?
+                            <Animations /> : isLoading === false ?
+                                <DataGrid
+                                    rows={rows}
+                                    columns={columns}
+                                    sx={{ border: "none", height: '80vh' }}
+                                    initialState={{
+                                        pagination: {
+                                            paginationModel: {
+                                                pageSize: 14,
 
-                                getRowId={(row) => row.id}
-                            />
-                           
-                            : isLoading === "error" ? <div
-                                style={{
-                                    position: "absolute",
-                                    top: "50%",
-                                    left: "50%",
-                                    transform: "translate(-50%,-50%)",
-                                }}
-                            >
-                                <small className="text-dark"><p>Check your connection and try again. :(</p><center><button onClick={getalldocument} className="btn btn-sm btn-secondary">Retry</button></center></small>
-                            </div> : <div
-                                style={{
-                                    position: "absolute",
-                                    top: "50%",
-                                    left: "50%",
-                                    transform: "translate(-50%,-50%)",
-                                }}
-                            >
-                                <RotatingLines
-                                    strokeColor="#2D5169"
-                                    strokeWidth="5"
-                                    animationDuration="0.75"
-                                    width="50"
-                                    visible={true}
+                                            },
+                                        },
+                                    }}
+                                    pageSizeOptions={[10]}
+                                    disableMultipleSelection
+                                    density="compact"
+
+                                    getRowId={(row) => row.id}
                                 />
-                            </div>  }
-                        
+                                : isLoading === "error" ? <div
+                                    style={{
+                                        position: "absolute",
+                                        top: "50%",
+                                        left: "50%",
+                                        transform: "translate(-50%,-50%)",
+                                    }}
+                                >
+                                    <small className="text-dark"><p>Check your connection and try again. :(</p><center><button onClick={getalldocument} className="btn btn-sm btn-secondary">Retry</button></center></small>
+                                </div> : <div
+                                    style={{
+                                        position: "absolute",
+                                        top: "50%",
+                                        left: "50%",
+                                        transform: "translate(-50%,-50%)",
+                                    }}
+                                >
+                                    <RotatingLines
+                                        strokeColor="#2D5169"
+                                        strokeWidth="5"
+                                        animationDuration="0.75"
+                                        width="50"
+                                        visible={true}
+                                    />
+                                </div>}
+
                     </Box>
                 </MyScreen>
             </Box>
