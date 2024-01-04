@@ -28,6 +28,7 @@ import InsertChartIcon from '@mui/icons-material/InsertChart';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { RotatingLines } from "react-loader-spinner";
+import CreateDoc from "../components/documentdynamic/DocCreate";
 
 export default function Document(props) {
 
@@ -62,7 +63,7 @@ export default function Document(props) {
         document.body.removeChild(link);
     };
 
-
+    const apiEndpoint = "/api/create_document";
     // Function to upload  the documents 
 
     const MyScreen = styled(Paper)((props) => ({
@@ -109,8 +110,6 @@ export default function Document(props) {
             console.log("Error Fetching Data :", error);
         }
     };
-
-
 
     // Function to download the uploaded documents 
     const handleDownload = async (documentId, fileName) => {
@@ -324,36 +323,6 @@ export default function Document(props) {
                 );
             },
         },
-
-        // {
-        //     field: "archive",
-        //     headerName: "Archive",
-        //     width: 120,
-        //     renderCell: (cellValues) => {
-        //         return (
-        //             <>
-        //                 {display === "unarchive" ? <Button
-        //                     variant="contained"
-        //                     color="secondary"
-        //                     sx={{ borderRadius: "12px", padding: "2px 10px" }}
-        //                     size="small"
-        //                 // onClick={() => archiveEmployee(cellValues)}
-        //                 >
-        //                     Archive
-        //                 </Button> : <Button
-        //                     variant="contained"
-        //                     color="secondary"
-        //                     sx={{ borderRadius: "12px", padding: "2px 10px" }}
-        //                     size="small"
-        //                 // onClick={() => unarchiveEmployee(cellValues)}
-        //                 >
-        //                     UnArchive
-        //                 </Button>}
-        //             </>
-        //         );
-        //     },
-        // },
-
     ];
 
 
@@ -411,8 +380,6 @@ export default function Document(props) {
                 active={4}
                 toggle={openNav}
             />
-
-
             <Box className="box" >
                 <Button
                     size="small"
@@ -432,13 +399,21 @@ export default function Document(props) {
                     Archive
                 </Button> */}
                 <Navbar toggle={() => setOpenNav((e) => !e)} />
-                <DocumentCreate
+                {/* <DocumentCreate
                     name={"Employee"}
                     COMPANY_ID={COMPANY_ID}
                     COMPANY_USERNAME={COMPANY_USERNAME}
                     COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
                     update={getalldocument}
 
+                /> */}
+
+                <CreateDoc
+                    COMPANY_ID={COMPANY_ID}
+                    COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+                    COMPANY_USERNAME={COMPANY_USERNAME}
+                    update={getalldocument}
+                    apiEndpoint={apiEndpoint}
                 />
                 <MyScreen sx={{ display: "block", padding: 2 }}>
                     <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
@@ -452,7 +427,6 @@ export default function Document(props) {
                                         pagination: {
                                             paginationModel: {
                                                 pageSize: 14,
-
                                             },
                                         },
                                     }}
@@ -491,9 +465,6 @@ export default function Document(props) {
                     </Box>
                 </MyScreen>
             </Box>
-
-
-
             <SimpleBackdrop open={backdrop} />
 
         </>
